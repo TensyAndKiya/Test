@@ -1,0 +1,5 @@
+使用2.1.6.RELEASE版本的boot
+使用IDEA的RunDashboard执行暴露的端点的话
+会发生 java.lang.IllegalArgumentException: Illegal character in path at index 22: http://localhost:1001/{GET%20/key}
+改成2.0.8.RELEASE版本之后能成功执行
+#2.0.9.RELEASE到2.1.6.RELEASE版本的都不行

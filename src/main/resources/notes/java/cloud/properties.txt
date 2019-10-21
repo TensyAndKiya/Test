@@ -1,0 +1,5 @@
+配置覆盖
+(it does not work to set this locally)
+    spring.cloud.config.allowOverride=true
+    spring.cloud.config.overrideNone=true
+    spring.cloud.config.overrideSystemProperties=false

@@ -1,0 +1,6 @@
+问题
+security.basic.enabled=false
+Deprecated: The security auto-configuration is no longer customizable
+解决方法
+@SpringBootApplication(exclude = {org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class})
+

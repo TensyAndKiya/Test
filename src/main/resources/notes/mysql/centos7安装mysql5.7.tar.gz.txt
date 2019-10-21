@@ -1,0 +1,115 @@
+#卸载系统自带的Mariadb
+[root@hdp265dnsnfs ~]# rpm -qa|grep mariadb
+mariadb-libs-5.5.44-2.el7.centos.x86_64
+[root@hdp265dnsnfs ~]# rpm -e --nodeps mariadb-libs-5.5.44-2.el7.centos.x86_64
+
+#删除etc目录下的my.cnf文件
+
+[root@hdp265dnsnfs ~]# rm /etc/my.cnf
+rm: cannot remove ?etc/my.cnf? No such file or directory
+
+#检查mysql是否存在
+[root@hdp265dnsnfs ~]# rpm -qa | grep mysql
+[root@hdp265dnsnfs ~]#
+
+#检查mysql组和用户是否存在，如无创建
+[root@hdp265dnsnfs ~]# cat /etc/group | grep mysql
+[root@hdp265dnsnfs ~]#  cat /etc/passwd | grep mysql
+
+#创建mysql用户组
+[root@hdp265dnsnfs ~]# groupadd mysql
+#创建一个用户名为mysql的用户并加入mysql用户组
+[root@hdp265dnsnfs ~]# useradd -g mysql mysql
+#制定password 为111111
+[root@hdp265dnsnfs ~]# passwd mysql
+Changing password for user mysql.
+New password:
+BAD PASSWORD: The password is a palindrome
+Retype new password:
+passwd: all authentication tokens updated successfully.
+
+[root@hdp265dnsnfs var]# tar -zxvf mysql-5.7.18-linux-glibc2.5-x86_64.tar.gz
+[root@hdp265dnsnfs var]# mv mysql-5.7.18-linux-glibc2.5-x86_64/ mysql
+
+cd mysql
+mkdir data
+mkdir logs
+mkdir pid
+
+更改用户和组
+chown -R mysql:mysql mysql/
+配置/etc/my.cnf
+我的配置详见my.cnf
+
+cd /bin
+./mysqld --user=mysql basedir=/usr/games/mysql --initialize
+初始化密码可以在mysql/logs/error.log里找到（我的是在这里找到的）
+
+[root@hdp265dnsnfs mysql57]# cp ./support-files/mysql.server /etc/init.d/mysqld
+[root@hdp265dnsnfs mysql57]# chown 777 /etc/my.cnf
+[root@hdp265dnsnfs mysql57]# chmod +x /etc/init.d/mysqld
+复制代码
+[root@hdp265dnsnfs mysql57]# /etc/init.d/mysqld restart
+Shutting down MySQL.. SUCCESS!
+Starting MySQL. SUCCESS!
+
+#设置开机启动
+
+[root@hdp265dnsnfs mysql57]# chkconfig --level 35 mysqld on
+[root@hdp265dnsnfs mysql57]# chkconfig --list mysqld
+
+[root@hdp265dnsnfs mysql57]# chmod +x /etc/rc.d/init.d/mysqld
+[root@hdp265dnsnfs mysql57]# chkconfig --add mysqld
+[root@hdp265dnsnfs mysql57]# chkconfig --list mysqld
+[root@hdp265dnsnfs mysql57]# service mysqld status
+ SUCCESS! MySQL running (4475)
+
+export PATH=$PATH:/var/mysql57/bin
+
+[root@hdp265dnsnfs mysql57]# source /etc/profile
+
+[root@hdp265dnsnfs bin]# mysql -uroot -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 5
+
+mysql> set PASSWORD = PASSWORD('111111');
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> flush privileges;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> use mysql;
+
+mysql> update user set host='%' where user='root';
+Query OK, 1 row affected (0.00 sec)
+
+create user 'xxx'@'%' identified by '123';  这里 @‘%’ 表示在任何主机都可以登录
+
+/bin/systemctl restart  mysql.service
+
+[root@hdp265dnsnfs bin]# /etc/init.d/mysqld restart
+Shutting down MySQL.. SUCCESS!
+Starting MySQL. SUCCESS!
+
+ln -s /var/mysql57/bin/mysql   /usr/bin/mysql
+
+成功了，差不多，可以在linux本机登录了。。。。
+
+最后试一下在windows主机 sqlyog连接。。失败了。。因为端口的原因
+
+看看端口开启否。。
+
+[root@LINKINPARK ~]# firewall-cmd --query-port 3306/tcp
+no
+[root@LINKINPARK ~]# firewall-cmd --permanent --zone=public --add-port=3306/tcp
+success
+[root@LINKINPARK ~]# firewall-cmd --reload
+success
+[root@LINKINPARK ~]# systemctl restart firewalld.service
+[root@LINKINPARK ~]# firewall-cmd --query-port 3306/tcp
+yes
+[root@LINKINPARK ~]# firewall-cmd --zone=public --list-ports
+3306/tcp
+
+成功。。

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--引入变量配置-->
+    <properties resource="mybatisConf/jdbc.properties"></properties>
+    <!--别名-->
+    <typeAliases>
+        <!--<package name="com.clei.mapper"></package>-->
+    </typeAliases>
+    <!--运行环境-->
+    <environments default="test">
+        <environment id="test">
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"></property>
+                <property name="url" value="${test.jdbc.url}"></property>
+                <property name="username" value="${test.jdbc.username}"></property>
+                <property name="password" value="${test.jdbc.password}"></property>
+            </dataSource>
+        </environment>
+        <environment id="prod">
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"></property>
+                <property name="url" value="${prod.jdbc.url}"></property>
+                <property name="username" value="${prod.jdbc.username}"></property>
+                <property name="password" value="${prod.jdbc.password}"></property>
+            </dataSource>
+        </environment>
+    </environments>
+    <!--mappers-->
+    <mappers>
+        <mapper resource="mappers/Column-Mapper.xml"/>
+    </mappers>
+</configuration>

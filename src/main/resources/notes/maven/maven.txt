@@ -1,0 +1,13 @@
+maven要使用已经打好的jar包，又没有源码用来install的话，可以用以下方式引入到项目(亲测可用)
+方法1
+# 将jar包放到资源目录下 pom如下
+<dependency>
+    <groupId>com.clei</groupId>
+    <artifactId>CleiUtils</artifactId>
+    <scope>system</scope>
+    <systemPath>${basedir}/src/main/resources/lib/CleiUtils-0.01.jar</systemPath>
+</dependency>
+
+方法2
+# 使用命令将jar包install到本地仓库 再通过常规方式引入
+mvn install:install-file -Dfile=D:\CLIdeaWorkspace\Test\target\CleiUtils-1.0.0.jar -DgroupId=com.clei -DartifactId=CleiUtils -Dversion=1.0.0 -Dpackaging=jar

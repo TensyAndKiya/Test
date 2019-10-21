@@ -1,0 +1,36 @@
+-Xms 128m jvm初始堆大小 默认是物理内存的1/64 空余堆内存大于70%时，JVM会减少堆直到-Xms的最小限制
+-Xmx 128m jvm最大堆大小 默认是物理内存的1/4 空余堆内存小于40%时，JVM就会增大堆直到-Xmx的最大限制
+    因此服务器一般设置-Xms、-Xmx 相等以避免在每次GC 后调整堆的大小
+
+-Xmn 64m 年轻代大小 整个堆大小=年轻代+年老代 增大年轻代会减小年老代大小，这个值对系统内存影响较大，Sun官方推荐配置为整个堆的3/8
+    配置这个使得 -XX:NewSize = -XX:MaxNewSize = 64m
+    年轻代分为1个Eden Space 和 2个Survivor Space
+    年轻代(Young Gen) 年老代(Tenured Gen) 永久代(Perm Gen)
+
+-Xss 1024k 每个线程栈大小 并非使用jvm内存，而是使用系统的剩余可用内存
+
+-XX:MaxNewSize=512m 最大年轻代大小
+
+-XX:PermSize=64m 初始分配的非堆内存 默认是物理内存的1/64
+-XX:MaxPermSize=128m jvm最大允许分配的非堆内存，按需分配 默认是物理内存的1/4
+
+-XX:NewRatio=3 年轻代与年老代比值为1:3
+-XX:SurvivorRatio=3 年轻代中eden区域两个survivor区的比值为3:2
+
+-XX:+PrintGCDetails 打印GC信息
+
+CMS(Concurrent Mark Sweep)收集器 （并发收集，低停顿）
+    过程：初始标记 =》并发标记 =》重新标记 =》并发清扫
+    （初始标记与重新标记仍需stop the world）
+
+-XX:+UseConcMarkSweepGC 激活CMS收集器(年轻代ParNew，老年代CMS)
+-XX:ConcGCThreads=4 CMS运行时的线程数，若未设置的话，值为(ParallelGCThreads + 3)/4
+-XX:CMSInitiatingOccupancyFraction=70 第一次垃圾收集会在老年代占用70%时被触发
+
+-XX:+HeapDumpOnOutOfMemoryError 遇到OOM 搞一个堆存储快照
+-XX:HeapDumpPath=D:\dump 堆存储快照位置
+
+例子：
+java -Xms10m -Xmx10m -Xmn10m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=D:\dump\test.bin -XX:+UseGCOverheadLimit MemoryTest
+
+

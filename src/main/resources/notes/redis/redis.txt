@@ -1,0 +1,102 @@
+安装
+    下载redis-5.0.5.tar.gz
+    tar -zxvf redis-5.0.5.tar.gz
+    cd redis-5.0.5
+    // 安装
+    make
+    // 启动 server
+    src/redis-server
+    // 指定配置文件启动 server
+    src/redis-server conf/my.conf
+    // 后台启动
+    修改配置文件 daemonize yes
+    // 测试
+    src/redis-cli
+    set fool aaa
+    get fool
+    del fool
+
+搭建redis集群
+    // 创建个文件夹 放集群的配置文件
+    mkdir cluster
+    // 将redis.conf 复制到 cluster 6379.conf 6380.conf
+    // 6380.conf 修改 端口 port 6380
+    // 添加下面配置到格子配置文件,nodes-6379.conf对应各自端口
+    cluster-enabled yes
+    cluster-node-timeout 15000
+    cluster-config-file nodes-6379.conf
+    // 创建
+    src/redis-cli --cluster create 127.0.0.1:6379 127.0.0.1:6380
+    // 报错啦
+    *** ERROR: Invalid configuration for cluster creation.
+    *** Redis Cluster requires at least 3 master nodes.
+    *** This is not possible with 2 nodes and 0 replicas per node.
+    *** At least 3 nodes are required.
+    // 再添加个6381的
+    src/redis-cli --cluster create 127.0.0.1:6379 127.0.0.1:6380 127.0.0.1:6381
+    // Can I set the above configuration? (type 'yes' to accept): 这里yes
+    // 成功 查看一下集群信息
+    src/redis-cli --cluster info 127.0.0.1:6380
+    // 信息
+    127.0.0.1:6380 (7fc4d936...) -> 0 keys | 5462 slots | 0 slaves.
+    127.0.0.1:6379 (366b6849...) -> 0 keys | 5461 slots | 0 slaves.
+    127.0.0.1:6381 (0aeb43c7...) -> 0 keys | 5461 slots | 0 slaves.
+    [OK] 0 keys in 3 masters.
+    0.00 keys per slot on average.
+    // 这里是3master，下面配置下3主3从的
+    // 关闭所有server，删除redis-5.0.5下面的nodes-6379.conf等文件
+    // 再添加6382,6383,6384的配置,全部启动
+    src/redis-cli -a eeparking --cluster create 192.168.223.128:6379 192.168.223.128:6380 192.168.223.128:6381 192.168.223.128:6382 192.168.223.128:6383 192.168.223.128:6384 --cluster-replicas 1
+    // 成功 查看一下集群信息
+    src/redis-cli --cluster info 127.0.0.1:6384
+    // 信息
+    127.0.0.1:6379 (05f020a5...) -> 0 keys | 5461 slots | 1 slaves.
+    127.0.0.1:6381 (70214585...) -> 0 keys | 5461 slots | 1 slaves.
+    127.0.0.1:6380 (33e84183...) -> 0 keys | 5462 slots | 1 slaves.
+    [OK] 0 keys in 3 masters.
+    0.00 keys per slot on average.
+    // 随便连接个server试一下 连接本机的话可以不用-h 127.0.0.1
+    src/redis-cli -h 127.0.0.1 -p 6384
+    127.0.0.1:6384> set fool hahaha
+    (error) MOVED 16175 127.0.0.1:6381
+    127.0.0.1:6384> set aa bb
+    (error) MOVED 1180 127.0.0.1:6379
+    127.0.0.1:6384> exit
+    [root@linkinpark redis-5.0.5]# src/redis-cli -h 127.0.0.1 -p 6381
+    127.0.0.1:6381> set aa bb
+    (error) MOVED 1180 127.0.0.1:6379
+    127.0.0.1:6381> set fool aa
+    OK
+    127.0.0.1:6381> get fool
+    "aa"
+    // error MOVED ??? 节点会计算这个东西给谁处理，不在该槽，就会发生这个错误
+    // 这是因为启动redis-cli时没有设置集群模式所导致
+    // 使用 -c 来启动集群模式
+    src/redis-cli -c -p 7000
+    //
+    127.0.0.1:6379> set bb cc
+    -> Redirected to slot [8620] located at 127.0.0.1:6380
+    OK
+    127.0.0.1:6380> set cc dd
+    -> Redirected to slot [700] located at 127.0.0.1:6379
+    OK
+    127.0.0.1:6379> set dd ee
+    -> Redirected to slot [11212] located at 127.0.0.1:6381
+    OK
+    127.0.0.1:6381> set fool fool
+    OK
+    127.0.0.1:6381> get aa
+    -> Redirected to slot [1180] located at 127.0.0.1:6379
+    "bb"
+    127.0.0.1:6379> get bb
+    -> Redirected to slot [8620] located at 127.0.0.1:6380
+    "cc"
+    // 搭建成功
+    // 为了安全 设置下密码 在配置文件里 requirepass password
+    // cli访问的时候加上 -a password
+
+# springboot redis 集群配置
+    redis:
+        cluster:
+          nodes: 121.41.51.151:7000,121.41.51.151:7001,121.41.51.151:7002,121.41.51.151:7003,121.41.51.151:7004,121.41.51.151:7005
+

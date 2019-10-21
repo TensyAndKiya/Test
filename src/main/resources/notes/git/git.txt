@@ -1,0 +1,47 @@
+# 删除某次push到远程的commit,并不是无痕的哦,revert 再push 会有本次revert的commit记录
+git revert commit_id  (这个commit_id是你要删掉的commit的id)
+git push
+
+# 删除某次push到远程的commit,无痕的哦...反正远程commits里看起来是无痕的。。。这个删除过程中的push有没有什么短信邮件通知我就不管了。。
+git rebase -i commit_id  (这个commit_id是你要删掉的commit之前那一次的id)
+    -i 后面的参数是 commit_idA commit_idB  左开右闭的区间。。不输入commit_idB 默认是到最近这一次
+git rebase后会进入编辑器页面 把需要删掉的commit 前面的pick改为drop，然后保存退出
+git push origin master --force   强制push上去
+
+# 自己本地新建一个仓库然后push上去，而不是从git仓库clone而后push
+git init test  在指定的test文件夹创建git仓库
+把需要的文件弄好
+git add .
+git commit -m '初始化提交'
+git remote add origin https://github.com/abc/cba.git 这个是添加在github刚创建的新仓库
+git push --set-upstream origin master 设置master的upstream并push上去
+完美
+
+# 修改remote url
+git remote rm origin
+git remote add origin https://github.com/abc/cba.git
+# 这个直接重设
+git remote set-url origin http://git.eeparking.com/MicroService/ms-autopayment.git
+
+git push origin master --force
+
+# 打标签了
+git tag -a V1.0.0 -m "第一个标签"  这个是给当前的commit打标签
+git tag -a V1.0.1 439d104 -m "之前忘记打标签了。现在补上"  指定commit打标签
+git push origin V1.0.0  把标签push到远程仓库
+git tag -d V1.0.0  删除本地标签
+git push origin --delete V1.0.0  删除远程仓库标签
+git tag  展示所有tag
+git show V1.0.0  展示对应tag的详细信息
+
+# 拉取远程分支到本地
+先 git fetch origin 拉下最新的信息
+git checkout -b dev origin/dev
+
+# 复制其它分支的commit到test分支
+git checkout test
+git cherry-pick commit_id 有冲突就解决冲突
+复制多个commit
+git cherry-pick commit_id1..commit_id20 左开右闭 (commit_id1到commit_id20]
+git cherry-pick commit_id1^..commit_id20 左闭右闭，注意多了个^符号^^^^^^^暂且称之为异或符吧 [commit_id1到commit_id20]
+

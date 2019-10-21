@@ -1,0 +1,56 @@
+Mysql 5.7 Zip 安装步骤
+
+1. my.ini
+放置于mysql根目录下
+
+[mysql]
+# 设置mysql客户端默认字符集
+default-character-set=utf8
+[mysqld]
+#设置3306端口
+port = 3306
+# 设置mysql的安装目录
+basedir=D:\mysql-5.7.25
+# 设置mysql数据库的数据的存放目录
+datadir=D:\mysql-5.7.25\data
+# 允许最大连接数
+max_connections=200
+# 服务端使用的字符集默认为8比特编码的latin1字符集
+character-set-server=utf8
+# 创建新表时将使用的默认存储引擎
+default-storage-engine=INNODB
+# mysql8默认使用“mysql_native_password”插件认证
+default_authentication_plugin=mysql_native_password
+
+2.mysql 环境变量
+
+3.初始化并安装
+
+以管理员身份运行cmd
+mysqld --initialize --user=mysql --console
+
+mysqld --install MYSQL
+
+net start MYSQL
+
+使用初始化密码登录
+
+mysql -u root -p
+
+使用初始密码登录后修改root用户密码
+
+set password for root@localhost=password('yourpassword');
+
+mysql8 使用 alter user 'root'@'localhost' identified with mysql_native_password by 'myPassword' 来修改密码
+因为mysql8 默认使用的是caching_sha2_password验证方式,之前的则是使用mysql_native_password
+若是采用mysql8的话。。登录可能会出问题哦。。超大概率的。
+
+最后来个 create user 'kiya'@'%' identified by 'myPassword' 让任何主机可以用kiya登录
+若是mysql8 的话 就用 identified with mysql_native_password by
+
+给予所有权限，让用这个的小伙子能像root一样为所欲为，慎用哦！！！
+GRANT ALL PRIVILEGES ON *.* TO 'kiya'@'%' IDENTIFIED BY '123456';
+
+flush privileges;
+
+最简单的安装步骤如上所示

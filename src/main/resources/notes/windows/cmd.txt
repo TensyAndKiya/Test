@@ -1,0 +1,26 @@
+windows + Pause Break -> 系统
+运行 psr -> 录制
+telnet ip port 查看是否通畅
+
+# 访问接口
+curl命令适用于linux
+POST方式
+curl -i -X POST http://localhost:8080/hasaki
+GET方式
+curl -i http://localhost:8080/hasaki
+GET方式多参数只能识别第一个参数的话用""把url包起来就行
+
+# cookie
+curl --cookie "aa=bb,cc=dd" localhost:8080
+# header -H 或 --header
+curl -H "aa:bb" -H "cc:dd" localhost:8080
+-i -v -I参数很多。。。
+
+# 结束任务
+taskkill /f /t /pid
+/f 强制 /t 进程树 /pid 指定进程id /im image name
+
+# 定时关机
+shutdown /s /t 3600
+/t 3600 秒数 /s 关机
+shutdown /a 取消定时关机

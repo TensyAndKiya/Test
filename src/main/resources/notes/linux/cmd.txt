@@ -1,0 +1,33 @@
+# 查看linux机器是64还是32位的
+getconf LONG_BIT
+# 复制文件或文件夹到某个位置
+cp hasaki.txt /a/b/c/ 文件
+cp -r hasaki /a/b/c/ 文件夹
+# ping通不通 -c 次数。。不然会一直ping
+ping ip -c 4
+# 看文件尾部 -n 行数
+tail -f all_info.log -n 100
+
+# vim 技巧
+跳到指定行数编辑 vim +100 test.log
+跳到某行 ngg/nG/:n n代表第几行
+跳到最后一行 G,shift+g 或者 Caps Lock大写后 g
+跳到第一行的第一个字符 gg
+
+# grep 技巧
+统计test.log里文本1234出现行数
+cat test.log | grep -c 1234
+grep 1234 test.log -c
+#查看满足条件的前40行
+grep 'EleInvoice Notify' all_info.log | head -n 40
+#查看满足条件的后40行
+grep 'EleInvoice Notify' all_info.log | tail -n 40
+#查看满足条件的第39，40行
+grep 'EleInvoice Notify' all_info.log | head -n 40 | tail -n 2
+
+# 查看文件大小
+du -sh 查看当前所在文件夹大小 默认单位M
+du -sk 查看当前所在文件夹大小 默认单位K
+du -sh filename 查看指定文件
+du -sk filename 查看指定文件
+

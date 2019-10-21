@@ -1,0 +1,17 @@
+两个表关联查询的连接字段有索引竟然用不了？
+原来是两个表的排序规则不一致
+
+写select要注意类型啊，发生类型转换的时候就搞不上索引了
+
+每次用explain extended检查一下，尽量优化，全表扫描的坚决不行
+
+explain 的 type key rows extra了解一哈
+
+type : all index range ref eq_ref const 效率从左到右增强
+all 全表扫描
+index 索引扫描
+range 有范围的索引扫描 between and,>,<,in,or (范围查询之后的索引不生效)
+ref 使用了索引，但该索引列的值不唯一
+ref_eq 这种类型的结果集只有一个(使用了主键或唯一索引)
+const 常量 使用了主键或唯一索引
+

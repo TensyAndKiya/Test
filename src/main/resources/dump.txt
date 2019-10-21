@@ -1,0 +1,22 @@
+java dump分析
+
+1. 使用jps命令查看java相关的进程
+2. 使用jmap -dump:format=b,file=fileName.bin <pid> (pid是jvm进程号)
+3. 将dump文件导入mat分析
+
+生产环境的话直接使用jmap导出dump不太好，因为会挂起程序且耗时
+
+1. 使用gcore <pid> 导出core.pid文件
+2. 把core.pid移到其他机器
+3. 使用sudo /JAVA_HOME/bin/jmap -dump:format=b,file=dump.hprof /JAVA_HOME/bin/java core.pid导出dump文件(注意java版本要一致)
+4. 分析
+5. 不要问为什么用sudo，为什么使用java命令要加上目录，因为去掉它们总是出问题而且不知怎么解决
+   应该是权限吧。。毕竟sudo
+   若windows上的话就用管理员身份运行cmd再执行命令
+
+jstack 线程堆栈分析
+
+1. 使用jps或者top查看java相关的进程
+2. 使用top -Hp <pid> 查看相关的线程情况(这样方便找出占用cpu和memory的线程)
+3. 使用jstack -l <pid> >> fileName.log （>>是追加内容，不会覆盖之前的）
+4. 看文件分析

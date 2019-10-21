@@ -1,0 +1,8 @@
+consistency 数据一致性
+availability 可获取性
+partition tolerance 分区容忍性
+
+appId = spring.application.name
+instanceId = ipAddr:appId:port
+
+eureka.client.serviceUrl.defaultZone
