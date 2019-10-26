@@ -31,3 +31,31 @@ du -sk 查看当前所在文件夹大小 默认单位K
 du -sh filename 查看指定文件
 du -sk filename 查看指定文件
 
+# 简单的后台启动jar 关闭terminal不退出
+nohup java -jar test.jar
+
+# 配置jar服务
+切到 system 目录
+cd /etc/systemd/system
+新建 eureka.service
+
+编辑内容 如下：
+[unit]
+Description=eureka-server
+After=syslog.target
+[Service]
+ExecStart=/usr/local/java/jdk1.8.0/bin/java -jar /usr/local/services/server-eureka-1.0.0.jar
+Restart=always
+RestartSec=1
+[Install]
+WantedBy=multi-user.target
+
+Description 改一下。(不改也行)
+再改好jar包路径
+保存退出
+
+启动服务
+systemctl start eureka.service
+设置开机自启
+systemctl enable eureka.service
+

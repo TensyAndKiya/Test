@@ -19,8 +19,8 @@ import java.util.Map;
  */
 public class MybatisTest {
     private final static String ENV = "prod";
-    private final static String DATABASE = "park";
-    private final static String TABLE = "park_parkinglot";
+    private final static String DATABASE = "business";
+    private final static String TABLE = "business_product";
     private final static char UNDERLINE = '_';
     private final static char AT = '@';
 
@@ -55,22 +55,32 @@ public class MybatisTest {
     private static void printResultMapAndColumns(List<Map<String, String>> list){
         StringBuilder resultMap = new StringBuilder("<resultMap id=\"baseMap\" type=\"\">");
         StringBuilder columnSql = new StringBuilder("<sql id=\"baseColumn\">\n\t");
+        StringBuilder properties = new StringBuilder("");
         System.out.println(list.size());
         list.forEach(e -> {
             String column = e.get("column_name");
             String type = e.get("column_type");
             resultMap.append("\n\t");
             resultMap.append("<result property=\"");
-            resultMap.append(getProperty(column));
+            String property = getProperty(column);
+            resultMap.append(property);
             resultMap.append("\" column=\"");
             resultMap.append(column);
             resultMap.append("\" javaType=\"");
-            resultMap.append(getJavaType(type));
+            String javaType = getJavaType(type);
+            resultMap.append(javaType);
             resultMap.append("\"></result>");
 
             // columnSql
             columnSql.append(column);
             columnSql.append(',');
+
+            // properties
+            properties.append("private ");
+            properties.append(javaType.substring(javaType.lastIndexOf('.') + 1));
+            properties.append(' ');
+            properties.append(property);
+            properties.append(";\n");
         });
         resultMap.append("\n</resultMap>");
         columnSql.deleteCharAt(columnSql.length() - 1);
@@ -78,6 +88,7 @@ public class MybatisTest {
 
         System.out.println(resultMap.toString());
         System.out.println(columnSql.toString());
+        System.out.println(properties.toString());
     }
 
     private static String getProperty(String column){
@@ -109,7 +120,7 @@ public class MybatisTest {
             return "java.lang.Double";
         }else if(type.startsWith("tinyint")){
             return "java.lang.Boolean";
-        }else if(type.startsWith("datetime")){
+        }else if(type.startsWith("datetime") || type.startsWith("date")){
             return "java.util.Date";
         }else if(type.contains("char")){
             return "java.lang.String";

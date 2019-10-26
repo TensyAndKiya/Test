@@ -41,7 +41,7 @@ class Runnable1 implements Runnable{
             while (it.hasNext()){
                 Map.Entry<String,Long> entry = it.next();
                 // 放入时间大于3分钟
-                if(new Date().getTime() - entry.getValue() > 300){
+                if(System.currentTimeMillis() - entry.getValue() > 300){
                     list.add(entry.getKey());
                 }
             }
