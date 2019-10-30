@@ -1,5 +1,6 @@
-package com.clei.Y2019.M10.D17;
+package com.clei.utils;
 
+import com.clei.utils.other.ColumnDao;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -17,10 +18,10 @@ import java.util.Map;
  * @author KIyA
  * @since 2019-10-17
  */
-public class MybatisTest {
+public class MybatisUtil {
     private final static String ENV = "prod";
-    private final static String DATABASE = "business";
-    private final static String TABLE = "business_product";
+    private final static String DATABASE = "users";
+    private final static String TABLE = "user_product_record";
     private final static char UNDERLINE = '_';
     private final static char AT = '@';
 
@@ -45,7 +46,7 @@ public class MybatisTest {
     private static Object doGet(String env) throws IOException {
         SqlSession session = getSession(env);
         ColumnDao mapper = session.getMapper(ColumnDao.class);
-        Map<String,String> param = new HashMap<>();
+        Map<String,String> param = new HashMap<>(2);
         param.put("database",DATABASE);
         param.put("table",TABLE);
         List<Map<String,String>> reuslt = mapper.getColumnInfo(param);
@@ -56,6 +57,9 @@ public class MybatisTest {
         StringBuilder resultMap = new StringBuilder("<resultMap id=\"baseMap\" type=\"\">");
         StringBuilder columnSql = new StringBuilder("<sql id=\"baseColumn\">\n\t");
         StringBuilder properties = new StringBuilder("");
+        StringBuilder selectAsSql = new StringBuilder("");
+        StringBuilder insertColumnSql = new StringBuilder("");
+        StringBuilder insertPropertySql = new StringBuilder("");
         System.out.println(list.size());
         list.forEach(e -> {
             String column = e.get("column_name");
@@ -75,12 +79,28 @@ public class MybatisTest {
             columnSql.append(column);
             columnSql.append(',');
 
+            // insertColumnSql
+            insertColumnSql.append(column);
+            insertColumnSql.append(",\n");
+
+            // insertPropertySql
+            insertPropertySql.append("#{");
+            insertPropertySql.append(property);
+            insertPropertySql.append("},\n");
+
             // properties
             properties.append("private ");
             properties.append(javaType.substring(javaType.lastIndexOf('.') + 1));
             properties.append(' ');
             properties.append(property);
             properties.append(";\n");
+
+            // selectAsSql
+            selectAsSql.append(column);
+            selectAsSql.append(" AS ");
+            selectAsSql.append(property);
+            selectAsSql.append(",\n\t");
+
         });
         resultMap.append("\n</resultMap>");
         columnSql.deleteCharAt(columnSql.length() - 1);
@@ -89,6 +109,9 @@ public class MybatisTest {
         System.out.println(resultMap.toString());
         System.out.println(columnSql.toString());
         System.out.println(properties.toString());
+        System.out.println(selectAsSql.toString());
+        System.out.println(insertColumnSql.toString());
+        System.out.println(insertPropertySql.toString());
     }
 
     private static String getProperty(String column){
@@ -128,3 +151,4 @@ public class MybatisTest {
         return "java.lang.String";
     }
 }
+

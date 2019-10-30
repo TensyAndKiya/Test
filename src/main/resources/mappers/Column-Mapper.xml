@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.clei.Y2019.M10.D17.ColumnDao">
+<mapper namespace="com.clei.utils.other.ColumnDao">
     <select id="getColumnInfo" resultType="java.util.Map">
         SELECT column_name,column_type
         FROM information_schema.`COLUMNS`
