@@ -1,0 +1,22 @@
+先下载jdk.tar.gz
+
+解压到linux
+
+编辑好目录 如 /usr/dev/jdk8
+
+vim /etc/profile
+
+在文件尾添加如下内容
+
+export JAVA_HOME=/usr/dev/jdk8
+export CLASSPATH=.:$CLASSPATH:$JAVA_HOME/lib/:$JAVA_HOME/lib/tools.jar
+export PATH=$PATH:$JAVA_HOME/bin
+
+保存退出
+
+source /etc/profile
+使得更改的变量生效
+
+java -version 校验
+
+成功
