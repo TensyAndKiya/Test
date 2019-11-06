@@ -11,3 +11,29 @@ maven要使用已经打好的jar包，又没有源码用来install的话，可�
 方法2
 # 使用命令将jar包install到本地仓库 再通过常规方式引入
 mvn install:install-file -Dfile=D:\CLIdeaWorkspace\Test\target\CleiUtils-1.0.0.jar -DgroupId=com.clei -DartifactId=CleiUtils -Dversion=1.0.0 -Dpackaging=jar
+
+打jar包时候把引入的jar包一起打到jar包里的方法
+<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.clei.DownloadInvoice</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
