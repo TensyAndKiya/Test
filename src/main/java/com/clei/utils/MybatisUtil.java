@@ -20,8 +20,8 @@ import java.util.Map;
  */
 public class MybatisUtil {
     private final static String ENV = "prod";
-    private final static String DATABASE = "users";
-    private final static String TABLE = "user_product_record";
+    private final static String DATABASE = "business";
+    private final static String TABLE = "business_product";
     private final static char UNDERLINE = '_';
     private final static char AT = '@';
 
