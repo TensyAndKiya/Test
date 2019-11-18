@@ -33,6 +33,5 @@ public class DownloadEleInvoiceUtil {
         }
         return new String(data, "UTF-8");
     }
-
 }
 

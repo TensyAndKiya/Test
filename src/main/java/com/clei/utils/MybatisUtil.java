@@ -21,7 +21,7 @@ import java.util.Map;
 public class MybatisUtil {
     private final static String ENV = "prod";
     private final static String DATABASE = "business";
-    private final static String TABLE = "business_product";
+    private final static String TABLE = "business_job";
     private final static char UNDERLINE = '_';
     private final static char AT = '@';
 
@@ -142,7 +142,7 @@ public class MybatisUtil {
         }else if(type.startsWith("double") || type.startsWith("decimal")){
             return "java.lang.Double";
         }else if(type.startsWith("tinyint")){
-            return "java.lang.Boolean";
+            return "java.lang.Short";
         }else if(type.startsWith("datetime") || type.startsWith("date")){
             return "java.util.Date";
         }else if(type.contains("char")){
