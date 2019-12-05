@@ -23,8 +23,9 @@ public class LocalDateTest {
 
 
         String date1 = "2019-11-14 11:11:11";
-        String date2 = "2019-11-15 11:11:11";
+        String date2 = "2019-11-14 11:11:12";
 
+        System.out.println("差异 ： " + ChronoUnit.SECONDS.between(LocalDateTime.parse(date1,dtf),LocalDateTime.parse(date2,dtf)));
         System.out.println("差异 ： " + ChronoUnit.DAYS.between(LocalDateTime.parse(date1,dtf),LocalDateTime.parse(date2,dtf)));
 
 

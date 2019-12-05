@@ -8,4 +8,104 @@
         WHERE TABLE_SCHEMA = #{database}
         AND TABLE_NAME = #{table}
     </select>
+
+    <insert id="insertSpace" parameterType="java.util.List">
+            INSERT INTO park_parkingspace(parkingspace_id,
+                floor_id,
+                area_id,
+                parkinglot_id,
+                parkingspace_code,
+                parkingspace_type,
+                parkingspace_status,
+                create_by,
+                create_date)
+            VALUES <foreach collection="list" open="(" close=")" separator="),(" item="i">
+            #{i.parkingspaceId},
+            #{i.floorId},
+            #{i.areaId},
+            #{i.parkinglotId},
+            #{i.parkingspaceCode},
+            #{i.parkingspaceType},
+            #{i.parkingspaceStatus},
+            #{i.createBy},
+            SYSDATE()
+        </foreach>
+    </insert>
+
+    <!--<select id="selectList" resultType="java.lang.String">
+        SELECT parkingspace_id
+        FROM park_parkingspace pp
+        WHERE pp.parkinglot_id = '9fb2a645362f58ea7fbf4978034028a3'
+        AND parkingspace_status = 1
+    </select>-->
+
+    <select id="selectList" resultType="java.lang.String">
+        SELECT parkingspace_id
+        FROM park_parkingspace pp,park_parkinglot_floor ppf
+        WHERE pp.parkinglot_id = '9fb2a645362f58ea7fbf4978034028a3'
+        AND ppf.floor_id = pp.floor_id
+        AND ppf.floor_name = '1M'
+        AND pp.del_flag = 0
+        AND ppf.del_flag = 0
+        AND parkingspace_status = 1
+    </select>
+
+    <!--<select id="selectList" resultType="java.lang.String">
+        SELECT parkingspace_id
+        FROM park_parkingspace pp,park_parkinglot_area ppa
+        WHERE pp.parkinglot_id = '9fb2a645362f58ea7fbf4978034028a3'
+        AND ppa.area_id = pp.area_id
+        AND ppa.area_name = '绿海龟'
+        AND pp.del_flag = 0
+        AND ppa.del_flag = 0
+        AND parkingspace_status = 1
+    </select>-->
+
+    <update id="updateTime" parameterType="java.util.Map">
+        UPDATE park_parkingspace
+        SET entrance_time = #{entranceTime}
+        WHERE parkingspace_id = #{parkingspaceId}
+    </update>
+
+    <update id="updateStatus1" parameterType="java.util.Map">
+        UPDATE park_parkingspace pp,park_parkinglot_area ppa
+        SET parkingspace_status = 0
+        WHERE pp.parkinglot_id = '9fb2a645362f58ea7fbf4978034028a3'
+        AND ppa.area_id = pp.area_id
+        AND ppa.area_name = #{areaName}
+        AND pp.del_flag = 0
+        AND ppa.del_flag = 0
+    </update>
+
+    <update id="updateStatus" parameterType="java.util.Map">
+            UPDATE park_parkingspace
+    SET parkingspace_status = 1
+    WHERE parkingspace_id IN (
+        SELECT * FROM (
+            SELECT parkingspace_id
+        FROM park_parkingspace pp,park_parkinglot_area ppa
+        WHERE pp.parkinglot_id = '9fb2a645362f58ea7fbf4978034028a3'
+        AND ppa.area_id = pp.area_id
+        AND ppa.area_name = #{areaName}
+        AND pp.del_flag = 0
+        AND ppa.del_flag = 0
+        AND parkingspace_code >= #{fromCode}
+        AND parkingspace_code <![CDATA[ < ]]> #{toCode}
+        AND parkingspace_status != 1
+        ORDER BY parkingspace_id
+        LIMIT #{limit}
+        ) temp
+    )
+    </update>
+
+    <update id="updateTimeBack" parameterType="java.util.Map">
+        UPDATE park_parkingspace
+        SET entrance_time = DATE_ADD(entrance_time,INTERVAL #{seconds} SECOND)
+        WHERE parkinglot_id = '9fb2a645362f58ea7fbf4978034028a3'
+        AND parkingspace_status = 1
+        AND entrance_time IS NOT NULL
+        AND del_flag = 0
+    </update>
+
+
 </mapper>

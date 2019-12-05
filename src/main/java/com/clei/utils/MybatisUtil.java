@@ -8,9 +8,10 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 /**
  * 快速获取某表的 ResultMap信息，以及所有的字段名信息
@@ -20,20 +21,132 @@ import java.util.Map;
  */
 public class MybatisUtil {
     private final static String ENV = "prod";
-    private final static String DATABASE = "business";
-    private final static String TABLE = "business_job";
+    private final static String DATABASE = "merchants";
+    private final static String TABLE = "merchants_recharge";
     private final static char UNDERLINE = '_';
     private final static char AT = '@';
 
-    public static void main(String[] args) throws IOException {
+    // 102 agv == 3 || p2 floor ||
+
+    public static void main(String[] args) throws Exception {
         String env = ENV;
         if(args.length > 0){
             if(args[0].equals("prod")){
                 env = "prod";
             }
         }
-        List<Map<String,String>> result = (List<Map<String, String>>) doGet(env);
-        printResultMapAndColumns(result);
+
+
+        // doUpdate(env);
+
+        /*List<Map<String,Object>> list = new ArrayList<>();
+        for (int i = 1; i <= 102; i++) {
+            Map<String,Object> map = new HashMap<>();
+            String id = UUID.randomUUID().toString().replaceAll("-","");
+            map.put("parkingspaceId",id);
+            map.put("floorId","000002");
+            map.put("areaId","200005");
+            map.put("parkinglotId","9fb2a645362f58ea7fbf4978034028a3");
+            map.put("parkingspaceCode","1F-AGV-" + getStr(i));
+            map.put("parkingspaceType",3);
+            map.put("parkingspaceStatus",0);
+            map.put("createBy","00001");
+            list.add(map);
+        }
+
+        SqlSession session = getSession(env);
+        ColumnDao mapper = session.getMapper(ColumnDao.class);
+        int result = mapper.insertSpace(list);
+        session.commit();
+
+        System.out.println("success " + result);*/
+
+        // Map<String,String> param = new HashMap<>(2);
+        /*param.put("list",DATABASE);
+        param.put("table",TABLE);*/
+
+
+        /*List<Map<String,String>> result = (List<Map<String, String>>) doGet(env);
+        printResultMapAndColumns(result);*/
+
+        // doUpdateStatus(env);
+
+         doUpdate(env);
+
+        // allTimeBack(env);
+
+        /*System.out.println(0.5*3600);
+        System.out.println(12*3600);*/
+
+    }
+
+    private static void allTimeBack(String env) throws Exception{
+        SqlSession session = getSession(env);
+        ColumnDao mapper = session.getMapper(ColumnDao.class);
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String yesterday = "2019-12-04 18:33:33";
+        LocalDateTime yTime = LocalDateTime.parse(yesterday,dtf);
+        LocalDateTime now = LocalDateTime.now();
+        long seconds = ChronoUnit.SECONDS.between(yTime,now);
+        System.out.println("秒 ： " + seconds);
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("seconds",seconds);
+        Integer result = mapper.updateTimeBack(map);
+
+        System.out.println("result : " + result);
+    }
+
+    private static void doUpdateStatus(String env) throws Exception{
+        SqlSession session = getSession(env);
+        ColumnDao mapper = session.getMapper(ColumnDao.class);
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("areaName","中华鲟");
+        map.put("fromCode","B1-810");
+        map.put("toCode","B1-870");
+        map.put("limit",55);
+
+        Integer origin = mapper.updateStatus1(map);
+        System.out.println("effect : " + origin);
+
+        Integer result  = mapper.updateStatus(map);
+        System.out.println("result : " + result);
+
+        session.commit();
+    }
+
+    private static void doUpdate(String env) throws Exception{
+        SqlSession session = getSession(env);
+        ColumnDao mapper = session.getMapper(ColumnDao.class);
+        List<String> strs = mapper.selectList();
+        Random random = new Random();
+        int[] array = random.ints(strs.size(),1800,43200).toArray();
+
+        System.out.println(strs.size());
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        for (int i = 0; i < strs.size(); i++) {
+            Map<String,Object> map = new HashMap<>();
+            map.put("parkingspaceId",strs.get(i));
+            map.put("entranceTime",dtf.format(now.minusSeconds(array[i])));
+            mapper.updateTime(map);
+            System.out.println(i);
+        }
+
+        session.commit();
+    }
+
+    private static String getStr(int i){
+        if (i < 10){
+            return "00" + i;
+        }else if(i< 100){
+            return "0" + i;
+        }else {
+            return "" + i;
+        }
     }
 
     private static SqlSession getSession(String env) throws IOException {
