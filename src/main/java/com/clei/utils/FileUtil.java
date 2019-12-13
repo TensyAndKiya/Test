@@ -24,7 +24,7 @@ public class FileUtil {
         // 删除指定目录下的.class文件
         fileOperation(file, f -> {
             String fileName = f.getName();
-            if(StringUtils.isEmpty(fileSuffix) || fileName.endsWith(fileSuffix)){
+            if(!StringUtils.isEmpty(fileSuffix) && fileName.endsWith(fileSuffix)){
                 findContent(f,content);
             }
         });

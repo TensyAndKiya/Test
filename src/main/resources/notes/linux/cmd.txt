@@ -24,6 +24,14 @@ grep 'EleInvoice Notify' all_info.log | head -n 40
 grep 'EleInvoice Notify' all_info.log | tail -n 40
 #查看满足条件的第39，40行
 grep 'EleInvoice Notify' all_info.log | head -n 40 | tail -n 2
+#查看匹配行及其后三行
+grep 'text' all_info.log -A 3
+#查看匹配行及其前三行
+grep 'text' all_info.log -B 3
+#查看匹配行及其前后三行
+grep 'text' all_info.log -C 3
+grep 'text' all_info.log -3
+
 
 # 查看文件大小
 du -sh 查看当前所在文件夹大小 默认单位M
