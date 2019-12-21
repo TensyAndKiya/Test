@@ -1,11 +1,13 @@
 package com.clei.utils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jdcloud.sdk.utils.StringUtils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FileUtil {
 
@@ -40,6 +42,80 @@ public class FileUtil {
             }
         }
         br.close();
+    }
+
+    public static void rewriteStr(String directory,String fileSuffix,String... strs) throws Exception{
+        File file = new File(directory);
+
+        List<Map<String,String>> list = new ArrayList<>();
+        List<String> fileContent = new ArrayList<>();
+        fileOperation(file, f -> {
+            String fileName = f.getName();
+            if(!file.isDirectory() && fileName.endsWith(fileSuffix)){
+
+
+                Map<String,String> m = new HashMap<>();
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file),"UTF-8"));
+                String str;
+                while(null != (str = br.readLine())){
+                    String origin = str;
+                    fileContent.add(origin);
+
+                    boolean always = true;
+                    for (int i = 0; i < strs.length; i++) {
+                        if(!str.contains(strs[i])){
+                            always = false;
+                            break;
+                        }else {
+
+                            PrintUtil.print(str);
+
+                            str = str.replace(strs[i],"");
+                        }
+                    }
+                    // 全都有
+                    if(always){
+
+                        PrintUtil.println("wocao");
+
+                        m.put("fileName",file.getAbsolutePath());
+                        m.put("origin",origin);
+                        // 暂时假设 长度 2
+                        // AND timerule_name LIKE '%${timeRuleName}%'
+                        // CONCAT('%',#{license},'%')
+                        int index1 = origin.indexOf("'%${");
+                        int index2 = origin.replace("'%${","").indexOf("}%") + 4;
+                        String newStr = str.substring(0,index1) + "CONCAT('%',#{"
+                                        + str.substring(index1 + 4,index2) + str.substring(index2 + 2);
+
+                        m.put("newStr",newStr);
+                        list.add(m);
+                    }
+                }
+                br.close();
+
+
+                PrintUtil.println("change : " + JSONObject.toJSONString(list));
+
+                PrintUtil.println("old : " + fileContent);
+
+
+                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file),EncryptUtil.CHARSET_UTF8));
+                for (String s : fileContent){
+                    String writeStr = s;
+                    for(Map<String,String> mm : list){
+                        String origin = mm.get("origin");
+                        if(writeStr.equals(origin)){
+                            writeStr = mm.get("newStr");
+                            break;
+                        }
+                    }
+                    bw.write(writeStr);
+                    bw.write("\n");
+                }
+            }
+        });
     }
 
     public interface Operation{

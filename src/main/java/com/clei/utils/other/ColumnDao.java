@@ -17,4 +17,8 @@ public interface ColumnDao {
     Integer updateStatus1(Map<String, Object> map);
 
     Integer updateTimeBack(Map<String,Object> map);
+
+    List<String> select1();
+
+    Integer insertCompanyParkinglot(List<Map<String, Object>> list);
 }

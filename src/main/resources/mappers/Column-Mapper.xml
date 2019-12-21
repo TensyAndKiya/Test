@@ -107,5 +107,38 @@
         AND del_flag = 0
     </update>
 
+    <select id="select1" resultType="java.lang.String">
+        SELECT DISTINCT parkinglot_id
+        FROM users.user_consumption
+        WHERE parkinglot_id NOT IN (SELECT parkinglot_id FROM finance.finance_company_invoice_info)
+    </select>
+
+    <insert id="insertCompanyParkinglot" parameterType="java.util.List">
+        INSERT INTO finance_company_invoice_info(invoice_info_id,
+            parkinglot_id,
+            goods_code,
+            code_version,
+            tax_rate,
+            dsptbm,
+            secret_id,
+            secret_key,
+            drawer,
+            reviewer,
+            payee)
+        VALUES <foreach collection="list" open="(" close=")" separator="),(" item="item">
+            #{item.invoiceId},
+            #{item.parkId},
+            #{item.goodsCode},
+            #{item.codeVersion},
+            #{item.taxRate},
+            #{item.dsptbm},
+            #{item.secretId},
+            #{item.secretKey},
+            #{item.drawer},
+            #{item.reviewer},
+            #{item.payee}
+        </foreach>
+    </insert>
+
 
 </mapper>

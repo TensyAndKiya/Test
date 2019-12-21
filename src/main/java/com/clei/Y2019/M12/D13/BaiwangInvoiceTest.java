@@ -2,6 +2,7 @@ package com.clei.Y2019.M12.D13;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.clei.utils.BigDecimalUtil;
 import com.clei.utils.OkHttpUtil;
 import com.clei.utils.PrintUtil;
 import com.clei.utils.StringUtil;
@@ -30,15 +31,15 @@ public class BaiwangInvoiceTest {
         tokenRequestMap.put("open_id","");
         tokenRequestMap.put("app_secret","");
         tokenRequestMap.put("drawer","何花");
-        tokenRequestMap.put("tax_number","");
-        tokenRequestMap.put("name","");
-        tokenRequestMap.put("address","");
-        tokenRequestMap.put("phone","");
+        tokenRequestMap.put("tax_number","91510107MA6CED5530");
+        tokenRequestMap.put("name","成都首中首泊停车场管理有限公司");
+        tokenRequestMap.put("address","成都市武侯区火车南站西路15号7楼02室");
+        tokenRequestMap.put("phone","028-85133533");
         tokenRequestMap.put("opening_bank","招商银行股份有限公司成都府城大道支行");
         tokenRequestMap.put("account","");
         // 开票业务参数
         Map<String,Object> param = new HashMap<>();
-        param.put("invoice_price",0.01f);
+        param.put("invoice_price",0.60f);
         param.put("e_mail","1406723908@qq.com");
         param.put("tax_number","");
         param.put("invoice_title","陈某");
@@ -81,18 +82,24 @@ public class BaiwangInvoiceTest {
             userName = tokenRequestMap.get("drawer").toString();
         }
 
-        float totalPrice = new BigDecimal(Float.parseFloat(invoicingRecord.get("invoice_price").toString())).setScale(2,BigDecimal.ROUND_HALF_UP).floatValue();
+        BigDecimal totalPrice = new BigDecimal(invoicingRecord.get("invoice_price").toString());
         //可能会有大于单张限额的，切割开多次
-        float singleQuota = 0.01f;
+        BigDecimal singleQuota = new BigDecimal("0.01");
         // 西部智谷的要求将车场名设置到备注里
         invoicingRecord.put("other_message","备注");
-        while(totalPrice > singleQuota){
-            float jshj = singleQuota;
-            totalPrice -= singleQuota;
+        while(totalPrice.compareTo(singleQuota) >= 0){
+            float jshj = BigDecimalUtil.getScaleFloat(singleQuota,2);
+            totalPrice = totalPrice.subtract(singleQuota);
             newInvoice(invoicingRecord,tokenRequestMap,jshj,userName);
+
+            try{
+                Thread.sleep(1357);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
-        if(totalPrice > 0){
-            return newInvoice(invoicingRecord,tokenRequestMap,totalPrice,userName);
+        if(totalPrice.compareTo(singleQuota) >= 0){
+            return newInvoice(invoicingRecord,tokenRequestMap,BigDecimalUtil.getScaleFloat(totalPrice,2),userName);
         }
         return false;
     }

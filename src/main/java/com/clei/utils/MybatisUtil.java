@@ -21,8 +21,8 @@ import java.util.*;
  */
 public class MybatisUtil {
     private final static String ENV = "prod";
-    private final static String DATABASE = "merchants";
-    private final static String TABLE = "merchants_recharge";
+    private final static String DATABASE = "park";
+    private final static String TABLE = "park_parkinglot";
     private final static char UNDERLINE = '_';
     private final static char AT = '@';
 
@@ -66,17 +66,76 @@ public class MybatisUtil {
         param.put("table",TABLE);*/
 
 
-        /*List<Map<String,String>> result = (List<Map<String, String>>) doGet(env);
-        printResultMapAndColumns(result);*/
+        // 输出 table private
+        List<Map<String,String>> result = (List<Map<String, String>>) doGet(env);
+        printResultMapAndColumns(result);
 
         // doUpdateStatus(env);
 
-         doUpdate(env);
+         // doUpdate(env);
 
         // allTimeBack(env);
 
         /*System.out.println(0.5*3600);
         System.out.println(12*3600);*/
+
+        //
+        // insertCompanyParkinglot(env);
+
+        // insertParkInvoiceInfo(env);
+
+    }
+
+    private static void insertCompanyParkinglot(String env) throws Exception{
+        SqlSession session = getSession(env);
+        ColumnDao mapper = session.getMapper(ColumnDao.class);
+
+        List<String> parkIds = mapper.select1();
+
+        List<Map<String,Object>> list = new ArrayList<>();
+        for(String str : parkIds){
+            Map<String,Object> param = new HashMap<>();
+            param.put("companyId","2");
+            param.put("parkId",str);
+            list.add(param);
+        }
+
+        // session.commit();
+
+        int result = mapper.insertCompanyParkinglot(list);
+
+        PrintUtil.println("result : " + result,result);
+
+    }
+
+    private static void insertParkInvoiceInfo(String env) throws Exception{
+        SqlSession session = getSession(env);
+        ColumnDao mapper = session.getMapper(ColumnDao.class);
+
+        List<String> parkIds = mapper.select1();
+
+        List<Map<String,Object>> list = new ArrayList<>();
+        for(String str : parkIds){
+            Map<String,Object> param = new HashMap<>();
+            param.put("invoiceId",UUID.randomUUID().toString().replaceAll("-", ""));
+            param.put("parkId",str);
+            param.put("goodsCode","3040502020200000000");
+            param.put("codeVersion","33.0");
+            param.put("taxRate",0.09);
+            param.put("dsptbm","111JIY4C");
+            param.put("secretId","2b92b210d95f48bda83eda5032d3b2e8");
+            param.put("secretKey","0eece418a8984803878918a8a49d781b");
+            param.put("drawer","张三三");
+            param.put("reviewer","李思思");
+            param.put("payee","王武武");
+            list.add(param);
+        }
+
+        // session.commit();
+
+        int result = mapper.insertCompanyParkinglot(list);
+
+        PrintUtil.println("result : " + result,result);
 
     }
 
@@ -152,7 +211,8 @@ public class MybatisUtil {
     private static SqlSession getSession(String env) throws IOException {
         Reader reader = Resources.getResourceAsReader("mybatisConf/mybatisConf.xml");
         SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(reader,env);
-        SqlSession session = sessionFactory.openSession();
+        // 自动提交 true
+        SqlSession session = sessionFactory.openSession(true);
         return session;
     }
 
@@ -173,6 +233,7 @@ public class MybatisUtil {
         StringBuilder selectAsSql = new StringBuilder("");
         StringBuilder insertColumnSql = new StringBuilder("");
         StringBuilder insertPropertySql = new StringBuilder("");
+        StringBuilder updateSql = new StringBuilder("");
         System.out.println(list.size());
         list.forEach(e -> {
             String column = e.get("column_name");
@@ -214,6 +275,12 @@ public class MybatisUtil {
             selectAsSql.append(property);
             selectAsSql.append(",\n\t");
 
+            // updateSql
+            updateSql.append(column);
+            updateSql.append("=#{");
+            updateSql.append(property);
+            updateSql.append("},\n");
+
         });
         resultMap.append("\n</resultMap>");
         columnSql.deleteCharAt(columnSql.length() - 1);
@@ -225,6 +292,7 @@ public class MybatisUtil {
         System.out.println(selectAsSql.toString());
         System.out.println(insertColumnSql.toString());
         System.out.println(insertPropertySql.toString());
+        System.out.println(updateSql.toString());
     }
 
     private static String getProperty(String column){
