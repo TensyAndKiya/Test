@@ -20,6 +20,8 @@ public class BaiwangInvoiceTest {
 
     private final static float SL = 0.09f;
 
+    private static int i = 0;
+
     private static ConcurrentHashMap<String,Object> tokenRequestMap = new ConcurrentHashMap<>(2);
 
     public static void main(String[] args){
@@ -39,7 +41,7 @@ public class BaiwangInvoiceTest {
         tokenRequestMap.put("account","");
         // 开票业务参数
         Map<String,Object> param = new HashMap<>();
-        param.put("invoice_price",0.60f);
+        param.put("invoice_price",1.00f);
         param.put("e_mail","1406723908@qq.com");
         param.put("tax_number","");
         param.put("invoice_title","陈某");
@@ -93,7 +95,7 @@ public class BaiwangInvoiceTest {
             newInvoice(invoicingRecord,tokenRequestMap,jshj,userName);
 
             try{
-                Thread.sleep(1357);
+                Thread.sleep(876);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -105,6 +107,10 @@ public class BaiwangInvoiceTest {
     }
 
     private static boolean newInvoice(Map<String,Object> invoicingRecord,Map<String,Object> tokenMap,float jshj,String userName){
+
+        System.out.println(i);
+        i ++;
+
         JSONObject params = new JSONObject();
         JSONObject dataParams = new JSONObject();
         JSONObject goods = new JSONObject();
@@ -159,7 +165,8 @@ public class BaiwangInvoiceTest {
             String result = map.get("result").toString();
             if(result.equals("SUCCESS")){
                 PrintUtil.println("开具蓝字发票成功");
-                return onlineDeliver(tokenMap,orderNo,email);
+                return true;
+                // return onlineDeliver(tokenMap,orderNo,email);
             }
         }
         PrintUtil.println("开具蓝字发票失败");

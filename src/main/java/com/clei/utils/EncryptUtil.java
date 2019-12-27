@@ -13,6 +13,7 @@ import java.util.zip.GZIPOutputStream;
 public class EncryptUtil {
     public final static String CHARSET_UTF8 = "UTF-8";
     private final static String ALGORITHM = "DESede";
+    public final static String AES = "AES";
     private final static int BUFFER = 1024;
 
     // ECB
@@ -41,6 +42,15 @@ public class EncryptUtil {
         cipher.init(Cipher.DECRYPT_MODE,secretKey);
 
         return cipher.doFinal(bytes);
+    }
+
+    public static byte[] decryptAES(byte[] bytes, String key) throws Exception{
+        byte[] enCodeFormat = key.getBytes();
+        SecretKeySpec secretKey = new SecretKeySpec(enCodeFormat, AES);
+        Cipher cipher = Cipher.getInstance(AES);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
+        byte[] result = cipher.doFinal(bytes);
+        return result;
     }
 
     public static byte[] compress(byte[] data) throws IOException {
