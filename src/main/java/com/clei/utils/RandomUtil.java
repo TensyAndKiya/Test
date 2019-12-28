@@ -11,8 +11,13 @@ public class RandomUtil {
     // 1 从1到1000里随机选取100个
 
     public static void main(String[] args) {
-        int[] array = intArray(1000);
-        int[] randomArray = randomArray(array,10);
+        long begin = System.currentTimeMillis();
+
+        int[] array = intArray(100000);
+        int[] randomArray = randomArray(array,100);
+
+        long end = System.currentTimeMillis();
+        PrintUtil.println("耗时 ： {}ms",end - begin);
 
         System.out.println("origin : " + Arrays.toString(array));
         System.out.println("result : " + Arrays.toString(randomArray));
