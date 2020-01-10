@@ -38,11 +38,13 @@ public class BaiwangInvoiceTest {
         tokenRequestMap.put("address","成都市武侯区火车南站西路15号7楼02室");
         tokenRequestMap.put("phone","028-85133533");
         tokenRequestMap.put("opening_bank","招商银行股份有限公司成都府城大道支行");
-        tokenRequestMap.put("account","");
+        tokenRequestMap.put("account","128909396510901");
+        tokenRequestMap.put("fhr","黄莺");
+        tokenRequestMap.put("skr","何花");
         // 开票业务参数
         Map<String,Object> param = new HashMap<>();
-        param.put("invoice_price",1.00f);
-        param.put("e_mail","1406723908@qq.com");
+        param.put("invoice_price",0.01f);
+        param.put("e_mail","yueyaye@163.com");
         param.put("tax_number","");
         param.put("invoice_title","陈某");
         param.put("address","");
@@ -146,6 +148,8 @@ public class BaiwangInvoiceTest {
         putIfNotEmpty(dataParams,"gmf_dzdh",invoicingRecord.get("address"),invoicingRecord.get("phone"));
         putIfNotEmpty(dataParams,"gmf_yhzh",invoicingRecord.get("bank"),invoicingRecord.get("account"));
         dataParams.put("kpr",userName);
+        dataParams.put("fhr",tokenMap.get("fhr"));
+        dataParams.put("skr",tokenMap.get("skr"));
         dataParams.put("jshj",jshj + "");//价税合计 合计金额+合计税额
         dataParams.put("hjje",new BigDecimal(jshj - hjse).setScale(2,BigDecimal.ROUND_HALF_UP).floatValue() + "");//合计金额
         dataParams.put("hjse",hjse + "");//合计税额
@@ -165,8 +169,10 @@ public class BaiwangInvoiceTest {
             String result = map.get("result").toString();
             if(result.equals("SUCCESS")){
                 PrintUtil.println("开具蓝字发票成功");
+
+                onlineDeliver(tokenMap,orderNo,email);
+
                 return true;
-                // return onlineDeliver(tokenMap,orderNo,email);
             }
         }
         PrintUtil.println("开具蓝字发票失败");
