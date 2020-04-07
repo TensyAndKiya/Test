@@ -21,8 +21,8 @@ import java.util.*;
  */
 public class MybatisUtil {
     private final static String ENV = "prod";
-    private final static String DATABASE = "park";
-    private final static String TABLE = "park_parkinglot";
+    private final static String DATABASE = "finance";
+    private final static String TABLE = "finance_park_income";
     private final static char UNDERLINE = '_';
     private final static char AT = '@';
 

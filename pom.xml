@@ -115,6 +115,14 @@
       <artifactId>alipay-sdk-java</artifactId>
       <version>4.8.10.ALL</version>
     </dependency>
+
+    <!-- 暂无用 -->
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.13</version>
+    </dependency>
+
   </dependencies>
 
   <build>

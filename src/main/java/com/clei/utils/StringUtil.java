@@ -1,7 +1,9 @@
 package com.clei.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Random;
 
 public class StringUtil {
@@ -25,5 +27,11 @@ public class StringUtil {
 
     public static boolean isEmpty(String str){
         return null == str || 0 == str.length();
+    }
+
+    public static String[] arrayRemoveDuplicate(){
+        String[] array = new String[0];
+        array = new HashSet<String>(Arrays.asList(array)).toArray(array);
+        return array;
     }
 }
