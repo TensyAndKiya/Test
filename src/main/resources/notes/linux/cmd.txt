@@ -13,11 +13,33 @@ tail -f all_info.log -n 100
 跳到某行 ngg/nG/:n n代表第几行
 跳到最后一行 G,shift+g 或者 Caps Lock大写后 g
 跳到第一行的第一个字符 gg
+跳到行首 Home键/^键/0数字键
+跳到行尾 End键/$键
+光标向下移n行到末尾 n$
+光标向左移n个字符 nh(例：12h)
+光标向右移n个字符 nl(例：12l，小写的L)
+光标向下移n行 nh(例：12j)
+光标向上移n行 nh(例：12k)
+删除一行 dd
 
-# grep 技巧
-统计test.log里文本1234出现行数
+# grep 技巧 （global regular expression print）
+#统计test.log里文本1234出现行数
 cat test.log | grep -c 1234
 grep 1234 test.log -c
+# 查找并打印行号
+grep 1234 test.log -n
+# 查找不匹配条件的
+grep 1234 test.log -v
+# 查找当前目录下符合条件的文件名
+grep 1234 * -l
+# 忽略大小写查找
+grep 1234 test.log -i
+# 只根据文本不用正则表达式
+grep $ test.log -F
+# 使用更广泛的正则表达式
+grep 'boot|boots' test.log -E
+# 精确匹配
+grep 1234 test.log -x
 #查看满足条件的前40行
 grep 'EleInvoice Notify' all_info.log | head -n 40
 #查看满足条件的后40行
