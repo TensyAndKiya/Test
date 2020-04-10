@@ -16,6 +16,15 @@ curl --cookie "aa=bb,cc=dd" localhost:8080
 curl -H "aa:bb" -H "cc:dd" localhost:8080
 -i -v -I参数很多。。。
 
+# 查看端口占用 比如8090
+netstat -ano | findstr 8090
+上篇找到了程序对应的pid 比如1234
+# 查看对应程序
+tasklist | findstr 1234
+# 也可以在任务管理器里根据pid找到对应程序 杀死
+taskkill /f /t /pid 1234也可以杀
+
+
 # 结束任务
 taskkill /f /t /pid
 /f 强制 /t 进程树 /pid 指定进程id /im image name
