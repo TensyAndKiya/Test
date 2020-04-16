@@ -18,7 +18,7 @@ curl -H "aa:bb" -H "cc:dd" localhost:8080
 
 # 查看端口占用 比如8090
 netstat -ano | findstr 8090
-上篇找到了程序对应的pid 比如1234
+上面找到了程序对应的pid 比如1234
 # 查看对应程序
 tasklist | findstr 1234
 # 也可以在任务管理器里根据pid找到对应程序 杀死
@@ -33,3 +33,5 @@ taskkill /f /t /pid
 shutdown /s /t 3600
 /t 3600 秒数 /s 关机
 shutdown /a 取消定时关机
+# 重启
+shutdown /r

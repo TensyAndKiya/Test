@@ -21,7 +21,7 @@ git push --set-upstream origin master 设置master的upstream并push上去
 git remote rm origin
 git remote add origin https://github.com/abc/cba.git
 # 这个直接重设
-git remote set-url origin http://git.eeparking.com/MicroService/ms-autopayment.git
+git remote set-url origin http://git.hasaki.com/MicroService/ms-autopayment.git
 
 git push origin master --force
 

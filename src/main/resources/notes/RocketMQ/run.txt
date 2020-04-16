@@ -10,3 +10,5 @@
 6.本机(linux)测试一下 export NAMESRV_ADDR=121.40.250.223:9876
   sh bin/tools.sh org.apache.rocketmq.example.quickstart.Producer
 7.代码调用测试一下(照抄官网代码)
+8.关闭 sh bin/mqshutdown broker
+  sh bin/mqshutdown namesrv

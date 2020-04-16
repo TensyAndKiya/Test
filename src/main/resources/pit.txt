@@ -14,6 +14,9 @@ mybatis：
     invalid bound statement 这个经常出的错误。。
     一般经常是方法名没对上 参数没对上 xml里的namespace没写对 或者没读取到xml  mapperLocation等等
 
+    返回的List<Map>或是Map类型的
+    若Map的所有字段值都是NULL，那么这个Map是NULL
+
 编码：
     任何时候请注意编码
     文件编码字符串编码等。。。windows默认编码。。。linux默认编码。。
