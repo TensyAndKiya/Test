@@ -1,8 +1,8 @@
 package com.clei.Y2020.M04.D16;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import com.alibaba.fastjson.JSONObject;
+
+import java.util.*;
 
 /**
  * 连续字符的开始结束索引
@@ -13,6 +13,36 @@ import java.util.Scanner;
 public class Test {
 
     public static void main(String[] args)throws Exception {
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("no",1);
+        map.put("assetsName","资产1");
+        map.put("assetsIp","192.168.1.1");
+        map.put("assetsHolder","张三");
+        map.put("assetsCategory",0);
+        map.put("assetsProducer",0);
+        map.put("assetsSystem",0);
+        map.put("unitName","跑腿");
+        map.put("departmentName","工程部");
+        map.put("assetsRunState",0);
+        Map<String,Object> map2 = new HashMap<>();
+        map2.put("no",1);
+        map2.put("assetsName","资产2");
+        map2.put("assetsIp","192.168.1.2");
+        map2.put("assetsHolder","李四");
+        map2.put("assetsCategory",1);
+        map2.put("assetsProducer",1);
+        map2.put("assetsSystem",1);
+        map2.put("unitName","跑腿");
+        map2.put("departmentName","工程部");
+        map2.put("assetsRunState",1);
+
+        List<Map<String,Object>> list = new ArrayList<>();
+        list.add(map);
+        list.add(map2);
+
+        System.out.println(JSONObject.toJSONString(list));
+
 
         List<Integer> result = new LinkedList<>();
         Scanner sc = new Scanner(System.in);

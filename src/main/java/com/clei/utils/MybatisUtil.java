@@ -20,9 +20,9 @@ import java.util.*;
  * @since 2019-10-17
  */
 public class MybatisUtil {
-    private final static String ENV = "prod";
-    private final static String DATABASE = "finance";
-    private final static String TABLE = "finance_park_income";
+    private final static String ENV = "test";
+    private final static String DATABASE = "security";
+    private final static String TABLE = "user";
     private final static char UNDERLINE = '_';
     private final static char AT = '@';
 
@@ -33,6 +33,8 @@ public class MybatisUtil {
         if(args.length > 0){
             if(args[0].equals("prod")){
                 env = "prod";
+            }else {
+                env = "test";
             }
         }
 
@@ -234,10 +236,34 @@ public class MybatisUtil {
         StringBuilder insertColumnSql = new StringBuilder("");
         StringBuilder insertPropertySql = new StringBuilder("");
         StringBuilder updateSql = new StringBuilder("");
-        System.out.println(list.size());
+
+        System.out.println("list : " + list);
+
+        String cn = "column_name";
+        String ct = "column_type";
+
+        if(null != list && !list.isEmpty()){
+            Map<String,String> m = list.get(0);
+            Set<String> set = m.keySet();
+
+            for(String s : set){
+                if(s.equalsIgnoreCase(cn)){
+                    cn = s;
+                }else {
+                    ct = s;
+                }
+            }
+        }
+
+        final String columnName = cn;
+        final String columnType = ct;
+
         list.forEach(e -> {
-            String column = e.get("column_name");
-            String type = e.get("column_type");
+
+
+
+            String column = e.get(columnName);
+            String type = e.get(columnType);
             resultMap.append("\n\t");
             resultMap.append("<result property=\"");
             String property = getProperty(column);
@@ -323,7 +349,7 @@ public class MybatisUtil {
         }else if(type.startsWith("double") || type.startsWith("decimal")){
             return "java.lang.Double";
         }else if(type.startsWith("tinyint")){
-            return "java.lang.Short";
+            return "java.lang.Boolean";
         }else if(type.startsWith("datetime") || type.startsWith("date")){
             return "java.util.Date";
         }else if(type.contains("char")){
