@@ -27,8 +27,11 @@ git remote rm origin
 git remote add origin https://github.com/abc/cba.git
 # 这个直接重设
 git remote set-url origin http://git.hasaki.com/MicroService/ms-autopayment.git
-
+# 强推
 git push origin master --force
+
+# 推送并设置上游
+git push --set-upstream origin chester
 
 # 打标签了
 git tag -a V1.0.0 -m "第一个标签"  这个是给当前的commit打标签

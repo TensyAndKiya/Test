@@ -2,6 +2,7 @@ package com.clei.Y2020.M04.D16;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -13,6 +14,11 @@ import java.util.*;
 public class Test {
 
     public static void main(String[] args)throws Exception {
+
+        System.out.println(1000 * 60 * 60 * 24);
+
+        BigDecimal a = new BigDecimal("-0.01");
+        System.out.println(a.compareTo(BigDecimal.ZERO));
 
         Map<String,Object> map = new HashMap<>();
         map.put("no",1);
