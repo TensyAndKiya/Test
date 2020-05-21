@@ -14,8 +14,9 @@ import java.util.*;
 public class Test {
 
     public static void main(String[] args)throws Exception {
-
+        
         // 呵呵呵
+        // 嘿嘿嘿
 
         System.out.println(1000 * 60 * 60 * 24);
 
