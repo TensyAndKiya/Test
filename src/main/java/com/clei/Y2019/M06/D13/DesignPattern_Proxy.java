@@ -203,6 +203,7 @@ class LogHandler implements InvocationHandler{
         this.target=target;
     }
 
+    @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         System.out.println("开启日志。。。");
         method.invoke(target,args);

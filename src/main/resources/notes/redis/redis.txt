@@ -10,6 +10,8 @@
     src/redis-server conf/my.conf
     // 后台启动
     修改配置文件 daemonize yes
+    // 若要允许外网访问的话 注释掉 bind 127.0.0.1 就行了
+    # bind 127.0.0.1
     // 测试
     src/redis-cli
     set fool aaa
