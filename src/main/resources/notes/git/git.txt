@@ -17,6 +17,16 @@ git remote add origin https://github.com/abc/cba.git 这个是添加在github刚
 git push --set-upstream origin master 设置master的upstream并push上去
 完美
 
+# 撤回工作区修改
+git checkout test.java
+或
+git restore test.java
+# 撤回缓冲区修改
+git reset HEAD test.java
+或
+git restore --stated test.java
+# 上面两个撤回所有修改的话 将具体文件名改为.即可
+
 # 删除本地分支
 git branch -D test
 # 删除远程分支
