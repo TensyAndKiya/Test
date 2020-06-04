@@ -1,0 +1,93 @@
+# 连接
+src/redis-cli -h 127.0.0.1 -p 6379 -a liuli
+# 连接时没输密码的话
+auth liuli
+# 查看匹配的键
+keys *
+
+# string 设置键值
+set aa bb
+# 查看值
+get aa
+# 删除键值
+del aa bb
+# 判断键是否存在
+exists aa
+# 让一个整数自增1，key不存在的话，设置该key值为1(原子操作)
+incr aa
+# 让一个整数加上n，key不存在的话，设置该key值为n(原子操作)
+incrby aa n
+# decr，decrby与incr，incrby相反的效果
+# 设置key n秒后过期
+expire aa n
+# 查看key还有多久过期，返回正整数表名还有n秒，返回-1表示永不过期，返回-2表示没这个key
+# 当对一个有有效期的key用set重新赋值后，其变成永不过期
+ttl aa
+# string 设置键值 并 设置n秒后过期
+set aa bb ex n
+# 将有有效期的key设置为永不过期，对原本永不过期的无用
+persist aa
+# list 往list尾添加元素，key不存在则创建，返回list长度
+rpush names aa
+# list 往list头添加元素，key不存在则创建，返回list长度
+lpush names bb
+# list 往list尾依次添加多个元素
+rpush names aa bb cc
+# list 往list头依次添加多个元素
+lpush names 1 2 3
+# list 查看list长度
+llen names
+# list 查看list元素
+# list 查看从0开始到第n个元素
+lrange names 0 n
+# list 查看从0开始的全部元素
+lrange names 0 -1
+# list 查看从0开始到倒数第二个元素
+lrange names 0 -2
+# list 移除list头一个元素并返回
+lpop names
+# list 移除list尾第一个元素并返回
+rpop names
+
+# set 往set加元素，key不存在则创建，返回0 表示已有 1 表示添加成功
+sadd types aa
+# set 往set添加多个元素
+sadd types bb cc dd
+# set 移除元素 返回0表示没这个，1表示移除成功
+srem types aa
+# set 查看所有元素
+smembers types
+# set 查看元素是否存在 0 没有 1 有
+sismerber types aa
+# set 合并两个set的值并返回set
+sunion types class
+# set 移除并返回一个元素
+spop types
+# set 移除并返回n个元素
+spop types n
+# set 随机返回n个元素，去掉n表示随机返回1个
+srandmember types n
+
+# zset 往set添加元素
+zadd names 100 asan
+# zset 查看元素 和 lrange一样的操作
+zrange names 0 -1
+
+# hash 往hash添加元素 或者修改
+hset users aa 11
+# hash 往hash添加多个元素
+hmset users aa 11 bb 22 cc 33
+# hash 查看元素
+hget users aa
+# hash 查看所有元素
+hgetall users
+# hash 让某整数加n，类似incrby
+hincrby users aa 100
+# hash 删除某key
+hdel users aa
+
+
+
+
+
+
