@@ -1,7 +1,6 @@
 package com.clei.utils;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 随机数相关工具类
@@ -13,8 +12,8 @@ public class RandomUtil {
     public static void main(String[] args) {
         long begin = System.currentTimeMillis();
 
-        int[] array = intArray(100000);
-        int[] randomArray = randomArray(array,100);
+        int[] array = intArray(20000);
+        int[] randomArray = randomArray(array,10000);
 
         long end = System.currentTimeMillis();
         PrintUtil.println("耗时 ： {}ms",end - begin);
@@ -37,13 +36,18 @@ public class RandomUtil {
             num = length - num;
         }
         // 装选入的数字
-        Set<Integer> set = new HashSet<>(num,1);
+        Set<Integer> set = new HashSet<>(num);
 
         // 筛选出的 set
         outer:
         while (set.size() < num){
-            //
-            int[] randomIntArray = randomIntArray(num * 3 / 2,0,length);
+            // 还需要多少个数字
+            int tempNum = num - set.size();
+            // 长度为n倍tempNum 的 数组(n > 1)
+            // 下面两个都是应对一次生成没有满足的状况
+            // 使用tempNum而不是num保证 需要的数字越来越少的时候 生成的数组越来越小 浪费少
+            // 使用array.length 而不是 length 保证 不会出现IndexOutOfBoundsException
+            int[] randomIntArray = randomIntArray(tempNum * 3 / 2 ,0,array.length);
 
             for(int i : randomIntArray){
                 set.add(array[i]);
@@ -64,17 +68,17 @@ public class RandomUtil {
     }
 
     /**
-     * array 里 的值 不在 set 里 的 凑一个array
+     * array 里 的值 不在 collection 里 的 凑一个array
      * @param array
-     * @param set
+     * @param collection
      * @return
      */
-    private static int[] getLastArray(int[] array, Set<Integer> set) {
-        int[] newArray = new int[array.length - set.size()];
+    private static int[] getLastArray(int[] array, Collection<Integer> collection) {
+        int[] newArray = new int[array.length - collection.size()];
 
         int j = 0;
         for (int i : array){
-            if(!set.contains(i)){
+            if(!collection.contains(i)){
                 newArray[j] = i;
                 j ++;
             }
@@ -102,7 +106,7 @@ public class RandomUtil {
      * @return
      */
     public static int[] intArray(int i){
-        if(i < 1){
+        if(i < 0){
             return null;
         }
         int[] array = new int[i];
@@ -122,7 +126,12 @@ public class RandomUtil {
         if(i < 1){
             return null;
         }
-        List<Integer> list = Arrays.stream(intArray(i)).boxed().collect(Collectors.toList());
+
+        List<Integer> list = new ArrayList<>(i);
+
+        for (int j = 0; j < i; j++) {
+            list.add(j);
+        }
         return list;
     }
 }
