@@ -1,9 +1,6 @@
 package com.clei.utils;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -28,6 +25,14 @@ public class DateUtil {
 
     public static String getDefaultPattern() {
         return FORMATTER_PATTERN;
+    }
+
+    /**
+     * 返回默认格式的 当前日期时间字符串
+     * @return
+     */
+    public static String currentDateTime(){
+        return format(LocalDateTime.now());
     }
 
     public static String format(LocalDateTime localDateTime){

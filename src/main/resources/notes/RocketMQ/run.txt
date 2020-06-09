@@ -2,6 +2,8 @@
 
 第一步 跑起来
 
+LINUX
+
 1.下包安装
 2.修改启动内存配置(runserver.sh,runbroker.sh)，不然我一个小小的ECS跑不起来(2G,4G,8G太多了)
 3.修改conf/broker.conf 添加 brokerIP1 = 你的服务器IP 例：brokerIP1 = 121.40.250.223
@@ -12,3 +14,16 @@
 7.代码调用测试一下(照抄官网代码)
 8.关闭 sh bin/mqshutdown broker
   sh bin/mqshutdown namesrv
+
+WINDOWS
+
+1. 设置环境变量ROCKETMQ_HOME
+2. mqnamesrv.cmd
+3. start mqbroker.cmd -n 127.0.0.1:9876 -c ../conf/broker.conf
+4. 测试
+
+第二步 操作起来
+
+mq管理工具
+1. admin tool [%ROCKETMQ_HOME%\bin mqadmin]
+2. rocketmq-console
