@@ -123,6 +123,13 @@
       <version>4.7.0</version>
     </dependency>
 
+    <!-- JAVA OBJECT LAYOUT core -->
+    <dependency>
+      <groupId>org.openjdk.jol</groupId>
+      <artifactId>jol-core</artifactId>
+      <version>0.10</version>
+    </dependency>
+
     <!-- 暂无用 -->
     <dependency>
       <groupId>commons-codec</groupId>

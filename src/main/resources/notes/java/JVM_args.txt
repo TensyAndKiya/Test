@@ -32,5 +32,3 @@ CMS(Concurrent Mark Sweep)收集器 （并发收集，低停顿）
 
 例子：
 java -Xms10m -Xmx10m -Xmn10m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=D:\dump\test.bin -XX:+UseGCOverheadLimit MemoryTest
-
-
