@@ -12,8 +12,6 @@ import java.security.cert.CertificateException;
 
 /**
  * 请求工具类
- * 
- * @author yuanxiaojun
  *
  */
 public class RequestUtils {

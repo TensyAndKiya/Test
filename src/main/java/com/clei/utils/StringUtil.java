@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 public class StringUtil {
     public static String createOrderNo(){
@@ -27,6 +28,28 @@ public class StringUtil {
 
     public static boolean isEmpty(String str){
         return null == str || 0 == str.length();
+    }
+
+    /**
+     * 是数字
+     * @param str
+     * @return
+     */
+    public static boolean isDigit(String str){
+        String pattern = "\\d*";
+
+        return Pattern.matches(pattern,str);
+    }
+
+    /**
+     * 是数字或字符
+     * @param str
+     * @return
+     */
+    public static boolean isDigitOrChar(String str){
+        String pattern = "[0-9A-Za-z]*";
+
+        return Pattern.matches(pattern,str);
     }
 
     public static String[] arrayRemoveDuplicate(){

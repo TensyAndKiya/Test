@@ -62,7 +62,7 @@ public class Algorithm003 {
                 a = oldIndex + 1;
             }
 
-            map.put(str.charAt(i),i);
+            map.put(c,i);
 
             int temp = b - a + 1;
 
