@@ -3,6 +3,15 @@
 -Dcom.sun.management.jmxremote.ssl=false
 -Djava.rmi.server.hostname=123.123.123.123 监控的主机的ip
 -Dcom.sun.management.jmxremote.port=8089 连接端口
+-Dcom.sun.management.jmxremote.rmi.port=8089
 
 # 需要认证的话，在jdk目录下的jre/lib/management 里配置jmxremote.access和jmxremote.password
 # 注意这两个文件的权限要是600,否则tomcat启动不起来
+
+jstatd
+
+./jstatd
+    -J-Djava.security.policy=jstatd.all.policy
+    -J-Djava.rmi.server.hostname=123.123.123.123
+    -J-Djava.rmi.server.logCalls=true
+    -p 8090
