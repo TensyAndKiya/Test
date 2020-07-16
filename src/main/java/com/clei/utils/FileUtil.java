@@ -118,6 +118,37 @@ public class FileUtil {
         });
     }
 
+    /**
+     * 二进制文件转为16 进制 样子
+     * 2020-07-16
+     */
+    public static void binFileToHexString(String path) throws Exception {
+        File file = new File(path);
+
+        FileInputStream fis = new FileInputStream(file);
+
+        byte[] bytes = new byte[16];
+
+        int length = -1;
+
+        while ((length = fis.read(bytes)) != -1){
+            String str = EncryptUtil.byteArrToHexString(bytes,true);
+
+            char[] array = str.toCharArray();
+
+            for (int i = 0; i < array.length; i++) {
+
+                if(i % 16 == 0){
+                    System.out.println();
+                }else if(i % 2 == 0){
+                    System.out.print(' ');
+                }
+
+                System.out.print(array[i]);
+            }
+        }
+    }
+
     public interface Operation{
         void operate(File file) throws Exception;
     }

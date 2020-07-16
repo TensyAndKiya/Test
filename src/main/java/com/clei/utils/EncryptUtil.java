@@ -1,9 +1,12 @@
 package com.clei.utils;
 
+import org.apache.commons.codec.binary.Hex;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
+import java.security.MessageDigest;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -96,4 +99,96 @@ public class EncryptUtil {
         gis.close();
         is.close();
     }
+
+    /**
+     * md5
+     * @param str
+     * @return
+     * @throws Exception
+     */
+    public static String md5(String str) throws Exception {
+        return md5(str,null,false);
+    }
+
+    /**
+     * md5
+     * @param str 源字符串
+     * @param charset 编码
+     * @param isUpperCase 返回字符串字母是否大写
+     * @throws Exception
+     */
+    public static String  md5(String str,String charset,boolean isUpperCase) throws Exception{
+
+        MessageDigest md = MessageDigest.getInstance("MD5");
+
+        // 指定编码
+        if(null == charset || 0 == charset.length()){
+            md.update(str.getBytes());
+        }else {
+            md.update(str.getBytes(charset));
+        }
+
+        byte[] arr = md.digest();
+
+        return byteArrToHexString(arr,isUpperCase);
+    }
+
+    /**
+     * sha1
+     * @param str 源字符串
+     * @throws Exception
+     */
+    public static String sha1(String str) throws Exception{
+        return sha1(str,null,false);
+    }
+
+    /**
+     * sha1
+     * @param str 源字符串
+     * @param charset 编码
+     * @param isUpperCase 返回字符串字母是否大写
+     * @throws Exception
+     */
+    public static String sha1(String str,String charset,boolean isUpperCase) throws Exception{
+        // SHA SHA1 SHA-1是一样的
+        MessageDigest md = MessageDigest.getInstance("SHA");
+
+        byte[] arr = null;
+
+        // 指定编码
+        if(null == charset || 0 == charset.length()){
+            arr = md.digest(str.getBytes());
+        }else {
+            arr = md.digest(str.getBytes(charset));
+        }
+
+        return byteArrToHexString(arr,isUpperCase);
+    }
+
+    /**
+     * 将byte数组转为字符串
+     * @param arr
+     * @param isUpperCase
+     * @return
+     */
+    public static String byteArrToHexString(byte[] arr, boolean isUpperCase) {
+        char[] hd = isUpperCase ? hexUpperDigits : hexDigits;
+
+        int length = arr.length;
+
+        char[] str = new char[length * 2];
+
+        for (int i = 0; i < length; i++) {
+            byte b = arr[i];
+
+            str[i * 2] = hd[b >>> 4 & 0xF];
+            str[i * 2 + 1] = hd[b & 0xF];
+        }
+
+        return new String(str);
+    }
+
+    final private static char[] hexDigits = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
+
+    final private static char[] hexUpperDigits = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 }

@@ -140,5 +140,35 @@
         </foreach>
     </insert>
 
+    <select id="getIdName" resultType="java.util.Map">
+        SELECT id,name,address
+        FROM parking_lot
+        WHERE cmb_park_open != 2
+        AND is_cdpay = 0
+        -- and ifnull(parent_id,'') = ''
+        AND NAME NOT LIKE '%测试%'
+        AND del_flag = 0
+        AND id NOT IN (
+
+            SELECT parking_lot_id AS parkId
+            FROM ccb_pay_info
+            WHERE del_flag = 0
+
+            UNION
+
+            SELECT parking_lot_id FROM parking_lot_pay_info
+            WHERE sys_service_provider_id = '2088521066336121'
+            AND del_flag = 0
+
+        )
+    </select>
+
+    <select id="getParkingRecordCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(id)
+        FROM temp_orders
+        WHERE parking_lot_id = #{parkId}
+        AND order_start_time > '2020-01-01 00:00:00';
+    </select>
+
 
 </mapper>

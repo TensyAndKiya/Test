@@ -20,7 +20,7 @@ import java.util.*;
  * @since 2019-10-17
  */
 public class MybatisUtil {
-    private final static String ENV = "test";
+    private final static String ENV = "prod";
     private final static String DATABASE = "security";
     private final static String TABLE = "user";
     private final static char UNDERLINE = '_';
@@ -69,8 +69,8 @@ public class MybatisUtil {
 
 
         // 输出 table private
-        List<Map<String,String>> result = (List<Map<String, String>>) doGet(env);
-        printResultMapAndColumns(result);
+        /*List<Map<String,String>> result = (List<Map<String, String>>) doGet(env);
+        printResultMapAndColumns(result);*/
 
         // doUpdateStatus(env);
 
@@ -85,6 +85,32 @@ public class MybatisUtil {
         // insertCompanyParkinglot(env);
 
         // insertParkInvoiceInfo(env);
+
+        List<Map<String,Object>> idName = getIdName(env);
+
+        SqlSession session = getSession(env);
+
+        int i = 0;
+
+        for (Map<String,Object> m : idName){
+
+            String id = m.get("id").toString();
+
+            Integer count = getCount(session,env,id);
+
+            if(count > 0){
+
+                System.out.println(id + "\t" + m.get("name") + "\t" + m.get("address"));
+
+                i ++ ;
+
+            }
+
+            Thread.sleep(200L);
+
+        }
+
+        System.out.println(i);
 
     }
 
@@ -108,6 +134,17 @@ public class MybatisUtil {
 
         PrintUtil.println("result : " + result,result);
 
+    }
+
+    private static List<Map<String,Object>> getIdName(String env) throws Exception{
+        SqlSession session = getSession(env);
+        ColumnDao mapper = session.getMapper(ColumnDao.class);
+        return mapper.getIdName();
+    }
+
+    private static Integer getCount(SqlSession session,String env,String parkId) throws Exception{
+        ColumnDao mapper = session.getMapper(ColumnDao.class);
+        return mapper.getParkingRecordCount(parkId);
     }
 
     private static void insertParkInvoiceInfo(String env) throws Exception{

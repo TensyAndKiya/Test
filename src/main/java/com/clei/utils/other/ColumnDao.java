@@ -21,4 +21,17 @@ public interface ColumnDao {
     List<String> select1();
 
     Integer insertCompanyParkinglot(List<Map<String, Object>> list);
+
+    /**
+     * 查询符合要求的停车场id和name
+     * @return
+     */
+    List<Map<String, Object>> getIdName();
+
+    /**
+     * 查询车场符合要求的停车记录数
+     * @param parkId
+     * @return
+     */
+    Integer getParkingRecordCount(String parkId);
 }

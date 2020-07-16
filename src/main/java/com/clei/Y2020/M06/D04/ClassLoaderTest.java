@@ -28,6 +28,9 @@ public class ClassLoaderTest {
         // 找不到一个确定的返回父Loader的方式，于是就返回null
         System.out.println(grandFather);
 
+        // rt.jar
+        System.out.println(new String().getClass().getClassLoader());
+
         // 类加载的三种方式
         ClassLoader cl = ClassLoaderTest.class.getClassLoader();
 
