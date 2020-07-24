@@ -15,3 +15,14 @@ ref 使用了索引，但该索引列的值不唯一
 ref_eq 这种类型的结果集只有一个(使用了主键或唯一索引)
 const 常量 使用了主键或唯一索引
 
+# 慢sql
+1. 查看慢sql相关的变量
+    SHOW VARIABLES LIKE '%query%';
+    关注long_query_time,slow_query_log,slow_query_log_file
+2. 查看慢查询的数量【 本次会话 】
+    SHOW STATUS LIKE '%slow_queries%';
+3. 打开慢查询设置并设置慢查询门槛 【 这个更新后重启mysql就没了，建议写到配置文件里 】
+    SET GLOBAL slow_query_log = ON;
+    SET GLOBAL long_query_time = 0.5;
+
+

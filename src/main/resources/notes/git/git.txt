@@ -24,7 +24,7 @@ git restore test.java
 # 撤回缓冲区修改
 git reset HEAD test.java
 或
-git restore --stated test.java
+git restore --staged test.java
 # 上面两个撤回所有修改的话 将具体文件名改为.即可
 
 # 删除本地分支
