@@ -116,6 +116,13 @@ ssh-add -l
 # 展示
 3072 SHA256:ilsEEbjv0zD01x1vwLkhstXn2Z+ZP0DnBlFT7BpGNXI yueyaye@163.com (RSA)
 3072 SHA256:NfyENThBvx7DW37yZ8/ehaKc/gwcg/TdSmmvdfXPliE yueyaye@163.com (RSA)
+# 测试下分别使用两个key连接github
+ssh -T git@github.com
+Hi TensyAndKiya! You've successfully authenticated, but GitHub does not provide shell access.
+ssh -T git@gk.github.com
+Hi GK-Universe/gk! You've successfully authenticated, but GitHub does not provide shell access.
+# 返回了对应不同仓库的信息，成功
 # 来个push测试
+# push成功
 
 
