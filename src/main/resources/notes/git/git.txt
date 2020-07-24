@@ -79,3 +79,43 @@ git merge originHasaki
 # 解决冲突
 # push 到 origin2 的 新分支
 git push origin2 mix
+
+# 在不同的仓库使用不同的SSH Key
+# 先创建两个不同的SSH Key
+ssh-keygen -t rsa -C "yueyaye@163.com" -f ~/.ssh/github_kiya_id_rsa
+ssh-keygen -t rsa -C "yueyaye@163.com" -f ~/.ssh/github_gk_id_rsa
+# 添加配置文件 到~/.ssh目录下
+vim config
+# 内容如下
+# 内容开始----------------------------------------------
+# KIyA的私人仓库用的
+Host github.com
+HostName github.com
+User git
+IdentityFile ~/.ssh/github_kiya_id_rsa
+
+# GK-Universe下的项目使用的
+Host gk.github.com
+HostName github.com
+User git
+IdentityFile ~/.ssh/github_gk_id_rsa
+# 内容结束----------------------------------------------
+# 将两个SSH key的密钥加入ssh的agent中去
+# 先使用ssh-add -D将agent中的先删除
+ssh-add -D
+# 报错啦
+Could not open a connection to your authentication agent.
+# 先执行这个
+ssh-agent bash
+# 然后 ssh-add -D
+# 依次添加到agent
+ssh-add github_kiya_id_rsa
+ssh-add github_gk_id_rsa
+# 查看加入agent当中的SSH key
+ssh-add -l
+# 展示
+3072 SHA256:ilsEEbjv0zD01x1vwLkhstXn2Z+ZP0DnBlFT7BpGNXI yueyaye@163.com (RSA)
+3072 SHA256:NfyENThBvx7DW37yZ8/ehaKc/gwcg/TdSmmvdfXPliE yueyaye@163.com (RSA)
+# 来个push测试
+
+
