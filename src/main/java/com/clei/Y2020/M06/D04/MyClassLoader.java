@@ -1,6 +1,6 @@
 package com.clei.Y2020.M06.D04;
 
-import com.mysql.jdbc.StringUtils;
+import com.clei.utils.StringUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -22,7 +22,7 @@ public class MyClassLoader extends ClassLoader{
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
 
-        if(StringUtils.isNullOrEmpty(classPath) || StringUtils.isNullOrEmpty(name)){
+        if(StringUtil.isEmpty(classPath) || StringUtil.isEmpty(name)){
             throw new ClassNotFoundException("真滴找不到！");
         }
 

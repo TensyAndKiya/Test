@@ -25,4 +25,9 @@ const 常量 使用了主键或唯一索引
     SET GLOBAL slow_query_log = ON;
     SET GLOBAL long_query_time = 0.5;
 
+# 上面是找到慢sql的前置操作，下面是如何调优
+1. 根据慢sql日志定位慢sql
+2. 使用explain等工具分析sql
+3. 修改sql或尽量让sql走索引
+
 

@@ -9,6 +9,18 @@ import java.util.*;
 
 public class FileUtil {
 
+    /**
+     * 重载一下 用路径可以代替file
+     * @param path
+     * @param operation
+     * @throws Exception
+     */
+    public static void fileOperation(String path,Operation operation) throws Exception {
+        File file = new File(path);
+
+        fileOperation(file,operation);
+    }
+
     public static void fileOperation(File file,Operation operation) throws Exception {
         if(file.isDirectory()){
             for(File f :file.listFiles()){
