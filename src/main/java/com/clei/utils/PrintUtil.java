@@ -29,11 +29,12 @@ public class PrintUtil {
         if(null == args || args.length == 0){
             return str;
         }
+
         StringBuilder sb = new StringBuilder(str);
         for(Object arg : args){
             int position = sb.indexOf(PLACE_STR);
             if(position > -1){
-                sb.replace(position,position + PLACE_LEN,null == arg ? "null" : arg.toString());
+                sb.replace(position,position + PLACE_LEN,String.valueOf(arg));
             }else{
                 break;
             }

@@ -16,6 +16,11 @@ public class FileUtil {
      * @throws Exception
      */
     public static void fileOperation(String path,Operation operation) throws Exception {
+
+        if(StringUtil.isEmpty(path)){
+            return ;
+        }
+
         File file = new File(path);
 
         fileOperation(file,operation);

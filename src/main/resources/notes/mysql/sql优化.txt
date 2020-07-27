@@ -30,4 +30,57 @@ const 常量 使用了主键或唯一索引
 2. 使用explain等工具分析sql
 3. 修改sql或尽量让sql走索引
 
+# 锁
+InnoDB默认使用行级锁，支持表级锁
+MyISAM默认使用表级锁，不支持行级锁
+
+# 划分
+按粒度 表级锁，行级锁，页级锁
+按级别 共享锁，排它锁
+按加锁方式 自动锁【insert,update,delete】，显式锁【for update，lock in share mode】
+按操作划分 DML锁【增删改查】，DDL【变更表结构】锁
+按使用方式划分 乐观锁【版本号，时间戳等】，悲观锁【依赖于数据库锁机制】
+
+# InnoDB测试锁的时候记得设置autoccomit=0哦
+# InnoDB的行级锁跟索引有关
+
+# 锁又分为共享锁，排它锁，读锁是共享锁，写锁是排它锁
+# 加了共享锁后其它事务只能再加共享锁，不能加排它锁
+# 加了排它锁后其它事务不能再加锁
+
+# 主动锁表
+LOCK TABLES USER READ;
+LOCK TABLES USER WRITE;
+# 主动解锁
+UNLOCK TABLES;
+
+# 语句加读锁
+SELECT * FROM USER LOCK IN SHARE MODE;
+# 语句加写锁
+SELECT * FROM USER FOR UPDATE;
+
+# 数据库事务四大特性 ACID
+原子性【Atomic】，一致性【Consistency】，隔离性【Isolation】，持久性【Durability】
+
+# 查看事务隔离级别
+SHOW VARIABLES LIKE '%isolation%';
+SELECT @@transaction_isolation;
+# 修改事务隔离级别
+SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+# 事务隔离级别及各级别下的并发访问问题
+                    脏读  不可重复读 幻读
+READ UNCOMMITTED     Y    Y        Y
+READ COMMITTED       X    Y        Y
+REPEATABLE READ      X    X        Y
+SERIALIZABLE         X    X        X
+
+# 当前读与快照读
+当前读【select ... lock in share mode; select ... for update; update ; delete ; insert ;】
+    加了锁的增删改查语句，读取的是最新版本的数据，读取后保证其它并发事务不能修改当前记录，给读取的记录加了锁
+快照读取【非SERIALIZABLE隔离级别下的不加锁的select语句】
+
+# 间隙锁 = gap锁【next-key锁 = 行锁 + gap锁】
+
+
+
 
