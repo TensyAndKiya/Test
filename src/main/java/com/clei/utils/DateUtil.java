@@ -17,7 +17,7 @@ public class DateUtil {
 
     private final static ZoneId ZONE_ID = ZoneId.of("GMT+8");
 
-    private final static ZoneOffset ZONE_OFFSET = ZoneOffset.of("+8");
+    private final static ZoneOffset ZONE_OFFSET = ZoneOffset.ofHours(8);
 
     static {
         FORMATTER_MAP.put(FORMATTER_PATTERN,FORMATTER);

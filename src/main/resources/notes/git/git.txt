@@ -17,6 +17,12 @@ git remote add origin https://github.com/abc/cba.git 这个是添加在github刚
 git push --set-upstream origin master 设置master的upstream并push上去
 完美
 
+# git commit 中文乱码问题
+# git bash 中文乱码
+git config --global core.quotepath=false
+# windows cmd git 中文乱码
+设置环境变量LESSCHARSET值为UTF-8
+
 # 撤回工作区修改
 git checkout test.java
 或
@@ -125,5 +131,3 @@ Hi GK-Universe/gk! You've successfully authenticated, but GitHub does not provid
 # 返回了对应不同仓库的信息，成功
 # 来个push测试
 # push成功
-
-
