@@ -78,3 +78,14 @@ Spring Boot
     图标是各种坑，resource目录里放了，static目录里也放了
     就是不管用
     然而，重启浏览器就好了
+
+Maven插件
+    Maven SpringBoot 打包运行找不到主清单
+    嘿嘿嘿，以我多年Java经验马上就知道是 spring boot maven plugin的问题
+    果然，打开pom一看，没加这个插件，加上，mvn clean package -> java -jar XXX.jar
+    然而，还是找不到主清单
+    经过一系列的操作，改version，改configuration，改goals，加其它插件，等等等等，都不行
+    忽然想到了问题根源，继承了一个其它的parent，果然，改成spring-boot-starter-parent，mvn clean package -> java -jar XXX.jar Success!
+    进到那个parent pom一看，spring-boot-maven-plugin插件配置的属性<configuration>里还有个属性<skip>true</skip>，俺服了
+    这个代码要这样搞，没办法，只能在该项目插件配置里也加个<skip>false</skip>，mvn clean package -> java -jar XXX.jar Success!
+    唉，搞了小半天，俺记住你了
