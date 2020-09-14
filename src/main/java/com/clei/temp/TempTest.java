@@ -6,6 +6,7 @@ import com.clei.utils.FileUtil;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
@@ -14,11 +15,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
+ * 临时用到的一些测试
+ *
  * @author KIyA
- * @backStory 临时用到的一些测试
  */
 public class TempTest {
 
@@ -28,7 +29,7 @@ public class TempTest {
         list1.add(new Node("张三"));
         list1.add(new Node("李四"));
 
-        List list2 = list1.stream().collect(Collectors.toList());
+        List<Node> list2 = new ArrayList<>(list1);
 
         System.out.println(list1 == list2);
         System.out.println(list1.get(0) == list2.get(0));
@@ -67,6 +68,12 @@ public class TempTest {
         System.out.println(DateUtil.toEpochMilli(l1.plusDays(1)));
         System.out.println(DateUtil.format(l1.withHour(3)));
 
+        test();
+
+    }
+
+    private static void test() throws Exception {
+
         // 看看改项目下用到了多少ES index
         Map<String,String> indexMap = new HashMap<>(16);
 
@@ -74,12 +81,14 @@ public class TempTest {
 
         String keyword = "_index";
 
+        String fileSuffix = ".java";
+
         FileUtil.fileOperation(filePath,f -> {
 
             String fileName = f.getName();
 
-            if(fileName.endsWith(".java")){
-                BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f),"UTF-8"));
+            if(fileName.endsWith(fileSuffix)){
+                BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8));
                 String str;
                 while(null != (str = br.readLine())){
 
@@ -100,10 +109,12 @@ public class TempTest {
                         if(temp != 0){
                             String indexName = str.substring(temp + 1,index + keyword.length());
                             if(!indexMap.containsKey(indexName)){
-                                fileName = f.getAbsolutePath();
-                                fileName = fileName.replace(filePath,"");
-                                fileName = fileName.substring(0,fileName.indexOf("\\")) + "    " + f.getName();
-                                indexMap.put(indexName,fileName);
+                                StringBuilder sb = new StringBuilder(f.getAbsolutePath());
+                                sb.replace(0,filePath.length(),"");
+                                sb.delete(sb.indexOf("\\"),sb.length());
+                                sb.append("    ");
+                                sb.append(f.getName());
+                                indexMap.put(indexName,sb.toString());
                             }
                         }
 
@@ -114,14 +125,11 @@ public class TempTest {
             }
         });
 
-        indexMap.forEach((k,v) -> {
-            System.out.println(k + "    " + v);
-        });
-
+        indexMap.forEach((k,v) -> System.out.println(k + "    " + v));
     }
 
     static class Node{
-        private String name;
+        private final String name;
 
         public Node(String name) {
             this.name = name;

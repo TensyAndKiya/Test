@@ -34,7 +34,7 @@ public class AConJavaCodeTest {
     private static void operation(int type) throws InterruptedException {
 
         // 线程数
-        int tasks = 100000;
+        int tasks = 1000;
 
         // park数量
         int parks = 100;
@@ -156,8 +156,10 @@ public class AConJavaCodeTest {
         List<VehicleInfo> vehicleInfoList = vehicleMap.get(parkId);
         if (vehicleInfoList == null) {
 
-            // synchronized (String.valueOf(parkId).intern())
+            // synchronized (String.valueOf(parkId).intern()) parkId太多不同值会导致常量池堆积大量数据
             synchronized(AConJavaCodeTest.class){
+
+                vehicleInfoList = vehicleMap.get(parkId);
 
                 if(vehicleInfoList == null){
 
@@ -232,7 +234,7 @@ public class AConJavaCodeTest {
     /**
      * 添加车辆操作
      */
-    static interface AddVehicleOperation{
+    interface AddVehicleOperation{
         void operate(ConcurrentHashMap<Long, List<VehicleInfo>> vehicleMap,long parkId, String vehicleNo, byte vehicleColor);
     }
 

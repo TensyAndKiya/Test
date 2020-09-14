@@ -1,7 +1,5 @@
 package com.clei.Y2019.M07.D31;
 
-import com.alibaba.fastjson.JSONObject;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
@@ -34,7 +32,7 @@ class Runnable1 implements Runnable{
             System.out.println("已经有key: " + k);
             return;
         }
-        map.put(k,new Date().getTime());
+        map.put(k,System.currentTimeMillis());
         try{
             Iterator<Map.Entry<String,Long>> it = map.entrySet().iterator();
             LinkedList<String> list = new LinkedList<>();
