@@ -1,16 +1,18 @@
 package com.clei.utils;
 
+import com.clei.Y2020.M09.D17.RoadObject;
 import com.clei.utils.other.ColumnDao;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -20,7 +22,7 @@ import java.util.*;
  * @since 2019-10-17
  */
 public class MybatisUtil {
-    private final static String ENV = "prod";
+    private final static String ENV = "test";
     private final static String DATABASE = "security";
     private final static String TABLE = "user";
     private final static char UNDERLINE = '_';
@@ -30,224 +32,95 @@ public class MybatisUtil {
 
     public static void main(String[] args) throws Exception {
         String env = ENV;
-        if(args.length > 0){
-            if(args[0].equals("prod")){
+        if (args.length > 0) {
+            if (args[0].equals("prod")) {
                 env = "prod";
-            }else {
+            } else {
                 env = "test";
             }
         }
 
-
-        // doUpdate(env);
-
-        /*List<Map<String,Object>> list = new ArrayList<>();
-        for (int i = 1; i <= 102; i++) {
-            Map<String,Object> map = new HashMap<>();
-            String id = UUID.randomUUID().toString().replaceAll("-","");
-            map.put("parkingspaceId",id);
-            map.put("floorId","000002");
-            map.put("areaId","200005");
-            map.put("parkinglotId","9fb2a645362f58ea7fbf4978034028a3");
-            map.put("parkingspaceCode","1F-AGV-" + getStr(i));
-            map.put("parkingspaceType",3);
-            map.put("parkingspaceStatus",0);
-            map.put("createBy","00001");
-            list.add(map);
-        }
-
-        SqlSession session = getSession(env);
-        ColumnDao mapper = session.getMapper(ColumnDao.class);
-        int result = mapper.insertSpace(list);
-        session.commit();
-
-        System.out.println("success " + result);*/
-
-        // Map<String,String> param = new HashMap<>(2);
-        /*param.put("list",DATABASE);
-        param.put("table",TABLE);*/
+         insertRoadInfo(env);
+    }
 
 
-        // 输出 table private
-        /*List<Map<String,String>> result = (List<Map<String, String>>) doGet(env);
-        printResultMapAndColumns(result);*/
+    /**
+     * 将大数据那边给的一份道路信息csv文件 插入到mysql数据库里
+     */
+    private static void insertRoadInfo(String env) throws Exception{
 
-        // doUpdateStatus(env);
+        // 1. 将数据装入 list
+        String filePath = "D:\\Download\\DingDing\\0.csv";
 
-         // doUpdate(env);
+        Map<String,List<RoadObject>> map = new HashMap<>();
 
-        // allTimeBack(env);
+        List<RoadObject> list = new ArrayList<>();
 
-        /*System.out.println(0.5*3600);
-        System.out.println(12*3600);*/
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath),"UTF-8"));
+        String str;
 
-        //
-        // insertCompanyParkinglot(env);
+        while(null != (str = br.readLine())){
 
-        // insertParkInvoiceInfo(env);
+            String[] array = str.split("\\s");
+            int length = array.length;
 
-        List<Map<String,Object>> idName = getIdName(env);
+            RoadObject obj = new RoadObject();
+            obj.setRoadCode(array[0]);
+            obj.setRoadName(array[3]);
+            obj.setLength(new BigDecimal(array[length - 3]));
+            obj.setDirection(array[length - 4]);
+            // centerPoint:[106.630610,26.684490]
+            String centerPoint = array[length - 2];
+            int commaIndex = centerPoint.indexOf(",");
 
-        SqlSession session = getSession(env);
+            obj.setCenterLon(new BigDecimal(centerPoint.substring(1,commaIndex)));
+            obj.setCenterLat(new BigDecimal(centerPoint.substring(commaIndex + 1,centerPoint.length() - 1)));
+            obj.setGeo(array[length - 1]);
 
-        int i = 0;
-
-        for (Map<String,Object> m : idName){
-
-            String id = m.get("id").toString();
-
-            Integer count = getCount(session,env,id);
-
-            if(count > 0){
-
-                System.out.println(id + "\t" + m.get("name") + "\t" + m.get("address"));
-
-                i ++ ;
-
+            // 放入list
+            list.add(obj);
+            // 放入map
+            List<RoadObject> sectionList = map.get(obj.getRoadName());
+            if(sectionList == null){
+                sectionList = new ArrayList<>(1);
             }
-
-            Thread.sleep(200L);
-
+            sectionList.add(obj);
+            map.put(obj.getRoadName(),sectionList);
         }
 
-        System.out.println(i);
-
-    }
-
-    private static void insertCompanyParkinglot(String env) throws Exception{
-        SqlSession session = getSession(env);
-        ColumnDao mapper = session.getMapper(ColumnDao.class);
-
-        List<String> parkIds = mapper.select1();
-
-        List<Map<String,Object>> list = new ArrayList<>();
-        for(String str : parkIds){
-            Map<String,Object> param = new HashMap<>();
-            param.put("companyId","2");
-            param.put("parkId",str);
-            list.add(param);
+        // 设置roadList
+        Collection<List<RoadObject>> values = map.values();
+        List<RoadObject> roadList = new ArrayList<>(values.size());
+        for (List<RoadObject> l : values){
+            // 只选第一个
+            roadList.add(l.get(0));
         }
 
-        // session.commit();
-
-        int result = mapper.insertCompanyParkinglot(list);
-
-        PrintUtil.println("result : " + result,result);
-
-    }
-
-    private static List<Map<String,Object>> getIdName(String env) throws Exception{
+        // 插入道路信息
         SqlSession session = getSession(env);
-        ColumnDao mapper = session.getMapper(ColumnDao.class);
-        return mapper.getIdName();
-    }
 
-    private static Integer getCount(SqlSession session,String env,String parkId) throws Exception{
-        ColumnDao mapper = session.getMapper(ColumnDao.class);
-        return mapper.getParkingRecordCount(parkId);
-    }
-
-    private static void insertParkInvoiceInfo(String env) throws Exception{
-        SqlSession session = getSession(env);
         ColumnDao mapper = session.getMapper(ColumnDao.class);
 
-        List<String> parkIds = mapper.select1();
+        // 插入到表并获取到roadId
+        mapper.batchInsertRoadInfo(roadList);
 
-        List<Map<String,Object>> list = new ArrayList<>();
-        for(String str : parkIds){
-            Map<String,Object> param = new HashMap<>();
-            param.put("invoiceId",UUID.randomUUID().toString().replaceAll("-", ""));
-            param.put("parkId",str);
-            param.put("goodsCode","3040502020200000000");
-            param.put("codeVersion","33.0");
-            param.put("taxRate",0.09);
-            param.put("dsptbm","111JIY4C");
-            param.put("secretId","2b92b210d95f48bda83eda5032d3b2e8");
-            param.put("secretKey","0eece418a8984803878918a8a49d781b");
-            param.put("drawer","张三三");
-            param.put("reviewer","李思思");
-            param.put("payee","王武武");
-            list.add(param);
+        // 给所有路段设置roadId
+        for(RoadObject obj : list){
+            String name = obj.getRoadName();
+
+            obj.setRoadId(map.get(name).get(0).getRoadId());
         }
 
-        // session.commit();
+        // 插入到表并获取到roadSectionId
+        mapper.batchInsertRoadSectionInfo(list);
 
-        int result = mapper.insertCompanyParkinglot(list);
+        // 插入到表
+        mapper.batchInsertRoadSectionNode(list);
 
-        PrintUtil.println("result : " + result,result);
-
+        br.close();
     }
 
-    private static void allTimeBack(String env) throws Exception{
-        SqlSession session = getSession(env);
-        ColumnDao mapper = session.getMapper(ColumnDao.class);
-
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String yesterday = "2019-12-04 18:33:33";
-        LocalDateTime yTime = LocalDateTime.parse(yesterday,dtf);
-        LocalDateTime now = LocalDateTime.now();
-        long seconds = ChronoUnit.SECONDS.between(yTime,now);
-        System.out.println("秒 ： " + seconds);
-
-        Map<String,Object> map = new HashMap<>();
-        map.put("seconds",seconds);
-        Integer result = mapper.updateTimeBack(map);
-
-        System.out.println("result : " + result);
-    }
-
-    private static void doUpdateStatus(String env) throws Exception{
-        SqlSession session = getSession(env);
-        ColumnDao mapper = session.getMapper(ColumnDao.class);
-
-        Map<String,Object> map = new HashMap<>();
-        map.put("areaName","中华鲟");
-        map.put("fromCode","B1-810");
-        map.put("toCode","B1-870");
-        map.put("limit",55);
-
-        Integer origin = mapper.updateStatus1(map);
-        System.out.println("effect : " + origin);
-
-        Integer result  = mapper.updateStatus(map);
-        System.out.println("result : " + result);
-
-        session.commit();
-    }
-
-    private static void doUpdate(String env) throws Exception{
-        SqlSession session = getSession(env);
-        ColumnDao mapper = session.getMapper(ColumnDao.class);
-        List<String> strs = mapper.selectList();
-        Random random = new Random();
-        int[] array = random.ints(strs.size(),1800,43200).toArray();
-
-        System.out.println(strs.size());
-
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        for (int i = 0; i < strs.size(); i++) {
-            Map<String,Object> map = new HashMap<>();
-            map.put("parkingspaceId",strs.get(i));
-            map.put("entranceTime",dtf.format(now.minusSeconds(array[i])));
-            mapper.updateTime(map);
-            System.out.println(i);
-        }
-
-        session.commit();
-    }
-
-    private static String getStr(int i){
-        if (i < 10){
-            return "00" + i;
-        }else if(i< 100){
-            return "0" + i;
-        }else {
-            return "" + i;
-        }
-    }
-
-    private static SqlSession getSession(String env) throws IOException {
+    public static SqlSession getSession(String env) throws IOException {
         Reader reader = Resources.getResourceAsReader("mybatisConf/mybatisConf.xml");
         SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(reader,env);
         // 自动提交 true

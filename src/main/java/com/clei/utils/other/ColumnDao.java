@@ -1,37 +1,29 @@
 package com.clei.utils.other;
 
+import com.clei.Y2020.M09.D17.RoadObject;
+
 import java.util.List;
 import java.util.Map;
 
 public interface ColumnDao {
-    List<Map<String,String>> getColumnInfo(Map<String, String> map);
 
-    Integer insertSpace(List<Map<String,Object>> list);
-
-    List<String> selectList();
-
-    Integer updateTime(Map<String,Object> map);
-
-    Integer updateStatus(Map<String,Object> map);
-
-    Integer updateStatus1(Map<String, Object> map);
-
-    Integer updateTimeBack(Map<String,Object> map);
-
-    List<String> select1();
-
-    Integer insertCompanyParkinglot(List<Map<String, Object>> list);
+    List<Map<String, String>> getColumnInfo(Map<String, String> map);
 
     /**
-     * 查询符合要求的停车场id和name
-     * @return
+     * 批量插入roadInfo
+     * @param list
      */
-    List<Map<String, Object>> getIdName();
+    void batchInsertRoadInfo(List<RoadObject> list);
 
     /**
-     * 查询车场符合要求的停车记录数
-     * @param parkId
-     * @return
+     * 批量插入roadSectionInfo
+     * @param list
      */
-    Integer getParkingRecordCount(String parkId);
+    void batchInsertRoadSectionInfo(List<RoadObject> list);
+
+    /**
+     * 批量插入roadSectionNode
+     * @param list
+     */
+    void batchInsertRoadSectionNode(List<RoadObject> list);
 }

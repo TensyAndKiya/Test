@@ -9,166 +9,79 @@
         AND TABLE_NAME = #{table}
     </select>
 
-    <insert id="insertSpace" parameterType="java.util.List">
-            INSERT INTO park_parkingspace(parkingspace_id,
-                floor_id,
-                area_id,
-                parkinglot_id,
-                parkingspace_code,
-                parkingspace_type,
-                parkingspace_status,
-                create_by,
-                create_date)
-            VALUES <foreach collection="list" open="(" close=")" separator="),(" item="i">
-            #{i.parkingspaceId},
-            #{i.floorId},
-            #{i.areaId},
-            #{i.parkinglotId},
-            #{i.parkingspaceCode},
-            #{i.parkingspaceType},
-            #{i.parkingspaceStatus},
-            #{i.createBy},
-            SYSDATE()
+    <insert id="batchInsertRoadInfo" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="roadId">
+        INSERT INTO road_info(
+        name,
+        type,
+        length,
+        one_way,
+        lane_number,
+        geo,
+        area,
+        direction,
+        uuid)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.roadName},
+            1,
+            #{item.length},
+            1,
+            2,
+            ' ',
+            '贵阳',
+            #{item.direction},
+            #{item.roadCode}
+            )
         </foreach>
     </insert>
 
-    <!--<select id="selectList" resultType="java.lang.String">
-        SELECT parkingspace_id
-        FROM park_parkingspace pp
-        WHERE pp.parkinglot_id = '9fb2a645362f58ea7fbf4978034028a3'
-        AND parkingspace_status = 1
-    </select>-->
-
-    <select id="selectList" resultType="java.lang.String">
-        SELECT parkingspace_id
-        FROM park_parkingspace pp,park_parkinglot_floor ppf
-        WHERE pp.parkinglot_id = '9fb2a645362f58ea7fbf4978034028a3'
-        AND ppf.floor_id = pp.floor_id
-        AND ppf.floor_name = '1M'
-        AND pp.del_flag = 0
-        AND ppf.del_flag = 0
-        AND parkingspace_status = 1
-    </select>
-
-    <!--<select id="selectList" resultType="java.lang.String">
-        SELECT parkingspace_id
-        FROM park_parkingspace pp,park_parkinglot_area ppa
-        WHERE pp.parkinglot_id = '9fb2a645362f58ea7fbf4978034028a3'
-        AND ppa.area_id = pp.area_id
-        AND ppa.area_name = '绿海龟'
-        AND pp.del_flag = 0
-        AND ppa.del_flag = 0
-        AND parkingspace_status = 1
-    </select>-->
-
-    <update id="updateTime" parameterType="java.util.Map">
-        UPDATE park_parkingspace
-        SET entrance_time = #{entranceTime}
-        WHERE parkingspace_id = #{parkingspaceId}
-    </update>
-
-    <update id="updateStatus1" parameterType="java.util.Map">
-        UPDATE park_parkingspace pp,park_parkinglot_area ppa
-        SET parkingspace_status = 0
-        WHERE pp.parkinglot_id = '9fb2a645362f58ea7fbf4978034028a3'
-        AND ppa.area_id = pp.area_id
-        AND ppa.area_name = #{areaName}
-        AND pp.del_flag = 0
-        AND ppa.del_flag = 0
-    </update>
-
-    <update id="updateStatus" parameterType="java.util.Map">
-            UPDATE park_parkingspace
-    SET parkingspace_status = 1
-    WHERE parkingspace_id IN (
-        SELECT * FROM (
-            SELECT parkingspace_id
-        FROM park_parkingspace pp,park_parkinglot_area ppa
-        WHERE pp.parkinglot_id = '9fb2a645362f58ea7fbf4978034028a3'
-        AND ppa.area_id = pp.area_id
-        AND ppa.area_name = #{areaName}
-        AND pp.del_flag = 0
-        AND ppa.del_flag = 0
-        AND parkingspace_code >= #{fromCode}
-        AND parkingspace_code <![CDATA[ < ]]> #{toCode}
-        AND parkingspace_status != 1
-        ORDER BY parkingspace_id
-        LIMIT #{limit}
-        ) temp
-    )
-    </update>
-
-    <update id="updateTimeBack" parameterType="java.util.Map">
-        UPDATE park_parkingspace
-        SET entrance_time = DATE_ADD(entrance_time,INTERVAL #{seconds} SECOND)
-        WHERE parkinglot_id = '9fb2a645362f58ea7fbf4978034028a3'
-        AND parkingspace_status = 1
-        AND entrance_time IS NOT NULL
-        AND del_flag = 0
-    </update>
-
-    <select id="select1" resultType="java.lang.String">
-        SELECT DISTINCT parkinglot_id
-        FROM users.user_consumption
-        WHERE parkinglot_id NOT IN (SELECT parkinglot_id FROM finance.finance_company_invoice_info)
-    </select>
-
-    <insert id="insertCompanyParkinglot" parameterType="java.util.List">
-        INSERT INTO finance_company_invoice_info(invoice_info_id,
-            parkinglot_id,
-            goods_code,
-            code_version,
-            tax_rate,
-            dsptbm,
-            secret_id,
-            secret_key,
-            drawer,
-            reviewer,
-            payee)
-        VALUES <foreach collection="list" open="(" close=")" separator="),(" item="item">
-            #{item.invoiceId},
-            #{item.parkId},
-            #{item.goodsCode},
-            #{item.codeVersion},
-            #{item.taxRate},
-            #{item.dsptbm},
-            #{item.secretId},
-            #{item.secretKey},
-            #{item.drawer},
-            #{item.reviewer},
-            #{item.payee}
+    <insert id="batchInsertRoadSectionInfo" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="roadSectionId">
+        INSERT INTO road_section_info(
+        road_id,
+        section_name,
+        road_name,
+        length,
+        one_way,
+        lane_number,
+        geo,
+        area,
+        direction,
+        uuid)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.roadId},
+            #{item.roadName},
+            #{item.roadName},
+            #{item.length},
+            1,
+            2,
+            #{item.geo},
+            '贵阳',
+            #{item.direction},
+            #{item.roadCode}
+            )
         </foreach>
     </insert>
 
-    <select id="getIdName" resultType="java.util.Map">
-        SELECT id,name,address
-        FROM parking_lot
-        WHERE cmb_park_open != 2
-        AND is_cdpay = 0
-        -- and ifnull(parent_id,'') = ''
-        AND NAME NOT LIKE '%测试%'
-        AND del_flag = 0
-        AND id NOT IN (
-
-            SELECT parking_lot_id AS parkId
-            FROM ccb_pay_info
-            WHERE del_flag = 0
-
-            UNION
-
-            SELECT parking_lot_id FROM parking_lot_pay_info
-            WHERE sys_service_provider_id = '2088521066336121'
-            AND del_flag = 0
-
+    <insert id="batchInsertRoadSectionNode" parameterType="java.util.List">
+        INSERT INTO road_section_node_coordinate(
+        road_id,
+        road_section_id,
+        lon,
+        lat
         )
-    </select>
-
-    <select id="getParkingRecordCount" parameterType="java.lang.String" resultType="java.lang.Integer">
-        SELECT COUNT(id)
-        FROM temp_orders
-        WHERE parking_lot_id = #{parkId}
-        AND order_start_time > '2020-01-01 00:00:00';
-    </select>
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.roadId},
+            #{item.roadSectionId},
+            #{item.centerLon},
+            #{item.centerLat}
+            )
+        </foreach>
+    </insert>
 
 
 </mapper>
