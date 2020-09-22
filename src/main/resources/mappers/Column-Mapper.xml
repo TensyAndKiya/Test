@@ -83,5 +83,95 @@
         </foreach>
     </insert>
 
+    <insert id="batchInserRoadSectionRunState" parameterType="java.util.List">
+        INSERT INTO road_real_time_section_run_state_all(
+        road_section_id,
+        congestion_index,
+        speed,
+        congestion_mileage,
+        direction,
+        congestion_type
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.roadSectionId},
+            #{item.congestionIndex},
+            #{item.speed},
+            #{item.congestionMileage},
+            #{item.direction},
+            #{item.congestionType}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="batchInsertWarnCongestion" parameterType="java.util.List">
+        INSERT INTO road_warn_congestion(
+        road_section_id,
+        name,
+        address,
+        direction,
+        congestion_level,
+        congestion_index,
+        lane_config,
+        lon_start,
+        lat_start,
+        lon_end,
+        lat_end,
+        congestion_time
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.roadSectionId},
+            #{item.name},
+            #{item.address},
+            #{item.direction},
+            #{item.congestionLevel},
+            #{item.congestionIndex},
+            #{item.laneConfig},
+            #{item.lonStart},
+            #{item.latStart},
+            #{item.lonEnd},
+            #{item.latEnd},
+            #{item.congestionTime}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateSectionRunStateById" parameterType="java.util.Map">
+        UPDATE road_real_time_section_run_state_all
+        SET congestion_index = #{congestionIndex},
+        speed = #{speed}
+        where road_section_id = #{roadSectionId}
+    </update>
+
+    <select id="getSectionList" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT id AS roadSectionId,
+            length,
+            direction
+        FROM road_section_info
+        WHERE id > #{id};
+    </select>
+
+    <select id="getCongestionSectionList" resultType="java.util.Map">
+        SELECT rr.road_section_id AS roadSectionId,
+        rs.section_name AS roadSectionName,
+        rr.direction,
+        rs.geo,
+        rr.congestion_index AS congestionIndex
+        FROM road_real_time_section_run_state_all rr,
+        road_section_info rs
+        WHERE rs.id = rr.road_section_id
+        AND congestion_index > 4
+    </select>
+
+    <select id="getRoadSectionByUuidList" parameterType="java.util.List" resultType="java.util.Map">
+        SELECT rsi.id AS roadSectionId,
+        rsi.uuid
+        FROM road_section_info rsi
+        WHERE rsi.uuid IN
+        <foreach collection="list" item="item" open="(" close=")" separator=",">#{item.uuid}</foreach>
+    </select>
 
 </mapper>

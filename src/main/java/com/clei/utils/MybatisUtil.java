@@ -1,5 +1,7 @@
 package com.clei.utils;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.clei.Y2020.M09.D17.RoadObject;
 import com.clei.utils.other.ColumnDao;
 import org.apache.ibatis.io.Resources;
@@ -13,7 +15,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.math.BigDecimal;
-import java.util.*;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * 快速获取某表的 ResultMap信息，以及所有的字段名信息
@@ -40,12 +49,19 @@ public class MybatisUtil {
             }
         }
 
-         insertRoadInfo(env);
+        // insertRoadInfo(env);
+
+        // insertRoadSectionRunStateInfo(env);
+
+        // insertWarnCongestion(env);
+
+        updateRoadSectionRunState(env);
     }
 
 
     /**
-     * 将大数据那边给的一份道路信息csv文件 插入到mysql数据库里
+     * @param env 环境
+     *            将大数据那边给的一份道路信息csv文件 插入到mysql数据库里
      */
     private static void insertRoadInfo(String env) throws Exception{
 
@@ -120,25 +136,205 @@ public class MybatisUtil {
         br.close();
     }
 
+
+    /**
+     * 根据数据库道路路段信息 随机设置 运行状态
+     *
+     * @param env
+     * @throws Exception
+     */
+    private static void insertRoadSectionRunStateInfo(String env) throws Exception {
+        SqlSession session = getSession(env);
+
+        ColumnDao mapper = session.getMapper(ColumnDao.class);
+
+        // 获取已有的道路路段信息
+        List<Map<String, Object>> sectionList = mapper.getSectionList(240001);
+
+        Random random = new Random();
+
+        for (Map<String, Object> m : sectionList) {
+            double d1 = random.nextDouble();
+            int i1 = random.nextInt(4);
+            BigDecimal b1 = new BigDecimal(d1 + i1);
+            b1 = b1.setScale(2, RoundingMode.HALF_UP);
+
+            double d2 = random.nextDouble();
+            int i2 = random.nextInt(200);
+            BigDecimal b2 = new BigDecimal(d2 + i2);
+            b2 = b2.setScale(2, RoundingMode.HALF_UP);
+
+            BigDecimal b3 = new BigDecimal(String.valueOf(m.get("length")));
+            b3 = b3.divide(new BigDecimal(2)).setScale(2, RoundingMode.HALF_UP);
+
+            m.put("congestionIndex", b1);
+            m.put("speed", b2);
+            m.put("congestionMileage", b3);
+            m.put("congestionType", random.nextInt(5 + 1));
+        }
+
+        mapper.batchInserRoadSectionRunState(sectionList);
+    }
+
+    /**
+     * 根据数据库道路路段信息 插入 拥堵预警信息
+     *
+     * @param env
+     * @throws Exception
+     */
+    private static void insertWarnCongestion(String env) throws Exception {
+        SqlSession session = getSession(env);
+
+        ColumnDao mapper = session.getMapper(ColumnDao.class);
+
+        // 获取已有的道路路段信息
+        List<Map<String, Object>> sectionList = mapper.getCongestionSectionList();
+
+        Random random = new Random();
+
+        for (Map<String, Object> m : sectionList) {
+
+            String roadSectionName = String.valueOf(m.get("roadSectionName"));
+
+            m.put("name", roadSectionName);
+            m.put("address", roadSectionName);
+            m.put("laneConfig", "双向四车道");
+            m.put("congestionTime", random.nextInt(200));
+
+            String geo = String.valueOf(m.remove("geo"));
+
+            JSONArray array = JSONObject.parseArray(geo);
+            int length = array.size();
+
+            String start = array.get(0).toString();
+            String end = array.get(length - 1).toString();
+
+            int commaIndex = start.indexOf(",");
+            BigDecimal lonStart = new BigDecimal(start.substring(1, commaIndex));
+            BigDecimal latStart = new BigDecimal(start.substring(commaIndex + 1, start.length() - 1));
+
+            commaIndex = end.indexOf(",");
+            BigDecimal lonEnd = new BigDecimal(end.substring(1, commaIndex));
+            BigDecimal latEnd = new BigDecimal(end.substring(commaIndex + 1, end.length() - 1));
+
+            m.put("lonStart", lonStart);
+            m.put("latStart", latStart);
+            m.put("lonEnd", lonEnd);
+            m.put("latEnd", latEnd);
+
+            String congestionIndex = String.valueOf(m.get("congestionIndex"));
+
+            BigDecimal b = new BigDecimal(congestionIndex);
+            int congestionLevel = 1;
+            if (b.compareTo(new BigDecimal(6)) == 1) {
+                congestionLevel = 2;
+            }
+            m.put("congestionLevel", congestionLevel);
+
+        }
+
+        mapper.batchInsertWarnCongestion(sectionList);
+    }
+
+    /**
+     * @param env 环境
+     *            将大数据那边给的一份道路信息csv文件 更新到road_section_run_state
+     */
+    private static void updateRoadSectionRunState(String env) throws Exception {
+
+        // 1. 将数据装入 list
+        String filePath = "D:\\Download\\DingDing\\城市道路指数.csv";
+
+        List<Map<String, String>> list = new ArrayList<>();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "UTF-8"));
+        String str;
+
+        Map<String, String> uuidMap = new HashMap<>();
+
+        while (null != (str = br.readLine())) {
+
+            String[] array = str.split(",");
+
+            Map<String, String> map = new HashMap<>();
+
+            String uuid = array[2];
+            String congestionIndex = array[4];
+            String speed = array[5];
+
+            map.put("uuid", uuid);
+            map.put("congestionIndex", congestionIndex);
+            map.put("speed", speed);
+
+            list.add(map);
+
+            uuidMap.put(uuid, congestionIndex + "," + speed);
+        }
+
+        SqlSession session = getSession(env);
+
+        ColumnDao mapper = session.getMapper(ColumnDao.class);
+
+        // 根据uuid获取到路段信息
+        List<Map<String, Object>> sectionList = mapper.getRoadSectionByUuidList(list);
+
+        for (Map m : sectionList) {
+            String uuid = m.get("uuid").toString();
+
+            String tempStr = uuidMap.get(uuid);
+
+            String[] arr = tempStr.split(",");
+
+            BigDecimal congestionIndex = new BigDecimal(arr[0]);
+
+            BigDecimal speed = new BigDecimal(arr[1]);
+
+            m.put("congestionIndex", congestionIndex);
+
+            m.put("speed", speed);
+
+            mapper.updateSectionRunStateById(m);
+        }
+    }
+
+    /**
+     * 获取sql session
+     *
+     * @param env
+     * @return
+     * @throws IOException
+     */
     public static SqlSession getSession(String env) throws IOException {
         Reader reader = Resources.getResourceAsReader("mybatisConf/mybatisConf.xml");
-        SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(reader,env);
+        SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(reader, env);
         // 自动提交 true
         SqlSession session = sessionFactory.openSession(true);
         return session;
     }
 
-    private static Object doGet(String env) throws IOException {
+    /**
+     * 查询某数据库某表的column信息
+     *
+     * @param env
+     * @return
+     * @throws IOException
+     */
+    private static Object getColumnInfo(String env) throws IOException {
         SqlSession session = getSession(env);
         ColumnDao mapper = session.getMapper(ColumnDao.class);
-        Map<String,String> param = new HashMap<>(2);
-        param.put("database",DATABASE);
-        param.put("table",TABLE);
-        List<Map<String,String>> reuslt = mapper.getColumnInfo(param);
+        Map<String, String> param = new HashMap<>(2);
+        param.put("database", DATABASE);
+        param.put("table", TABLE);
+        List<Map<String, String>> reuslt = mapper.getColumnInfo(param);
         return reuslt;
     }
 
-    private static void printResultMapAndColumns(List<Map<String, String>> list){
+    /**
+     * 根据column信息打印 mybatis可能用到的代码
+     *
+     * @param list
+     */
+    private static void printResultMapAndColumns(List<Map<String, String>> list) {
         StringBuilder resultMap = new StringBuilder("<resultMap id=\"baseMap\" type=\"\">");
         StringBuilder columnSql = new StringBuilder("<sql id=\"baseColumn\">\n\t");
         StringBuilder properties = new StringBuilder("");
@@ -169,7 +365,6 @@ public class MybatisUtil {
         final String columnType = ct;
 
         list.forEach(e -> {
-
 
 
             String column = e.get(columnName);

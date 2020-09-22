@@ -23,7 +23,51 @@ public interface ColumnDao {
 
     /**
      * 批量插入roadSectionNode
+     *
      * @param list
      */
     void batchInsertRoadSectionNode(List<RoadObject> list);
+
+    /**
+     * 获取id大于给定参数的section数据
+     *
+     * @param id
+     * @return
+     */
+    List<Map<String, Object>> getSectionList(Integer id);
+
+    /**
+     * 批量插入roadSectionRunState
+     *
+     * @param sectionList
+     */
+    void batchInserRoadSectionRunState(List<Map<String, Object>> sectionList);
+
+    /**
+     * 获取拥堵的的section数据
+     *
+     * @return
+     */
+    List<Map<String, Object>> getCongestionSectionList();
+
+    /**
+     * 批量插入warnCongestion
+     *
+     * @param sectionList
+     */
+    void batchInsertWarnCongestion(List<Map<String, Object>> sectionList);
+
+    /**
+     * 根据uuid获取到路段信息
+     *
+     * @param list
+     */
+    List<Map<String, Object>> getRoadSectionByUuidList(List<Map<String, String>> list);
+
+    /**
+     * 根据roadSectionId更新拥堵指数和速度
+     *
+     * @param m
+     */
+    void updateSectionRunStateById(Map m);
 }
