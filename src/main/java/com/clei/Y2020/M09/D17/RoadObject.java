@@ -31,6 +31,21 @@ public class RoadObject {
     private String roadName;
 
     /**
+     * 起始位置
+     */
+    private String startLocation;
+
+    /**
+     * 结束位置
+     */
+    private String endLocation;
+
+    /**
+     * 道路类型 1：城市道路，2：高/快速路，3：普通国省干线
+     */
+    private Integer roadType;
+
+    /**
      * 道路长度
      */
     private BigDecimal length;
@@ -58,8 +73,11 @@ public class RoadObject {
     @Override
     public String toString() {
         return "RoadObject{" +
-                "roadCode='" + roadCode + '\'' +
+                "roadId=" + roadId +
+                ", roadSectionId=" + roadSectionId +
+                ", roadCode='" + roadCode + '\'' +
                 ", roadName='" + roadName + '\'' +
+                ", roadType=" + roadType +
                 ", length=" + length +
                 ", direction='" + direction + '\'' +
                 ", centerLon=" + centerLon +
@@ -90,6 +108,38 @@ public class RoadObject {
 
     public void setRoadName(String roadName) {
         this.roadName = roadName;
+    }
+
+    public String getStartLocation() {
+        return startLocation;
+    }
+
+    public void setStartLocation(String startLocation) {
+        this.startLocation = startLocation;
+    }
+
+    public String getEndLocation() {
+        return endLocation;
+    }
+
+    public void setEndLocation(String endLocation) {
+        this.endLocation = endLocation;
+    }
+
+    public Long getRoadSectionId() {
+        return roadSectionId;
+    }
+
+    public void setRoadSectionId(Long roadSectionId) {
+        this.roadSectionId = roadSectionId;
+    }
+
+    public Integer getRoadType() {
+        return roadType;
+    }
+
+    public void setRoadType(Integer roadType) {
+        this.roadType = roadType;
     }
 
     public BigDecimal getLength() {

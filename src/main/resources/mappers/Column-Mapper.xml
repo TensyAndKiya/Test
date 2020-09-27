@@ -24,10 +24,10 @@
         <foreach collection="list" item="item" separator=",">
             (
             #{item.roadName},
-            1,
+            #{item.roadType},
             #{item.length},
-            1,
-            2,
+            0,
+            4,
             ' ',
             '贵阳',
             #{item.direction},
@@ -41,6 +41,8 @@
         road_id,
         section_name,
         road_name,
+        start_location,
+        end_location,
         length,
         one_way,
         lane_number,
@@ -54,15 +56,28 @@
             #{item.roadId},
             #{item.roadName},
             #{item.roadName},
+            #{item.startLocation},
+            #{item.endLocation},
             #{item.length},
-            1,
-            2,
+            0,
+            4,
             #{item.geo},
             '贵阳',
             #{item.direction},
             #{item.roadCode}
             )
         </foreach>
+    </insert>
+
+    <insert id="batchInsertRoadSectionInfoByTable" parameterType="java.lang.String">
+        INSERT INTO road_real_time_section_run_state_all(road_section_id,congestion_index,speed,congestion_mileage,direction,congestion_type)
+        SELECT road_section_id,congestion_index,speed,
+        CASE WHEN congestion_index >= 1.6 THEN rr.length ELSE 0 END,
+        direction,
+        CASE WHEN CAST(FLOOR((congestion_index - 1) / 0.3) + 1 AS UNSIGNED) <![CDATA[ < ]]> 1 THEN 1 WHEN CAST(FLOOR((congestion_index - 1) / 0.3) + 1 AS UNSIGNED) > 5 THEN 5 ELSE CAST(FLOOR((congestion_index - 1) / 0.3) + 1 AS UNSIGNED)  END
+        FROM ${tableName} rrr, road_section_info rr
+        WHERE rrr.date_time = #{dateTime}
+        AND rr.id = rrr.road_section_id
     </insert>
 
     <insert id="batchInsertRoadSectionNode" parameterType="java.util.List">
@@ -118,6 +133,7 @@
         lat_start,
         lon_end,
         lat_end,
+        gmt_start,
         congestion_time
         )
         VALUES
@@ -134,7 +150,160 @@
             #{item.latStart},
             #{item.lonEnd},
             #{item.latEnd},
+            #{item.startTime},
             #{item.congestionTime}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="batchInsertTempSectionRunState">
+        INSERT INTO ${tableName}(
+        road_section_id,
+        road_code,
+        congestion_index,
+        speed,
+        date_time
+        )
+        VALUES
+        <foreach collection="origin" item="item" separator=",">
+            (
+            #{item.roadSectionId},
+            #{item.uuid},
+            #{item.congestionIndex},
+            #{item.speed},
+            #{item.dateTime}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="batchInsertCheckpoint" parameterType="java.util.List" useGeneratedKeys="true"
+            keyProperty="checkpointId">
+        INSERT INTO road_checkpoint(
+        name,
+        direction,
+        lon,
+        lat,
+        status
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.checkpointName},
+            #{item.direction},
+            #{item.lon},
+            #{item.lat},
+            #{item.status}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="batchInsertSectionCheckpointRel" parameterType="java.util.List">
+        INSERT INTO road_section_checkpoint_rel(
+        road_section_id,
+        checkpoint_id
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.roadSectionId},
+            #{item.checkpointId}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="batchInsertCongestionTop10" parameterType="java.util.List">
+        INSERT INTO road_real_time_congestion_top(
+        road_id,
+        road_name,
+        road_section_id,
+        road_section_name,
+        `rank`,
+        congestion_index,
+        speed,
+        congestion_description
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.roadId},
+            #{item.roadName},
+            #{item.roadSectionId},
+            #{item.roadSectionName},
+            #{item.rank},
+            #{item.congestionIndex},
+            #{item.speed},
+            #{item.congestionDescription}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insertRoadSpeed">
+        INSERT INTO road_real_time_road_speed(road_type,speed)
+        SELECT r.type,AVG(rrr.speed) AS speed
+        FROM road_real_time_section_run_state_all rrr,road_section_info rr,road_info r
+        WHERE rr.id = rrr.road_section_id
+        AND r.id = rr.road_id
+        GROUP BY r.type
+        ORDER BY r.type ASC;
+    </insert>
+
+    <insert id="insertCongestionMileage">
+        INSERT INTO road_real_time_congestion_mileage(congestion_mileage,road_type,congestion_type)
+        SELECT SUM(rrr.congestion_mileage) AS length,ri.type AS roadType,CASE congestion_type WHEN 5 THEN 1 WHEN 4 THEN 2 WHEN 3 THEN 3 END AS congestionType
+        FROM road_real_time_section_run_state_all rrr
+        JOIN road_section_info rsi
+        ON rsi.id = rrr.road_section_id
+        JOIN road_info ri
+        ON ri.id = rsi.road_id
+        WHERE congestion_type > 2
+        GROUP BY roadType,congestionType
+        ORDER BY roadType ASC,congestionType ASC
+    </insert>
+
+    <insert id="batchInsertReportHour" parameterType="java.util.List">
+        INSERT INTO road_report_hour_road_run_state(
+        road_id,
+        section_id,
+        date,
+        hour,
+        minute,
+        congestion_index,
+        speed,
+        congestion_type
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.roadId},
+            #{item.roadSectionId},
+            #{item.date},
+            #{item.hour},
+            #{item.minute},
+            #{item.congestionIndex},
+            #{item.speed},
+            #{item.congestionType}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="batchInsertReportForcast" parameterType="java.util.List">
+        INSERT INTO road_report_hour_congestion_forcast(
+        road_id,
+        section_id,
+        date,
+        hour,
+        congestion_index,
+        congestion_type
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.roadId},
+            #{item.roadSectionId},
+            #{item.date},
+            #{item.hour},
+            #{item.congestionIndex},
+            #{item.congestionType}
             )
         </foreach>
     </insert>
@@ -144,6 +313,51 @@
         SET congestion_index = #{congestionIndex},
         speed = #{speed}
         where road_section_id = #{roadSectionId}
+    </update>
+
+    <update id="updateCongestionIndex">
+        UPDATE road_real_time_congestion_index
+        SET congestion_index = (SELECT AVG(congestion_index)
+        FROM road_real_time_section_run_state_all)
+        WHERE id = 1;
+    </update>
+
+    <update id="updateRoadOneWay" parameterType="java.util.List">
+        UPDATE road_info
+        SET one_way = 1
+        WHERE id IN
+        <foreach collection="list" separator="," open="(" close=")" item="item">#{item.roadId}</foreach>
+    </update>
+
+    <update id="updateRoadSectionOneWay" parameterType="java.util.List">
+        UPDATE road_section_info
+        SET one_way = 1
+        WHERE id IN
+        <foreach collection="list" separator="," open="(" close=")" item="item">#{item.roadSectionId}</foreach>
+    </update>
+
+    <update id="updateRoadLaneNumber">
+        UPDATE road_info
+        SET lane_number = #{laneNumber}
+        WHERE type = #{roadType}
+        AND one_way = #{oneWay}
+    </update>
+
+    <update id="updateRoadSectionLaneNumber">
+        UPDATE road_section_info
+        SET lane_number = #{laneNumber}
+        WHERE one_way = #{oneWay}
+        AND road_id IN (
+            SELECT id from road_info
+            WHERE type = #{roadType}
+            AND one_way = #{oneWay}
+        )
+    </update>
+
+    <update id="updateReportForcastDate" parameterType="com.clei.Y2020.M09.D22.DateToDate">
+        UPDATE road_report_hour_congestion_forcast
+        SET date = #{target}
+        WHERE date = #{source};
     </update>
 
     <select id="getSectionList" parameterType="java.lang.Integer" resultType="java.util.Map">
@@ -156,14 +370,17 @@
 
     <select id="getCongestionSectionList" resultType="java.util.Map">
         SELECT rr.road_section_id AS roadSectionId,
-        rs.section_name AS roadSectionName,
+        rsi.section_name AS roadSectionName,
         rr.direction,
-        rs.geo,
-        rr.congestion_index AS congestionIndex
+        CASE WHEN rr.congestion_index <![CDATA[ < ]]> 6 THEN 1 ELSE 2 END AS congestionLevel,
+        rr.congestion_index AS congestionIndex,
+        rsi.one_way AS oneWay,
+        rsi.lane_number AS laneNumber,
+        rsi.geo
         FROM road_real_time_section_run_state_all rr,
-        road_section_info rs
-        WHERE rs.id = rr.road_section_id
-        AND congestion_index > 4
+        road_section_info rsi
+        WHERE rsi.id = rr.road_section_id
+        AND congestion_index >= 4
     </select>
 
     <select id="getRoadSectionByUuidList" parameterType="java.util.List" resultType="java.util.Map">
@@ -173,5 +390,84 @@
         WHERE rsi.uuid IN
         <foreach collection="list" item="item" open="(" close=")" separator=",">#{item.uuid}</foreach>
     </select>
+
+    <select id="getSectionInfo" resultType="com.clei.Y2020.M09.D22.SectionInfo">
+        SELECT rsi.id AS roadSectionId,
+        section_name AS roadSectionName,
+        rsi.uuid,
+        rsi.geo,
+        rsi.direction
+        FROM road_section_info rsi;
+    </select>
+
+    <select id="getTwoWayRoadSection" resultType="java.util.Map">
+        SELECT r1.road_id AS roadId,
+        r1.id AS roadSectionId
+        FROM road_section_info r1
+        JOIN road_section_info r2
+        ON r1.section_name = r2.section_name
+        AND r1.id != r2.id
+        AND r1.length = r2.length
+        AND r1.start_location = r2.end_location
+        AND r1.end_location = r2.start_location
+        AND (LENGTH(r1.start_location) > 1 AND LENGTH(r1.end_location) > 1)
+    </select>
+
+    <select id="getCongestionTopList" resultType="com.clei.Y2020.M09.D22.CongestionTop">
+        SELECT ri.id AS roadId,
+        ri.name AS roadName,
+        rsi.id AS roadSectionId,
+        rsi.section_name AS roadSectionName,
+        congestion_index AS congestionIndex,
+        speed,
+        start_location AS startLocation,
+        end_location AS endLocation,
+        congestion_type AS congestionType,
+        rrr.direction,
+        ROUND(rsi.length,2) AS length
+        FROM road_real_time_section_run_state_all rrr
+        JOIN road_section_info rsi
+        ON rsi.id = rrr.road_section_id
+        JOIN road_info ri
+        ON ri.id = rsi.road_id
+        ORDER BY congestion_index DESC,rrr.road_section_id ASC
+        LIMIT 10;
+    </select>
+
+    <select id="getWarnCongestionList" resultType="java.util.Map">
+        SELECT road_section_id AS roadSectionId,
+        DATE_FORMAT(gmt_start,'%Y-%m-%d %H:%i:%s') AS startTime
+        FROM road_warn_congestion
+    </select>
+
+    <select id="getRoadSectionRunStateByTable" resultType="java.util.Map">
+        SELECT road_id AS roadId,rr.road_section_id AS roadSectionId,
+        congestion_index AS congestionIndex,speed,
+        DATE_FORMAT(date_time,'%Y-%m-%d %H:%i:%s') AS dataTime,
+        CASE WHEN CAST(FLOOR((congestion_index - 1) / 0.3) + 1 AS UNSIGNED) <![CDATA[ < ]]> 1 THEN 1 WHEN CAST(FLOOR((congestion_index - 1) / 0.3) + 1 AS UNSIGNED) > 5 THEN 5 ELSE CAST(FLOOR((congestion_index - 1) / 0.3) + 1 AS UNSIGNED)  END AS congestionType
+        FROM ${tableName} rr
+        JOIN road_section_info rsi
+        ON rsi.id = rr.road_section_id
+        WHERE date_time <![CDATA[ < ]]> #{dateTime};
+    </select>
+
+    <select id="getAllRoadSectionRunStateByTable" resultType="java.util.Map">
+        SELECT road_id AS roadId,rr.road_section_id AS roadSectionId,
+        congestion_index AS congestionIndex,
+        DATE_FORMAT(date_time,'%Y-%m-%d %H:%i:%s') AS dataTime
+        FROM ${tableName} rr
+        JOIN road_section_info rsi
+        ON rsi.id = rr.road_section_id;
+    </select>
+
+    <select id="getHourCongestionForcastDateDay" resultType="java.lang.Integer">
+        SELECT DISTINCT date
+        FROM road_report_hour_congestion_forcast
+        ORDER BY date ASC;
+    </select>
+
+    <delete id="truncateTable" parameterType="java.lang.String">
+        TRUNCATE TABLE ${tableName};
+    </delete>
 
 </mapper>
