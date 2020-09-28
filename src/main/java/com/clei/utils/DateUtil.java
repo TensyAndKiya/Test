@@ -1,6 +1,9 @@
 package com.clei.utils;
 
-import java.time.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,21 +32,32 @@ public class DateUtil {
 
     /**
      * 返回默认格式的 当前日期时间字符串
+     *
      * @return
      */
-    public static String currentDateTime(){
+    public static String currentDateTime() {
         return format(LocalDateTime.now());
     }
 
-    public static String format(LocalDateTime localDateTime){
-        return format(localDateTime,FORMATTER);
+    /**
+     * 根据epochMilli返回格式化日期字符串
+     *
+     * @param millis
+     * @return
+     */
+    public static String formatMillis(long millis) {
+        return format(fromMillis(millis));
     }
 
-    public static String format(LocalDateTime localDateTime,String pattern){
+    public static String format(LocalDateTime localDateTime) {
+        return format(localDateTime, FORMATTER);
+    }
+
+    public static String format(LocalDateTime localDateTime, String pattern) {
         validateStr(pattern);
         DateTimeFormatter dateTimeFormatter = FORMATTER_MAP.get(pattern);
-        if(null != dateTimeFormatter){
-            return format(localDateTime,dateTimeFormatter);
+        if (null != dateTimeFormatter) {
+            return format(localDateTime, dateTimeFormatter);
         }else{
             try{
                 dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
@@ -51,26 +65,46 @@ public class DateUtil {
                 //放入格式化器map里
                 FORMATTER_MAP.put(pattern,dateTimeFormatter);
                 return result;
-            }catch (Exception e){
+            }catch (Exception e) {
                 throw new RuntimeException(e.getMessage());
             }
         }
     }
 
-    private static String format(LocalDateTime localDateTime,DateTimeFormatter formatter){
+    private static String format(LocalDateTime localDateTime, DateTimeFormatter formatter) {
         validateLocalDateTime(localDateTime);
         return localDateTime.format(formatter);
     }
 
-    public static LocalDateTime parse(String date){
-        return parse(date,FORMATTER);
+    /**
+     * 根据epochMilli获取 LocalDateTime
+     *
+     * @param millis
+     * @return
+     */
+    public static LocalDateTime fromMillis(long millis) {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZONE_ID);
     }
 
-    public static LocalDateTime parse(String date,String pattern){
+    /**
+     * 根据epochSecond获取 LocalDateTime
+     *
+     * @param seconds
+     * @return
+     */
+    public static LocalDateTime fromSeconds(long seconds) {
+        return LocalDateTime.ofInstant(Instant.ofEpochSecond(seconds), ZONE_ID);
+    }
+
+    public static LocalDateTime parse(String date) {
+        return parse(date, FORMATTER);
+    }
+
+    public static LocalDateTime parse(String date, String pattern) {
         validateStr(pattern);
         DateTimeFormatter dateTimeFormatter = FORMATTER_MAP.get(pattern);
-        if(null != dateTimeFormatter){
-            return parse(date,dateTimeFormatter);
+        if (null != dateTimeFormatter) {
+            return parse(date, dateTimeFormatter);
         }else{
             try{
                 dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);

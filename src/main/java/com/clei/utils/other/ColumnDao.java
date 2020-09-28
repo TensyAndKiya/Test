@@ -101,6 +101,13 @@ public interface ColumnDao {
     void batchInsertReportForcast(List<CongestionHourForcat> congestionHourForcatList);
 
     /**
+     * 批量插入vehicleState
+     *
+     * @param list
+     */
+    void batchInsertVehicleState(List<Map<String, Object>> list);
+
+    /**
      * 根据uuid获取到路段信息
      *
      * @param list

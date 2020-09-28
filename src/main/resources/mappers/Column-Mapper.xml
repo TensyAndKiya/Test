@@ -308,6 +308,38 @@
         </foreach>
     </insert>
 
+    <insert id="batchInsertVehicleState" parameterType="java.util.List">
+        INSERT INTO vehicle_real_time_vehicle_state(
+        vehicle_no,
+        vehicle_type,
+        plate_color,
+        online_status,
+        danger_level,
+        route_type,
+        affiliated_company,
+        mark_address,
+        gmt_mark,
+        lon,
+        lat
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.vehicleNo},
+            #{item.vehicleType},
+            #{item.plateColor},
+            #{item.onlineStatus},
+            #{item.dangerLevel},
+            #{item.routeType},
+            #{item.affiliatedCompany},
+            #{item.markAddress},
+            #{item.gmtMark},
+            #{item.lon},
+            #{item.lat}
+            )
+        </foreach>
+    </insert>
+
     <update id="updateSectionRunStateById" parameterType="java.util.Map">
         UPDATE road_real_time_section_run_state_all
         SET congestion_index = #{congestionIndex},

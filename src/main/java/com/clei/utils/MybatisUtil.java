@@ -67,6 +67,8 @@ public class MybatisUtil {
             }
         }
 
+        // ---------------Road Begin---------------
+
         // insertRoadInfo(env);
 
         // updateOneWayAdnLaneNumber(env);
@@ -75,13 +77,23 @@ public class MybatisUtil {
 
         // insertTempSectionRunState(env);
 
-        updateAllData(env, DateUtil.currentDateTime(), LocalDate.now());
+        // updateAllData(env, DateUtil.currentDateTime(), true, LocalDate.now());
 
         // updateRoadSectionRunState(env);
 
         // insertRoadSectionRunStateInfo(env);
 
         // insertCheckpoint(env);
+
+        // ---------------Road End---------------
+
+        // ---------------Vehicle Begin---------------
+
+        PrintUtil.printMemoryInfo();
+
+        insertVehicleState(env);
+
+        // ---------------Vehicle End---------------
     }
 
 
@@ -310,6 +322,8 @@ public class MybatisUtil {
         }
 
         mapper.batchInserRoadSectionRunState(sectionList);
+
+        session.close();
     }
 
     /**
@@ -399,11 +413,12 @@ public class MybatisUtil {
             ;
 
             // 切割并插入
-            cutAndInsert(origin, 1, tableName, mapper);
+            cutAndInsert(origin, 0, 1, tableName, mapper);
 
             // mapper.batchInsertTempSectionRunState(origin,tableName);
 
         }
+        session.close();
     }
 
     /**
@@ -505,6 +520,8 @@ public class MybatisUtil {
         // 批量插入
         mapper.batchInsertCheckpoint(origin);
         mapper.batchInsertSectionCheckpointRel(origin);
+
+        session.close();
     }
 
     /**
@@ -620,19 +637,31 @@ public class MybatisUtil {
         mapper.batchInsertSectionCheckpointRel(checkpointList);
 
         PrintUtil.dateLine("随机批量插入卡口成功");
+
+        session.close();
     }
 
     /**
      * 更新路网实时数据
      */
-    private static void updateAllData(String env, String dateTime, LocalDate toDate) throws Exception {
+    private static void updateAllData(String env, String dateTime, boolean useSameDayOfWeek, LocalDate toDate) throws Exception {
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        String[] tableDateArr = {"", "2020-09-07", "2020-09-08", "2020-09-02", "2020-09-03", "2020-09-04", "2020-09-05", "2020-09-06"};
+
+        // 使用同一个dayOfWeek的数据
+        if (useSameDayOfWeek) {
+            int dayOfWeek = LocalDateTime.parse(dateTime, dtf).getDayOfWeek().getValue();
+            dateTime = tableDateArr[dayOfWeek] + dateTime.substring(10);
+
+        }
 
         // 去除秒数
         dateTime = dateTime.substring(0, 17) + "00";
         String date = dateTime.substring(0, 10);
         String tableName = "road_section_run_state_" + date.replaceAll("-", "");
 
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime dt = LocalDateTime.parse(dateTime, dtf);
 
         SqlSession session = getSession(env);
@@ -646,7 +675,7 @@ public class MybatisUtil {
         Integer result = mapper.batchInsertRoadSectionInfoByTable(tableName, dateTime);
         // 若没有数据则加一分钟重新插入
         if (result < 1) {
-            updateAllData(env, dt.plusMinutes(1).format(dtf), toDate);
+            updateAllData(env, dt.plusMinutes(1).format(dtf), useSameDayOfWeek, toDate);
             PrintUtil.dateLine(dateTime + " 道路运行状态数据插入失败");
             // 做完了，返回
             return;
@@ -746,7 +775,9 @@ public class MybatisUtil {
 
             String roadSectionName = String.valueOf(m.get("roadSectionName"));
 
-            m.put("name", roadSectionName);
+            String congestionLevel = String.valueOf(m.get("congestionLevel"));
+
+            m.put("name", "1".equals(congestionLevel) ? "交通拥堵" : "交通瘫痪");
             m.put("address", roadSectionName);
 
             String geo = String.valueOf(m.remove("geo"));
@@ -815,11 +846,10 @@ public class MybatisUtil {
         mapper.truncateTable(truncateTableName);
 
         // 3. 插入数据
-        cutAndInsert(sectionRunStateList, 2, "", mapper);
+        cutAndInsert(sectionRunStateList, 0, 2, "", mapper);
         PrintUtil.dateLine("更新report_hour_road_run_state成功");
 
         // 第六步 更新report_hour_congestion_forcast
-        String[] tableDateArr = {"", "2020-09-07", "2020-09-08", "2020-09-02", "2020-09-03", "2020-09-04", "2020-09-05", "2020-09-06"};
         int dayOfWeek = toDate.getDayOfWeek().getValue() + 1;
 
         // 1. 判断当前数据的日期
@@ -969,10 +999,143 @@ public class MybatisUtil {
                     PrintUtil.dateLine("批量插入" + dateStr + "日预测数据失败");
                 }
             }
-
         }
 
+        session.close();
+    }
 
+    /**
+     * @param env 环境
+     *            将大数据那边给的一份道路信息csv文件 更新到road_section_run_state
+     */
+    private static void updateRoadSectionRunState(String env) throws Exception {
+
+        // 1. 将数据装入 list
+        String filePath = "D:\\Download\\DingDing\\城市道路指数.csv";
+
+        List<Map<String, String>> list = new ArrayList<>();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "UTF-8"));
+        String str;
+
+        Map<String, String> uuidMap = new HashMap<>();
+
+        while (null != (str = br.readLine())) {
+
+            String[] array = str.split(",");
+
+            Map<String, String> map = new HashMap<>();
+
+            String uuid = array[2];
+            String congestionIndex = array[4];
+            String speed = array[5];
+
+            map.put("uuid", uuid);
+            map.put("congestionIndex", congestionIndex);
+            map.put("speed", speed);
+
+            list.add(map);
+
+            uuidMap.put(uuid, congestionIndex + "," + speed);
+        }
+
+        SqlSession session = getSession(env);
+
+        ColumnDao mapper = session.getMapper(ColumnDao.class);
+
+        // 根据uuid获取到路段信息
+        List<Map<String, Object>> sectionList = mapper.getRoadSectionByUuidList(list);
+
+        for (Map m : sectionList) {
+            String uuid = m.get("uuid").toString();
+
+            String tempStr = uuidMap.get(uuid);
+
+            String[] arr = tempStr.split(",");
+
+            BigDecimal congestionIndex = new BigDecimal(arr[0]);
+
+            BigDecimal speed = new BigDecimal(arr[1]);
+
+            m.put("congestionIndex", congestionIndex);
+
+            m.put("speed", speed);
+
+            mapper.updateSectionRunStateById(m);
+        }
+
+        session.close();
+    }
+
+    /**
+     * 随机插入n条车辆状态
+     *
+     * @param env 环境
+     */
+    private static void insertVehicleState(String env) throws Exception {
+        // 整这么多条
+        int recordCount = 990000;
+
+        List<Map<String, Object>> list = new ArrayList<>(recordCount);
+
+        Random random = new Random();
+
+        long millis = System.currentTimeMillis();
+        int dayMills = 1000 * 60 * 60 * 24;
+
+        int i = 2;
+
+        PrintUtil.dateLine("批量插入车辆状态数据准备");
+
+        // 车辆类型
+        for (int j = 1; j < 8; j++) {
+            // 车牌颜色
+            for (int k = 1; k < 6; k++) {
+                // 危险等级
+                for (int l = 1; l < 4; l++) {
+                    // 记录数判断
+                    while (i < recordCount + 2) {
+
+                        Map<String, Object> m = new HashMap<>();
+
+                        String vehicleNo = getVehicleNo("贵A", i, 6);
+
+                        m.put("vehicleNo", vehicleNo);
+                        m.put("vehicleType", j);
+                        m.put("plateColor", k);
+                        m.put("dangerLevel", l);
+                        m.put("onlineStatus", 1);
+                        m.put("routeType", 0);
+                        m.put("affiliatedCompany", "hikcreate");
+                        m.put("gmtMark", DateUtil.formatMillis(millis + random.nextInt(dayMills)));
+                        m.put("markAddress", "北京西路");
+                        m.put("lon", 180 * random.nextDouble());
+                        m.put("lat", 90 * random.nextDouble());
+
+                        list.add(m);
+                        i++;
+
+                    }
+                }
+            }
+        }
+
+        SqlSession session = getSession(env);
+
+        ColumnDao mapper = session.getMapper(ColumnDao.class);
+
+        PrintUtil.dateLine("批量插入车辆状态开始");
+
+        System.out.println(list.size());
+
+        // 批量插入
+        // mapper.batchInsertVehicleState(list);
+
+        cutAndInsert(list, 0, 3, "", mapper);
+
+        session.close();
+
+        PrintUtil.dateLine("批量插入车辆状态成功");
     }
 
     /**
@@ -1042,12 +1205,16 @@ public class MybatisUtil {
     /**
      * 切割批量导入
      *
-     * @param list
-     * @param tableName
+     * @param list      数据
+     * @param n         切割每份多少条
+     * @param type      插入类型
+     * @param tableName 表名
+     * @param mapper    mapper接口
      */
-    private static void cutAndInsert(List list, int type, String tableName, ColumnDao mapper) {
+    private static void cutAndInsert(List list, int n, int type, String tableName, ColumnDao mapper) {
 
-        int number = 100000;
+        // 默认每次10w条
+        int number = 0 == n ? 100000 : n;
         int size = list.size();
         int start = 0;
 
@@ -1055,14 +1222,21 @@ public class MybatisUtil {
 
             int end = start + number;
             end = end > size ? size : end;
-            List<SectionRunState> l = new ArrayList<>(list.subList(start, end));
+            List l = new ArrayList<>(list.subList(start, end));
             // 批量插入
-            if (type == 1) {
-                mapper.batchInsertTempSectionRunState(l, tableName);
-            } else if (type == 2) {
-                mapper.batchInsertReportHour(l);
-            } else {
-                return;
+            switch (type) {
+                case 1:
+                    mapper.batchInsertTempSectionRunState(l, tableName);
+                    break;
+                case 2:
+                    mapper.batchInsertReportHour(l);
+                    break;
+                case 3:
+                    mapper.batchInsertVehicleState(l);
+                    break;
+                default:
+                    PrintUtil.dateLine("未知插入类型");
+                    return;
             }
 
             PrintUtil.dateLine("已经插入数据条数： " + end);
@@ -1072,67 +1246,6 @@ public class MybatisUtil {
             }
             start = end;
 
-        }
-    }
-
-    /**
-     * @param env 环境
-     *            将大数据那边给的一份道路信息csv文件 更新到road_section_run_state
-     */
-    private static void updateRoadSectionRunState(String env) throws Exception {
-
-        // 1. 将数据装入 list
-        String filePath = "D:\\Download\\DingDing\\城市道路指数.csv";
-
-        List<Map<String, String>> list = new ArrayList<>();
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "UTF-8"));
-        String str;
-
-        Map<String, String> uuidMap = new HashMap<>();
-
-        while (null != (str = br.readLine())) {
-
-            String[] array = str.split(",");
-
-            Map<String, String> map = new HashMap<>();
-
-            String uuid = array[2];
-            String congestionIndex = array[4];
-            String speed = array[5];
-
-            map.put("uuid", uuid);
-            map.put("congestionIndex", congestionIndex);
-            map.put("speed", speed);
-
-            list.add(map);
-
-            uuidMap.put(uuid, congestionIndex + "," + speed);
-        }
-
-        SqlSession session = getSession(env);
-
-        ColumnDao mapper = session.getMapper(ColumnDao.class);
-
-        // 根据uuid获取到路段信息
-        List<Map<String, Object>> sectionList = mapper.getRoadSectionByUuidList(list);
-
-        for (Map m : sectionList) {
-            String uuid = m.get("uuid").toString();
-
-            String tempStr = uuidMap.get(uuid);
-
-            String[] arr = tempStr.split(",");
-
-            BigDecimal congestionIndex = new BigDecimal(arr[0]);
-
-            BigDecimal speed = new BigDecimal(arr[1]);
-
-            m.put("congestionIndex", congestionIndex);
-
-            m.put("speed", speed);
-
-            mapper.updateSectionRunStateById(m);
         }
     }
 
@@ -1150,6 +1263,37 @@ public class MybatisUtil {
 
         return congestionType;
 
+    }
+
+    /**
+     * 获取一个车牌
+     *
+     * @param prefix 例 川A
+     * @param number 例 18
+     * @param size   例 5 除了prefix之外的字符串size
+     * @return
+     */
+    private static String getVehicleNo(String prefix, int number, int size) {
+
+        int length = prefix.length() + size;
+        StringBuilder sb = new StringBuilder(length);
+        sb.append(prefix);
+
+        int diff = size - String.valueOf(number).length();
+
+        if (diff < 0) {
+            throw new RuntimeException("number out of bounds");
+        }
+
+        while (diff > 0) {
+            // 缺的补0
+            sb.append('0');
+            diff--;
+        }
+
+        sb.append(number);
+
+        return sb.toString();
     }
 
     /**
@@ -1318,4 +1462,3 @@ public class MybatisUtil {
         return "java.lang.String";
     }
 }
-

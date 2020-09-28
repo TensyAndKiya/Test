@@ -80,6 +80,16 @@ public class PrintUtil {
         print(DateUtil.currentDateTime() + " - " + str, args);
     }
 
+    /**
+     * 打印当前虚拟机内存情况
+     */
+    public static void printMemoryInfo() {
+        Runtime runtime = Runtime.getRuntime();
+        dateLine("maxMemory : {}M", runtime.maxMemory() / 1024 / 1024);
+        dateLine("totalMemory : {}M", runtime.totalMemory() / 1024 / 1024);
+        dateLine("freeMemory : {}M", runtime.freeMemory() / 1024 / 1024);
+    }
+
     private static String formatStr(String str, Object... args) {
         if (null == args || args.length == 0) {
             return str;
