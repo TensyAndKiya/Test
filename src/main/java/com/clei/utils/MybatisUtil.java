@@ -49,9 +49,10 @@ import java.util.stream.Collectors;
  * @since 2019-10-17
  */
 public class MybatisUtil {
+
     private final static String ENV = "test";
-    private final static String DATABASE = "security";
-    private final static String TABLE = "user";
+    private final static String DATABASE = "hdsp_itms";
+    private final static String TABLE = "road_section_info";
     private final static char UNDERLINE = '_';
     private final static char AT = '@';
 
@@ -77,7 +78,7 @@ public class MybatisUtil {
 
         // insertTempSectionRunState(env);
 
-        // updateAllData(env, DateUtil.currentDateTime(), true, LocalDate.now());
+        // updateAllData(env, DateUtil.currentDateTime(), true, LocalDate.now(), new int[]{1,1,1,1,1,1,1,1});
 
         // updateRoadSectionRunState(env);
 
@@ -89,11 +90,11 @@ public class MybatisUtil {
 
         // ---------------Vehicle Begin---------------
 
-        PrintUtil.printMemoryInfo();
+        // PrintUtil.printMemoryInfo();
 
         // insertVehicleState(env);
 
-        test(env);
+        printResultMapAndColumns(env);
 
         // ---------------Vehicle End---------------
     }
@@ -645,10 +646,23 @@ public class MybatisUtil {
 
     /**
      * 更新路网实时数据
+     *
+     * @param env              数据库环境
+     * @param dateTime         要取的数据时间
+     * @param useSameDayOfWeek 是否使用同一个周几的数据
+     * @param toDate           设置为哪一天的数据
+     * @param methods          要执行的方法
      */
-    private static void updateAllData(String env, String dateTime, boolean useSameDayOfWeek, LocalDate toDate) throws Exception {
+    private static void updateAllData(String env, String dateTime, boolean useSameDayOfWeek, LocalDate toDate, int[] methods) throws Exception {
+
+        // 啥都不执行
+        if (null == methods || 0 == methods.length) {
+            return;
+        }
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         String[] tableDateArr = {"", "2020-09-07", "2020-09-08", "2020-09-02", "2020-09-03", "2020-09-04", "2020-09-05", "2020-09-06"};
 
@@ -656,7 +670,6 @@ public class MybatisUtil {
         if (useSameDayOfWeek) {
             int dayOfWeek = LocalDateTime.parse(dateTime, dtf).getDayOfWeek().getValue();
             dateTime = tableDateArr[dayOfWeek] + dateTime.substring(10);
-
         }
 
         // 去除秒数
@@ -669,336 +682,360 @@ public class MybatisUtil {
         SqlSession session = getSession(env);
         ColumnDao mapper = session.getMapper(ColumnDao.class);
 
+        // 方法计数器
+        int methodCounter = 0;
+
         // 第一步 更新section_run_state_all
-        // 1. 清空数据
-        String truncateTableName = "road_real_time_section_run_state_all";
-        mapper.truncateTable(truncateTableName);
-        // 2. 插入数据
-        Integer result = mapper.batchInsertRoadSectionInfoByTable(tableName, dateTime);
-        // 若没有数据则加一分钟重新插入
-        if (result < 1) {
-            updateAllData(env, dt.plusMinutes(1).format(dtf), useSameDayOfWeek, toDate);
-            PrintUtil.dateLine(dateTime + " 道路运行状态数据插入失败");
-            // 做完了，返回
-            return;
-        } else {
-            PrintUtil.dateLine(dateTime + " 道路运行状态数据插入成功");
+        if (1 == methods[methodCounter++]) {
+
+            // 1. 清空数据
+            String truncateTableName = "road_real_time_section_run_state_all";
+            mapper.truncateTable(truncateTableName);
+            // 2. 插入数据
+            Integer result = mapper.batchInsertRoadSectionInfoByTable(tableName, dateTime);
+            // 若没有数据则加一分钟重新插入
+            if (result < 1) {
+                updateAllData(env, dt.plusMinutes(1).format(dtf), useSameDayOfWeek, toDate, methods);
+                PrintUtil.dateLine(dateTime + " 道路运行状态数据插入失败");
+                // 做完了，返回
+                return;
+            } else {
+                PrintUtil.dateLine(dateTime + " 道路运行状态数据插入成功");
+            }
         }
 
         // 第二步 更新congestion_index
-        mapper.updateCongestionIndex();
-        PrintUtil.dateLine("更新congestionIndex成功");
+        if (1 == methods[methodCounter++]) {
+
+            mapper.updateCongestionIndex();
+            PrintUtil.dateLine("更新congestionIndex成功");
+        }
 
         // 第三步 更新speed
-        // 1. 清空数据
-        truncateTableName = "road_real_time_road_speed";
-        mapper.truncateTable(truncateTableName);
-        // 2. 插入数据
-        mapper.insertRoadSpeed();
-        PrintUtil.dateLine("更新speed成功");
+        if (1 == methods[methodCounter++]) {
+
+            // 1. 清空数据
+            String truncateTableName = "road_real_time_road_speed";
+            mapper.truncateTable(truncateTableName);
+            // 2. 插入数据
+            mapper.insertRoadSpeed();
+            PrintUtil.dateLine("更新speed成功");
+        }
 
         // 第四步 更新mileage
-        // 1. 清空数据
-        truncateTableName = "road_real_time_congestion_mileage";
-        mapper.truncateTable(truncateTableName);
-        // 2. 插入数据
-        mapper.insertCongestionMileage();
-        PrintUtil.dateLine("更新congestionMileage成功");
+        if (1 == methods[methodCounter++]) {
 
-        // 第四步 更新congestionTop
-        // 1. 清空数据
-        truncateTableName = "road_real_time_congestion_top";
-        mapper.truncateTable(truncateTableName);
-        // 2. 获取实时拥堵前10
-        List<CongestionTop> congestionTopList = mapper.getCongestionTopList();
-        // 3. 更改数据并插入
-        String[] congestionArr = {"", "畅通", "基本畅通", "轻度拥堵", "中度拥堵", "重度拥堵"};
-        // String[] directionArr = {"","南向北","西南向东北","西向东","西北向东南","北向南","东北向西南","东向西","东南向西北"};
+            // 1. 清空数据
+            String truncateTableName = "road_real_time_congestion_mileage";
+            mapper.truncateTable(truncateTableName);
+            // 2. 插入数据
+            mapper.insertCongestionMileage();
+            PrintUtil.dateLine("更新congestionMileage成功");
+        }
 
-        int i = 0;
-        for (CongestionTop c : congestionTopList) {
-            String startLocation = c.getStartLocation();
-            String endLocation = c.getEndLocation();
+        // 第五步 更新congestionTop
+        if (1 == methods[methodCounter++]) {
 
-            // 拥堵描述
-            StringBuilder sb = new StringBuilder();
-            if (StringUtil.isNotEmpty(startLocation)) {
-                sb.append("从");
-                sb.append(startLocation);
-                if (StringUtil.isNotEmpty(endLocation)) {
-                    sb.append("到");
-                    sb.append(endLocation);
+            // 1. 清空数据
+            String truncateTableName = "road_real_time_congestion_top";
+            mapper.truncateTable(truncateTableName);
+            // 2. 获取实时拥堵前10
+            List<CongestionTop> congestionTopList = mapper.getCongestionTopList();
+            // 3. 更改数据并插入
+            String[] congestionArr = {"", "畅通", "基本畅通", "轻度拥堵", "中度拥堵", "重度拥堵"};
+            // String[] directionArr = {"","南向北","西南向东北","西向东","西北向东南","北向南","东北向西南","东向西","东南向西北"};
+
+            int i = 0;
+            for (CongestionTop c : congestionTopList) {
+                String startLocation = c.getStartLocation();
+                String endLocation = c.getEndLocation();
+
+                // 拥堵描述
+                StringBuilder sb = new StringBuilder();
+                if (StringUtil.isNotEmpty(startLocation)) {
+                    sb.append("从");
+                    sb.append(startLocation);
+                    if (StringUtil.isNotEmpty(endLocation)) {
+                        sb.append("到");
+                        sb.append(endLocation);
+                    } else {
+                        sb.append("起");
+                    }
                 } else {
-                    sb.append("起");
+                    if (StringUtil.isNotEmpty(endLocation)) {
+                        sb.append("到");
+                        sb.append(endLocation);
+                        sb.append("止");
+                    }
                 }
-            } else {
-                if (StringUtil.isNotEmpty(endLocation)) {
-                    sb.append("到");
-                    sb.append(endLocation);
-                    sb.append("止");
-                }
+                sb.append(' ');
+                sb.append(c.getDirection());
+                sb.append(' ');
+                sb.append(congestionArr[c.getCongestionType()]);
+                sb.append(' ');
+
+                String mileage = 1 == BigDecimal.ONE.compareTo(c.getLength()) ? c.getLength().multiply(new BigDecimal(1000)).intValue() + "m" : c.getLength().toString() + "km";
+                sb.append(mileage);
+                c.setCongestionDescription(sb.toString());
+                // 排名
+                c.setRank(++i);
             }
-            sb.append(' ');
-            sb.append(c.getDirection());
-            sb.append(' ');
-            sb.append(congestionArr[c.getCongestionType()]);
-            sb.append(' ');
-
-            String mileage = 1 == BigDecimal.ONE.compareTo(c.getLength()) ? c.getLength().multiply(new BigDecimal(1000)).intValue() + "m" : c.getLength().toString() + "km";
-            sb.append(mileage);
-            c.setCongestionDescription(sb.toString());
-            // 排名
-            c.setRank(++i);
-        }
-        mapper.batchInsertCongestionTop10(congestionTopList);
-        PrintUtil.dateLine("更新congestionTop成功");
-
-        // 第五步 更新warnCongestion
-        // 1. 获取原来的拥堵预警信息
-        List<Map<String, Object>> congestionList = mapper.getWarnCongestionList();
-
-        // 拥堵路段id - startTime map
-        Map<String, String> congestionMap = new HashMap<>();
-
-        for (Map<String, Object> m : congestionList) {
-            String roadSectionId = String.valueOf(m.get("roadSectionId"));
-            Object startTime = m.get("startTime");
-            if (null != startTime && 0 != startTime.toString().length()) {
-                congestionMap.put(roadSectionId, startTime.toString());
-            }
+            mapper.batchInsertCongestionTop10(congestionTopList);
+            PrintUtil.dateLine("更新congestionTop成功");
         }
 
-        // 2. 获取符合条件的交通拥堵/瘫痪路段信息
-        List<Map<String, Object>> sectionList = mapper.getCongestionSectionList();
+        // 第六步 更新warnCongestion
+        if (1 == methods[methodCounter++]) {
 
-        String[] numberArr = {"零", "一", "二", "三", "四", "五", "六", "七", "八", "九",};
+            // 1. 获取原来的拥堵预警信息
+            List<Map<String, Object>> congestionList = mapper.getWarnCongestionList();
 
-        for (Map<String, Object> m : sectionList) {
+            // 拥堵路段id - startTime map
+            Map<String, String> congestionMap = new HashMap<>();
 
-            String roadSectionName = String.valueOf(m.get("roadSectionName"));
-
-            String congestionLevel = String.valueOf(m.get("congestionLevel"));
-
-            m.put("name", "1".equals(congestionLevel) ? "交通拥堵" : "交通瘫痪");
-            m.put("address", roadSectionName);
-
-            String geo = String.valueOf(m.remove("geo"));
-            JSONArray array = JSONObject.parseArray(geo);
-            int length = array.size();
-
-            String start = array.get(0).toString();
-            String end = array.get(length - 1).toString();
-
-            int commaIndex = start.indexOf(",");
-            BigDecimal lonStart = new BigDecimal(start.substring(1, commaIndex));
-            BigDecimal latStart = new BigDecimal(start.substring(commaIndex + 1, start.length() - 1));
-
-            commaIndex = end.indexOf(",");
-            BigDecimal lonEnd = new BigDecimal(end.substring(1, commaIndex));
-            BigDecimal latEnd = new BigDecimal(end.substring(commaIndex + 1, end.length() - 1));
-
-            m.put("lonStart", lonStart);
-            m.put("latStart", latStart);
-            m.put("lonEnd", lonEnd);
-            m.put("latEnd", latEnd);
-
-            Boolean oneWay = Boolean.valueOf(String.valueOf(m.get("oneWay")));
-            Integer laneNumber = Integer.parseInt(String.valueOf(m.get("laneNumber")));
-            String laneConfig = (oneWay ? "单向" : "双向") + numberArr[laneNumber] + "车道";
-
-            m.put("laneConfig", laneConfig);
-
-            String roadSectionId = String.valueOf(m.get("roadSectionId"));
-            String startTime = congestionMap.get(roadSectionId);
-            if (StringUtil.isNotEmpty(startTime)) {
-                m.put("startTime", startTime);
-                m.put("congestionTime", LocalDateTime.parse(startTime, dtf).until(LocalDateTime.now(), ChronoUnit.SECONDS));
-            } else {
-                m.put("startTime", LocalDateTime.now().format(dtf));
-                m.put("congestionTime", 0);
-            }
-        }
-
-        // 3. 清空原有数据
-        truncateTableName = "road_warn_congestion";
-        mapper.truncateTable(truncateTableName);
-
-        // 4. 插入数据
-        mapper.batchInsertWarnCongestion(sectionList);
-        PrintUtil.dateLine("更新warnCongestion成功");
-
-        // 第六步 更新report_hour_road_run_state
-        // 1. 获取源数据
-        List<Map<String, Object>> sectionRunStateList = mapper.getRoadSectionRunStateByTable(tableName, dt.plusMinutes(1).format(dtf));
-        PrintUtil.dateLine("查询到sectionRunState 数据 size : " + sectionRunStateList.size());
-        // 修改数据格式
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String dateDay = toDate.format(dateTimeFormatter);
-        for (Map<String, Object> m : sectionRunStateList) {
-            String dataTime = String.valueOf(m.get("dataTime"));
-            int hour = Integer.parseInt(dataTime.substring(11, 13));
-            int minute = Integer.parseInt(dataTime.substring(14, 16));
-            m.put("date", Integer.parseInt(dateDay.replaceAll("-", "")));
-            m.put("hour", hour);
-            m.put("minute", minute);
-        }
-
-        // 2. 清空原有数据
-        truncateTableName = "road_report_hour_road_run_state";
-        mapper.truncateTable(truncateTableName);
-
-        // 3. 插入数据
-        cutAndInsert(sectionRunStateList, 0, 2, "", mapper);
-        PrintUtil.dateLine("更新report_hour_road_run_state成功");
-
-        // 第六步 更新report_hour_congestion_forcast
-        int dayOfWeek = toDate.getDayOfWeek().getValue() + 1;
-
-        // 1. 判断当前数据的日期
-        List<Integer> dateDayList = mapper.getHourCongestionForcastDateDay();
-        // 要求是连续的日期数，这里不好判断，省略了
-        if (null != dateDayList && 7 == dateDayList.size()) {
-
-            List<LocalDate> tempDateDayList = new ArrayList<>(7);
-            for (int j = 0; j < 7; j++) {
-                LocalDate tempDateDay = toDate.plusDays(1 + j);
-                tempDateDayList.add(tempDateDay);
-            }
-
-            Integer firstDate = dateDayList.get(0);
-            long diff = LocalDate.of(firstDate / 10000, firstDate / 100 % 100, firstDate % 100).until(tempDateDayList.get(0), ChronoUnit.DAYS);
-
-            // 设置源日期与目标日期对应关系，这里的规则保证了源于目标的日期的dayOfWeek是相等的
-            List<DateToDate> dateToDateList = new ArrayList<>(7);
-            for (int j = 0; j < 7; j++) {
-
-                int sourceIndex = (int) (j + diff);
-                sourceIndex = sourceIndex % 7;
-                sourceIndex = sourceIndex < 0 ? sourceIndex + 7 : sourceIndex;
-
-                Integer ii = dateDayList.get(sourceIndex);
-                Integer jj = Integer.parseInt(tempDateDayList.get(j).format(dateTimeFormatter).replaceAll("-", ""));
-                if (ii.equals(jj)) {
-                    continue;
+            for (Map<String, Object> m : congestionList) {
+                String roadSectionId = String.valueOf(m.get("roadSectionId"));
+                Object startTime = m.get("startTime");
+                if (null != startTime && 0 != startTime.toString().length()) {
+                    congestionMap.put(roadSectionId, startTime.toString());
                 }
-                dateToDateList.add(new DateToDate(ii, jj));
             }
 
-            if (dateToDateList.size() > 0) {
-                for (DateToDate d : dateToDateList) {
-                    mapper.updateReportForcastDate(d);
-                    PrintUtil.dateLine("更新" + d.getSource() + " -> " + d.getTarget() + "预测拥堵数据成功");
+            // 2. 获取符合条件的交通拥堵/瘫痪路段信息
+            List<Map<String, Object>> sectionList = mapper.getCongestionSectionList();
+
+            String[] numberArr = {"零", "一", "二", "三", "四", "五", "六", "七", "八", "九",};
+
+            for (Map<String, Object> m : sectionList) {
+
+                String roadSectionName = String.valueOf(m.get("roadSectionName"));
+
+                String congestionLevel = String.valueOf(m.get("congestionLevel"));
+
+                m.put("name", "1".equals(congestionLevel) ? "交通拥堵" : "交通瘫痪");
+                m.put("address", roadSectionName);
+
+                String geo = String.valueOf(m.remove("geo"));
+                JSONArray array = JSONObject.parseArray(geo);
+                int length = array.size();
+
+                String start = array.get(0).toString();
+                String end = array.get(length - 1).toString();
+
+                int commaIndex = start.indexOf(",");
+                BigDecimal lonStart = new BigDecimal(start.substring(1, commaIndex));
+                BigDecimal latStart = new BigDecimal(start.substring(commaIndex + 1, start.length() - 1));
+
+                commaIndex = end.indexOf(",");
+                BigDecimal lonEnd = new BigDecimal(end.substring(1, commaIndex));
+                BigDecimal latEnd = new BigDecimal(end.substring(commaIndex + 1, end.length() - 1));
+
+                m.put("lonStart", lonStart);
+                m.put("latStart", latStart);
+                m.put("lonEnd", lonEnd);
+                m.put("latEnd", latEnd);
+
+                Boolean oneWay = Boolean.valueOf(String.valueOf(m.get("oneWay")));
+                Integer laneNumber = Integer.parseInt(String.valueOf(m.get("laneNumber")));
+                String laneConfig = (oneWay ? "单向" : "双向") + numberArr[laneNumber] + "车道";
+
+                m.put("laneConfig", laneConfig);
+
+                String roadSectionId = String.valueOf(m.get("roadSectionId"));
+                String startTime = congestionMap.get(roadSectionId);
+                if (StringUtil.isNotEmpty(startTime)) {
+                    m.put("startTime", startTime);
+                    m.put("congestionTime", LocalDateTime.parse(startTime, dtf).until(LocalDateTime.now(), ChronoUnit.SECONDS));
+                } else {
+                    m.put("startTime", LocalDateTime.now().format(dtf));
+                    m.put("congestionTime", 0);
                 }
-            } else {
-                PrintUtil.dateLine("无需更新预测拥堵数据");
             }
 
-
-        } else {
-
-            // 2. 清空原有数据
-            truncateTableName = "road_report_hour_congestion_forcast";
+            // 3. 清空原有数据
+            String truncateTableName = "road_warn_congestion";
             mapper.truncateTable(truncateTableName);
 
-            // 3. 获取源数据并插入
-            // 未来一周
-            for (int j = 0; j < 7; j++) {
+            // 4. 插入数据
+            mapper.batchInsertWarnCongestion(sectionList);
+            PrintUtil.dateLine("更新warnCongestion成功");
+        }
 
-                int index = dayOfWeek + j;
-                index = index > 7 ? index - 7 : index;
+        // 第七步 更新report_hour_road_run_state
+        if (1 == methods[methodCounter++]) {
 
-                String tbName = "road_section_run_state_" + tableDateArr[index].replaceAll("-", "");
+            // 1. 获取源数据
+            List<Map<String, Object>> sectionRunStateList = mapper.getRoadSectionRunStateByTable(tableName, dt.plusMinutes(1).format(dtf));
+            PrintUtil.dateLine("查询到sectionRunState 数据 size : " + sectionRunStateList.size());
+            // 修改数据格式
+            String dateDay = toDate.format(dateFormatter);
+            for (Map<String, Object> m : sectionRunStateList) {
+                String dataTime = String.valueOf(m.get("dataTime"));
+                int hour = Integer.parseInt(dataTime.substring(11, 13));
+                int minute = Integer.parseInt(dataTime.substring(14, 16));
+                m.put("date", Integer.parseInt(dateDay.replaceAll("-", "")));
+                m.put("hour", hour);
+                m.put("minute", minute);
+            }
 
-                List<Map<String, Object>> allRunStateList = mapper.getAllRoadSectionRunStateByTable(tbName);
+            // 2. 清空原有数据
+            String truncateTableName = "road_report_hour_road_run_state";
+            mapper.truncateTable(truncateTableName);
 
-                String dateStr = toDate.plusDays(1 + j).format(dateTimeFormatter);
+            // 3. 插入数据
+            cutAndInsert(sectionRunStateList, 0, 2, "", mapper);
+            PrintUtil.dateLine("更新report_hour_road_run_state成功");
+        }
 
-                Integer tempDay = Integer.parseInt(dateStr.replaceAll("-", ""));
+        // 第八步 更新report_hour_congestion_forcast
+        if (1 == methods[methodCounter++]) {
 
-                Map<String, CongestionForcast> sectionCongestionForcastMap = new HashMap<>();
+            int dayOfWeek = toDate.getDayOfWeek().getValue() + 1;
 
-                for (Map<String, Object> m : allRunStateList) {
+            // 1. 判断当前数据的日期
+            List<Integer> dateDayList = mapper.getHourCongestionForcastDateDay();
+            // 要求是连续的日期数，这里不好判断，省略了
+            if (null != dateDayList && 7 == dateDayList.size()) {
 
-                    String roadSectionId = String.valueOf(m.get("roadSectionId"));
-
-                    CongestionForcast congestionForcast = sectionCongestionForcastMap.get(roadSectionId);
-
-                    if (null == congestionForcast) {
-                        congestionForcast = new CongestionForcast();
-                        BigDecimal[] hourCongestionIndexSum = congestionForcast.getHourCongestionIndexSum();
-                        int[] hourRecordCount = congestionForcast.getHourRecordCount();
-                        // 数组初始化
-                        for (int k = 0; k < 24; k++) {
-                            hourCongestionIndexSum[k] = BigDecimal.ZERO;
-                            hourRecordCount[k] = 0;
-                        }
-
-                        // 放入map
-                        sectionCongestionForcastMap.put(roadSectionId, congestionForcast);
-
-                        // 设置值
-                        congestionForcast.setDate(tempDay);
-                        congestionForcast.setRoadSectionId(Long.parseLong(roadSectionId));
-                        congestionForcast.setRoadId(Long.parseLong(String.valueOf(m.get("roadId"))));
-                    }
-                    BigDecimal[] hourCongestionIndexSum = congestionForcast.getHourCongestionIndexSum();
-                    int[] hourRecordCount = congestionForcast.getHourRecordCount();
-
-                    String dateTimeStr = String.valueOf(m.get("dataTime"));
-
-                    int tempDayHour = Integer.parseInt(dateTimeStr.substring(11, 13));
-
-                    BigDecimal congestionIndex = new BigDecimal(String.valueOf(m.get("congestionIndex")));
-
-                    hourRecordCount[tempDayHour] = hourRecordCount[tempDayHour] + 1;
-                    hourCongestionIndexSum[tempDayHour] = hourCongestionIndexSum[tempDayHour].add(congestionIndex);
+                List<LocalDate> tempDateDayList = new ArrayList<>(7);
+                for (int j = 0; j < 7; j++) {
+                    LocalDate tempDateDay = toDate.plusDays(1 + j);
+                    tempDateDayList.add(tempDateDay);
                 }
 
-                List<CongestionHourForcat> congestionHourForcatList = new ArrayList<>(sectionCongestionForcastMap.keySet().size() * 24);
+                Integer firstDate = dateDayList.get(0);
+                long diff = LocalDate.of(firstDate / 10000, firstDate / 100 % 100, firstDate % 100).until(tempDateDayList.get(0), ChronoUnit.DAYS);
 
-                sectionCongestionForcastMap.forEach((k, v) -> {
+                // 设置源日期与目标日期对应关系，这里的规则保证了源于目标的日期的dayOfWeek是相等的
+                List<DateToDate> dateToDateList = new ArrayList<>(7);
+                for (int j = 0; j < 7; j++) {
 
-                    BigDecimal[] hourCongestionIndexSum = v.getHourCongestionIndexSum();
-                    int[] hourRecordCount = v.getHourRecordCount();
+                    int sourceIndex = (int) (j + diff);
+                    sourceIndex = sourceIndex % 7;
+                    sourceIndex = sourceIndex < 0 ? sourceIndex + 7 : sourceIndex;
 
-                    for (int l = 0; l < 24; l++) {
-                        CongestionHourForcat c = new CongestionHourForcat();
-                        c.setRoadId(v.getRoadId());
-                        c.setRoadSectionId(v.getRoadSectionId());
-                        c.setDate(v.getDate());
-                        c.setHour(l);
-
-                        int hourCount = hourRecordCount[l];
-                        BigDecimal congestionIndex = 0 == hourCount ? BigDecimal.ZERO : hourCongestionIndexSum[l].divide(new BigDecimal(hourRecordCount[l]), 10, RoundingMode.HALF_UP);
-                        c.setCongestionIndex(congestionIndex);
-                        c.setCongestionType(getCongestionType(congestionIndex));
-
-                        congestionHourForcatList.add(c);
+                    Integer ii = dateDayList.get(sourceIndex);
+                    Integer jj = Integer.parseInt(tempDateDayList.get(j).format(dateFormatter).replaceAll("-", ""));
+                    if (ii.equals(jj)) {
+                        continue;
                     }
-                });
+                    dateToDateList.add(new DateToDate(ii, jj));
+                }
 
-                Comparator<CongestionHourForcat> comparator = (c1, c2) -> {
-                    int num = c1.getRoadId().compareTo(c2.getRoadId());
-                    if (num == 0) {
-                        num = c1.getRoadSectionId().compareTo(c2.getRoadSectionId());
+                if (dateToDateList.size() > 0) {
+                    for (DateToDate d : dateToDateList) {
+                        mapper.updateReportForcastDate(d);
+                        PrintUtil.dateLine("更新" + d.getSource() + " -> " + d.getTarget() + "预测拥堵数据成功");
+                    }
+                } else {
+                    PrintUtil.dateLine("无需更新预测拥堵数据");
+                }
+
+            } else {
+
+                // 2. 清空原有数据
+                String truncateTableName = "road_report_hour_congestion_forcast";
+                mapper.truncateTable(truncateTableName);
+
+                // 3. 获取源数据并插入
+                // 未来一周
+                for (int j = 0; j < 7; j++) {
+
+                    int index = dayOfWeek + j;
+                    index = index > 7 ? index - 7 : index;
+
+                    String tbName = "road_section_run_state_" + tableDateArr[index].replaceAll("-", "");
+
+                    List<Map<String, Object>> allRunStateList = mapper.getAllRoadSectionRunStateByTable(tbName);
+
+                    String dateStr = toDate.plusDays(1 + j).format(dateFormatter);
+
+                    Integer tempDay = Integer.parseInt(dateStr.replaceAll("-", ""));
+
+                    Map<String, CongestionForcast> sectionCongestionForcastMap = new HashMap<>();
+
+                    for (Map<String, Object> m : allRunStateList) {
+
+                        String roadSectionId = String.valueOf(m.get("roadSectionId"));
+
+                        CongestionForcast congestionForcast = sectionCongestionForcastMap.get(roadSectionId);
+
+                        if (null == congestionForcast) {
+                            congestionForcast = new CongestionForcast();
+                            BigDecimal[] hourCongestionIndexSum = congestionForcast.getHourCongestionIndexSum();
+                            int[] hourRecordCount = congestionForcast.getHourRecordCount();
+                            // 数组初始化
+                            for (int k = 0; k < 24; k++) {
+                                hourCongestionIndexSum[k] = BigDecimal.ZERO;
+                                hourRecordCount[k] = 0;
+                            }
+
+                            // 放入map
+                            sectionCongestionForcastMap.put(roadSectionId, congestionForcast);
+
+                            // 设置值
+                            congestionForcast.setDate(tempDay);
+                            congestionForcast.setRoadSectionId(Long.parseLong(roadSectionId));
+                            congestionForcast.setRoadId(Long.parseLong(String.valueOf(m.get("roadId"))));
+                        }
+                        BigDecimal[] hourCongestionIndexSum = congestionForcast.getHourCongestionIndexSum();
+                        int[] hourRecordCount = congestionForcast.getHourRecordCount();
+
+                        String dateTimeStr = String.valueOf(m.get("dataTime"));
+
+                        int tempDayHour = Integer.parseInt(dateTimeStr.substring(11, 13));
+
+                        BigDecimal congestionIndex = new BigDecimal(String.valueOf(m.get("congestionIndex")));
+
+                        hourRecordCount[tempDayHour] = hourRecordCount[tempDayHour] + 1;
+                        hourCongestionIndexSum[tempDayHour] = hourCongestionIndexSum[tempDayHour].add(congestionIndex);
+                    }
+
+                    List<CongestionHourForcat> congestionHourForcatList = new ArrayList<>(sectionCongestionForcastMap.keySet().size() * 24);
+
+                    sectionCongestionForcastMap.forEach((k, v) -> {
+                        BigDecimal[] hourCongestionIndexSum = v.getHourCongestionIndexSum();
+                        int[] hourRecordCount = v.getHourRecordCount();
+
+                        for (int l = 0; l < 24; l++) {
+                            CongestionHourForcat c = new CongestionHourForcat();
+                            c.setRoadId(v.getRoadId());
+                            c.setRoadSectionId(v.getRoadSectionId());
+                            c.setDate(v.getDate());
+                            c.setHour(l);
+
+                            int hourCount = hourRecordCount[l];
+                            BigDecimal congestionIndex = 0 == hourCount ? BigDecimal.ZERO : hourCongestionIndexSum[l].divide(new BigDecimal(hourRecordCount[l]), 10, RoundingMode.HALF_UP);
+                            c.setCongestionIndex(congestionIndex);
+                            c.setCongestionType(getCongestionType(congestionIndex));
+
+                            congestionHourForcatList.add(c);
+                        }
+                    });
+
+                    Comparator<CongestionHourForcat> comparator = (c1, c2) -> {
+                        int num = c1.getRoadId().compareTo(c2.getRoadId());
                         if (num == 0) {
-                            num = c1.getDate().compareTo(c2.getDate());
+                            num = c1.getRoadSectionId().compareTo(c2.getRoadSectionId());
                             if (num == 0) {
-                                num = c1.getHour().compareTo(c2.getHour());
+                                num = c1.getDate().compareTo(c2.getDate());
+                                if (num == 0) {
+                                    num = c1.getHour().compareTo(c2.getHour());
+                                }
                             }
                         }
-                    }
-                    return num;
-                };
+                        return num;
+                    };
 
-                // 批量插入
-                if (congestionHourForcatList.size() > 0) {
-                    // 排下序
-                    Collections.sort(congestionHourForcatList, comparator);
-                    mapper.batchInsertReportForcast(congestionHourForcatList);
-                    PrintUtil.dateLine("批量插入" + dateStr + "日预测数据成功");
-                } else {
-                    PrintUtil.dateLine("批量插入" + dateStr + "日预测数据失败");
+                    // 批量插入
+                    if (congestionHourForcatList.size() > 0) {
+                        // 排下序
+                        Collections.sort(congestionHourForcatList, comparator);
+                        mapper.batchInsertReportForcast(congestionHourForcatList);
+                        PrintUtil.dateLine("批量插入" + dateStr + "日预测数据成功");
+                    } else {
+                        PrintUtil.dateLine("批量插入" + dateStr + "日预测数据失败");
+                    }
                 }
             }
         }
@@ -1398,31 +1435,35 @@ public class MybatisUtil {
      * @return
      * @throws IOException
      */
-    private static Object getColumnInfo(String env) throws IOException {
+    private static List<Map<String, String>> getColumnInfo(String env) throws Exception {
         SqlSession session = getSession(env);
         ColumnDao mapper = session.getMapper(ColumnDao.class);
         Map<String, String> param = new HashMap<>(2);
         param.put("database", DATABASE);
         param.put("table", TABLE);
         List<Map<String, String>> reuslt = mapper.getColumnInfo(param);
+        session.close();
         return reuslt;
     }
 
     /**
      * 根据column信息打印 mybatis可能用到的代码
      *
-     * @param list
+     * @param env
      */
-    private static void printResultMapAndColumns(List<Map<String, String>> list) {
+    private static void printResultMapAndColumns(String env) throws Exception {
+
+        List<Map<String, String>> list = getColumnInfo(env);
+
         StringBuilder resultMap = new StringBuilder("<resultMap id=\"baseMap\" type=\"\">");
-        StringBuilder columnSql = new StringBuilder("<sql id=\"baseColumn\">\n\t");
+        StringBuilder columnSql = new StringBuilder("<sql id=\"baseColumn\">\n");
         StringBuilder properties = new StringBuilder("");
         StringBuilder selectAsSql = new StringBuilder("");
         StringBuilder insertColumnSql = new StringBuilder("");
         StringBuilder insertPropertySql = new StringBuilder("");
         StringBuilder updateSql = new StringBuilder("");
 
-        PrintUtil.dateLine("list : " + list);
+        // PrintUtil.dateLine("list : " + list);
 
         String cn = "column_name";
         String ct = "column_type";
@@ -1445,10 +1486,9 @@ public class MybatisUtil {
 
         list.forEach(e -> {
 
-
             String column = e.get(columnName);
             String type = e.get(columnType);
-            resultMap.append("\n\t");
+            resultMap.append("\n");
             resultMap.append("<result property=\"");
             String property = getProperty(column);
             resultMap.append(property);
@@ -1483,7 +1523,7 @@ public class MybatisUtil {
             selectAsSql.append(column);
             selectAsSql.append(" AS ");
             selectAsSql.append(property);
-            selectAsSql.append(",\n\t");
+            selectAsSql.append(",\n");
 
             // updateSql
             updateSql.append(column);
@@ -1505,23 +1545,42 @@ public class MybatisUtil {
         PrintUtil.dateLine(updateSql.toString());
     }
 
-    private static String getProperty(String column){
-        int index = -1;
-        while (UNDERLINE == column.charAt(0)){
-            column = AT + column.substring(1);
-        }
-        while (UNDERLINE == column.charAt(column.length() - 1)){
-            column = column.substring(0,column.length() -1) + AT;
-        }
-        while ((index = column.indexOf(UNDERLINE)) > 0){
-            char c = column.charAt(index + 1);
-            if(Character.isLowerCase(c)){
-                // 转为大写
-                c -= 32;
+    private static String getProperty(String column) {
+
+        char[] arr = column.toCharArray();
+
+        StringBuilder sb = new StringBuilder(arr.length);
+
+        boolean underlinePrefix = false;
+
+        for (char c : arr) {
+            // 下划线
+            if ('_' == c) {
+                underlinePrefix = true;
+                continue;
+            } else {
+                // 小写字母
+                if ('a' <= c && 'z' >= c) {
+                    // 前面是下划线且不是第一个字母
+                    if (underlinePrefix && sb.length() > 0) {
+                        // 转大写
+                        c = Character.toUpperCase(c);
+                        // 还原
+                        underlinePrefix = false;
+                    }
+
+                    sb.append(c);
+                } else {
+                    // 其它字符
+
+                    sb.append(c);
+                    // 还原可能的下划线前缀
+                    underlinePrefix = false;
+                }
             }
-            column = column.substring(0,index) + c + column.substring(index + 2);
         }
-        return column.replaceAll("" + AT,"");
+
+        return sb.toString();
     }
 
     private static String getJavaType(String type){
