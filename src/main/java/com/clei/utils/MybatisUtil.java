@@ -91,7 +91,9 @@ public class MybatisUtil {
 
         PrintUtil.printMemoryInfo();
 
-        insertVehicleState(env);
+        // insertVehicleState(env);
+
+        test(env);
 
         // ---------------Vehicle End---------------
     }
@@ -1076,6 +1078,28 @@ public class MybatisUtil {
         // 整这么多条
         int recordCount = 990000;
 
+        SqlSession session = getSession(env);
+
+        ColumnDao mapper = session.getMapper(ColumnDao.class);
+
+        // 查询到所有路段点是为了把车的位置放到路上
+        List<SectionPoint> sectionPointList = getAllSectionPoint(mapper);
+
+        int pointSize = sectionPointList.size();
+
+        PrintUtil.dateLine("路段点个数： " + pointSize);
+
+        // 路段点与车的比例 1:n
+        int n = 500;
+
+        int tempCount = pointSize / n;
+
+        // 最多5个点分配一个车 避免车辆太过密集
+        recordCount = recordCount > tempCount ? tempCount : recordCount;
+
+        // 选中点记录 map
+        Map<String, Integer> selectedMap = new HashMap<>(recordCount);
+
         List<Map<String, Object>> list = new ArrayList<>(recordCount);
 
         Random random = new Random();
@@ -1087,46 +1111,63 @@ public class MybatisUtil {
 
         PrintUtil.dateLine("批量插入车辆状态数据准备");
 
-        // 车辆类型
-        for (int j = 1; j < 8; j++) {
-            // 车牌颜色
-            for (int k = 1; k < 6; k++) {
-                // 危险等级
-                for (int l = 1; l < 4; l++) {
-                    // 记录数判断
-                    while (i < recordCount + 2) {
+        // 记录数判断
+        boolean endLoop = false;
 
-                        Map<String, Object> m = new HashMap<>();
+        while (!endLoop) {
+            // 车辆类型 !endLoop保证 条数达到了立即跳出
+            for (int j = 1; j < 8 && !endLoop; j++) {
+                // 车牌颜色 !endLoop保证 条数达到了立即跳出
+                for (int k = 1; k < 6 && !endLoop; k++, i++, endLoop = i == recordCount + 2) {
 
-                        String vehicleNo = getVehicleNo("贵A", i, 6);
+                    Map<String, Object> m = new HashMap<>();
 
-                        m.put("vehicleNo", vehicleNo);
-                        m.put("vehicleType", j);
-                        m.put("plateColor", k);
-                        m.put("dangerLevel", l);
-                        m.put("onlineStatus", 1);
-                        m.put("routeType", 0);
-                        m.put("affiliatedCompany", "hikcreate");
-                        m.put("gmtMark", DateUtil.formatMillis(millis + random.nextInt(dayMills)));
-                        m.put("markAddress", "北京西路");
-                        m.put("lon", 180 * random.nextDouble());
-                        m.put("lat", 90 * random.nextDouble());
+                    String vehicleNo = getVehicleNo("贵A", i, 6);
 
-                        list.add(m);
-                        i++;
+                    m.put("vehicleNo", vehicleNo);
+                    m.put("vehicleType", j);
+                    m.put("plateColor", k);
+
+                    // 危险等级 2/3 安全 2/9 中危 1/9 高危
+                    int dangerLevel = random.nextInt(100);
+                    dangerLevel = dangerLevel < 67 ? 1 : dangerLevel < 89 ? 2 : 3;
+
+                    m.put("dangerLevel", dangerLevel);
+                    m.put("onlineStatus", 1);
+                    m.put("routeType", 0);
+                    m.put("affiliatedCompany", "hikcreate");
+                    m.put("gmtMark", DateUtil.formatMillis(millis + random.nextInt(dayMills)));
+
+                    // 使用重复随机选而不是选中点后remove
+                    // 是因为点太多了，频繁获取，remove，花销太大，而这个车与点的比例最多1：n，重复几率也不大
+                    // 刚才试了下通过linkedList remove的方式
+                    // 代码重构成这样之后数据还没准备完毕
+                    // 而采用这个方式 一下就准备完了
+                    while (true) {
+                        int pointIndex = random.nextInt(sectionPointList.size());
+                        SectionPoint sp = sectionPointList.get(pointIndex);
+
+                        String key = sp.getLon().toString() + sp.getLat().toString();
+                        Integer result = selectedMap.get(key);
+
+                        if (null == result) {
+                            m.put("lon", sp.getLon());
+                            m.put("lat", sp.getLat());
+                            m.put("markAddress", sp.getRoadSectionName());
+                            selectedMap.put(key, 1);
+                            break;
+                        }
 
                     }
+
+                    list.add(m);
                 }
             }
         }
 
-        SqlSession session = getSession(env);
-
-        ColumnDao mapper = session.getMapper(ColumnDao.class);
-
         PrintUtil.dateLine("批量插入车辆状态开始");
 
-        System.out.println(list.size());
+        PrintUtil.dateLine("总数据条数： " + list.size());
 
         // 批量插入
         // mapper.batchInsertVehicleState(list);
@@ -1136,6 +1177,45 @@ public class MybatisUtil {
         session.close();
 
         PrintUtil.dateLine("批量插入车辆状态成功");
+    }
+
+    /**
+     * 获取所有的路段经纬度点集合
+     *
+     * @param mapper
+     * @return
+     */
+    private static List<SectionPoint> getAllSectionPoint(ColumnDao mapper) {
+
+        // 全部路段数据
+        List<SectionInfo> sectionInfoList = mapper.getSectionInfo();
+
+        // 全部路段点数据 使用linkedList是为了方便remove
+        List<SectionPoint> sectionPointList = new ArrayList<>();
+
+        for (SectionInfo s : sectionInfoList) {
+            String geo = s.getGeo();
+            String roadSectionName = s.getRoadSectionName();
+
+            List<String> geoList = JSONObject.parseArray(geo, String.class);
+
+            for (String str : geoList) {
+
+                int index = str.indexOf(",");
+
+                String longitude = str.substring(1, index);
+
+                String latitude = str.substring(index + 1, str.length() - 1);
+
+                SectionPoint sectionPoint = new SectionPoint();
+                sectionPoint.setRoadSectionName(roadSectionName);
+                sectionPoint.setLon(new BigDecimal(longitude));
+                sectionPoint.setLat(new BigDecimal(latitude));
+                sectionPointList.add(sectionPoint);
+            }
+        }
+
+        return sectionPointList;
     }
 
     /**
@@ -1450,15 +1530,29 @@ public class MybatisUtil {
             return "java.lang.Integer";
         }else if(type.startsWith("float")){
             return "java.lang.Float";
-        }else if(type.startsWith("double") || type.startsWith("decimal")){
+        }else if(type.startsWith("double") || type.startsWith("decimal")) {
             return "java.lang.Double";
-        }else if(type.startsWith("tinyint")){
+        } else if (type.startsWith("tinyint")) {
             return "java.lang.Boolean";
-        }else if(type.startsWith("datetime") || type.startsWith("date")){
+        } else if (type.startsWith("datetime") || type.startsWith("date")) {
             return "java.util.Date";
-        }else if(type.contains("char")){
+        } else if (type.contains("char")) {
             return "java.lang.String";
         }
         return "java.lang.String";
+    }
+
+    /**
+     * 测试mybatis的方法
+     *
+     * @param env 环境参数
+     */
+    private static void test(String env) throws Exception {
+
+        /*SqlSession session = getSession(env);
+
+        ColumnDao mapper = session.getMapper(ColumnDao.class);
+
+        session.close();*/
     }
 }

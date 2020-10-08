@@ -1,7 +1,9 @@
 package com.clei.utils;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -46,6 +48,7 @@ public class DateUtil {
      * @return
      */
     public static String formatMillis(long millis) {
+        validateMilliOrSecond(millis);
         return format(fromMillis(millis));
     }
 
@@ -77,12 +80,40 @@ public class DateUtil {
     }
 
     /**
+     * 昨日之始
+     *
+     * @return
+     */
+    public static LocalDateTime yesterdayBegin() {
+        return todayBegin().plusDays(-1);
+    }
+
+    /**
+     * 今日之始
+     *
+     * @return
+     */
+    public static LocalDateTime todayBegin() {
+        return LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
+    }
+
+    /**
+     * 明日之始
+     *
+     * @return
+     */
+    public static LocalDateTime tomorrowBegin() {
+        return todayBegin().plusDays(1);
+    }
+
+    /**
      * 根据epochMilli获取 LocalDateTime
      *
      * @param millis
      * @return
      */
     public static LocalDateTime fromMillis(long millis) {
+        validateMilliOrSecond(millis);
         return LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZONE_ID);
     }
 
@@ -93,6 +124,7 @@ public class DateUtil {
      * @return
      */
     public static LocalDateTime fromSeconds(long seconds) {
+        validateMilliOrSecond(seconds);
         return LocalDateTime.ofInstant(Instant.ofEpochSecond(seconds), ZONE_ID);
     }
 
@@ -128,24 +160,30 @@ public class DateUtil {
         return localDateTime.toInstant(ZONE_OFFSET);
     }
 
-    public static long toEpochMilli(LocalDateTime localDateTime){
+    public static long toEpochMilli(LocalDateTime localDateTime) {
         return toInstant(localDateTime).toEpochMilli();
     }
 
-    public static long toEpochSecond(LocalDateTime localDateTime){
+    public static long toEpochSecond(LocalDateTime localDateTime) {
         validateLocalDateTime(localDateTime);
         return localDateTime.toEpochSecond(ZONE_OFFSET);
         // return toInstant(localDateTime).getEpochSecond();
     }
 
-    private static void validateLocalDateTime(LocalDateTime localDateTime){
-        if(null == localDateTime){
+    private static void validateMilliOrSecond(long l) {
+        if (l < 0) {
+            throw new RuntimeException("传入参数小于0！");
+        }
+    }
+
+    private static void validateLocalDateTime(LocalDateTime localDateTime) {
+        if (null == localDateTime) {
             throw new RuntimeException("传入参数为null！");
         }
     }
 
-    private static void validateStr(String str){
-        if(null == str || "".equals(str)){
+    private static void validateStr(String str) {
+        if (null == str || "".equals(str)) {
             throw new RuntimeException("传入字符串为" + null == str ? "null！" : "空串！");
         }
     }

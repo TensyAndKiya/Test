@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 public class SectionPoint {
 
     private Long roadSectionId;
+    private String roadSectionName;
     private BigDecimal lon;
     private BigDecimal lat;
 
@@ -17,6 +18,14 @@ public class SectionPoint {
 
     public void setRoadSectionId(Long roadSectionId) {
         this.roadSectionId = roadSectionId;
+    }
+
+    public String getRoadSectionName() {
+        return roadSectionName;
+    }
+
+    public void setRoadSectionName(String roadSectionName) {
+        this.roadSectionName = roadSectionName;
     }
 
     public BigDecimal getLon() {

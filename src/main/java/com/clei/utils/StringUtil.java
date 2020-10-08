@@ -22,23 +22,52 @@ public class StringUtil {
         return result.toString();
     }
 
-    public static boolean isNotEmpty(String str){
+    public static boolean isNotEmpty(String str) {
         return !isEmpty(str);
     }
 
-    public static boolean isEmpty(String str){
+    public static boolean isEmpty(String str) {
         return null == str || 0 == str.length();
     }
 
     /**
+     * str 是否包含 strArr中的某个字符串
+     *
+     * @param str
+     * @param strArr
+     * @return
+     */
+    public static boolean contains(String str, String[] strArr) {
+
+        if (isEmpty(str) || null == strArr || 0 == strArr.length) {
+            throw new RuntimeException("参数为空");
+        }
+
+        for (String s : strArr) {
+
+            if (isNotEmpty(s)) {
+
+                boolean result = str.contains(s);
+
+                if (result) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * 是数字
+     *
      * @param str
      * @return
      */
-    public static boolean isDigit(String str){
+    public static boolean isDigit(String str) {
         String pattern = "\\d*";
 
-        return Pattern.matches(pattern,str);
+        return Pattern.matches(pattern, str);
     }
 
     /**
