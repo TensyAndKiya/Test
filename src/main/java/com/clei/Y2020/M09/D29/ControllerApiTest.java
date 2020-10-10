@@ -10,6 +10,8 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * controller api 统计查询
@@ -113,8 +115,12 @@ public class ControllerApiTest {
 
         FileUtil.fileOperation("D:\\WorkSpace\\HK\\hdsp\\hdsp-module-itms-detection", operation);
 
+        Map<String, List<RequestApi>> map = list.stream().collect(Collectors.groupingBy(RequestApi::getJavaClass));
         // 这里是遍历操作，可以有其它的查找操作【比如根据url找到文件和行号什么的】
-        list.forEach(PrintUtil::println);
+        map.forEach((k, v) -> {
+            PrintUtil.println(k);
+            v.forEach(r -> PrintUtil.println("\t" + r));
+        });
     }
 
     /**
@@ -161,26 +167,15 @@ public class ControllerApiTest {
             int tempIndex = -1;
 
             // 找到第一个key之后的等号
-            while (true) {
+            tempIndex = str.indexOf("=", index);
 
-                // 避免死循环
-                int ttt = tempIndex;
-
-                tempIndex = str.indexOf("=", tempIndex);
-
-                // 结果与上次一样
-                if (ttt == tempIndex) {
-                    break;
-                }
-
-                // 找到了
-                if (tempIndex == index + key.length()) {
-                    int index1 = str.indexOf("\"", tempIndex);
-                    if (index1 == tempIndex + 1) {
-                        int index2 = str.indexOf("\"", index1);
-                        String value = str.substring(index1 + 1, index2);
-                        return value;
-                    }
+            // 找到了
+            if (tempIndex == index + key.length()) {
+                int index1 = str.indexOf("\"", tempIndex);
+                if (index1 == tempIndex + 1) {
+                    int index2 = str.indexOf("\"", index1 + 1);
+                    String value = str.substring(index1 + 1, index2);
+                    return value;
                 }
             }
         }
