@@ -54,7 +54,8 @@ public class MybatisUtil {
     private final static String DATABASE = "hdsp_itms";
     private final static String TABLE = "road_section_info";
     private final static char UNDERLINE = '_';
-    private final static char AT = '@';
+    private final static Map<String, String> javaTypeMap = new HashMap<>();
+    private static boolean javaTypeMapInit = false;
 
     // 102 agv == 3 || p2 floor ||
 
@@ -1433,7 +1434,7 @@ public class MybatisUtil {
      *
      * @param env
      * @return
-     * @throws IOException
+     * @throws Exception
      */
     private static List<Map<String, String>> getColumnInfo(String env) throws Exception {
         SqlSession session = getSession(env);
@@ -1441,9 +1442,9 @@ public class MybatisUtil {
         Map<String, String> param = new HashMap<>(2);
         param.put("database", DATABASE);
         param.put("table", TABLE);
-        List<Map<String, String>> reuslt = mapper.getColumnInfo(param);
+        List<Map<String, String>> result = mapper.getColumnInfo(param);
         session.close();
-        return reuslt;
+        return result;
     }
 
     /**
@@ -1455,25 +1456,25 @@ public class MybatisUtil {
 
         List<Map<String, String>> list = getColumnInfo(env);
 
+        PrintUtil.dateLine("list : " + list);
+
         StringBuilder resultMap = new StringBuilder("<resultMap id=\"baseMap\" type=\"\">");
         StringBuilder columnSql = new StringBuilder("<sql id=\"baseColumn\">\n");
-        StringBuilder properties = new StringBuilder("");
-        StringBuilder selectAsSql = new StringBuilder("");
-        StringBuilder insertColumnSql = new StringBuilder("");
-        StringBuilder insertPropertySql = new StringBuilder("");
-        StringBuilder updateSql = new StringBuilder("");
-
-        // PrintUtil.dateLine("list : " + list);
+        StringBuilder properties = new StringBuilder();
+        StringBuilder selectAsSql = new StringBuilder();
+        StringBuilder insertColumnSql = new StringBuilder();
+        StringBuilder insertPropertySql = new StringBuilder();
+        StringBuilder updateSql = new StringBuilder();
 
         String cn = "column_name";
         String ct = "column_type";
 
-        if(null != list && !list.isEmpty()){
-            Map<String,String> m = list.get(0);
+        if (null != list && !list.isEmpty()) {
+            Map<String, String> m = list.get(0);
             Set<String> set = m.keySet();
 
-            for(String s : set){
-                if(s.equalsIgnoreCase(cn)){
+            for (String s : set) {
+                if (s.equalsIgnoreCase(cn)) {
                     cn = s;
                 }else {
                     ct = s;
@@ -1555,7 +1556,7 @@ public class MybatisUtil {
 
         for (char c : arr) {
             // 下划线
-            if ('_' == c) {
+            if (UNDERLINE == c) {
                 underlinePrefix = true;
                 continue;
             } else {
@@ -1565,11 +1566,10 @@ public class MybatisUtil {
                     if (underlinePrefix && sb.length() > 0) {
                         // 转大写
                         c = Character.toUpperCase(c);
-                        // 还原
-                        underlinePrefix = false;
                     }
-
                     sb.append(c);
+                    // 还原
+                    underlinePrefix = false;
                 } else {
                     // 其它字符
 
@@ -1583,22 +1583,49 @@ public class MybatisUtil {
         return sb.toString();
     }
 
-    private static String getJavaType(String type){
+    private static String getJavaType(String type) {
+        // 全转为小写
         type = type.toLowerCase();
-        if(type.startsWith("int")){
-            return "java.lang.Integer";
-        }else if(type.startsWith("float")){
-            return "java.lang.Float";
-        }else if(type.startsWith("double") || type.startsWith("decimal")) {
-            return "java.lang.Double";
-        } else if (type.startsWith("tinyint")) {
-            return "java.lang.Boolean";
-        } else if (type.startsWith("datetime") || type.startsWith("date")) {
-            return "java.util.Date";
-        } else if (type.contains("char")) {
-            return "java.lang.String";
+        // 去掉后面的括号
+        int index = type.indexOf('(');
+        if (-1 != index) {
+            type = type.substring(0, index);
         }
-        return "java.lang.String";
+        // map是否初始化
+        if (!javaTypeMapInit) {
+            initJavaTypeMap();
+        }
+        // 结果
+        String javaType = javaTypeMap.get(type);
+        if (null == javaType) {
+            javaType = javaTypeMap.get("default");
+        }
+
+        return javaType;
+    }
+
+    private static void initJavaTypeMap() {
+        // 整数
+        javaTypeMap.put("tinyint", "java.lang.Boolean");
+        javaTypeMap.put("smallint", "java.lang.Short");
+        javaTypeMap.put("int", "java.lang.Integer");
+        javaTypeMap.put("bigint", "java.lang.Long");
+        // 字符串
+        javaTypeMap.put("text", "java.lang.String");
+        javaTypeMap.put("char", "java.lang.String");
+        javaTypeMap.put("varchar", "java.lang.String");
+        javaTypeMap.put("date", "java.lang.String");
+        // 小数
+        javaTypeMap.put("float", "java.lang.Float");
+        javaTypeMap.put("double", "java.lang.Double");
+        javaTypeMap.put("decimal", "java.math.BigDecimal");
+        // 日期
+        javaTypeMap.put("datetime", "java.util.Date");
+        javaTypeMap.put("timestamp", "java.util.Date");
+        // 默认类型
+        javaTypeMap.put("default", "java.lang.String");
+        // 初始化完毕
+        javaTypeMapInit = true;
     }
 
     /**
