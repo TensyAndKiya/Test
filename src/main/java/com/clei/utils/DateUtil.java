@@ -16,16 +16,21 @@ public class DateUtil {
 
     private final static String FORMATTER_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
-    private final static DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(FORMATTER_PATTERN);
+    private final static String FORMATTER_PATTERN_MS = "yyyy-MM-dd HH:mm:ss.SSS";
 
-    private final static ConcurrentHashMap<String,DateTimeFormatter> FORMATTER_MAP = new ConcurrentHashMap(4);
+    private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(FORMATTER_PATTERN);
+
+    private final static DateTimeFormatter DATE_TIME_FORMATTER_MS = DateTimeFormatter.ofPattern(FORMATTER_PATTERN_MS);
+
+    private final static ConcurrentHashMap<String, DateTimeFormatter> FORMATTER_MAP = new ConcurrentHashMap(4);
 
     private final static ZoneId ZONE_ID = ZoneId.of("GMT+8");
 
     private final static ZoneOffset ZONE_OFFSET = ZoneOffset.ofHours(8);
 
     static {
-        FORMATTER_MAP.put(FORMATTER_PATTERN,FORMATTER);
+        FORMATTER_MAP.put(FORMATTER_PATTERN, DATE_TIME_FORMATTER);
+        FORMATTER_MAP.put(FORMATTER_PATTERN_MS, DATE_TIME_FORMATTER_MS);
     }
 
     public static String getDefaultPattern() {
@@ -42,18 +47,59 @@ public class DateUtil {
     }
 
     /**
+     * 返回指定格式的格式的 当前日期时间字符串
+     *
+     * @param ms 是否打印毫秒
+     * @return
+     */
+    public static String currentDateTime(boolean ms) {
+        return format(LocalDateTime.now(), ms ? DATE_TIME_FORMATTER_MS : DATE_TIME_FORMATTER);
+    }
+
+    /**
+     * 返回指定格式的格式的 当前日期时间字符串
+     *
+     * @param pattern 指定日期格式
+     * @return
+     */
+    public static String currentDateTime(String pattern) {
+        return format(LocalDateTime.now(), pattern);
+    }
+
+    /**
      * 根据epochMilli返回格式化日期字符串
      *
      * @param millis
      * @return
      */
     public static String formatMillis(long millis) {
-        validateMilliOrSecond(millis);
         return format(fromMillis(millis));
     }
 
+    /**
+     * 根据epochMilli返回格式化日期字符串
+     *
+     * @param millis
+     * @param pattern 指定格式化样例
+     * @return
+     */
+    public static String formatMillis(long millis, String pattern) {
+        return format(fromMillis(millis), pattern);
+    }
+
+    /**
+     * 根据epochMilli返回格式化日期字符串
+     *
+     * @param millis
+     * @param dateTimeFormatter 指定格式化器
+     * @return
+     */
+    public static String formatMillis(long millis, DateTimeFormatter dateTimeFormatter) {
+        return format(fromMillis(millis), dateTimeFormatter);
+    }
+
     public static String format(LocalDateTime localDateTime) {
-        return format(localDateTime, FORMATTER);
+        return format(localDateTime, DATE_TIME_FORMATTER);
     }
 
     public static String format(LocalDateTime localDateTime, String pattern) {
@@ -74,9 +120,9 @@ public class DateUtil {
         }
     }
 
-    private static String format(LocalDateTime localDateTime, DateTimeFormatter formatter) {
+    private static String format(LocalDateTime localDateTime, DateTimeFormatter dateTimeFormatter) {
         validateLocalDateTime(localDateTime);
-        return localDateTime.format(formatter);
+        return localDateTime.format(dateTimeFormatter);
     }
 
     /**
@@ -129,7 +175,7 @@ public class DateUtil {
     }
 
     public static LocalDateTime parse(String date) {
-        return parse(date, FORMATTER);
+        return parse(date, DATE_TIME_FORMATTER);
     }
 
     public static LocalDateTime parse(String date, String pattern) {
@@ -150,9 +196,9 @@ public class DateUtil {
         }
     }
 
-    private static LocalDateTime parse(String date,DateTimeFormatter formatter){
+    private static LocalDateTime parse(String date, DateTimeFormatter dateTimeFormatter) {
         validateStr(date);
-        return LocalDateTime.parse(date,formatter);
+        return LocalDateTime.parse(date, dateTimeFormatter);
     }
 
     public static Instant toInstant(LocalDateTime localDateTime){

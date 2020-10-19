@@ -93,9 +93,9 @@ public class MybatisUtil {
 
         // PrintUtil.printMemoryInfo();
 
-        // insertVehicleState(env);
+        insertVehicleState(env);
 
-        printResultMapAndColumns(env);
+        // printResultMapAndColumns(env);
 
         // ---------------Vehicle End---------------
     }
@@ -1145,7 +1145,7 @@ public class MybatisUtil {
         long millis = System.currentTimeMillis();
         int dayMills = 1000 * 60 * 60 * 24;
 
-        int i = 2;
+        int i = 1;
 
         PrintUtil.dateLine("批量插入车辆状态数据准备");
 
@@ -1160,7 +1160,7 @@ public class MybatisUtil {
 
                     Map<String, Object> m = new HashMap<>();
 
-                    String vehicleNo = getVehicleNo("贵A", i, 6);
+                    String vehicleNo = getVehicleNo("贵A", i, 5);
 
                     m.put("vehicleNo", vehicleNo);
                     m.put("vehicleType", j);
@@ -1172,6 +1172,7 @@ public class MybatisUtil {
 
                     m.put("dangerLevel", dangerLevel);
                     m.put("onlineStatus", 1);
+                    m.put("speed", random.nextDouble() * 120);
                     m.put("routeType", 0);
                     m.put("affiliatedCompany", "hikcreate");
                     m.put("gmtMark", DateUtil.formatMillis(millis + random.nextInt(dayMills)));

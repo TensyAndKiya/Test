@@ -5,4 +5,6 @@ partition tolerance 分区容忍性
 appId = spring.application.name
 instanceId = ipAddr:appId:port
 
+eureka.instance.instance-id: ${spring.application.name}-${spring.cloud.client.ip-address}:${server.port}
+
 eureka.client.serviceUrl.defaultZone
