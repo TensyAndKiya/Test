@@ -1,5 +1,6 @@
 package com.clei.Y2020.M06.D06;
 
+import com.clei.utils.PrintUtil;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.MessageQueueSelector;
 import org.apache.rocketmq.client.producer.SendResult;
@@ -36,7 +37,7 @@ public class SyncProducer {
             // 指定消息存储在哪个队列中
             SendResult result = producer.send(msg,selector,Integer.valueOf(1));
 
-            System.out.println(i + " 发送结果：" + result);
+            PrintUtil.dateLine(i + " 发送结果：" + result);
         }
 
         // 关闭

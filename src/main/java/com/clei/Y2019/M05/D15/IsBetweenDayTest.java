@@ -1,10 +1,16 @@
 package com.clei.Y2019.M05.D15;
 
+import com.clei.utils.PrintUtil;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class IsBetweenDayTest {
@@ -28,14 +34,14 @@ public class IsBetweenDayTest {
         );
 
         for (int i = 1; i < 100000001; i++) {
-            System.out.println("提交第 " + i + " 个任务！");
+            PrintUtil.dateLine("提交第 " + i + " 个任务！");
             executor.execute(new MyRunnable());
         }
         //executor.shutdown();
     }
 
     public synchronized static void over(){
-        System.out.println("第" + (++num) + "个任务执行完毕！");
+        PrintUtil.dateLine("第" + (++num) + "个任务执行完毕！");
     }
 
 
@@ -97,7 +103,7 @@ public class IsBetweenDayTest {
         @Override
         public Thread newThread(Runnable r) {
             String name = "KIyA_ThreadFactory_Thread_"+ai.addAndGet(1);
-            System.out.println("创建了线程 ： "+name);
+            PrintUtil.dateLine("创建了线程 ： " + name);
             return new Thread(r, name);
         }
     }
@@ -109,7 +115,7 @@ public class IsBetweenDayTest {
                 //阻塞方法
                 executor.getQueue().put(r);
             } catch (InterruptedException e) {
-                System.out.println("放入阻塞队列失败！！！");
+                PrintUtil.dateLine("放入阻塞队列失败！！！");
                 e.printStackTrace();
             }
         }

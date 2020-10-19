@@ -3,6 +3,7 @@ package com.clei.Y2019.M10.D08;
 import com.alibaba.fastjson.JSONObject;
 import com.clei.utils.MD5Util;
 import com.clei.utils.OkHttpUtil;
+import com.clei.utils.PrintUtil;
 
 public class JDSMS0Test {
     private final static String account = "aaa";
@@ -19,6 +20,6 @@ public class JDSMS0Test {
         messageData.put("sign","【客户签名1】");
         message.put("data",messageData);
         String result = OkHttpUtil.doPost(url,message.toJSONString());
-        System.out.println("result : " + result);
+        PrintUtil.dateLine("result : " + result);
     }
 }

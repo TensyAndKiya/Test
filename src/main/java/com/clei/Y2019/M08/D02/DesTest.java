@@ -1,5 +1,6 @@
 package com.clei.Y2019.M08.D02;
 
+import com.clei.utils.PrintUtil;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -21,9 +22,9 @@ public class DesTest {
 
     public static void main(String[] args) throws Exception {
         String str = "sk中文英文特殊符号！@#￥！@#￥！@#￥";
-        System.out.println(str);
-        System.out.println(encrypt3DESECB(str));
-        System.out.println(encrypt3DES(str));
+        PrintUtil.dateLine(str);
+        PrintUtil.dateLine(encrypt3DESECB(str));
+        PrintUtil.dateLine(encrypt3DES(str));
     }
 
     private static String encryptDESCBC(String str) throws Exception {

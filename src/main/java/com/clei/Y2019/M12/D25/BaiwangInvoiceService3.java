@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.clei.utils.Base64Util;
 import com.clei.utils.DateUtil;
 import com.clei.utils.EncryptUtil;
+import com.clei.utils.PrintUtil;
 import com.clei.utils.RequestUtils;
 import sun.misc.BASE64Encoder;
 
@@ -14,7 +15,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * 百旺开票测试2
@@ -59,7 +64,7 @@ public class BaiwangInvoiceService3 {
         String content = requestData(cInfo,iInfo);
         // content = content.replaceAll("\r","").replaceAll("\n","");
 
-        System.out.println("content " + content);
+        PrintUtil.dateLine("content " + content);
 
         String contentMD5 = MD5(content.getBytes("UTF-8"));
 
@@ -73,15 +78,14 @@ public class BaiwangInvoiceService3 {
         String outerInfo = outerInfo(cInfo,content,encryptStr);
 
 
+        // PrintUtil.dateLine("contentKey : " + encryptStr);
 
-        // System.out.println("contentKey : " + encryptStr);
-
-        System.out.println("final : " + outerInfo);
+        PrintUtil.dateLine("final : " + outerInfo);
 
 
         String result = RequestUtils.getHttpConnectResult(outerInfo,"https://dev.fapiao.com:19444/fpt-dsqz/invoice");
 
-        System.out.println("result : " + result);
+        PrintUtil.dateLine("result : " + result);
 
         JSONObject obj = JSONObject.parseObject(result);
 
@@ -96,17 +100,17 @@ public class BaiwangInvoiceService3 {
         // 业务数据内容
         String returnContent = data.getString("content");
 
-        System.out.println("content : " + returnContent);
+        PrintUtil.dateLine("content : " + returnContent);
         byte[] base64 = Base64Util.base64decode(returnContent);
 
 
-        System.out.println(new String(base64,"utf-8"));
+        PrintUtil.dateLine(new String(base64, "utf-8"));
 
-        System.out.println("length1 : " + base64.length);
+        PrintUtil.dateLine("length1 : " + base64.length);
         byte[] aesBytes = EncryptUtil.decryptAES(base64,aesKey);
         String finalResult = new String(EncryptUtil.decryptAES(aesBytes,aesKey));
 
-        System.out.println(finalResult);
+        PrintUtil.dateLine(finalResult);
 
 
     }
@@ -259,7 +263,7 @@ public class BaiwangInvoiceService3 {
         content.append("}");
         content.append("}");
 
-        System.out.println("content " + content.toString());
+        PrintUtil.dateLine("content " + content.toString());
 
         String str = new BASE64Encoder().encodeBuffer(content.toString().getBytes("UTF-8"))
                 .replaceAll("\r","").replaceAll("\n","");

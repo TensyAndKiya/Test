@@ -1,5 +1,7 @@
 package com.clei.Y2020.M09.D03;
 
+import com.clei.utils.PrintUtil;
+
 /**
  * HashMap初始化容量
  * @author KIyA
@@ -15,36 +17,36 @@ public class TableSizeForTest {
 
     public static void main(String[] args) {
 
-        System.out.println(Math.pow(2,14 - 14));
-        System.out.println(Math.pow(2,14 - 19));
-        System.out.println(Math.pow(2,14 - 14));
-        System.out.println(Math.pow(2,14 - 17));
-        System.out.println(Math.pow(2,14 - 16));
-        System.out.println(Math.pow(2,14 - 15));
-        System.out.println(Math.pow(2,14 - 1));
+        PrintUtil.dateLine(Math.pow(2, 14 - 14));
+        PrintUtil.dateLine(Math.pow(2, 14 - 19));
+        PrintUtil.dateLine(Math.pow(2, 14 - 14));
+        PrintUtil.dateLine(Math.pow(2, 14 - 17));
+        PrintUtil.dateLine(Math.pow(2, 14 - 16));
+        PrintUtil.dateLine(Math.pow(2, 14 - 15));
+        PrintUtil.dateLine(Math.pow(2, 14 - 1));
 
         int capacity = 7;
 
-        System.out.println(tableSizeFor(7));
+        PrintUtil.dateLine(tableSizeFor(7));
     }
 
     /**
      * Returns a power of two size for the given target capacity.
      */
     static final int tableSizeFor(int cap) {
-        System.out.println(cap);
+        PrintUtil.dateLine(cap);
         int n = cap - 1;
-        System.out.println(n);
+        PrintUtil.dateLine(n);
         n |= n >>> 1;
-        System.out.println(n);
+        PrintUtil.dateLine(n);
         n |= n >>> 2;
-        System.out.println(n);
+        PrintUtil.dateLine(n);
         n |= n >>> 4;
-        System.out.println(n);
+        PrintUtil.dateLine(n);
         n |= n >>> 8;
-        System.out.println(n);
+        PrintUtil.dateLine(n);
         n |= n >>> 16;
-        System.out.println(n);
+        PrintUtil.dateLine(n);
         return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
     }
 

@@ -55,6 +55,6 @@ public class NumUtil {
 
     public static void main(String[] args) {
 
-        System.out.println(transRadix("x",333,10));
+        PrintUtil.dateLine(transRadix("x", 333, 10));
     }
 }

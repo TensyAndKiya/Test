@@ -1,5 +1,7 @@
 package com.clei.Y2019.M04.D10;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.Scanner;
 
 /**
@@ -24,27 +26,27 @@ public class CheckUpdateFilesTest {
         if(sb.indexOf("AlipayConfig.java") > -1){
             count ++;
         }else{
-            System.out.println("AlipayConfig.java");
+            PrintUtil.dateLine("AlipayConfig.java");
         }
         if(sb.indexOf("AlipayWXConfig.java") > -1){
             count ++;
         }else{
-            System.out.println("AlipayWXConfig.java");
+            PrintUtil.dateLine("AlipayWXConfig.java");
         }
         if(sb.indexOf("CdPayConfig.java") > -1){
             count ++;
         }else{
-            System.out.println("CdPayConfig.java");
+            PrintUtil.dateLine("CdPayConfig.java");
         }
         if(sb.indexOf("application.properties") > -1){
             count ++;
         }else{
-            System.out.println("application.properties");
+            PrintUtil.dateLine("application.properties");
         }
         if( count == 4 ){
-            System.out.println("PASS!");
+            PrintUtil.dateLine("PASS!");
         }else{
-            System.out.println("ERROR!WARNING!ERROR!WARNING!ERROR!WARNING!ERROR!WARNING!");
+            PrintUtil.dateLine("ERROR!WARNING!ERROR!WARNING!ERROR!WARNING!ERROR!WARNING!");
         }
     }
 }

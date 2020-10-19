@@ -1,5 +1,7 @@
 package com.clei.Y2020.M09.D22;
 
+import com.clei.utils.PrintUtil;
+
 /**
  * 将秒数转为 23:59:33字符串
  *
@@ -9,7 +11,7 @@ public class IntSecond2StrTest {
 
     public static void main(String[] args) {
 
-        System.out.println(convertSecond2Str((24 + 23) * 3600 + 59 * 60 + 59));
+        PrintUtil.dateLine(convertSecond2Str((24 + 23) * 3600 + 59 * 60 + 59));
 
     }
 

@@ -1,16 +1,18 @@
 package com.clei.Y2019.M11.D01;
 
+import com.clei.utils.PrintUtil;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class OrderNoTest {
     public static void main(String[] args) {
         LocalDateTime now = LocalDateTime.now();
-        System.out.println(now.getYear());
-        System.out.println(now.getMonthValue());
-        System.out.println(now.getDayOfMonth());
+        PrintUtil.dateLine(now.getYear());
+        PrintUtil.dateLine(now.getMonthValue());
+        PrintUtil.dateLine(now.getDayOfMonth());
 
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
-        System.out.println(now.format(df));
+        PrintUtil.dateLine(now.format(df));
     }
 }

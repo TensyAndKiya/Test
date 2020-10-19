@@ -1,5 +1,7 @@
 package com.clei.Y2019.M04.D22;
 
+import com.clei.utils.PrintUtil;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,9 +15,9 @@ public class StringCompareTest {
         list.add("sdate");
         list.add("sdatetime");
         list.add("sDatetime");
-        System.out.println(list);
-        Collections.sort(list,new MyStrComparator());
-        System.out.println(list);
+        PrintUtil.dateLine(list);
+        Collections.sort(list, new MyStrComparator());
+        PrintUtil.dateLine(list);
     }
 
     private static class MyStrComparator implements Comparator<String>, Serializable {

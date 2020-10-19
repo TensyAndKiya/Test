@@ -1,6 +1,8 @@
 package com.clei.Y2018.M11.D08;
 
 
+import com.clei.utils.PrintUtil;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,43 +17,43 @@ public class LittleTest {
         //  list2.add(3); bug bug
 
         //list.addAll(Arrays.asList(arr));
-        Collections.addAll(list,arr);
+        Collections.addAll(list, arr);
 
         //subList may bug bug
-        List<Integer> list3=list.subList(1,4);
-        System.out.println(list3);
+        List<Integer> list3 = list.subList(1, 4);
+        PrintUtil.dateLine(list3);
 
-        List<Integer> list4=new ArrayList<>(list3);
+        List<Integer> list4 = new ArrayList<>(list3);
 
         list3.add(18);
-        System.out.println(list3);
-        System.out.println(list4);
-        System.out.println(list);
+        PrintUtil.dateLine(list3);
+        PrintUtil.dateLine(list4);
+        PrintUtil.dateLine(list);
 
-        System.out.println(Arrays.toString(arr));
+        PrintUtil.dateLine(Arrays.toString(arr));
 
-        for(int i=0;i<arr.length-1;i++){
-            boolean change=false;
-            for(int j=0;j<arr.length-1-i;j++){
-                if(arr[j]<arr[j+1]){
-                    change=true;
-                    int temp=arr[j];
-                    arr[j]=arr[j+1];
+        for (int i = 0; i < arr.length - 1; i++) {
+            boolean change = false;
+            for (int j = 0; j < arr.length - 1 - i; j++) {
+                if (arr[j] < arr[j + 1]) {
+                    change = true;
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
                     arr[j+1]=temp;
                 }
             }
-            if(!change){
+            if (!change) {
                 break;
             }
         }
 
-        System.out.println(Arrays.toString(arr));
+        PrintUtil.dateLine(Arrays.toString(arr));
 
-        String x=new String("xxx");
-        String y="xxx";
-        String z="xxx";
-        System.out.println(x==y);
-        System.out.println(y==z);
-        System.out.println(x.equals(y));
+        String x = new String("xxx");
+        String y = "xxx";
+        String z = "xxx";
+        PrintUtil.dateLine(x == y);
+        PrintUtil.dateLine(y == z);
+        PrintUtil.dateLine(x.equals(y));
     }
 }

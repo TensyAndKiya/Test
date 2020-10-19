@@ -1,5 +1,7 @@
 package com.clei.leetcode;
 
+import com.clei.utils.PrintUtil;
+
 /**
  * 两数相加
  *
@@ -45,13 +47,13 @@ public class Algorithm002 {
         h.next = i;
         i.next = j;*/
 
-        System.out.println(getNodeVal(a));
+        PrintUtil.dateLine(getNodeVal(a));
 
-        System.out.println(getNodeVal(new Node(9)));
+        PrintUtil.dateLine(getNodeVal(new Node(9)));
 
         Node result = getNode(a,new Node(9));
 
-        System.out.println(getNodeVal(result));
+        PrintUtil.dateLine(getNodeVal(result));
 
     }
 

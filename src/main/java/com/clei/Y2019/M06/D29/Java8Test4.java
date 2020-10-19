@@ -1,8 +1,10 @@
 package com.clei.Y2019.M06.D29;
 
+import com.clei.utils.PrintUtil;
+
 public class Java8Test4 {
     public static void main(String[] args) {
-        Dog dog = () -> System.out.println("汪汪汪");
+        Dog dog = () -> PrintUtil.dateLine("汪汪汪");
         dog.run();
         Dog.protect();
         dog.bark();
@@ -21,15 +23,15 @@ interface Dog{
 
     // 默认方法
     default void run(){
-        System.out.println("跑起来");
+        PrintUtil.dateLine("跑起来");
     }
 
     default void eat(){
-        System.out.println("开饭啦");
+        PrintUtil.dateLine("开饭啦");
     }
 
     // 静态方法
     static void protect(){
-        System.out.println("保护朋友");
+        PrintUtil.dateLine("保护朋友");
     }
 }

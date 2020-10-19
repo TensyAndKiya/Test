@@ -1,5 +1,7 @@
 package com.clei.Y2019.M04.D11;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -24,6 +26,6 @@ public class SubStrTest {
                 max = max > leng ? max : leng;
             }
         }
-        System.out.println("RESULT: " + max);
+        PrintUtil.dateLine("RESULT: " + max);
     }
 }

@@ -1,6 +1,7 @@
 package com.clei.Y2019.M08.D10;
 
 import com.alibaba.fastjson.JSONObject;
+import com.clei.utils.PrintUtil;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPart;
@@ -12,7 +13,11 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.concurrent.*;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class JerseyClientTest {
     private static Client client = null;
@@ -27,7 +32,7 @@ public class JerseyClientTest {
             prefix = args[0];
             tps = Integer.parseInt(args[1]);
         }else{
-            System.out.println("参数不对！！！");
+            PrintUtil.dateLine("参数不对！！！");
         }
         doPost(tps);
     }
@@ -69,10 +74,10 @@ public class JerseyClientTest {
             }
         }
         executed ++ ;
-        if(executed == tps){
-            System.out.println("耗时 ：：" + (System.currentTimeMillis() - start) + "ms");
-            System.out.println("总数 : " + tps);
-            System.out.println("成功数 : " + success);
+        if(executed == tps) {
+            PrintUtil.dateLine("耗时 ：：" + (System.currentTimeMillis() - start) + "ms");
+            PrintUtil.dateLine("总数 : " + tps);
+            PrintUtil.dateLine("成功数 : " + success);
         }
     }
 
@@ -99,7 +104,7 @@ public class JerseyClientTest {
                 //阻塞方法
                 executor.getQueue().put(r);
             } catch (InterruptedException e) {
-                System.out.println("放入阻塞队列失败！！！");
+                PrintUtil.dateLine("放入阻塞队列失败！！！");
                 e.printStackTrace();
             }
         }

@@ -1,5 +1,7 @@
 package com.clei.leetcode;
 
+import com.clei.utils.PrintUtil;
+
 /**
  * 寻找两个有序数组的中位数
  *
@@ -35,7 +37,7 @@ public class Algorithm004 {
 
         double median = getMedian(arr1,arr2);
 
-        System.out.println("中位数: " + median);
+        PrintUtil.dateLine("中位数: " + median);
 
     }
 

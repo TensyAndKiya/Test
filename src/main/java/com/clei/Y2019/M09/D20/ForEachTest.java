@@ -1,5 +1,7 @@
 package com.clei.Y2019.M09.D20;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.Consumer;
@@ -12,10 +14,10 @@ public class ForEachTest {
         list.add("sahaki");
         // forEach语法
         for(String s : list){
-            System.out.println(s);
+            PrintUtil.dateLine(s);
         }
         // 集合forEach方法
-        list.forEach(s -> System.out.println(s));
+        list.forEach(s -> PrintUtil.dateLine(s));
     }
 
 
@@ -33,7 +35,7 @@ public class ForEachTest {
 
         @Override
         public void forEach(Consumer action) {
-            System.out.println("forEach");
+            PrintUtil.dateLine("forEach");
             for(T t : list){
                 action.accept(t);
             }

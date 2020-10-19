@@ -5,7 +5,12 @@ import com.clei.utils.PrintUtil;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
-import javax.mail.*;
+import javax.mail.Address;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -24,7 +29,7 @@ public class JavaMailTest {
             // ms.sendAttachMail(MAIL_TO);
             // ms.sendMixedMail(MAIL_TO);
         } catch (Exception e) {
-            System.out.println("邮件发送失败！！！");
+            PrintUtil.dateLine("邮件发送失败！！！");
             e.printStackTrace();
         }
     }

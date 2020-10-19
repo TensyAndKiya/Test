@@ -1,5 +1,6 @@
 package com.clei.Y2020.M06.D06;
 
+import com.clei.utils.PrintUtil;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendCallback;
@@ -29,7 +30,7 @@ public class AsyncProducer {
             producer.start();
         }catch (MQClientException e){
             e.printStackTrace();
-            System.out.println("mq 启动失败！");
+            PrintUtil.dateLine("mq 启动失败！");
             return;
         }
 
@@ -53,25 +54,25 @@ public class AsyncProducer {
                     @Override
                     public void onSuccess(SendResult sendResult) {
                         countDownLatch.countDown();
-                        System.out.println(index + " 发送成功 结果：" + sendResult);
+                        PrintUtil.dateLine(index + " 发送成功 结果：" + sendResult);
                     }
 
                     @Override
                     public void onException(Throwable throwable) {
                         countDownLatch.countDown();
                         throwable.printStackTrace();
-                        System.out.println(index + " 发送失败 ");
+                        PrintUtil.dateLine(index + " 发送失败 ");
                     }
                 });
             }
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println("mq 发送消息失败！");
+            PrintUtil.dateLine("mq 发送消息失败！");
         }
 
         boolean result = countDownLatch.await(5, TimeUnit.SECONDS);
 
-        System.out.println("result : " + result);
+        PrintUtil.dateLine("result : " + result);
 
         // 关闭
         producer.shutdown();

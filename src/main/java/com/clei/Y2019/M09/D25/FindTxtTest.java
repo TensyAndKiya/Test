@@ -1,8 +1,12 @@
 package com.clei.Y2019.M09.D25;
 
 import com.clei.utils.FileUtil;
+import com.clei.utils.PrintUtil;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 
 public class FindTxtTest {
     public static void main(String[] args) throws Exception{
@@ -21,7 +25,7 @@ public class FindTxtTest {
         String str;
         while(null != (str = br.readLine())){
             if(str.contains("PaymentResult")){
-                System.out.println(file.getName());
+                PrintUtil.dateLine(file.getName());
                 break;
             }
         }

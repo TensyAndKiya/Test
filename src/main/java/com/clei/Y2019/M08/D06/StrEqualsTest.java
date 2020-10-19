@@ -1,5 +1,7 @@
 package com.clei.Y2019.M08.D06;
 
+import com.clei.utils.PrintUtil;
+
 public class StrEqualsTest {
     public static void main(String[] args) {
         String str1 = "<REQUEST_FPXXXZ_NEW class=\"REQUEST_FPXXXZ_NEW\"><FPQQLSH>111MFWIK201908070927497M0nqA0luCk7G17V9zR4</FPQQLSH><DSPTBM>111MFWIK</DSPTBM><NSRSBH>310101000000090</NSRSBH><DDH>20190807092749M37eZ0</DDH><PDF_XZFS>2</PDF_XZFS></REQUEST_FPXXXZ_NEW>";
@@ -9,9 +11,9 @@ public class StrEqualsTest {
 
         for (int i = 0; i < str2.length(); i++) {
             if(arr1[i] != arr2[i]){
-                System.out.println("index: " + i);
-                System.out.println(str1.substring(i));
-                System.out.println(str2.substring(i));
+                PrintUtil.dateLine("index: " + i);
+                PrintUtil.dateLine(str1.substring(i));
+                PrintUtil.dateLine(str2.substring(i));
                 break;
             }
         }

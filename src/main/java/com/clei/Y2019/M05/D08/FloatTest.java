@@ -21,14 +21,14 @@ public class FloatTest {
         float b = 1987.01f;
         while(a > 200){
             a -= 200;
-            System.out.println(200);
+            PrintUtil.dateLine(200);
         }
         if(a>0){
-            System.out.println(a);
+            PrintUtil.dateLine(a);
         }
         String xxx = "asdfjalsdkfjalksdjflksad";
         if(xxx.length() > 8){
-            System.out.println(xxx.substring(xxx.length() - 8));
+            PrintUtil.dateLine(xxx.substring(xxx.length() - 8));
         }
     }
 }

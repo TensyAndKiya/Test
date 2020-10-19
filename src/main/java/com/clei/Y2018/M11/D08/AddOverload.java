@@ -1,10 +1,12 @@
 package com.clei.Y2018.M11.D08;
 
+import com.clei.utils.PrintUtil;
+
 public class AddOverload<T extends Number> {
     public static void main(String[] args){
         AddOverload<Integer> aaa=new AddOverload<>();
         int result=(int)aaa.add(3,4);
-        System.out.println(result);
+        PrintUtil.dateLine(result);
 
         TTT tt=(x,y)->x+y;
         tt.f1(3,4);

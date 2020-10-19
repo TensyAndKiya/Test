@@ -1,9 +1,8 @@
 package com.clei.Y2020.M06.D06;
 
+import com.clei.utils.PrintUtil;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.client.producer.MessageQueueSelector;
 import org.apache.rocketmq.client.producer.SendResult;
-import org.apache.rocketmq.client.producer.selector.SelectMessageQueueByHash;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
 
@@ -36,7 +35,7 @@ public class FilterProducer {
             // 发送
             SendResult result = producer.send(msg);
 
-            System.out.println(i + " 发送结果：" + result);
+            PrintUtil.dateLine(i + " 发送结果：" + result);
         }
 
         // 关闭

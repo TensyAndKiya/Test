@@ -12,9 +12,9 @@ public class RequestRateLimitTest {
 
         for (int i = 0; i < 10; i++) {
 
-            System.out.println(invoiceRequestMap.keySet().size());
+            PrintUtil.dateLine(invoiceRequestMap.keySet().size());
             long rand = (long) (Math.random() * 6);
-            System.out.println(rand * 1000);
+            PrintUtil.dateLine(rand * 1000);
             Thread.sleep(rand * 1000);
 
             // 避免短时间内多次申请

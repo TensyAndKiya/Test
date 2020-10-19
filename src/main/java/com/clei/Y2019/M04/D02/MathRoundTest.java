@@ -1,5 +1,7 @@
 package com.clei.Y2019.M04.D02;
 
+import com.clei.utils.PrintUtil;
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
@@ -8,12 +10,12 @@ public class MathRoundTest {
         double d = 123.1455858123D;
         //method 1
         BigDecimal bd = new BigDecimal(String.valueOf(d));
-        System.out.println(bd);
-        System.out.println(bd.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue());
+        PrintUtil.dateLine(bd);
+        PrintUtil.dateLine(bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
         //method 2
         DecimalFormat df = new DecimalFormat("#.00");
-        System.out.println(df.format(bd.doubleValue()));
+        PrintUtil.dateLine(df.format(bd.doubleValue()));
         //method 3
-        System.out.println(Math.round(d*100)/100f);
+        PrintUtil.dateLine(Math.round(d * 100) / 100f);
     }
 }

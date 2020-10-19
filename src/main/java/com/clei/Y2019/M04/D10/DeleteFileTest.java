@@ -1,5 +1,7 @@
 package com.clei.Y2019.M04.D10;
 
+import com.clei.utils.PrintUtil;
+
 import java.io.File;
 import java.util.Scanner;
 
@@ -10,7 +12,7 @@ public class DeleteFileTest {
     }
 
     private static void deleteTarget() {
-        System.out.println("输入文件(g || t || d)");
+        PrintUtil.dateLine("输入文件(g || t || d)");
         Scanner input = new Scanner(System.in,"UTF-8");
         char c = input.next().charAt(0);
         String folder = "dev";
@@ -38,11 +40,11 @@ public class DeleteFileTest {
                             if (f.getName().equals("target")) {
                                 //直接点用f.delete()是不行的。。因为不是空文件件，，所以要递归删除
                                 if (deleteFile(f)) {
-                                    System.out.print("删除成功！" + f.getAbsolutePath());
+                                    PrintUtil.date("删除成功！" + f.getAbsolutePath());
                                 } else {
-                                    System.out.print("删除失败！" + f.getAbsolutePath());
+                                    PrintUtil.date("删除失败！" + f.getAbsolutePath());
                                 }
-                                System.out.print(f.getAbsolutePath());
+                                PrintUtil.date(f.getAbsolutePath());
                                 break;
                             }
                         }
@@ -59,7 +61,7 @@ public class DeleteFileTest {
                         for (File f : fs) {
                             if (f.getName().equals("target")) {
                                 clear = false;
-                                System.out.println(f.getAbsolutePath());
+                                PrintUtil.dateLine(f.getAbsolutePath());
                                 break;
                             }
                         }
@@ -68,9 +70,9 @@ public class DeleteFileTest {
             }
         }
         if (clear) {
-            System.out.println(folder + "\t删除完毕！！！");
+            PrintUtil.dateLine(folder + "\t删除完毕！！！");
         } else {
-            System.out.println("NOT CLEAR!");
+            PrintUtil.dateLine("NOT CLEAR!");
         }
 
     }

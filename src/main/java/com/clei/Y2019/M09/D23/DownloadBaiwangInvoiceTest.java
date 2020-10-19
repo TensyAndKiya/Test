@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.clei.utils.Base64Util;
 import com.clei.utils.OkHttpUtil;
+import com.clei.utils.PrintUtil;
 
 /**
  * @author kiya
@@ -28,11 +29,11 @@ public class DownloadBaiwangInvoiceTest {
         obj.put("data",data);
         String result = OkHttpUtil.doPost(url,obj.toJSONString());
         JSONObject obj1 = JSON.parseObject(result);
-        System.out.println(obj1);
+        PrintUtil.dateLine(obj1);
         JSONObject obj2 = JSON.parseObject(obj1.getString("rows"));
-        System.out.println(obj2);
+        PrintUtil.dateLine(obj2);
         String str = obj2.getString("url");
-        System.out.println(str);
-        Base64Util.base64ToFile(str,"D:\\invoice1.pdf");
+        PrintUtil.dateLine(str);
+        Base64Util.base64ToFile(str, "D:\\invoice1.pdf");
     }
 }

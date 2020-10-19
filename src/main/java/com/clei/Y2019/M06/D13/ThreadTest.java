@@ -1,9 +1,15 @@
 package com.clei.Y2019.M06.D13;
 
+import com.clei.utils.PrintUtil;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 
 public class ThreadTest {
     //哈哈哈
@@ -20,13 +26,13 @@ public class ThreadTest {
         executor.submit(futureTask);
         executor.shutdown();
         try {
-            System.out.println("Task执行结果： "+futureTask.get());
+            PrintUtil.dateLine("Task执行结果： " + futureTask.get());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        System.out.println("Main线程执行完毕！");
+        PrintUtil.dateLine("Main线程执行完毕！");
     }
 }
 
@@ -39,21 +45,21 @@ class MyThread1 extends Thread{
     }
     @Override
     public void run(){
-        System.out.println("进程"+this.getName()+"运行中...");
+        PrintUtil.dateLine("进程" + this.getName() + "运行中...");
     }
 }
 
 class MyThread2 implements  Runnable{
     @Override
     public void run() {
-        System.out.println("进程"+Thread.currentThread().getName()+"运行中...");
+        PrintUtil.dateLine("进程" + Thread.currentThread().getName() + "运行中...");
     }
 }
 
 class MyThread3 implements Callable<String>{
     @Override
     public String call(){
-        System.out.println("进程"+Thread.currentThread().getName()+"运行中...");
+        PrintUtil.dateLine("进程" + Thread.currentThread().getName() + "运行中...");
         StringBuilder sb=new StringBuilder();
 
         try{
@@ -65,7 +71,7 @@ class MyThread3 implements Callable<String>{
                 sb.append(str+'\n');
             }
             br.close();
-            System.out.println("进程"+Thread.currentThread().getName()+"执行完毕!...");
+            PrintUtil.dateLine("进程" + Thread.currentThread().getName() + "执行完毕!...");
         }catch (RuntimeException e){
             sb.delete(0,sb.length());
         }catch (Exception e){

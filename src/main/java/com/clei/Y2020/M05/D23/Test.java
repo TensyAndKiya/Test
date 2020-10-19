@@ -1,5 +1,7 @@
 package com.clei.Y2020.M05.D23;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -40,7 +42,7 @@ public class Test {
 
                 if(arrB[j] - arrA[i] <= R){
 
-                    System.out.println(arrA[i] + " " + arrB[j]);
+                    PrintUtil.dateLine(arrA[i] + " " + arrB[j]);
 
                 }
 

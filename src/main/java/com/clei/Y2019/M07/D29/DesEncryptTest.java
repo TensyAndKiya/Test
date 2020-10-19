@@ -1,5 +1,6 @@
 package com.clei.Y2019.M07.D29;
 
+import com.clei.utils.PrintUtil;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -20,9 +21,9 @@ public class DesEncryptTest {
     public static void main(String[] args) throws Exception {
         String str = "abcdefghijklmnop";
         String encryptedStr = encrypt(str);
-        System.out.println(encryptedStr);
+        PrintUtil.dateLine(encryptedStr);
         String decryptedStr = decrypt(encryptedStr);
-        System.out.println(decryptedStr);
+        PrintUtil.dateLine(decryptedStr);
     }
 
     private static String encrypt(String content) throws Exception {

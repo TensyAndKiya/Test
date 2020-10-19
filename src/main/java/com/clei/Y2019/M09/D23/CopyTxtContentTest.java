@@ -1,8 +1,15 @@
 package com.clei.Y2019.M09.D23;
 
 import com.clei.utils.FileUtil;
+import com.clei.utils.PrintUtil;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 public class CopyTxtContentTest {
     public static void main(String[] args) throws Exception{
@@ -20,10 +27,10 @@ public class CopyTxtContentTest {
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file),"UTF-8"));
         String str;
         while(null != (str = br.readLine())){
-            if(str.contains("cluster")){
-                System.out.println(file.getAbsolutePath());
-                System.out.println(file.getName());
-                System.out.println("hasaki:::");
+            if(str.contains("cluster")) {
+                PrintUtil.dateLine(file.getAbsolutePath());
+                PrintUtil.dateLine(file.getName());
+                PrintUtil.dateLine("hasaki:::");
                 break;
             }
         }

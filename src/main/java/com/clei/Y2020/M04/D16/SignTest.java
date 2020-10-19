@@ -1,5 +1,7 @@
 package com.clei.Y2020.M04.D16;
 
+import com.clei.utils.PrintUtil;
+
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -14,17 +16,17 @@ public class SignTest {
 
     public static void main(String[] args) {
 
-        System.out.println(new BigDecimal("9.567").setScale(2, RoundingMode.CEILING).toString());
+        PrintUtil.dateLine(new BigDecimal("9.567").setScale(2, RoundingMode.CEILING).toString());
 
         Instant instant = Instant.ofEpochMilli(System.currentTimeMillis());
         LocalDateTime entranceTime = LocalDateTime.ofInstant(instant, ZoneId.of("GMT+8"));
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
 
-        System.out.println(entranceTime.format(dtf));
+        PrintUtil.dateLine(entranceTime.format(dtf));
 
         String json = "{'key':'value','key2':'value2'}";
 
-        System.out.println(getSHA256StrJava(json));
+        PrintUtil.dateLine(getSHA256StrJava(json));
     }
 
 

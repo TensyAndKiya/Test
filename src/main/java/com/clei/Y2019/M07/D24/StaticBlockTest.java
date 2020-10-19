@@ -1,5 +1,7 @@
 package com.clei.Y2019.M07.D24;
 
+import com.clei.utils.PrintUtil;
+
 /**
  * 验证下 一个类是否能存在多个静态代码块
  * 可以滴
@@ -19,7 +21,7 @@ public class StaticBlockTest {
 
     public static void main(String[] args) {
         for (int j = 0; j < 20; j++) {
-            System.out.println(i);
+            PrintUtil.dateLine(i);
         }
     }
 }

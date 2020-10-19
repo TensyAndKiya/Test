@@ -1,5 +1,7 @@
 package com.clei.Y2018.M11.D28;
 
+import com.clei.utils.PrintUtil;
+
 public class DeadLock {
     public static void main(String[] args) {
         String s1="老大";
@@ -24,20 +26,20 @@ class MyThread extends Thread{
     }
     @Override
     public void run(){
-        System.out.println("进程"+this.getName()+"运行中...");
-        synchronized (obj1){
-            System.out.println("获得obj1");
-            System.out.println("等待获取obj2....................");
+        PrintUtil.dateLine("进程" + this.getName() + "运行中...");
+        synchronized (obj1) {
+            PrintUtil.dateLine("获得obj1");
+            PrintUtil.dateLine("等待获取obj2....................");
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            synchronized (obj2){
-                System.out.println("获得obj1");
+            synchronized (obj2) {
+                PrintUtil.dateLine("获得obj1");
             }
         }
-        System.out.println("进程"+this.getName()+"结束");
+        PrintUtil.dateLine("进程" + this.getName() + "结束");
     }
 }
 
@@ -54,19 +56,19 @@ class MyThread1 extends Thread{
     }
     @Override
     public void run(){
-        System.out.println("进程"+this.getName()+"运行中...");
-        synchronized (obj2){
-            System.out.println("获得obj2");
-            System.out.println("等待获取obj1....................");
+        PrintUtil.dateLine("进程" + this.getName() + "运行中...");
+        synchronized (obj2) {
+            PrintUtil.dateLine("获得obj2");
+            PrintUtil.dateLine("等待获取obj1....................");
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            synchronized (obj1){
-                System.out.println("获得obj2");
+            synchronized (obj1) {
+                PrintUtil.dateLine("获得obj2");
             }
         }
-        System.out.println("进程"+this.getName()+"结束");
+        PrintUtil.dateLine("进程" + this.getName() + "结束");
     }
 }

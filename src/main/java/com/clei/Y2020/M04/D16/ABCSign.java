@@ -1,5 +1,9 @@
 package com.clei.Y2020.M04.D16;
 
+import com.clei.utils.PrintUtil;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
@@ -13,9 +17,6 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Enumeration;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.Hex;
-
 public class ABCSign {
 
     public static void main(String[] args) throws Exception{
@@ -24,7 +25,7 @@ public class ABCSign {
         String merchantCerPath = "F:\\work\\Eeparking\\ABC\\103882200110039.pfx";
         String merchantCerPassword = "abcd1234";
 
-        System.out.println(readPfxAndSha1WithRsa(str,merchantCerPath,merchantCerPassword));
+        PrintUtil.dateLine(readPfxAndSha1WithRsa(str, merchantCerPath, merchantCerPassword));
     }
 
     /**
@@ -34,9 +35,9 @@ public class ABCSign {
     public static void sha256() {
         String jsonKey = "{'key':'value'}1B4I3E3QU18C0101007F00002C32AED5";
 
-        System.out.println("A: " + getSHA256StrJava(jsonKey));// java 代码实现
+        PrintUtil.dateLine("A: " + getSHA256StrJava(jsonKey));// java 代码实现
 
-        System.out.println("B: "+getSHA256StrUseApacheCodec(jsonKey));// apache工具栏
+        PrintUtil.dateLine("B: " + getSHA256StrUseApacheCodec(jsonKey));// apache工具栏
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.clei.Y2019.M06.D13;
 
+import com.clei.utils.PrintUtil;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
@@ -31,34 +32,34 @@ class StaticProxy {
 class CglibDynamicProxy {
     void proxy(){
         // Test
-        UserDao userDao=new UserDaoMysqlImpl();
-        UserDao userDaoProxy=(UserDao) new LogHandler2().getInstance(userDao);
-        userDaoProxy.save(1,"张三");
+        UserDao userDao = new UserDaoMysqlImpl();
+        UserDao userDaoProxy = (UserDao) new LogHandler2().getInstance(userDao);
+        userDaoProxy.save(1, "张三");
         userDaoProxy.delete(1);
-        System.out.println("目标对象类型： "+userDao.getClass());
-        System.out.println("代理目标对象类型： "+userDaoProxy.getClass());
+        PrintUtil.dateLine("目标对象类型： " + userDao.getClass());
+        PrintUtil.dateLine("代理目标对象类型： " + userDaoProxy.getClass());
     }
 }
 
 //接口
 class JdkDynamicProxy {
-    void proxy(){
+    void proxy() {
         //ProxyFactory Test
-        UserDao userDao=new UserDaoMysqlImpl();
-        UserDao userDaoProxy=(UserDao) new ProxyFactory(userDao).getLogProxyInstance();
-        userDaoProxy.save(1,"张三");
-        userDaoProxy.update(1,"张三三");
+        UserDao userDao = new UserDaoMysqlImpl();
+        UserDao userDaoProxy = (UserDao) new ProxyFactory(userDao).getLogProxyInstance();
+        userDaoProxy.save(1, "张三");
+        userDaoProxy.update(1, "张三三");
         userDaoProxy.delete(1);
-        System.out.println("目标对象类型： "+userDao.getClass());
-        System.out.println("代理目标对象类型： "+userDaoProxy.getClass());
+        PrintUtil.dateLine("目标对象类型： " + userDao.getClass());
+        PrintUtil.dateLine("代理目标对象类型： " + userDaoProxy.getClass());
         //LogHandler Test
-        UserDao userDao2=new UserDaoOracleImpl();
-        UserDao userDaoProxy2=(UserDao) new LogHandler(userDao2).getInstance();
-        userDaoProxy2.save(2,"李四");
-        userDaoProxy.update(2,"李四四");
+        UserDao userDao2 = new UserDaoOracleImpl();
+        UserDao userDaoProxy2 = (UserDao) new LogHandler(userDao2).getInstance();
+        userDaoProxy2.save(2, "李四");
+        userDaoProxy.update(2, "李四四");
         userDaoProxy2.delete(2);
-        System.out.println("目标对象类型： "+userDao2.getClass());
-        System.out.println("代理目标对象类型： "+userDaoProxy2.getClass());
+        PrintUtil.dateLine("目标对象类型： " + userDao2.getClass());
+        PrintUtil.dateLine("代理目标对象类型： " + userDaoProxy2.getClass());
     }
 }
 
@@ -68,7 +69,7 @@ interface Eatable{
 
 class Cat implements Eatable{
     public void eat() {
-        System.out.println("猫吃老鼠！");
+        PrintUtil.dateLine("猫吃老鼠！");
     }
 }
 
@@ -79,14 +80,14 @@ class CatLogProxy implements Eatable{
         this.e=e;
     }
     public void eat() {
-        System.out.println("Log Start...");
+        PrintUtil.dateLine("Log Start...");
         e.eat();
         try {
             Thread.sleep(new Random().nextInt(1000));
         }catch(InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("Log End...");
+        PrintUtil.dateLine("Log End...");
     }
 }
 
@@ -100,7 +101,7 @@ class CatTimeProxy implements Eatable{
         long start=System.currentTimeMillis();
         e.eat();
         long end=System.currentTimeMillis();
-        System.out.println("运行时间："+(end-start)+"毫秒！");
+        PrintUtil.dateLine("运行时间：" + (end - start) + "毫秒！");
     }
 }
 
@@ -119,9 +120,9 @@ class LogHandler2 implements MethodInterceptor {
 
     @Override
     public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
-        System.out.println("开启日志。。。");
+        PrintUtil.dateLine("开启日志。。。");
         Object result = methodProxy.invokeSuper(o,objects);
-        System.out.println("关闭日志。。。");
+        PrintUtil.dateLine("关闭日志。。。");
         return result;
     }
 }
@@ -134,29 +135,29 @@ interface UserDao{
 
 class UserDaoMysqlImpl implements UserDao{
     public void save(int id, String name) {
-        System.out.println("Mysql执行保存！");
+        PrintUtil.dateLine("Mysql执行保存！");
     }
 
     public void delete(int id) {
-        System.out.println("Mysql执行删除！");
+        PrintUtil.dateLine("Mysql执行删除！");
     }
 
     public void update(int id, String name) {
-        System.out.println("Mysql执行修改！");
+        PrintUtil.dateLine("Mysql执行修改！");
     }
 }
 
 class UserDaoOracleImpl implements UserDao{
     public void save(int id, String name) {
-        System.out.println("Oracle执行保存！");
+        PrintUtil.dateLine("Oracle执行保存！");
     }
 
     public void delete(int id) {
-        System.out.println("Oracle执行删除！");
+        PrintUtil.dateLine("Oracle执行删除！");
     }
 
     public void update(int id, String name) {
-        System.out.println("Oracle执行修改！");
+        PrintUtil.dateLine("Oracle执行修改！");
     }
 }
 
@@ -170,9 +171,9 @@ class ProxyFactory{
 
     public Object getTransactionProxyInstance(){
         Object proxy=Proxy.newProxyInstance(obj.getClass().getClassLoader(), obj.getClass().getInterfaces(), (tempProxy,method,args) -> {
-            System.out.println("开启事务！");
-            method.invoke(obj,args);
-            System.out.println("关闭事务！");
+            PrintUtil.dateLine("开启事务！");
+            method.invoke(obj, args);
+            PrintUtil.dateLine("关闭事务！");
             return tempProxy;
         });
         return proxy;
@@ -183,9 +184,9 @@ class ProxyFactory{
             String methodName = method.getName();
             //只代理save和delete类型的方法
             if(methodName.contains("save") || methodName.contains("delete")){
-                System.out.println("开启日志！");
-                method.invoke(obj,args);
-                System.out.println("关闭日志！");
+                PrintUtil.dateLine("开启日志！");
+                method.invoke(obj, args);
+                PrintUtil.dateLine("关闭日志！");
             }else{
                 method.invoke(obj,args);
             }
@@ -205,9 +206,9 @@ class LogHandler implements InvocationHandler{
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        System.out.println("开启日志。。。");
-        method.invoke(target,args);
-        System.out.println("关闭日志。。。");
+        PrintUtil.dateLine("开启日志。。。");
+        method.invoke(target, args);
+        PrintUtil.dateLine("关闭日志。。。");
         return proxy;
     }
 

@@ -1,5 +1,6 @@
 package com.clei.Y2019.M08.D02;
 
+import com.clei.utils.PrintUtil;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -9,7 +10,7 @@ import java.io.UnsupportedEncodingException;
 public class Base64Test {
     private static String charset = "UTF-8";
     public static void main(String[] args) throws IOException {
-        System.out.println(encode("hasaki"));
+        PrintUtil.dateLine(encode("hasaki"));
     }
 
     private static String encode(String str) throws UnsupportedEncodingException {

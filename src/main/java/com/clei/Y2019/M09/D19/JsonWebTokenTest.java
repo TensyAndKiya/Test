@@ -2,6 +2,7 @@ package com.clei.Y2019.M09.D19;
 
 import com.alibaba.fastjson.JSONObject;
 import com.clei.utils.JWTUtil;
+import com.clei.utils.PrintUtil;
 import io.jsonwebtoken.Claims;
 
 import java.util.HashMap;
@@ -13,9 +14,9 @@ public class JsonWebTokenTest {
         user.put("username","zhangsan");
         user.put("password","hasaki");
         String token = JWTUtil.createToken(user);
-        System.out.println("token : " + token);
+        PrintUtil.dateLine("token : " + token);
         Claims claims = JWTUtil.parseToken(token);
         Map<String,String> obj = claims.get("obj",Map.class);
-        System.out.println(JSONObject.toJSONString(obj));
+        PrintUtil.dateLine(JSONObject.toJSONString(obj));
     }
 }

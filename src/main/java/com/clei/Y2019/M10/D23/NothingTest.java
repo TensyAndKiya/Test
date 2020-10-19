@@ -1,5 +1,7 @@
 package com.clei.Y2019.M10.D23;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +13,7 @@ public class NothingTest {
         list.add("aa");
         list.add("aa");
         list.add("aa");
-        System.out.println(list);
-        System.out.println(new Date(1571742900000L));
+        PrintUtil.dateLine(list);
+        PrintUtil.dateLine(new Date(1571742900000L));
     }
 }

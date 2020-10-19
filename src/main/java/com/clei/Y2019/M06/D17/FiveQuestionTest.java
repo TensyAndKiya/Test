@@ -1,14 +1,16 @@
 package com.clei.Y2019.M06.D17;
 
+import com.clei.utils.PrintUtil;
+
 import java.math.BigDecimal;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class FiveQuestionTest {
     public static void main(String[] args) {
-        System.out.println(q1());
-        System.out.println(q2());
-        //System.out.println(q3());
+        PrintUtil.dateLine(q1());
+        PrintUtil.dateLine(q2());
+        //PrintUtil.dateLine(q3());
         q4();
         q5();
         q6();
@@ -47,9 +49,9 @@ public class FiveQuestionTest {
     //b好
     private static void q4(){
         BigDecimal a = new BigDecimal(0.1);
-        System.out.println(a);
+        PrintUtil.dateLine(a);
         BigDecimal b = new BigDecimal("0.1");
-        System.out.println(b);
+        PrintUtil.dateLine(b);
     }
 
     //并发锁问题
@@ -60,7 +62,7 @@ public class FiveQuestionTest {
                 //需要加锁的代码
             }
         }catch (Exception e){
-            System.out.println("ERROR!!!!");
+            PrintUtil.dateLine("ERROR!!!!");
             e.printStackTrace();
         }finally {
             lock.unlock();
@@ -69,15 +71,15 @@ public class FiveQuestionTest {
 
     //触类旁通
     //证明switch是用的hashCode
-    private static void q6(){
+    private static void q6() {
         String param1 = "param";
         String param2 = "PARAM";
-        System.out.println(param1.hashCode());
-        System.out.println(param2.hashCode());
-        System.out.println(strSwitch1(param1));
-        System.out.println(strSwitch1(param2));
-        System.out.println(strSwitch2(param1));
-        System.out.println(strSwitch2(param2));
+        PrintUtil.dateLine(param1.hashCode());
+        PrintUtil.dateLine(param2.hashCode());
+        PrintUtil.dateLine(strSwitch1(param1));
+        PrintUtil.dateLine(strSwitch1(param2));
+        PrintUtil.dateLine(strSwitch2(param1));
+        PrintUtil.dateLine(strSwitch2(param2));
     }
 
     private static String strSwitch1(String param){

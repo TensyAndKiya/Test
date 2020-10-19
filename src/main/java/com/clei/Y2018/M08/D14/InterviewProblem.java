@@ -1,5 +1,7 @@
 package com.clei.Y2018.M08.D14;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +10,7 @@ import java.util.Map;
 public class InterviewProblem {
     public static void main(String[] args){
         List<Integer> result=getZhishu(100);
-        System.out.println(result);
+        PrintUtil.dateLine(result);
 
         char[] chars="abcdefabcadeffbghxx".toCharArray();
         outChar(chars);
@@ -56,7 +58,7 @@ public class InterviewProblem {
         }
         for(Map.Entry<Character,Integer> entry:map.entrySet()){
             if(entry.getValue().equals(max)){
-                System.out.println("KEY: " +entry.getKey()+"\tVALUE: "+entry.getValue());
+                PrintUtil.dateLine("KEY: " + entry.getKey() + "\tVALUE: " + entry.getValue());
             }
         }
     }

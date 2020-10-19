@@ -1,6 +1,12 @@
 package com.clei.utils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * 随机数相关工具类
@@ -13,15 +19,15 @@ public class RandomUtil {
         long begin = System.currentTimeMillis();
 
         int[] array = intArray(20000);
-        int[] randomArray = randomArray(array,10000);
+        int[] randomArray = randomArray(array, 10000);
 
         long end = System.currentTimeMillis();
-        PrintUtil.println("耗时 ： {}ms",end - begin);
+        PrintUtil.println("耗时 ： {}ms", end - begin);
 
-        System.out.println("origin : " + Arrays.toString(array));
-        System.out.println("result : " + Arrays.toString(randomArray));
+        PrintUtil.dateLine("origin : " + Arrays.toString(array));
+        PrintUtil.dateLine("result : " + Arrays.toString(randomArray));
 
-        System.out.println("size : " + randomArray.length);
+        PrintUtil.dateLine("size : " + randomArray.length);
     }
 
     // 从 0 到 n 里 选 num 个

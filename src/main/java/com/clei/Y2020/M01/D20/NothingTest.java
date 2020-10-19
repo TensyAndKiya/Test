@@ -1,5 +1,7 @@
 package com.clei.Y2020.M01.D20;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -25,6 +27,6 @@ public class NothingTest {
             }
         }
 
-        System.out.println(dateMonth);
+        PrintUtil.dateLine(dateMonth);
     }
 }

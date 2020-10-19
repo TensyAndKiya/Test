@@ -1,5 +1,7 @@
 package com.clei.Y2020.M07.D23;
 
+import com.clei.utils.PrintUtil;
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -39,7 +41,7 @@ public class UDPSocketClient {
 
         String response = new String(data,"UTF-8");
 
-        System.out.println(response);
+        PrintUtil.dateLine(response);
 
     }
 

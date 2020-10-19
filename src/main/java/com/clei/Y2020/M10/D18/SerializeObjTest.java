@@ -14,7 +14,7 @@ public class SerializeObjTest {
     public static void main(String[] args) {
 
         String[] arr = {"CC,BB", "DD,EE"};
-        System.out.println(StringUtils.join(arr, ";"));
+        PrintUtil.dateLine(StringUtils.join(arr, ";"));
 
         Vehicle vv = new Vehicle("川A00001", true);
 

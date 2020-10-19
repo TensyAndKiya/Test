@@ -1,5 +1,7 @@
 package com.clei.Y2019.M04.D09;
 
+import com.clei.utils.PrintUtil;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -16,16 +18,16 @@ public class CalendarTest {
         cal2.setTime(sdf.parse(dateStr2));
 
         //判断同一天
-        System.out.println(cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH) );
+        PrintUtil.dateLine(cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH));
 
-        if( cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
+        if (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
                 && cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)
-                && cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH) ){
-            System.out.println(true);
+                && cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH)) {
+            PrintUtil.dateLine(true);
         }
-        System.out.println(false);
+        PrintUtil.dateLine(false);
 
-        System.out.println(sdf.format(cal1.getTime()));
-        System.out.println(sdf.format(cal2.getTime()));
+        PrintUtil.dateLine(sdf.format(cal1.getTime()));
+        PrintUtil.dateLine(sdf.format(cal2.getTime()));
     }
 }

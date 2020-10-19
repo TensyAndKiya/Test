@@ -1,5 +1,6 @@
 package com.clei.Y2019.M07.D31;
 
+import com.clei.utils.PrintUtil;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -33,7 +34,7 @@ public class PostMadlyTest {
         Response response = okHttpClient.newCall(request).execute();
         if(null != response && response.isSuccessful()){
             String result = response.body().string();
-            System.out.println("result: " + result);
+            PrintUtil.dateLine("result: " + result);
         }
         if(null != response){
             response.close();

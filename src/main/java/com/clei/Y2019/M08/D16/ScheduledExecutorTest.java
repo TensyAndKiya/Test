@@ -11,8 +11,8 @@ import java.util.concurrent.TimeUnit;
 
 public class ScheduledExecutorTest {
     public static void main(String[] args) {
-        System.out.println("开始时间 " + DateUtil.format(LocalDateTime.now()));
-        postAgain("","内容",3);
+        PrintUtil.dateLine("开始时间 " + DateUtil.format(LocalDateTime.now()));
+        postAgain("", "内容", 3);
     }
     private static void postAgain(final String url,final String json,final int times){
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();

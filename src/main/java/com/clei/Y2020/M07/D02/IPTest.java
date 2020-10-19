@@ -1,9 +1,11 @@
 package com.clei.Y2020.M07.D02;
 
+import com.clei.utils.PrintUtil;
+
 public class IPTest {
     public static void main(String[] args) {
 
-        System.out.println(validateIP("255.255.255.256"));
+        PrintUtil.dateLine(validateIP("255.255.255.256"));
 
     }
 

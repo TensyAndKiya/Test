@@ -1,7 +1,14 @@
 package com.clei.Y2019.M04.D18;
 
+import com.clei.utils.PrintUtil;
+
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 //用于一个表根据季度分表之后的查询。。分页是最骚的。。蓝瘦
 public class SeasonTableTest {
@@ -11,19 +18,19 @@ public class SeasonTableTest {
 
     public static void main(String[] args) throws Exception{
         /*Scanner input = new Scanner(System.in,"UTF-8");
-        System.out.println("时间格式 yyyy MM dd HH mm ss");
+        PrintUtil.dateLine("时间格式 yyyy MM dd HH mm ss");
         while(true){
-            System.out.println("请输入开始时间： xxxx xx xx xx xx xx(输入xx结束程序)");
+            PrintUtil.dateLine("请输入开始时间： xxxx xx xx xx xx xx(输入xx结束程序)");
             String str = input.nextLine();
             if(str.equals("xx")){
                 break;
             }
             if(null == str || str.length() == 0){
-                System.out.println("请输入正确内容：");
+                PrintUtil.dateLine("请输入正确内容：");
                 continue;
             }
             Date startDate = SDF.parse(str);
-            System.out.println("请输入结束时间： xxxx xx xx xx xx xx(输入xx结束程序)");
+            PrintUtil.dateLine("请输入结束时间： xxxx xx xx xx xx xx(输入xx结束程序)");
             str = input.nextLine();
             if(str.equals("xx")){
                 break;
@@ -37,8 +44,8 @@ public class SeasonTableTest {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(endDate.getTime()));
         for (int i = 0; i < 12; i++) {
-            calendar.add(Calendar.MONTH,-1);
-            System.out.println("第"+i+"次");
+            calendar.add(Calendar.MONTH, -1);
+            PrintUtil.dateLine("第" + i + "次");
             List<TableObject> tables = calcTable(calendar.getTime(),endDate);
             int limit = 10;
             int page = 3;
@@ -126,7 +133,7 @@ public class SeasonTableTest {
         //倒序一下。。让老的表在前面
         Collections.reverse(tables);
         for(TableObject to : tables){
-            System.out.println(to);
+            PrintUtil.dateLine(to);
         }
         int from = (page-1) * limit ;
         int sum = 0;
@@ -160,7 +167,7 @@ public class SeasonTableTest {
     }
 
     private static void execSql(String tableName,int limit,int offset){
-        System.out.println("SELECT * FROM " + tableName + " LIMIT " + limit +" OFFSET " + offset);
+        PrintUtil.dateLine("SELECT * FROM " + tableName + " LIMIT " + limit + " OFFSET " + offset);
     }
 
     private static int getRandom(){

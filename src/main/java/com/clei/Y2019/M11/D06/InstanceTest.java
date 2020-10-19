@@ -1,5 +1,7 @@
 package com.clei.Y2019.M11.D06;
 
+import com.clei.utils.PrintUtil;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -12,14 +14,14 @@ public class InstanceTest {
 
         String endDate = "2019-11-01";
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate eDate = LocalDate.parse(endDate,df);
+        LocalDate eDate = LocalDate.parse(endDate, df);
 
-        System.out.println(ChronoUnit.DAYS.between(eDate,LocalDate.now()));
-        System.out.println(ChronoUnit.DAYS.between(LocalDate.now(),eDate));
+        PrintUtil.dateLine(ChronoUnit.DAYS.between(eDate, LocalDate.now()));
+        PrintUtil.dateLine(ChronoUnit.DAYS.between(LocalDate.now(), eDate));
 
 
         Object oo = null;
-        System.out.println(("" + oo).equals("null"));
+        PrintUtil.dateLine(("" + oo).equals("null"));
 
 
         List<String> list = new ArrayList<>();
@@ -27,24 +29,24 @@ public class InstanceTest {
         list.add("bb");
         list.add("cc");
 
-        String[] array = new String[]{"aa","bb","cc"};
+        String[] array = new String[]{"aa", "bb", "cc"};
 
         Object obj = list;
         Object obj2 = array;
 
-        System.out.println(obj.getClass().getCanonicalName());
-        System.out.println(obj2.getClass().getCanonicalName());
+        PrintUtil.dateLine(obj.getClass().getCanonicalName());
+        PrintUtil.dateLine(obj2.getClass().getCanonicalName());
 
         Collection c = (Collection) obj;
-        System.out.println(c.size());
+        PrintUtil.dateLine(c.size());
 
         String[] arr = (String[]) obj2;
-        System.out.println(arr.length);
+        PrintUtil.dateLine(arr.length);
 
-        System.out.println(obj instanceof Collection);
-        System.out.println(obj instanceof List);
-        System.out.println(obj instanceof ArrayList);
+        PrintUtil.dateLine(obj instanceof Collection);
+        PrintUtil.dateLine(obj instanceof List);
+        PrintUtil.dateLine(obj instanceof ArrayList);
 
-        System.out.println(obj2 instanceof String);
+        PrintUtil.dateLine(obj2 instanceof String);
     }
 }

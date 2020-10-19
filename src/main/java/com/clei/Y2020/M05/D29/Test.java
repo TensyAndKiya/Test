@@ -1,5 +1,7 @@
 package com.clei.Y2020.M05.D29;
 
+import com.clei.utils.PrintUtil;
+
 import java.time.LocalDate;
 
 public class Test {
@@ -8,7 +10,7 @@ public class Test {
         String s1 = "aa";
         String s2 = "aa";
 
-        System.out.println("s1 == s2 : " + s1 == s2 );
+        PrintUtil.dateLine("s1 == s2 : " + (s1 == s2));
 
         Test test = null;
 
@@ -19,7 +21,7 @@ public class Test {
     }
 
     public static void test(){
-        System.out.println("哈哈哈");
+        PrintUtil.dateLine("哈哈哈");
     }
 
     /**
@@ -47,9 +49,9 @@ public class Test {
         LocalDate targetDate = date.plusDays(dayDiff);
 
         if(dayDiff < 0 || targetDate.isAfter(monthEnd)){
-            System.out.println(0);
+            PrintUtil.dateLine(0);
         }else {
-            System.out.println(targetDate);
+            PrintUtil.dateLine(targetDate);
         }
 
     }

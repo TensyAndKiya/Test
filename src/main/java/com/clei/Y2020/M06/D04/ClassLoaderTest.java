@@ -1,5 +1,7 @@
 package com.clei.Y2020.M06.D04;
 
+import com.clei.utils.PrintUtil;
+
 import java.lang.reflect.Method;
 
 /**
@@ -15,26 +17,26 @@ public class ClassLoaderTest {
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
-        System.out.println(classLoader);
+        PrintUtil.dateLine(classLoader);
 
         ClassLoader parent = classLoader.getParent();
 
-        System.out.println(parent);
+        PrintUtil.dateLine(parent);
 
         ClassLoader grandFather = parent.getParent();
 
         // 找不到ExtClassLoader的父Loader，
         // 原因是Bootstrap Loader（引导类加载器）是用C语言实现的，
         // 找不到一个确定的返回父Loader的方式，于是就返回null
-        System.out.println(grandFather);
+        PrintUtil.dateLine(grandFather);
 
         // rt.jar
-        System.out.println(new String().getClass().getClassLoader());
+        PrintUtil.dateLine(new String().getClass().getClassLoader());
 
         // 类加载的三种方式
         ClassLoader cl = ClassLoaderTest.class.getClassLoader();
 
-        System.out.println(cl == classLoader);
+        PrintUtil.dateLine(cl == classLoader);
 
         // 1.不会执行初始化块
         // cl.loadClass("com.clei.Y2020.M06.D04.UnLoad");
@@ -75,7 +77,7 @@ public class ClassLoaderTest {
 
         test.invoke(object);
 
-        System.out.println(object);
+        PrintUtil.dateLine(object);
     }
 
 }

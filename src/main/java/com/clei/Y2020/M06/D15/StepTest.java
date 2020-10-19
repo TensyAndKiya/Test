@@ -1,5 +1,7 @@
 package com.clei.Y2020.M06.D15;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,11 +21,11 @@ public class StepTest {
         // 这个太慢了 先注释掉
         // step(step);
 
-        System.out.println(num);
+        PrintUtil.dateLine(num);
 
         Long temp = tempNewStep(step);
 
-        System.out.println(temp);
+        PrintUtil.dateLine(temp);
 
     }
 

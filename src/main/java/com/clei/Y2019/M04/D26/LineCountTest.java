@@ -1,7 +1,17 @@
 package com.clei.Y2019.M04.D26;
 
-import java.io.*;
-import java.util.*;
+import com.clei.utils.PrintUtil;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class LineCountTest {
     private static String LOG_File = "C:\\Users\\liudg\\Desktop\\logs\\2019-04-23 error\\all_info_0426.log";
@@ -19,7 +29,7 @@ public class LineCountTest {
         List<LineCount> list = mapToEC(countMap);
         Collections.sort(list);
         for (int i =0;i < 100 && i < list.size();i ++){
-            System.out.println(list.get(i));
+            PrintUtil.dateLine(list.get(i));
         }
     }
 

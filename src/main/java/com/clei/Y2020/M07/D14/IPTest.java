@@ -1,5 +1,6 @@
 package com.clei.Y2020.M07.D14;
 
+import com.clei.utils.PrintUtil;
 import com.clei.utils.StringUtil;
 
 public class IPTest {
@@ -8,7 +9,7 @@ public class IPTest {
 
         String ip = "192.168.1.22";
 
-        System.out.println(isLimitIp(ip));
+        PrintUtil.dateLine(isLimitIp(ip));
 
     }
 

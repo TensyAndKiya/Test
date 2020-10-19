@@ -1,5 +1,6 @@
 package com.clei.Y2020.M06.D15;
 
+import com.clei.utils.PrintUtil;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
 
@@ -13,6 +14,6 @@ public class SpringTest {
 
         Tiger tiger = xmlBeanFactory.getBean(Tiger.class);
 
-        System.out.println(tiger);
+        PrintUtil.dateLine(tiger);
     }
 }

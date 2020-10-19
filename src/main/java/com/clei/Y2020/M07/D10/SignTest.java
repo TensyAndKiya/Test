@@ -2,6 +2,7 @@ package com.clei.Y2020.M07.D10;
 
 import com.clei.utils.EncryptUtil;
 import com.clei.utils.MD5Util;
+import com.clei.utils.PrintUtil;
 
 import java.util.TreeMap;
 
@@ -10,8 +11,8 @@ public class SignTest {
     public static void main(String[] args) throws Exception {
 
         //1505785966215
-        System.out.println(System.currentTimeMillis());
-        System.out.println(1505785966215L);
+        PrintUtil.dateLine(System.currentTimeMillis());
+        PrintUtil.dateLine(1505785966215L);
 
         String str = "中文";
 
@@ -19,15 +20,15 @@ public class SignTest {
 
         String md52 = MD5Util.md5(str);
 
-        String md53 = MD5Util.md5Str(str,0);
+        String md53 = MD5Util.md5Str(str, 0);
 
-        System.out.println(md51);
+        PrintUtil.dateLine(md51);
 
-        System.out.println(md52);
+        PrintUtil.dateLine(md52);
 
-        System.out.println(md53);
+        PrintUtil.dateLine(md53);
 
-        System.out.println(EncryptUtil.sha1(md51));
+        PrintUtil.dateLine(EncryptUtil.sha1(md51));
 
 
         TreeMap<String,Object> param = new TreeMap<>();
@@ -60,14 +61,14 @@ public class SignTest {
 
         String signStr = appSecret + publicParamStr + "中文汉字哦" + appSecret;
 
-        System.out.println(signStr);
+        PrintUtil.dateLine(signStr);
 
-        String sign = EncryptUtil.md5(signStr,"UTF-8",true);
+        String sign = EncryptUtil.md5(signStr, "UTF-8", true);
 
-        System.out.println(EncryptUtil.md5(signStr));
-        System.out.println(EncryptUtil.md5(signStr,"UTF8",false));
+        PrintUtil.dateLine(EncryptUtil.md5(signStr));
+        PrintUtil.dateLine(EncryptUtil.md5(signStr, "UTF8", false));
 
-        System.out.println(sign);
+        PrintUtil.dateLine(sign);
     }
 
 }

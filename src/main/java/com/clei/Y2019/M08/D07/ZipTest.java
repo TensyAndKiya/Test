@@ -1,11 +1,14 @@
 package com.clei.Y2019.M08.D07;
 
+import com.clei.utils.PrintUtil;
 import com.thoughtworks.xstream.core.util.Base64Encoder;
 import sun.misc.BASE64Decoder;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.zip.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 
 /**
@@ -16,15 +19,15 @@ public class ZipTest {
     private final static String CHARSET_UTF8 = "UTF-8";
     public static void main(String[] args) throws Exception {
         String str = "我是你滴大爷爷呀！";
-        System.out.println("原文 ：" + str);
+        PrintUtil.dateLine("原文 ：" + str);
         String zipStr = zip(str);
-        System.out.println("压缩后 ：" + zipStr);
-        System.out.println("解压后 ：" + unZip(zipStr));
+        PrintUtil.dateLine("压缩后 ：" + zipStr);
+        PrintUtil.dateLine("解压后 ：" + unZip(zipStr));
     }
 
     private static String zip(String str) throws Exception{
         byte[] bytes = str.getBytes(CHARSET_UTF8);
-        System.out.println(bytes.length);
+        PrintUtil.dateLine(bytes.length);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ZipOutputStream zos = new ZipOutputStream(bos);
         ZipEntry zipEntry = new ZipEntry("zip");
@@ -33,7 +36,7 @@ public class ZipTest {
         zos.write(bytes);
         zos.closeEntry();
         bytes = bos.toByteArray();
-        System.out.println(bytes.length);
+        PrintUtil.dateLine(bytes.length);
         String result = new Base64Encoder().encode(bytes);
         bos.close();
         return result;

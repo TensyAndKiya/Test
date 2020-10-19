@@ -1,33 +1,40 @@
 package com.clei.Y2018.M08.D13;
 
-import java.util.*;
+import com.clei.utils.PrintUtil;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class InterviewProblem {
-    public static void main(String[] args){
-        Map<String,String> map=new HashMap<>();
-        map.put("key1","key1");
-        map.put("key2","key2");
-        System.out.println(map.get("key1"));
-        System.out.println(map.remove("key1"));
-        System.out.println(map.remove("key3"));
-        System.out.println(map.put("key1","new key1"));
-        System.out.println(map.put("key2","new key2"));
+    public static void main(String[] args) {
+        Map<String, String> map = new HashMap<>();
+        map.put("key1", "key1");
+        map.put("key2", "key2");
+        PrintUtil.dateLine(map.get("key1"));
+        PrintUtil.dateLine(map.remove("key1"));
+        PrintUtil.dateLine(map.remove("key3"));
+        PrintUtil.dateLine(map.put("key1", "new key1"));
+        PrintUtil.dateLine(map.put("key2", "new key2"));
 
         //
-        User u1=new User(5,"张三");
-        User u2=new User(4,"李四");
-        User u3=new User(3,"王五");
-        List<User> list =new ArrayList<>();
+        User u1 = new User(5, "张三");
+        User u2 = new User(4, "李四");
+        User u3 = new User(3, "王五");
+        List<User> list = new ArrayList<>();
         list.add(u1);
         list.add(u2);
         list.add(u3);
-        System.out.println(list);
+        PrintUtil.dateLine(list);
         //list.sort(new UserComparator());
         //Collections.sort(list,new UserComparator());
         Collections.sort(list);
-        System.out.println(list);
+        PrintUtil.dateLine(list);
         Collections.reverse(list);
-        System.out.println(list);
+        PrintUtil.dateLine(list);
     }
 }
 

@@ -1,7 +1,16 @@
 package com.clei.Y2019.M04.D23;
 
-import java.io.*;
-import java.util.*;
+import com.clei.utils.PrintUtil;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class ExceptionCountTest {
     private static String LOG_File = "C:\\Users\\liudg\\Desktop\\logs\\2019-04-23 error\\all_error_0505.log";
@@ -22,11 +31,11 @@ public class ExceptionCountTest {
             }
         }
         br.close();
-        System.out.println("筛选完毕");
+        PrintUtil.dateLine("筛选完毕");
         List<ExceptionCount> list = mapToEC(countMap);
         Collections.sort(list);
         for(ExceptionCount ec : list){
-            System.out.println(ec);
+            PrintUtil.dateLine(ec);
         }
     }
 

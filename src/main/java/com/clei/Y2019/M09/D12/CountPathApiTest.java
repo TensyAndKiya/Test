@@ -1,6 +1,11 @@
 package com.clei.Y2019.M09.D12;
 
-import java.io.*;
+import com.clei.utils.PrintUtil;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +27,9 @@ public class CountPathApiTest {
         int size = apiList.size();
         if(size > 0){
             for(String s : apiList){
-                System.out.println(s);
+                PrintUtil.dateLine(s);
             }
-            System.out.println("\nSize : " + size);
+            PrintUtil.dateLine("\nSize : " + size);
         }
     }
 

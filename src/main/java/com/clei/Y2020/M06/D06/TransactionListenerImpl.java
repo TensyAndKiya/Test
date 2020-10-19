@@ -1,6 +1,7 @@
 package com.clei.Y2020.M06.D06;
 
 import com.clei.utils.DateUtil;
+import com.clei.utils.PrintUtil;
 import org.apache.rocketmq.client.producer.LocalTransactionState;
 import org.apache.rocketmq.client.producer.TransactionListener;
 import org.apache.rocketmq.common.message.Message;
@@ -24,7 +25,7 @@ public class TransactionListenerImpl implements TransactionListener {
     @Override
     public LocalTransactionState executeLocalTransaction(Message message, Object o) {
 
-        System.out.println(DateUtil.currentDateTime() + " message : " + message + " obj : " + o);
+        PrintUtil.dateLine(DateUtil.currentDateTime() + " message : " + message + " obj : " + o);
 
         Integer value = transactionIndex.getAndIncrement();
 
@@ -38,7 +39,7 @@ public class TransactionListenerImpl implements TransactionListener {
     @Override
     public LocalTransactionState checkLocalTransaction(MessageExt messageExt) {
 
-        System.out.println(DateUtil.currentDateTime() + "  " + messageExt);
+        PrintUtil.dateLine(DateUtil.currentDateTime() + "  " + messageExt);
 
         Integer status = localTrans.get(messageExt.getTransactionId());
 

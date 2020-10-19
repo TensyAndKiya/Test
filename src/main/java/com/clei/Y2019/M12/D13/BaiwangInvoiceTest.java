@@ -110,8 +110,8 @@ public class BaiwangInvoiceTest {
 
     private static boolean newInvoice(Map<String,Object> invoicingRecord,Map<String,Object> tokenMap,float jshj,String userName){
 
-        System.out.println(i);
-        i ++;
+        PrintUtil.dateLine(i);
+        i++;
 
         JSONObject params = new JSONObject();
         JSONObject dataParams = new JSONObject();

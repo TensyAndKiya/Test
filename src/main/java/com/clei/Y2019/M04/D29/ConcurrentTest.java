@@ -1,5 +1,7 @@
 package com.clei.Y2019.M04.D29;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -12,15 +14,15 @@ public class ConcurrentTest {
     private static final int LOOP = 5000000;
     public static void main(String[] args) {
         Set<String> set = new HashSet<>();
-        Map<String,Object> map = new ConcurrentHashMap<>();
+        Map<String, Object> map = new ConcurrentHashMap<>();
         putInSet(set);
         putInMap(map);
         traverseSet(set);
         traverseMap(map);
         setRemove(set);
         mapRemove(map);
-        System.out.println(set.remove("998"));
-        System.out.println(map.remove("998"));
+        PrintUtil.dateLine(set.remove("998"));
+        PrintUtil.dateLine(map.remove("998"));
     }
 
 
@@ -30,7 +32,7 @@ public class ConcurrentTest {
             set.add("String " + i);
         }
         long end = System.currentTimeMillis();
-        System.out.println("set耗时：" + (end - begin));
+        PrintUtil.dateLine("set耗时：" + (end - begin));
     }
 
     private static void putInMap(Map<String,Object> map){
@@ -40,7 +42,7 @@ public class ConcurrentTest {
             map.put("String " + i,obj);
         }
         long end = System.currentTimeMillis();
-        System.out.println("map耗时：" + (end - begin));
+        PrintUtil.dateLine("map耗时：" + (end - begin));
     }
 
     private static void traverseSet(Set<String> set){
@@ -51,7 +53,7 @@ public class ConcurrentTest {
             }
         }
         long end = System.currentTimeMillis();
-        System.out.println("set耗时：" + (end - begin));
+        PrintUtil.dateLine("set耗时：" + (end - begin));
     }
 
     private static void traverseMap(Map<String,Object> map){
@@ -62,7 +64,7 @@ public class ConcurrentTest {
             }
         });
         long end = System.currentTimeMillis();
-        System.out.println("map耗时：" + (end - begin));
+        PrintUtil.dateLine("map耗时：" + (end - begin));
     }
 
     private static void setRemove(Set<String> set){
@@ -71,7 +73,7 @@ public class ConcurrentTest {
         set.remove("String 500000");
         set.remove("String 999999");
         long end = System.currentTimeMillis();
-        System.out.println("set耗时：" + (end - begin));
+        PrintUtil.dateLine("set耗时：" + (end - begin));
     }
 
     private static void mapRemove(Map<String,Object> map){
@@ -80,7 +82,7 @@ public class ConcurrentTest {
         map.remove("String 500000");
         map.remove("String 999999");
         long end = System.currentTimeMillis();
-        System.out.println("map耗时：" + (end - begin));
+        PrintUtil.dateLine("map耗时：" + (end - begin));
     }
 
 }

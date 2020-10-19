@@ -1,5 +1,7 @@
 package com.clei.Y2019.M04.D11;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.Random;
 
 public class MergeSortStudy {
@@ -9,12 +11,12 @@ public class MergeSortStudy {
         int[] arr = rand.ints(0,100).limit(20).toArray();
 
         for (int i : arr) {
-            System.out.print(i+"\t");
+            PrintUtil.date(i + "\t");
         }
-        mergeSort(arr, 0, arr.length-1);
-        System.out.println();
+        mergeSort(arr, 0, arr.length - 1);
+        PrintUtil.dateLine();
         for (int i : arr) {
-            System.out.print(i+"\t");
+            PrintUtil.date(i + "\t");
         }
     }
 

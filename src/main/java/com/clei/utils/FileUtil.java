@@ -3,9 +3,19 @@ package com.clei.utils;
 import com.alibaba.fastjson.JSONObject;
 import com.jdcloud.sdk.utils.StringUtils;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FileUtil {
 
@@ -175,12 +185,12 @@ public class FileUtil {
             for (int i = 0; i < array.length; i++) {
 
                 if(i % 16 == 0){
-                    System.out.println();
+                    PrintUtil.dateLine();
                 }else if(i % 2 == 0){
-                    System.out.print(' ');
+                    PrintUtil.date(' ');
                 }
 
-                System.out.print(array[i]);
+                PrintUtil.date(array[i]);
             }
         }
     }
@@ -231,7 +241,7 @@ public class FileUtil {
         }
 
         for (FileSize fs : list){
-            System.out.println(fs.toString(tempUnit));
+            PrintUtil.dateLine(fs.toString(tempUnit));
         }
     }
 

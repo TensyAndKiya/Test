@@ -3,6 +3,7 @@ package com.clei.Y2019.M12.D25;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.clei.utils.DateUtil;
+import com.clei.utils.PrintUtil;
 import com.clei.utils.RequestUtils;
 import sun.misc.BASE64Encoder;
 
@@ -13,7 +14,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * 百旺开票测试2
@@ -60,11 +65,11 @@ public class BaiwangInvoiceService2 {
 
         String contentStr = content.toJSONString();
 
-        System.out.println("content : " + contentStr);
+        PrintUtil.dateLine("content : " + contentStr);
 
         contentStr = new BASE64Encoder().encodeBuffer(contentStr.getBytes("UTF-8")).replaceAll("\r","").replaceAll("\n","");
 
-        System.out.println("contentStr : " + contentStr);
+        PrintUtil.dateLine("contentStr : " + contentStr);
 
         String contentMD5 = MD5(contentStr.getBytes("UTF-8"));
 
@@ -78,15 +83,14 @@ public class BaiwangInvoiceService2 {
         JSONObject outerInfo = outerInfo(cInfo,contentStr,encryptStr);
 
 
+        // PrintUtil.dateLine("contentKey : " + encryptStr);
 
-        // System.out.println("contentKey : " + encryptStr);
-
-        System.out.println("final : " + outerInfo.toJSONString());
+        PrintUtil.dateLine("final : " + outerInfo.toJSONString());
 
 
         String result = RequestUtils.getHttpConnectResult(outerInfo.toJSONString(),"https://dev.fapiao.com:18944/fpt-dsqz/invoice");
 
-        System.out.println("result : " + result);
+        PrintUtil.dateLine("result : " + result);
 
 
     }
@@ -135,7 +139,7 @@ public class BaiwangInvoiceService2 {
 
         obj.put("interface",interfaceInfo);
 
-        System.out.println(obj.toJSONString());
+        PrintUtil.dateLine(obj.toJSONString());
 
         return obj;
 
