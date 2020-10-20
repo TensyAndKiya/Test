@@ -1,5 +1,6 @@
 package com.clei.Y2019.M06.D29;
 
+import com.clei.obj.Person;
 import com.clei.utils.PrintUtil;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class Java8Test5 {
         list.add(new Person("陈某",24,1));
 
         // 找出姓王的
-        List<Person> listWang = list.stream().filter( p -> p.getName().startsWith("王")).collect(Collectors.toList());
+        List<Person> listWang = list.stream().filter(p -> p.getName().startsWith("王")).collect(Collectors.toList());
         listWang.forEach(System.out :: println);
         // 找出女人的数目
         long girlCount = list.stream().filter(v -> v.getSex() == 0).count();
@@ -36,50 +37,5 @@ public class Java8Test5 {
         // 所有人
         String everyone = list.stream().map(Person::getName).collect(Collectors.joining(","));
         PrintUtil.dateLine(everyone);
-    }
-}
-
-class Person{
-    private String name;
-    private int age;
-    private int sex;
-
-    public Person(String name,int age,int sex){
-        this.name = name;
-        this.age = age;
-        this.sex = sex;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public int getSex() {
-        return sex;
-    }
-
-    public void setSex(int sex) {
-        this.sex = sex;
-    }
-
-    @Override
-    public String toString() {
-        return "Person{" +
-                "name='" + name + '\'' +
-                ", age=" + age +
-                ", sex=" + (sex == 1 ? "男" : "女") +
-                '}';
     }
 }
