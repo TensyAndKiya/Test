@@ -15,8 +15,8 @@ public class JDSMS0Test {
         message.put("account",account);
         message.put("ukey", MD5Util.md5("" + Math.random()));
         JSONObject messageData = new JSONObject();
-        messageData.put("phones","18408244077");
-        messageData.put("content","赵客缦胡缨，吴钩霜雪明。银鞍照白马，飒沓如流星。");
+        messageData.put("phones", "184XXXXXXXX");
+        messageData.put("content", "赵客缦胡缨，吴钩霜雪明。银鞍照白马，飒沓如流星。");
         messageData.put("sign","【客户签名1】");
         message.put("data",messageData);
         String result = OkHttpUtil.doPost(url,message.toJSONString());

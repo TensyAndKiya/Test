@@ -51,9 +51,9 @@ public class BaiwangInvoiceService3 {
 
         iInfo.put("taxNo","");
         iInfo.put("invoiceTitle","陈某");
-        iInfo.put("address","中国四川");
-        iInfo.put("phone","18408244088");
-        iInfo.put("bankName","中国人民银行");
+        iInfo.put("address", "中国四川");
+        iInfo.put("phone", "184XXXXXXXX");
+        iInfo.put("bankName", "中国人民银行");
         iInfo.put("bankAccount","12345678");
         iInfo.put("amount","1.00");
         iInfo.put("email","yueyaye@163.com");

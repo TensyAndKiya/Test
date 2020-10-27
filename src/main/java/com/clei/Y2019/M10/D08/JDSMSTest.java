@@ -17,7 +17,7 @@ public class JDSMSTest {
     public static void main(String[] args) {
         String accessKeyId = "";
         String secretAccessKey = "";
-        List<String> phoneList = Arrays.asList("18408244077");
+        List<String> phoneList = Arrays.asList("184XXXXXXXX");
         List<String> params = Arrays.asList("4077");
 
         CredentialsProvider credentialsProvider = new StaticCredentialsProvider(accessKeyId,secretAccessKey);

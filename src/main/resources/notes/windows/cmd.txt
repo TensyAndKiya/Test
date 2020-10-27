@@ -27,9 +27,13 @@ tasklist | findstr 1234
 # 也可以在任务管理器里根据pid找到对应程序 杀死
 taskkill /f /t /pid 1234也可以杀
 
+# 根据启动命令行找到进程id
+wmic process where "caption = 'java.exe' and commandline like '%server_1.properties%'" get processid
+
 
 # 结束任务
-taskkill /f /t /pid
+taskkill /f /t /pid 12345
+taskkill /f /t /im java.exe
 /f 强制 /t 进程树 /pid 指定进程id /im image name
 
 # 定时关机

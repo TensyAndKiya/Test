@@ -52,7 +52,7 @@ public class EleInvoiceTest {
         paramMap.put("secret_id","485abd5ade61437e90240b70b8943267");
         paramMap.put("secret_key","43aca2dccb0544b4922dff6ccd4e1be1");
         paramMap.put("address","某路某号1111");
-        paramMap.put("phone","18408244077");
+        paramMap.put("phone","184XXXXXXXX");
         paramMap.put("bank","中国银行");
         paramMap.put("account","01234567890");
         Map<String,Object> invoicingRecord = new HashMap<>();
@@ -125,7 +125,7 @@ public class EleInvoiceTest {
             invoiceHeader.put("GHFQYLX", "03");
         }
         // 必填？
-        invoiceHeader.put("GHF_SJ", "18408244077");
+        invoiceHeader.put("GHF_SJ", "184XXXXXXXX");
         invoiceHeader.put("GHF_EMAIL", invoicingRecord.get("e_mail").toString());
         invoiceHeader.put("KPY", drawer);
         invoiceHeader.put("KPLX", "1");

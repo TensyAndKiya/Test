@@ -187,7 +187,7 @@ public class XmlXstreamTest {
         invoiceHeader.setXhfyhzh("saleAccountNo");
         invoiceHeader.setGhfmc("个人");
         invoiceHeader.setGhfqylx("03");
-        invoiceHeader.setGhfsj("18408244077");
+        invoiceHeader.setGhfsj("184XXXXXXXX");
         invoiceHeader.setGhfemail("yueyaye@163.com");
         invoiceHeader.setKpy("张三");
         // invoiceHeader.setSky("收款人");
