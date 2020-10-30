@@ -5,7 +5,7 @@ import com.clei.utils.PrintUtil;
 /**
  * 将秒数转为 23:59:33字符串
  *
- * @author chenlei51
+ * @author KIyA
  */
 public class IntSecond2StrTest {
 

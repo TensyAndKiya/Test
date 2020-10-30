@@ -116,21 +116,8 @@ public class DateUtil {
     }
 
     public static String format(TemporalAccessor temporal, String pattern) {
-        validateStr(pattern);
-        DateTimeFormatter dateTimeFormatter = FORMATTER_MAP.get(pattern);
-        if (null != dateTimeFormatter) {
-            return format(temporal, dateTimeFormatter);
-        } else {
-            try {
-                dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
-                String result = format(temporal, dateTimeFormatter);
-                //放入格式化器map里
-                FORMATTER_MAP.put(pattern, dateTimeFormatter);
-                return result;
-            } catch (Exception e) {
-                throw new RuntimeException(e.getMessage());
-            }
-        }
+        DateTimeFormatter dateTimeFormatter = getDateTimeFormatter(pattern);
+        return format(temporal, dateTimeFormatter);
     }
 
     private static String format(TemporalAccessor temporal, DateTimeFormatter dateTimeFormatter) {
@@ -191,7 +178,6 @@ public class DateUtil {
         return parse(date, QUERY);
     }
 
-
     public static <T> T parse(String date, TemporalQuery<T> query) {
         return parse(date, DATE_TIME_FORMATTER, query);
     }
@@ -201,21 +187,8 @@ public class DateUtil {
     }
 
     public static <T> T parse(String date, String pattern, TemporalQuery<T> query) {
-        validateStr(pattern);
-        DateTimeFormatter dateTimeFormatter = FORMATTER_MAP.get(pattern);
-        if (null != dateTimeFormatter) {
-            return parse(date, dateTimeFormatter, query);
-        } else {
-            try {
-                dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
-                T result = parse(date, dateTimeFormatter, query);
-                //放入格式化器map里
-                FORMATTER_MAP.put(pattern, dateTimeFormatter);
-                return result;
-            } catch (Exception e) {
-                throw new RuntimeException(e.getMessage());
-            }
-        }
+        DateTimeFormatter dateTimeFormatter = getDateTimeFormatter(pattern);
+        return parse(date, dateTimeFormatter, query);
     }
 
     private static <T> T parse(String date, DateTimeFormatter dateTimeFormatter, TemporalQuery<T> query) {
@@ -254,5 +227,26 @@ public class DateUtil {
         if (null == str || "".equals(str)) {
             throw new RuntimeException("传入字符串为" + null == str ? "null！" : "空串！");
         }
+    }
+
+    /**
+     * 根据pattern获取DateTimeFormatter
+     *
+     * @param pattern
+     * @return
+     */
+    private static DateTimeFormatter getDateTimeFormatter(String pattern) {
+        validateStr(pattern);
+        DateTimeFormatter dateTimeFormatter = FORMATTER_MAP.get(pattern);
+        if (null == dateTimeFormatter) {
+            try {
+                dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
+                //放入格式化器map里
+                FORMATTER_MAP.put(pattern, dateTimeFormatter);
+            } catch (Exception e) {
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+        return dateTimeFormatter;
     }
 }

@@ -40,27 +40,25 @@ public class BaiwangInvoiceService2 {
         cInfo.put("taxNo","110109500321655");
         cInfo.put("companyName","百旺电子测试2");
         cInfo.put("address","南山区蛇口、");
-        cInfo.put("phone","83484949");
-        cInfo.put("bankName","xx银行、");
-        cInfo.put("bankAccount","88888888888");
-        cInfo.put("taxRate","0.09");
-        cInfo.put("drawer","张三");
-        cInfo.put("reviewer","李四");
-        cInfo.put("payee","王五");
+        cInfo.put("phone", "83484949");
+        cInfo.put("bankName", "xx银行、");
+        cInfo.put("bankAccount", "88888888888");
+        cInfo.put("taxRate", "0.09");
+        cInfo.put("drawer", "张三");
+        cInfo.put("reviewer", "李四");
+        cInfo.put("payee", "王五");
 
-        iInfo.put("taxNo","");
-        iInfo.put("invoiceTitle","陈某");
-        iInfo.put("address","中国四川");
-        iInfo.put("phone","18408244088");
-        iInfo.put("bankName","中国人民银行");
-        iInfo.put("bankAccount","12345678");
-        iInfo.put("amount","1.00");
-        iInfo.put("email","yueyaye@163.com");
-
-
+        iInfo.put("taxNo", "");
+        iInfo.put("invoiceTitle", "陈某");
+        iInfo.put("address", "中国四川");
+        iInfo.put("phone", "184XXXXXXXX");
+        iInfo.put("bankName", "中国人民银行");
+        iInfo.put("bankAccount", "12345678");
+        iInfo.put("amount", "1.00");
+        iInfo.put("email", "yueyaye@163.com");
 
 
-        JSONObject content = requestData(cInfo,iInfo);
+        JSONObject content = requestData(cInfo, iInfo);
         // content = content.replaceAll("\r","").replaceAll("\n","");
 
         String contentStr = content.toJSONString();

@@ -2,11 +2,17 @@ package com.clei.Y2020.M10.D27;
 
 import com.clei.utils.DateUtil;
 import com.clei.utils.PrintUtil;
+import com.clei.utils.SystemUtil;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 根据两个日期字符串，输出从开始到结束日期间的所有日期
+ *
+ * @author KIyA
+ */
 public class EpochDayTest {
 
     public static void main(String[] args) {
@@ -31,6 +37,8 @@ public class EpochDayTest {
         }
 
         list.forEach(PrintUtil::println);
+
+        SystemUtil.pause("");
     }
 
 }
