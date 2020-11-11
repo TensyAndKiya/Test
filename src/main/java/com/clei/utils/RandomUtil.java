@@ -18,26 +18,36 @@ public class RandomUtil {
     public static void main(String[] args) {
         long begin = System.currentTimeMillis();
 
-        int[] array = intArray(20000);
-        int[] randomArray = randomArray(array, 10000);
+        int[] array = intArray(20);
+        int[] randomArray = randomArray(array, 10);
 
         long end = System.currentTimeMillis();
         PrintUtil.println("耗时 ： {}ms", end - begin);
 
         PrintUtil.dateLine("origin : " + Arrays.toString(array));
         PrintUtil.dateLine("result : " + Arrays.toString(randomArray));
+        shuffle(randomArray);
+        PrintUtil.dateLine("shuffle result : " + Arrays.toString(randomArray));
 
         PrintUtil.dateLine("size : " + randomArray.length);
     }
 
     // 从 0 到 n 里 选 num 个
-    public static int[] randomArray(int[] array,int num){
+    public static int[] randomArray(int[] array, int num) {
         int length = array.length;
+
+        if (length == num) {
+            return array;
+        }
+
+        if (length < num) {
+            throw new RuntimeException("数组太短");
+        }
 
         // 1000里选 900个 == 1000里选 100个
         boolean other = false;
         int[] originArray = array;
-        if(num > length / 2){
+        if (num > length / 2) {
             other = true;
             num = length - num;
         }
@@ -46,73 +56,101 @@ public class RandomUtil {
 
         // 筛选出的 set
         outer:
-        while (set.size() < num){
+        while (set.size() < num) {
             // 还需要多少个数字
             int tempNum = num - set.size();
             // 长度为n倍tempNum 的 数组(n > 1)
             // 下面两个都是应对一次生成没有满足的状况
             // 使用tempNum而不是num保证 需要的数字越来越少的时候 生成的数组越来越小 浪费少
             // 使用array.length 而不是 length 保证 不会出现IndexOutOfBoundsException
-            int[] randomIntArray = randomIntArray(tempNum * 3 / 2 ,0,array.length);
+            int[] randomIntArray = randomIntArray(tempNum * 3 / 2, 0, array.length);
 
-            for(int i : randomIntArray){
+            for (int i : randomIntArray) {
                 set.add(array[i]);
 
-                if(num == set.size()){
+                if (num == set.size()) {
                     break outer;
                 }
             }
-            array = getLastArray(array,set);
+            array = getLastArray(array, set);
         }
 
         //
-        if(other){
-            return getLastArray(originArray,set);
+        if (other) {
+            return getLastArray(originArray, set);
         }
 
         return set.stream().mapToInt(i -> i).toArray();
     }
 
     /**
-     * array 里 的值 不在 collection 里 的 凑一个array
-     * @param array
-     * @param collection
+     * 打乱数组顺序
+     *
+     * @param arr
      * @return
      */
-    private static int[] getLastArray(int[] array, Collection<Integer> collection) {
-        int[] newArray = new int[array.length - collection.size()];
+    public static <T> void shuffle(T[] arr) {
+        int length = arr.length;
 
-        int j = 0;
-        for (int i : array){
-            if(!collection.contains(i)){
-                newArray[j] = i;
-                j ++;
-            }
+        if (length < 2) {
+            throw new RuntimeException("数组太短");
         }
 
-        return newArray;
+        Random rand = new Random();
+
+        int index = length;
+
+        while (index > 0) {
+            int r = rand.nextInt(index);
+            swap(arr, r, --index);
+        }
+    }
+
+    /**
+     * 打乱数组顺序
+     *
+     * @param arr
+     * @return
+     */
+    public static void shuffle(int[] arr) {
+        int length = arr.length;
+
+        if (length < 2) {
+            throw new RuntimeException("数组太短");
+        }
+
+        Random rand = new Random();
+
+        int index = length;
+
+        while (index > 0) {
+            int r = rand.nextInt(index);
+            swap(arr, r, --index);
+        }
     }
 
     /**
      * 获得一个长度为num 大小在origin 到 bound[左闭右开]之间的int数组
+     *
      * @param num
      * @param origin
      * @param bound
      * @return
      */
-    public static int[] randomIntArray(int num,int origin,int bound){
+    public static int[] randomIntArray(int num, int origin, int bound) {
         Random random = new Random();
-        int[] array = random.ints(num,origin,bound).toArray();
+        int[] array = random.ints(num, origin, bound).toArray();
         return array;
     }
 
     /**
      * 获得一个长度为i 的 从0到i[左闭右开] 的 int数组
+     *
      * @param i
      * @return
      */
-    public static int[] intArray(int i){
-        if(i < 0){
+    public static int[] intArray(int i) {
+        if (i < 0) {
             return null;
         }
         int[] array = new int[i];
@@ -125,11 +163,12 @@ public class RandomUtil {
 
     /**
      * 获得一个长度为i 的 从0到i[左闭右开] 的 Integer 列表
+     *
      * @param i
      * @return
      */
-    public static List<Integer> integerList(int i){
-        if(i < 1){
+    public static List<Integer> integerList(int i) {
+        if (i < 1) {
             return null;
         }
 
@@ -139,5 +178,52 @@ public class RandomUtil {
             list.add(j);
         }
         return list;
+    }
+
+    /**
+     * 交换T数组两个数位置
+     *
+     * @param arr
+     * @param i
+     * @param j
+     */
+    public static <T> void swap(T[] arr, int i, int j) {
+        T t = arr[i];
+        arr[i] = arr[j];
+        arr[j] = t;
+    }
+
+    /**
+     * 交换int数组两个数位置
+     *
+     * @param arr
+     * @param i
+     * @param j
+     */
+    public static void swap(int[] arr, int i, int j) {
+        int t = arr[i];
+        arr[i] = arr[j];
+        arr[j] = t;
+    }
+
+    /**
+     * array 里 的值 不在 collection 里 的 凑一个array
+     *
+     * @param array
+     * @param collection
+     * @return
+     */
+    private static int[] getLastArray(int[] array, Collection<Integer> collection) {
+        int[] newArray = new int[array.length - collection.size()];
+
+        int j = 0;
+        for (int i : array) {
+            if (!collection.contains(i)) {
+                newArray[j] = i;
+                j++;
+            }
+        }
+
+        return newArray;
     }
 }

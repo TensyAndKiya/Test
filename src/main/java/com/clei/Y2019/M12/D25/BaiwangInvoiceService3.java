@@ -27,63 +27,50 @@ import java.util.UUID;
 public class BaiwangInvoiceService3 {
 
     public static void main(String[] args) throws Exception {
-
-        LocalDateTime now = LocalDateTime.now();
-
-
-
         String aesKey = "加密加密加密加密";
 
-        Map<String,Object> cInfo = new HashMap<>();
-        Map<String,Object> iInfo = new HashMap<>();
+        Map<String, Object> cInfo = new HashMap<>();
+        Map<String, Object> iInfo = new HashMap<>();
 
-        cInfo.put("appId","");
-        cInfo.put("taxNo","税号");
-        cInfo.put("companyName","百旺电子测试2");
-        cInfo.put("address","南山区蛇口、");
-        cInfo.put("phone","83484949");
-        cInfo.put("bankName","xx银行、");
-        cInfo.put("bankAccount","88888888888");
-        cInfo.put("taxRate","0.09");
-        cInfo.put("drawer","张三");
-        cInfo.put("reviewer","李四");
-        cInfo.put("payee","王五");
+        cInfo.put("appId", "");
+        cInfo.put("taxNo", "税号");
+        cInfo.put("companyName", "百旺电子测试2");
+        cInfo.put("address", "南山区蛇口、");
+        cInfo.put("phone", "83484949");
+        cInfo.put("bankName", "xx银行、");
+        cInfo.put("bankAccount", "88888888888");
+        cInfo.put("taxRate", "0.09");
+        cInfo.put("drawer", "张三");
+        cInfo.put("reviewer", "李四");
+        cInfo.put("payee", "王五");
 
-        iInfo.put("taxNo","");
-        iInfo.put("invoiceTitle","陈某");
+        iInfo.put("taxNo", "");
+        iInfo.put("invoiceTitle", "陈某");
         iInfo.put("address", "中国四川");
         iInfo.put("phone", "184XXXXXXXX");
         iInfo.put("bankName", "中国人民银行");
-        iInfo.put("bankAccount","12345678");
-        iInfo.put("amount","1.00");
-        iInfo.put("email","yueyaye@163.com");
+        iInfo.put("bankAccount", "12345678");
+        iInfo.put("amount", "1.00");
+        iInfo.put("email", "yueyaye@163.com");
 
-
-
-
-        String content = requestData(cInfo,iInfo);
+        String content = requestData(cInfo, iInfo);
         // content = content.replaceAll("\r","").replaceAll("\n","");
 
         PrintUtil.dateLine("content " + content);
 
         String contentMD5 = MD5(content.getBytes("UTF-8"));
 
-        byte[] encryptBytes = encrypt(contentMD5.getBytes("UTF-8"),aesKey);
+        byte[] encryptBytes = encrypt(contentMD5.getBytes("UTF-8"), aesKey);
 
-        String encryptStr = new BASE64Encoder().encodeBuffer(encryptBytes).replaceAll("\r","").replaceAll("\n","");
+        String encryptStr = new BASE64Encoder().encodeBuffer(encryptBytes).replaceAll("\r", "").replaceAll("\n", "");
 
-
-
-
-        String outerInfo = outerInfo(cInfo,content,encryptStr);
-
+        String outerInfo = outerInfo(cInfo, content, encryptStr);
 
         // PrintUtil.dateLine("contentKey : " + encryptStr);
 
         PrintUtil.dateLine("final : " + outerInfo);
 
-
-        String result = RequestUtils.getHttpConnectResult(outerInfo,"https://dev.fapiao.com:19444/fpt-dsqz/invoice");
+        String result = RequestUtils.getHttpConnectResult(outerInfo, "https://dev.fapiao.com:19444/fpt-dsqz/invoice");
 
         PrintUtil.dateLine("result : " + result);
 
@@ -103,29 +90,26 @@ public class BaiwangInvoiceService3 {
         PrintUtil.dateLine("content : " + returnContent);
         byte[] base64 = Base64Util.base64decode(returnContent);
 
-
         PrintUtil.dateLine(new String(base64, "utf-8"));
 
         PrintUtil.dateLine("length1 : " + base64.length);
-        byte[] aesBytes = EncryptUtil.decryptAES(base64,aesKey);
-        String finalResult = new String(EncryptUtil.decryptAES(aesBytes,aesKey));
+        byte[] aesBytes = EncryptUtil.decryptAES(base64, aesKey);
+        String finalResult = new String(EncryptUtil.decryptAES(aesBytes, aesKey));
 
         PrintUtil.dateLine(finalResult);
-
-
     }
 
     // 外层信息
-    private static String outerInfo(Map<String,Object> companyInfo,String content,String contentKey) throws UnsupportedEncodingException {
+    private static String outerInfo(Map<String, Object> companyInfo, String content, String contentKey) throws UnsupportedEncodingException {
 
-        String now = DateUtil.format(LocalDateTime.now(),"yyyy-MM-dd HH:mm:ss");
-        String today = now.substring(0,10);
+        String now = DateUtil.format(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss");
+        String today = now.substring(0, 10);
 
         String requestCode = "DZFPQZ";
         String interfaceCode = "DFXJ1001";
 
         String dataExchangeId = requestCode + interfaceCode + today
-                + UUID.randomUUID().toString().replaceAll("-","").substring(0,9);
+                + UUID.randomUUID().toString().replaceAll("-", "").substring(0, 9);
 
         StringBuffer sb = new StringBuffer("");
 
@@ -138,7 +122,7 @@ public class BaiwangInvoiceService3 {
         sb.append("\"requestCode\": \"DZFPQZ\",");
         sb.append("\"requestTime\": \"").append(new Date()).append("\",");
         sb.append("\"responseCode\": \"Ds\",");
-        sb.append("\"dataExchangeId\": \"").append(dataExchangeId).append( "\"");
+        sb.append("\"dataExchangeId\": \"").append(dataExchangeId).append("\"");
         sb.append("},");
         sb.append("\"returnStateInfo\": {");
         sb.append("\"returnCode\": \"\",");
@@ -161,11 +145,11 @@ public class BaiwangInvoiceService3 {
     }
 
     // 请求数据
-    private static String requestData(Map<String,Object> companyInfo,Map<String,Object> requestInfo) throws UnsupportedEncodingException {
+    private static String requestData(Map<String, Object> companyInfo, Map<String, Object> requestInfo) throws UnsupportedEncodingException {
 
         // 停哪儿成都信息科技有限公司
         String company = "TEST";
-        String fpqqlsh = company + DateUtil.format(LocalDateTime.now(),"yyyyMMddHHmmssSSS").substring(2,15)
+        String fpqqlsh = company + DateUtil.format(LocalDateTime.now(), "yyyyMMddHHmmssSSS").substring(2, 15)
                 + new Random().nextInt(10);
 
         StringBuffer content = new StringBuffer("{");
@@ -173,13 +157,13 @@ public class BaiwangInvoiceService3 {
         content.append("\"FPQQLSH\": \"" + fpqqlsh + "\",");
         content.append("\"ZSFS\": \"0\",");
         content.append("\"KPLX\": \"0\",");
-        content.append("\"XSF_NSRSBH\": \"" + companyInfo.get("taxNo") +  "\",");
+        content.append("\"XSF_NSRSBH\": \"" + companyInfo.get("taxNo") + "\",");
         content.append("\"XSF_MC\": \"" + companyInfo.get("companyName") + "\",");
         content.append("\"XSF_DZDH\": \"" + companyInfo.get("address") + companyInfo.get("phone") + "\",");
         content.append("\"XSF_YHZH\": \"" + companyInfo.get("bankName") + companyInfo.get("bankAccount") + "\",");
         // 购买方纳税人识别号
         Object taxNo = requestInfo.get("taxNo");
-        if(notEmpty(taxNo)){
+        if (notEmpty(taxNo)) {
             content.append("\"GMF_NSRSBH\": \"" + taxNo + "\",");
         }
         content.append("\"GMF_MC\": \"" + requestInfo.get("invoiceTitle") + "\",");
@@ -187,13 +171,13 @@ public class BaiwangInvoiceService3 {
         // 购买方地址电话
         Object address2 = requestInfo.get("address");
         Object phone2 = requestInfo.get("phone");
-        if(notEmpty(address2) && notEmpty(phone2)){
+        if (notEmpty(address2) && notEmpty(phone2)) {
             content.append("\"GMF_DZDH\": \"" + address2 + phone2 + "\",");
         }
         // 购买方银行账号
         Object bankName2 = requestInfo.get("bankName");
         Object bankAccount2 = requestInfo.get("bankAccount");
-        if(notEmpty(bankName2) && notEmpty(bankAccount2)){
+        if (notEmpty(bankName2) && notEmpty(bankAccount2)) {
             content.append("\"GMF_YHZH\": \"" + bankName2 + bankAccount2 + "\",");
         }
 
@@ -212,15 +196,15 @@ public class BaiwangInvoiceService3 {
         BigDecimal taxRate = new BigDecimal(companyInfo.get("taxRate").toString());
 
         // 合计税额
-        BigDecimal hjse = amount.multiply(taxRate).divide(BigDecimal.ONE.add(taxRate),4, RoundingMode.HALF_UP).setScale(2,BigDecimal.ROUND_HALF_UP);
+        BigDecimal hjse = amount.multiply(taxRate).divide(BigDecimal.ONE.add(taxRate), 4, RoundingMode.HALF_UP).setScale(2, BigDecimal.ROUND_HALF_UP);
         // 合计金额
         BigDecimal hjje = amount.subtract(hjse);
 
         content.append("\"YFP_DM\": \"\",");
         content.append("\"YFP_HM\": \"\",");
         content.append("\"JSHJ\": \"" + amount + "\",");
-        content.append("\"HJJE\": \""+ hjje +"\",");
-        content.append("\"HJSE\": \""+ hjse +"\",");
+        content.append("\"HJJE\": \"" + hjje + "\",");
+        content.append("\"HJSE\": \"" + hjse + "\",");
         content.append("\"KCE\": \"\",");
         content.append("\"BZ\": \"\",");
         content.append("\"HYLX\": \"\",");
@@ -250,8 +234,8 @@ public class BaiwangInvoiceService3 {
         content.append("\"GGXH\": \"\",");
         content.append("\"DW\": \"\",");
         content.append("\"XMSL\": \"1\",");
-        content.append("\"XMDJ\": \"" + hjje+ "\",");
-        content.append("\"XMJE\": \"" + hjje +"\",");
+        content.append("\"XMDJ\": \"" + hjje + "\",");
+        content.append("\"XMJE\": \"" + hjje + "\",");
         content.append("\"SL\": \"" + taxRate + "\",");
         content.append("\"SE\": \"" + hjse + "\",");
         content.append("\"BY1\": \"\",");
@@ -266,12 +250,12 @@ public class BaiwangInvoiceService3 {
         PrintUtil.dateLine("content " + content.toString());
 
         String str = new BASE64Encoder().encodeBuffer(content.toString().getBytes("UTF-8"))
-                .replaceAll("\r","").replaceAll("\n","");
+                .replaceAll("\r", "").replaceAll("\n", "");
 
-        return str ;
+        return str;
     }
 
-    private static boolean notEmpty(Object obj){
+    private static boolean notEmpty(Object obj) {
         return null != obj && 0 != obj.toString().length();
     }
 
@@ -281,7 +265,7 @@ public class BaiwangInvoiceService3 {
         byte[] b = md5.digest();
         StringBuffer buf = new StringBuffer("");
 
-        for(int offset = 0; offset < b.length; ++offset) {
+        for (int offset = 0; offset < b.length; ++offset) {
             int i = b[offset];
             if (i < 0) {
                 i += 256;

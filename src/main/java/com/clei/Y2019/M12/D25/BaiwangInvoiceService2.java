@@ -27,10 +27,6 @@ public class BaiwangInvoiceService2 {
 
     public static void main(String[] args) throws Exception {
 
-        LocalDateTime now = LocalDateTime.now();
-
-
-
         String aesKey = "5EE6C2C11DD421F2";
 
         Map<String,Object> cInfo = new HashMap<>();
