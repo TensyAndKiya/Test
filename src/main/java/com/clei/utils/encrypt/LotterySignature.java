@@ -100,7 +100,7 @@ public class LotterySignature {
         params.remove("sign");
 
         StringBuffer content = new StringBuffer();
-        List<String> keys = new ArrayList<String>(params.keySet());
+        List<String> keys = new ArrayList<>(params.keySet());
         Collections.sort(keys);
 
         for (int i = 0; i < keys.size(); i++) {

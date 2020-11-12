@@ -9,17 +9,19 @@ import java.util.Random;
 import java.util.Set;
 
 /**
- * 随机数相关工具类
+ * 数组相关工具类
+ *
+ * @author KIyA
  */
-public class RandomUtil {
+public class ArrayUtil {
     // 想法1
     // 1 从1到1000里随机选取100个
 
     public static void main(String[] args) {
         long begin = System.currentTimeMillis();
 
-        int[] array = intArray(20);
-        int[] randomArray = randomArray(array, 10);
+        int[] array = intArray(0);
+        int[] randomArray = randomArray(array, 0);
 
         long end = System.currentTimeMillis();
         PrintUtil.println("耗时 ： {}ms", end - begin);
@@ -130,33 +132,77 @@ public class RandomUtil {
     }
 
     /**
+     * 获得一个长度为num 大小在origin 到 bound[左闭右开]之间的乱序int数组
+     *
+     * @param num
+     * @param origin
+     * @param bound
+     * @param repeatable
+     * @return
+     */
+    public static int[] shuffleArray(int num, int origin, int bound, boolean repeatable) {
+        int[] arr = randomIntArray(num, origin, bound, repeatable);
+        shuffle(arr);
+        return arr;
+    }
+
+    /**
      * 获得一个长度为num 大小在origin 到 bound[左闭右开]之间的int数组
      *
      * @param num
      * @param origin
      * @param bound
+     * @param repeatable
      * @return
      */
-    public static int[] randomIntArray(int num, int origin, int bound) {
-        Random random = new Random();
-        int[] array = random.ints(num, origin, bound).toArray();
-        return array;
+    public static int[] randomIntArray(int num, int origin, int bound, boolean repeatable) {
+        if (repeatable) {
+            return randomIntArray(num, origin, bound);
+        } else {
+            if (num < 0 || bound - origin <= num) {
+                throw new RuntimeException("参数错误");
+            }
+
+            int[] arr = intArray(bound - origin, origin, bound);
+            int[] result = randomArray(arr, num);
+            return result;
+        }
     }
 
     /**
-     * 获得一个长度为i 的 从0到i[左闭右开] 的 int数组
+     * 获得一个长度为i 的 从0到Integer.MAX_VALUE[左闭右开] 的 int数组
      *
      * @param i
      * @return
      */
     public static int[] intArray(int i) {
-        if (i < 0) {
-            return null;
+        return intArray(i, 0);
+    }
+
+    /**
+     * 获得一个长度为i 的 from到Integer.MAX_VALUE[左闭右开] 的 int数组
+     *
+     * @param i
+     * @return
+     */
+    public static int[] intArray(int i, int from) {
+        return intArray(i, from, Integer.MAX_VALUE);
+    }
+
+    /**
+     * 获得一个长度为i 的 from到to[左闭右开] 的 int数组
+     *
+     * @param i
+     * @return
+     */
+    public static int[] intArray(int i, int from, int to) {
+        if (i < 0 || to - from < i) {
+            throw new RuntimeException("参数错误");
         }
         int[] array = new int[i];
 
         for (int j = 0; j < i; j++) {
-            array[j] = j;
+            array[j] = j + from;
         }
         return array;
     }
@@ -207,6 +253,24 @@ public class RandomUtil {
     }
 
     /**
+     * 将数字num插入到数组的i位置
+     *
+     * @param arr
+     * @param num
+     * @param i
+     * @param endIndex
+     */
+    public static void insert(int[] arr, int num, int i, int endIndex) {
+        if (i < 0 || i > arr.length - 1 || endIndex <= i) {
+            throw new RuntimeException("参数错误");
+        }
+        for (int j = endIndex; j > i + 1; j--) {
+            arr[j - 1] = arr[j - 2];
+        }
+        arr[i] = num;
+    }
+
+    /**
      * array 里 的值 不在 collection 里 的 凑一个array
      *
      * @param array
@@ -225,5 +289,23 @@ public class RandomUtil {
         }
 
         return newArray;
+    }
+
+    /**
+     * 获得一个长度为num 大小在origin 到 bound[左闭右开]之间的int数组
+     * 允许重复的
+     *
+     * @param num
+     * @param origin
+     * @param bound
+     * @return
+     */
+    private static int[] randomIntArray(int num, int origin, int bound) {
+        if (num < 0 || bound - origin <= num) {
+            throw new RuntimeException("参数错误");
+        }
+        Random random = new Random();
+        int[] array = random.ints(num, origin, bound).toArray();
+        return array;
     }
 }
