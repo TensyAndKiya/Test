@@ -39,26 +39,18 @@ public class MergeSort {
 
         while (p1 <= mid && p2 <= end) {
             if (arr[p1] < arr[p2]) {
-                temp[k] = arr[p1];
-                p1++;
-                k++;
+                temp[k++] = arr[p1++];
             } else {
-                temp[k] = arr[p2];
-                p2++;
-                k++;
+                temp[k++] = arr[p2++];
             }
         }
 
         while (p1 <= mid) {
-            temp[k] = arr[p1];
-            k++;
-            p1++;
+            temp[k++] = arr[p1++];
         }
 
         while (p2 <= end) {
-            temp[k] = arr[p2];
-            k++;
-            p2++;
+            temp[k++] = arr[p2++];
         }
 
         for (int i = start; i < end + 1; i++) {
