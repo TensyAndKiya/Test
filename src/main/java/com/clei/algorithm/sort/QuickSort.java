@@ -23,7 +23,7 @@ public class QuickSort {
         sort(arr, 0, arr.length - 1);
     }
 
-    public static void sort(int[] arr, int low, int high) {
+    private static void sort(int[] arr, int low, int high) {
         if (low >= high) {
             return;
         }
