@@ -70,7 +70,42 @@ public class NumUtil {
         return sb.toString();
     }
 
+    /**
+     * num^(i - 1) + ... + num^0
+     *
+     * @param num
+     * @param i
+     * @return
+     */
+    public static int getPowSum(int num, int i) {
+        int sum = 0;
+        while (i > 0) {
+            sum += getPow(num, --i);
+        }
+        return sum;
+    }
+
+    /**
+     * num的i次方 num^i
+     *
+     * @param num
+     * @param i
+     * @return
+     */
+    public static int getPow(int num, int i) {
+        if (i < 0) {
+            throw new RuntimeException("参数错误");
+        }
+        int result = 1;
+        while (i > 0) {
+            result *= num;
+            i--;
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
+        System.out.println(getPowSum(3, 4));
 
         PrintUtil.dateLine(transRadix("x", 36, 10));
     }

@@ -1,4 +1,4 @@
-package com.clei.obj;
+package com.clei.entity;
 
 /**
  * 常用到的一些简单类 人

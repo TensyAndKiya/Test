@@ -1,7 +1,7 @@
 package com.clei.Y2020.M10.D19;
 
 import com.alibaba.fastjson.JSONObject;
-import com.clei.obj.Person;
+import com.clei.entity.Person;
 import com.clei.utils.PrintUtil;
 
 /**

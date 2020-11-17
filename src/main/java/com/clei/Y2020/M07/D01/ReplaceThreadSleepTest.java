@@ -19,7 +19,7 @@ public class ReplaceThreadSleepTest {
 
     public static void main(String[] args) throws Exception{
 
-        useTimer();
+        // useTimer();
 
         useScheduledExecutorService();
     }
@@ -53,17 +53,16 @@ public class ReplaceThreadSleepTest {
      * 使用ScheduledExecutorService
      */
     private static void useScheduledExecutorService(){
-
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
         PrintUtil.dateLine(System.currentTimeMillis() + " - ScheduledExecutorService");
 
         executor.schedule(() -> {
             PrintUtil.dateLine(System.currentTimeMillis() + " - ScheduledExecutorService Hello World!");
-        },1000L, TimeUnit.MILLISECONDS);
+        }, 8000L, TimeUnit.MILLISECONDS);
 
         // 关闭
-        // executor.shutdown();
+        executor.shutdown();
 
     }
 
