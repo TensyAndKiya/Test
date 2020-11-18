@@ -11,11 +11,16 @@ import java.util.List;
  */
 public class GraphNode {
 
+    private String name;
+
     private int weight = Integer.MAX_VALUE;
 
     private List<GraphLine> lines = new ArrayList<>();
 
-    public GraphNode() {
+    private String path;
+
+    public GraphNode(String name) {
+        this.name = name;
     }
 
     public void addLines(GraphLine... arr) {
@@ -24,6 +29,14 @@ public class GraphNode {
 
     public void addLines(List<GraphLine> lines) {
         this.lines.addAll(lines);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getWeight() {
@@ -38,5 +51,11 @@ public class GraphNode {
         return lines;
     }
 
+    public String getPath() {
+        return path;
+    }
 
+    public void setPath(String path) {
+        this.path = path;
+    }
 }

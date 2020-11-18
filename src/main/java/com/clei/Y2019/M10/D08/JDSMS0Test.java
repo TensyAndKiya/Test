@@ -8,7 +8,7 @@ import com.clei.utils.PrintUtil;
 public class JDSMS0Test {
     private final static String account = "aaa";
     private final static String password = "bbb";
-    private final static String url = "http://116.196.117.211:5555/jdPayResult";
+    private final static String url = "http://127.0.0.1:8888/jdPayResult";
     public static void main(String[] args) {
         JSONObject message = new JSONObject();
         message.put("password",password);

@@ -47,7 +47,7 @@ public class PrintUtil {
      * @param obj
      */
     public static void dateLine(Object obj) {
-        println(DateUtil.currentDateTime() + " - " + obj);
+        println(DateUtil.currentDateTime() + ' ' + obj);
     }
 
     /**
@@ -57,18 +57,20 @@ public class PrintUtil {
      * @param args
      */
     public static void dateLine(final String str, Object... args) {
-        println(DateUtil.currentDateTime() + " - " + str, args);
+        String head = DateUtil.currentDateTime() + ' ' + str;
+        println(head, args);
     }
 
     /**
      * 打印当前日期 + 数据 + 换行
      *
-     * @param 是否打印毫秒数
+     * @param ms   是否打印毫秒数
      * @param str
      * @param args
      */
     public static void dateLine(boolean ms, final String str, Object... args) {
-        println(DateUtil.currentDateTime(ms) + " - " + str, args);
+        String head = DateUtil.currentDateTime(ms) + " [" + Thread.currentThread().getName() + "] " + str;
+        println(head, args);
     }
 
     /**
@@ -151,5 +153,14 @@ public class PrintUtil {
             sb.append(cause.toString() + LINEFEED);
         }
         return sb.toString();
+    }
+
+    /**
+     * 获得当前线程名
+     *
+     * @return
+     */
+    private static String getThreadName() {
+        return Thread.currentThread().getName();
     }
 }

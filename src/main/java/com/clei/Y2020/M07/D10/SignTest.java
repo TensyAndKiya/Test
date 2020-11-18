@@ -10,17 +10,13 @@ public class SignTest {
 
     public static void main(String[] args) throws Exception {
 
-        //1505785966215
-        PrintUtil.dateLine(System.currentTimeMillis());
-        PrintUtil.dateLine(1505785966215L);
-
         String str = "中文";
 
         String md51 = EncryptUtil.md5(str);
 
         String md52 = MD5Util.md5(str);
 
-        String md53 = MD5Util.md5Str(str, 0);
+        String md53 = MD5Util.md5(str, 0);
 
         PrintUtil.dateLine(md51);
 
@@ -29,7 +25,6 @@ public class SignTest {
         PrintUtil.dateLine(md53);
 
         PrintUtil.dateLine(EncryptUtil.sha1(md51));
-
 
         TreeMap<String,Object> param = new TreeMap<>();
         // 接口名
@@ -63,12 +58,8 @@ public class SignTest {
 
         PrintUtil.dateLine(signStr);
 
-        String sign = EncryptUtil.md5(signStr, "UTF-8", true);
-
         PrintUtil.dateLine(EncryptUtil.md5(signStr));
         PrintUtil.dateLine(EncryptUtil.md5(signStr, "UTF8", false));
-
-        PrintUtil.dateLine(sign);
+        PrintUtil.dateLine(EncryptUtil.md5(signStr, "UTF-8", true));
     }
-
 }

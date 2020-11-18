@@ -10,40 +10,56 @@ import java.util.List;
 /**
  * 贝尔曼福特算法
  * 图中求解最短路径
+ * 可计算负权重的[没有负权重回环的情况下]
  *
  * @author KIyA
  */
 public class BellmanFord {
 
     public static void main(String[] args) {
-
         List<GraphNode> nodeList = initGraphNode();
         updateWeight(nodeList);
         // 起点a到g的最小权重值
         int weight = nodeList.get(nodeList.size() - 1).getWeight();
         PrintUtil.println("A -> G : {}", weight);
+        PrintUtil.println("A -> G : {}", nodeList.get(nodeList.size() - 1).getPath());
         // 起点a到e的最小权重值
         weight = nodeList.get(nodeList.size() - 3).getWeight();
         PrintUtil.println("A -> E : {}", weight);
+        PrintUtil.println("A -> E : {}", nodeList.get(nodeList.size() - 3).getPath());
         // 起点a到f的最小权重值
         weight = nodeList.get(nodeList.size() - 2).getWeight();
         PrintUtil.println("A -> F : {}", weight);
+        PrintUtil.println("A -> F : {}", nodeList.get(nodeList.size() - 2).getPath());
     }
 
+    /**
+     * 遍历节点计算节点权重
+     *
+     * @param nodeList
+     */
     private static void updateWeight(List<GraphNode> nodeList) {
-        for (GraphNode n : nodeList) {
+        int size = nodeList.size();
+        while (size-- > 0) {
             boolean changed = false;
-            int weight = n.getWeight();
-            List<GraphLine> lineList = n.getLines();
-            for (GraphLine l : lineList) {
-                int nodeWeight = weight + l.getWeight();
-                if (nodeWeight < l.getA().getWeight()) {
-                    l.getA().setWeight(nodeWeight);
-                    changed = true;
-                }
-                if (nodeWeight < l.getB().getWeight()) {
-                    l.getB().setWeight(nodeWeight);
-                    changed = true;
+            for (GraphNode n : nodeList) {
+                int weight = n.getWeight();
+                List<GraphLine> lineList = n.getLines();
+                for (GraphLine l : lineList) {
+                    int nodeWeight = weight + l.getWeight();
+                    GraphNode a = l.getA();
+                    GraphNode b = l.getB();
+                    String path = null == n.getPath() ? n.getName() : n.getPath();
+                    if (nodeWeight < a.getWeight()) {
+                        a.setWeight(nodeWeight);
+                        a.setPath(path + a.getName());
+                        changed = true;
+                    }
+                    if (nodeWeight < l.getB().getWeight()) {
+                        b.setWeight(nodeWeight);
+                        b.setPath(path + b.getName());
+                        changed = true;
+                    }
                 }
             }
             // 快速结束循环
@@ -59,13 +75,13 @@ public class BellmanFord {
      * @return
      */
     private static List<GraphNode> initGraphNode() {
-        GraphNode a = new GraphNode();
-        GraphNode b = new GraphNode();
-        GraphNode c = new GraphNode();
-        GraphNode d = new GraphNode();
-        GraphNode e = new GraphNode();
-        GraphNode f = new GraphNode();
-        GraphNode g = new GraphNode();
+        GraphNode a = new GraphNode("A");
+        GraphNode b = new GraphNode("B");
+        GraphNode c = new GraphNode("C");
+        GraphNode d = new GraphNode("D");
+        GraphNode e = new GraphNode("E");
+        GraphNode f = new GraphNode("F");
+        GraphNode g = new GraphNode("G");
 
         List<GraphNode> nodeList = new ArrayList<>(7);
         nodeList.add(a);
