@@ -5,6 +5,7 @@ package com.clei.utils;
  */
 public class PrintUtil {
 
+    private final static String EMPTY = "";
     private final static char TAB = '\t';
     private final static char LINEFEED = '\n';
     private final static String PLACE_STR = "{}";
@@ -30,8 +31,16 @@ public class PrintUtil {
         System.out.print(obj);
     }
 
+    public static void log() {
+        log(EMPTY);
+    }
+
     public static void log(final String str, Object... args) {
         dateLine(true, str, args);
+    }
+
+    public static void log(Object obj) {
+        dateLine(true, String.valueOf(obj));
     }
 
     /**
