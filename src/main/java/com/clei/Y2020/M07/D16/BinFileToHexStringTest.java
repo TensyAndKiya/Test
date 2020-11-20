@@ -1,6 +1,7 @@
 package com.clei.Y2020.M07.D16;
 
 import com.clei.utils.FileUtil;
+import com.clei.utils.PrintUtil;
 
 /**
  * 二进制文件转为16 进制 样子
@@ -14,7 +15,11 @@ public class BinFileToHexStringTest {
 
     public static void main(String[] args) throws Exception {
 
-        FileUtil.binFileToHexString("E:/TEMP/Test.class");
+        PrintUtil.dateLine("开始");
+        FileUtil.binFileToHexString("F:\\Game\\GAME\\法利恩戰記（Furion Chronicles）\\Save\\save02.sav");
+        PrintUtil.dateLine("结束");
+
+        System.out.println(Integer.toHexString(20));
 
     }
 
