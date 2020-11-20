@@ -1,10 +1,12 @@
 package com.clei.Y2020.M06.D04;
 
+import com.clei.utils.PrintUtil;
+
 /**
  * 待加载的类
  */
 public class UnLoad {
     static {
-        System.out.println("This is UnLoad static block！");
+        PrintUtil.dateLine("This is UnLoad static block！");
     }
 }

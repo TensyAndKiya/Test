@@ -5,10 +5,13 @@ package com.clei.utils;
  */
 public class PrintUtil {
 
+    private final static String EMPTY = "";
+    private final static char TAB = '\t';
+    private final static char LINEFEED = '\n';
     private final static String PLACE_STR = "{}";
     private final static int PLACE_LEN = PLACE_STR.length();
 
-    public static void println(){
+    public static void println() {
         System.out.println();
     }
 
@@ -28,6 +31,18 @@ public class PrintUtil {
         System.out.print(obj);
     }
 
+    public static void log() {
+        log(EMPTY);
+    }
+
+    public static void log(final String str, Object... args) {
+        dateLine(true, str, args);
+    }
+
+    public static void log(Object obj) {
+        dateLine(true, String.valueOf(obj));
+    }
+
     /**
      * 打印当前日期 + 换行
      */
@@ -41,7 +56,7 @@ public class PrintUtil {
      * @param obj
      */
     public static void dateLine(Object obj) {
-        println(DateUtil.currentDateTime() + " - " + obj);
+        println(DateUtil.currentDateTime() + ' ' + obj);
     }
 
     /**
@@ -51,7 +66,20 @@ public class PrintUtil {
      * @param args
      */
     public static void dateLine(final String str, Object... args) {
-        println(DateUtil.currentDateTime() + " - " + str, args);
+        String head = DateUtil.currentDateTime() + ' ' + str;
+        println(head, args);
+    }
+
+    /**
+     * 打印当前日期 + 数据 + 换行
+     *
+     * @param ms   是否打印毫秒数
+     * @param str
+     * @param args
+     */
+    public static void dateLine(boolean ms, final String str, Object... args) {
+        String head = DateUtil.currentDateTime(ms) + " [" + Thread.currentThread().getName() + "] " + str;
+        println(head, args);
     }
 
     /**
@@ -96,6 +124,7 @@ public class PrintUtil {
         }
 
         StringBuilder sb = new StringBuilder(str);
+        // 普通参数
         for (Object arg : args) {
             int position = sb.indexOf(PLACE_STR);
             if (position > -1) {
@@ -104,6 +133,43 @@ public class PrintUtil {
                 break;
             }
         }
+        // 异常
+        Object lastArg = args[args.length - 1];
+        if (lastArg instanceof Throwable) {
+            sb.append(getStackTrace((Throwable) lastArg));
+        }
         return sb.toString();
+    }
+
+    /**
+     * Throwable stackTrace 字符串
+     *
+     * @param t
+     * @return
+     */
+    private static String getStackTrace(Throwable t) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(LINEFEED + t.toString() + LINEFEED);
+        for (StackTraceElement s : t.getStackTrace()) {
+            sb.append(TAB + "at " + s.toString() + LINEFEED);
+        }
+        for (Throwable se : t.getSuppressed()) {
+            sb.append(se.toString() + LINEFEED);
+        }
+        Throwable cause = t.getCause();
+        if (null != cause) {
+            sb.append(cause.toString() + LINEFEED);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 获得当前线程名
+     *
+     * @return
+     */
+    private static String getThreadName() {
+        return Thread.currentThread().getName();
     }
 }

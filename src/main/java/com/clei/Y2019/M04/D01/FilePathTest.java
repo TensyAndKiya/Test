@@ -1,5 +1,7 @@
 package com.clei.Y2019.M04.D01;
 
+import com.clei.utils.PrintUtil;
+
 import java.io.File;
 
 public class FilePathTest {
@@ -24,7 +26,7 @@ public class FilePathTest {
         for (int i = 0; i < level; i++) {
             tableStr.append('\t');
         }
-        System.out.println(tableStr + file.getAbsolutePath());
+        PrintUtil.dateLine(tableStr + file.getAbsolutePath());
         if(file.isDirectory()){
             File[] files = file.listFiles();
             if(null != files){

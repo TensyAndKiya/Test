@@ -1,5 +1,6 @@
 package com.clei.Y2020.M06.D30;
 
+import com.clei.utils.PrintUtil;
 
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.Delayed;
@@ -20,9 +21,9 @@ public class DelayQueueTest {
 
         QueryResult q3 = new QueryResult(curMillis + 9000);
 
-        System.out.println(q1.getStopMillis());
-        System.out.println(q2.getStopMillis());
-        System.out.println(q3.getStopMillis());
+        PrintUtil.dateLine(q1.getStopMillis());
+        PrintUtil.dateLine(q2.getStopMillis());
+        PrintUtil.dateLine(q3.getStopMillis());
 
         DelayQueue<QueryResult> queue = new DelayQueue<>();
 
@@ -30,19 +31,15 @@ public class DelayQueueTest {
         queue.add(q2);
         queue.add(q3);
 
-        System.out.println(queue.size());
+        int size = queue.size();
+        PrintUtil.dateLine(queue.size());
 
-        for (int i = 0; i < queue.size(); i++) {
-
+        // take之后会改变queue的size 所以不要用queue.size()控制循环
+        for (int i = 0; i < size; i++) {
             QueryResult result = queue.take();
-            System.out.println(System.currentTimeMillis() + " delay : " + result.getDelay(TimeUnit.MILLISECONDS) + " stop : " + result.getStopMillis());
-
+            PrintUtil.dateLine(System.currentTimeMillis() + " delay : " + result.getDelay(TimeUnit.MILLISECONDS) + " stop : " + result.getStopMillis());
         }
-
-        Thread.sleep(10000);
-
     }
-
 }
 
 class QueryResult implements Delayed{

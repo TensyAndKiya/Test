@@ -1,5 +1,7 @@
 package com.clei.Y2019.M05.D17;
 
+import com.clei.utils.PrintUtil;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -40,7 +42,7 @@ public class LimitAllCount {
         chargeParams.setMaxDayStopTime(0);
         chargeParams.setMaxNightStopTime(0);
         //计费
-        System.out.println(countFee(orderStart,orderEnd,chargeParams,countStart));
+        PrintUtil.dateLine(countFee(orderStart, orderEnd, chargeParams, countStart));
     }
 
     private static float countFee(Calendar orderStart, Calendar orderEnd, ChargeParams params, boolean countStart){

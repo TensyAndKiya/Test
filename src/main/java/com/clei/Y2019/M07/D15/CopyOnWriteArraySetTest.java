@@ -1,5 +1,7 @@
 package com.clei.Y2019.M07.D15;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
@@ -20,6 +22,6 @@ public class CopyOnWriteArraySetTest {
             }
         }
 
-        System.out.println(set);
+        PrintUtil.dateLine(set);
     }
 }

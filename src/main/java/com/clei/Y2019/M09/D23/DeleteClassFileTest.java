@@ -1,6 +1,7 @@
 package com.clei.Y2019.M09.D23;
 
 import com.clei.utils.FileUtil;
+import com.clei.utils.PrintUtil;
 
 import java.io.File;
 
@@ -10,7 +11,7 @@ public class DeleteClassFileTest {
         // 删除指定目录下的.class文件
         FileUtil.fileOperation(file, f -> {
             if(f.getName().endsWith(".class")){
-                System.out.println(f.getName() + "  " + f.delete());
+                PrintUtil.dateLine(f.getName() + "  " + f.delete());
             }
         });
     }

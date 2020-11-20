@@ -102,9 +102,3 @@ hgetall users
 hincrby users aa 100
 # hash 删除某key
 hdel users aa
-
-
-
-
-
-

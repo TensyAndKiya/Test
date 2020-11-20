@@ -1,6 +1,7 @@
 package com.clei.utils;
 
 import com.alibaba.fastjson.JSONObject;
+
 import java.util.Scanner;
 
 /**
@@ -32,7 +33,7 @@ public class JSONUtil {
 
     public static void main(String[] args) throws Exception{
 
-        System.out.println(getJSON());
+        PrintUtil.dateLine(getJSON());
 
     }
 

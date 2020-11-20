@@ -1,12 +1,20 @@
 package com.clei.Y2019.M04.D23;
 
-import java.io.*;
+import com.clei.utils.PrintUtil;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 public class LogContentByDateTest {
     private final static String LOG_DIRECTORY = "C:\\Users\\liudg\\Desktop\\logs\\2019-04-23 error";
     public static void main(String[] args) throws Exception {
 //        Scanner input = new Scanner(System.in,"UTF-8");
-//        System.out.println("请输入开始时间和结束时间：");
+//        PrintUtil.dateLine("请输入开始时间和结束时间：");
         //2019-04-22-15:3  从30分开始
         //2019-04-22-16  到 4点结束
         String startDate = "2019-04-11-16:31";
@@ -33,6 +41,6 @@ public class LogContentByDateTest {
         }
         br.close();
         bw.close();
-        System.out.println("筛选完毕");
+        PrintUtil.dateLine("筛选完毕");
     }
 }

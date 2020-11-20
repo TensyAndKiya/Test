@@ -1,6 +1,12 @@
 package com.clei.Y2019.M04.D04;
 
-import java.util.concurrent.*;
+import com.clei.utils.PrintUtil;
+
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ThreadPoolExecutorTest {
@@ -28,14 +34,14 @@ public class ThreadPoolExecutorTest {
         );
 
         for (int i = 0; i < 100; i++) {
-            System.out.println("提交第 " + i + " 个任务！");
-            executor.execute(()-> {
+            PrintUtil.dateLine("提交第 " + i + " 个任务！");
+            executor.execute(() -> {
                 try {
                     Thread.sleep(150);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println(Thread.currentThread().getName()+"执行完毕。。。");
+                PrintUtil.dateLine(Thread.currentThread().getName() + "执行完毕。。。");
             });
         }
     }
@@ -45,7 +51,7 @@ public class ThreadPoolExecutorTest {
         @Override
         public Thread newThread(Runnable r) {
             String name = "KIyA_ThreadFactory_Thread_"+ai.addAndGet(1);
-            System.out.println("创建了线程 ： "+name);
+            PrintUtil.dateLine("创建了线程 ： " + name);
             return new Thread(r, name);
         }
     }
@@ -57,7 +63,7 @@ public class ThreadPoolExecutorTest {
                 //阻塞方法
                 executor.getQueue().put(r);
             } catch (InterruptedException e) {
-                System.out.println("放入阻塞队列失败！！！");
+                PrintUtil.dateLine("放入阻塞队列失败！！！");
                 e.printStackTrace();
             }
         }

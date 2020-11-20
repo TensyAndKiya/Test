@@ -31,6 +31,56 @@ public class StringUtil {
     }
 
     /**
+     * 去掉空白
+     *
+     * @param str
+     * @return
+     */
+    public static String trimBlank(String str) {
+        if (isEmpty(str)) {
+            return str;
+        }
+
+        char[] arr = str.toCharArray();
+
+        StringBuilder sb = new StringBuilder();
+
+        for (char c : arr) {
+            if (' ' == c || '\t' == c || '\r' == c || '\n' == c) {
+                continue;
+            }
+            sb.append(c);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 获得一个正确格式的url【后缀】
+     *
+     * @param url
+     * @return
+     */
+    public static String getUrl(String url) {
+        if (isNotEmpty(url)) {
+            char slash = '/';
+            char[] arr = url.toCharArray();
+            StringBuilder sb = new StringBuilder(url.length());
+            sb.append(slash);
+            for (char c : arr) {
+                if (slash == c && slash == sb.charAt(sb.length() - 1)) {
+                    continue;
+                }
+                sb.append(c);
+            }
+            if (slash == sb.charAt(sb.length() - 1)) {
+                sb.deleteCharAt(sb.length() - 1);
+            }
+            url = sb.toString();
+        }
+        return url;
+    }
+
+    /**
      * str 是否包含 strArr中的某个字符串
      *
      * @param str
@@ -38,24 +88,34 @@ public class StringUtil {
      * @return
      */
     public static boolean contains(String str, String[] strArr) {
+        return containsIndex(str, strArr) > -1;
+    }
+
+    /**
+     * str 是否包含 strArr中的某个字符串
+     *
+     * @param str
+     * @param strArr
+     * @return 第一个包含字符串的索引
+     */
+    public static int containsIndex(String str, String[] strArr) {
 
         if (isEmpty(str) || null == strArr || 0 == strArr.length) {
             throw new RuntimeException("参数为空");
         }
 
-        for (String s : strArr) {
+        for (int i = 0; i < strArr.length; i++) {
+            if (isNotEmpty(strArr[i])) {
 
-            if (isNotEmpty(s)) {
-
-                boolean result = str.contains(s);
+                boolean result = str.contains(strArr[i]);
 
                 if (result) {
-                    return true;
+                    return i;
                 }
             }
         }
 
-        return false;
+        return -1;
     }
 
     /**

@@ -1,9 +1,11 @@
 package com.clei.Y2019.M09.D07;
 
+import com.clei.utils.PrintUtil;
+
 public class FinallyTest {
     public static void main(String[] args) {
         int i = getNum();
-        System.out.println(i);
+        PrintUtil.dateLine(i);
     }
 
     private static int getNum(){

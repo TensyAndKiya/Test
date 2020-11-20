@@ -1,5 +1,7 @@
 package com.clei.Y2019.M04.D18;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -49,6 +51,6 @@ public class ExcutorsTest {
 class MyRunnable implements Runnable{
     @Override
     public void run() {
-        System.out.println(Thread.currentThread().getName()+" 执行了任务！");
+        PrintUtil.dateLine(Thread.currentThread().getName() + " 执行了任务！");
     }
 }

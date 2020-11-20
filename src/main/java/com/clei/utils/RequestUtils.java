@@ -2,13 +2,28 @@ package com.clei.utils;
 
 import com.alipay.api.internal.util.file.IOUtils;
 
-import javax.net.ssl.*;
-import java.io.*;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.*;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-
 
 /**
  * 请求工具类
@@ -28,7 +43,7 @@ public class RequestUtils {
 	 */
 	public static String getHttpConnectResult(String content, String address) {
 		String resultData = "";
-		System.out.println("http请求开始，请求地址：" + address);
+		PrintUtil.dateLine("http请求开始，请求地址：" + address);
 		OutputStream wr = null;
 		HttpsURLConnection conn = null;
 		try {
@@ -48,10 +63,10 @@ public class RequestUtils {
 			resultData = IOUtils.toString(conn.getInputStream(), "utf-8");
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
-			System.out.println("http请求失败！请求地址不正确！请求地址：" + address);
+			PrintUtil.dateLine("http请求失败！请求地址不正确！请求地址：" + address);
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.out.println("http请求失败！发生i/o错误，请求地址：" + address);
+			PrintUtil.dateLine("http请求失败！发生i/o错误，请求地址：" + address);
 		} finally {
 			try {
 				if (wr != null) {

@@ -1,7 +1,13 @@
 package com.clei.Y2019.M04.D01;
 
+import com.clei.utils.PrintUtil;
+
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -53,7 +59,7 @@ public class LearnAboutThrowable {
 
 
         }else{
-            System.out.println("你这Java环境有问题！！！rt.jar都没有！！！");
+            PrintUtil.dateLine("你这Java环境有问题！！！rt.jar都没有！！！");
         }
     }
 
@@ -67,7 +73,7 @@ public class LearnAboutThrowable {
         List<ClassNode> subClassList = map.get(className);
         for(String name : classFiles){
             if(isChildClass(name,className)){
-                System.out.println(className);
+                PrintUtil.dateLine(className);
                 subClassList.add(new ClassNode(name, map.get(name)));
                 fillSubClassList(name, classFiles, map);
             }

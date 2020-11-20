@@ -1,5 +1,7 @@
 package com.clei.Y2019.M11.D11;
 
+import com.clei.utils.PrintUtil;
+
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,9 +11,9 @@ public class Md5Test {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime signMark = now.minusHours(12);
-        System.out.println(now.format(df));
-        System.out.println(signMark.format(df));
-        // System.out.println(md5(md5("123456pda")));
+        PrintUtil.dateLine(now.format(df));
+        PrintUtil.dateLine(signMark.format(df));
+        // PrintUtil.dateLine(md5(md5("123456pda")));
     }
 
 

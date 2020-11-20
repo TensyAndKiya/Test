@@ -1,5 +1,7 @@
 package com.clei.Y2020.M09.D21;
 
+import com.clei.utils.PrintUtil;
+
 /**
  * 将一组经纬度数组字符串转为[[18.3333,19.4444],[20.11223,19.31231]]格式
  *
@@ -47,7 +49,7 @@ public class String2GeoArrayTest {
         }
         sb.append(']');
 
-        System.out.println(sb.toString());
+        PrintUtil.dateLine(sb.toString());
 
     }
 }

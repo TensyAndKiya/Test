@@ -1,5 +1,7 @@
 package com.clei.Y2019.M06.D25;
 
+import com.clei.utils.PrintUtil;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
@@ -20,7 +22,7 @@ public class SDFBugTest {
         Enumeration<String> enumeration = map.keys();
         while(enumeration.hasMoreElements()){
             String s = enumeration.nextElement();
-            System.out.println(s);
+            PrintUtil.dateLine(s);
         }
     }
 

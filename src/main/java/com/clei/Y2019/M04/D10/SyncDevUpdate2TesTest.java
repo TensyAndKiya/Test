@@ -1,9 +1,14 @@
 package com.clei.Y2019.M04.D10;
 
+import com.clei.utils.PrintUtil;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Scanner;
 
 //将dev下面的修改同步到tes下
 public class SyncDevUpdate2TesTest {
@@ -11,19 +16,19 @@ public class SyncDevUpdate2TesTest {
     //private final static String[] CONFIG_FILES = {};
     private final static String[] CONFIG_FILES = {"AlipayConfig.java","AlipayWXConfig.java","CdPayConfig.java","application.properties","main.jsp","mainV2.jsp","monitor.jsp","sub_monitor.jsp","inOut.jsp"};
 
-    public static void main(String[] args){
-        System.out.println("Sync A to B");
-        System.out.println("输入A B");
-        Scanner input = new Scanner(System.in,"UTF-8");
+    public static void main(String[] args) {
+        PrintUtil.dateLine("Sync A to B");
+        PrintUtil.dateLine("输入A B");
+        Scanner input = new Scanner(System.in, "UTF-8");
         String from = input.next();
         String to = input.next();
         String fromPath = "D:\\CLIdeaWorkspace\\" + from + "\\park\\";
         String toPath = "D:\\CLIdeaWorkspace\\" + to + "\\park\\";
-        Map<String,String> updateFiles = new HashMap<>();
-        System.out.println("输入需要同步的文件");
+        Map<String, String> updateFiles = new HashMap<>();
+        PrintUtil.dateLine("输入需要同步的文件");
         String str = input.nextLine();
-        while ( !str.contains("no changes added to commit") ){
-            if(str.length() != 0 && str.contains("park-")){
+        while (!str.contains("no changes added to commit")) {
+            if (str.length() != 0 && str.contains("park-")) {
                 str = str.substring(str.indexOf("park-"));
                 str= str.replaceAll("/","\\\\");
                 updateFiles.put(fromPath + str,toPath + str);
@@ -40,27 +45,27 @@ public class SyncDevUpdate2TesTest {
                 }
             }
         }
-        updateFiles.forEach( (k,v) ->{
+        updateFiles.forEach((k, v) -> {
             try {
-                overrideFile(k,v);
-                System.out.println(k + "\t成功！");
+                overrideFile(k, v);
+                PrintUtil.dateLine(k + "\t成功！");
             } catch (Exception e) {
                 e.printStackTrace();
-                return ;
+                return;
             }
-        } );
-        System.out.println("同步修改文件成功！！！");
+        });
+        PrintUtil.dateLine("同步修改文件成功！！！");
     }
 
     private static void overrideFile(String path,String toPath) throws Exception{
         File file = new File(path);
         if(!file.exists()){
-            System.out.println("文件 " + path + "不存在！");
+            PrintUtil.dateLine("文件 " + path + "不存在！");
             return ;
         }
         File newFile = new File(toPath);
         if(!newFile.exists()){
-            System.out.println("文件 " + toPath + "不存在！");
+            PrintUtil.dateLine("文件 " + toPath + "不存在！");
             return ;
         }
         FileInputStream fis = null;
@@ -76,7 +81,7 @@ public class SyncDevUpdate2TesTest {
                 fos.write(buffer,0,length);
             }
         }catch (Exception e){
-            System.out.println("求你了大佬，不要报错！！！！");
+            PrintUtil.dateLine("求你了大佬，不要报错！！！！");
             e.printStackTrace();
         }finally {
             if(null != fis){

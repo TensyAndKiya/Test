@@ -1,4 +1,7 @@
 package com.clei.Y2019.M04.D16;
+
+import com.clei.utils.PrintUtil;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -16,27 +19,27 @@ public class CalcPriceTest {
 
     public static void main(String[] args) throws Exception{
         Scanner input = new Scanner(System.in,"UTF-8");
-        System.out.println("时间格式 yyyy MM dd HH mm ss");
+        PrintUtil.dateLine("时间格式 yyyy MM dd HH mm ss");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy MM dd HH mm ss");
         while(true){
-            System.out.println("请输入开始时间： xxxx xx xx xx xx xx(输入xx结束程序)");
+            PrintUtil.dateLine("请输入开始时间： xxxx xx xx xx xx xx(输入xx结束程序)");
             String str = input.nextLine();
             if(null != str && str.equals("xx")){
                 break;
             }
             if(null == str || str.length() == 0){
-                System.out.println("请输入正确内容：");
+                PrintUtil.dateLine("请输入正确内容：");
                 continue;
             }
             Date startDate = sdf.parse(str);
-            System.out.println("请输入结束时间： xxxx xx xx xx xx xx(输入xx结束程序)");
+            PrintUtil.dateLine("请输入结束时间： xxxx xx xx xx xx xx(输入xx结束程序)");
             str = input.nextLine();
             if(str.equals("xx")){
                 break;
             }
             Date endDate = sdf.parse(str);
             //输出
-            System.out.println(myCalc(startDate,endDate));
+            PrintUtil.dateLine(myCalc(startDate, endDate));
         }
 
         /*Date sDate = new Date();
@@ -44,7 +47,7 @@ public class CalcPriceTest {
         cal2.setTime(new Date(sDate.getTime()));
         for (int i = 0; i < 24; i++) {
             cal2.add(Calendar.HOUR_OF_DAY,2);
-            System.out.println(myCalc(sDate,cal2.getTime()));
+            PrintUtil.dateLine(myCalc(sDate,cal2.getTime()));
         }*/
     }
 

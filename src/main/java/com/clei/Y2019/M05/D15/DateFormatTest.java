@@ -1,5 +1,7 @@
 package com.clei.Y2019.M05.D15;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.Calendar;
 
 public class DateFormatTest {
@@ -15,8 +17,8 @@ public class DateFormatTest {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY,7);
         cal.set(Calendar.MINUTE,0);
-        cal.set(Calendar.SECOND,0);
-        System.out.println(isBetween(cal,dateStr1,dateStr2));
+        cal.set(Calendar.SECOND, 0);
+        PrintUtil.dateLine(isBetween(cal, dateStr1, dateStr2));
     }
 
     private static int getSecond(String str){
@@ -32,17 +34,17 @@ public class DateFormatTest {
         return second;
     }
 
-    public static boolean isBetween(Calendar cal, String dayStartTime, String dayEndTime){
+    public static boolean isBetween(Calendar cal, String dayStartTime, String dayEndTime) {
         //因为是从1970 01 01 00:00:00 (而我们这里是+8时区)开始的 。。开始时刻为0
         //所以加上8小时的毫秒数再除余一天毫秒数
         //最后得到的便是今天的毫秒数
-        long todaySecond = ((cal.getTimeInMillis() + 8 * ONE_HOUR_MILLS)%ONE_DAY_MILLS)/1000;
+        long todaySecond = ((cal.getTimeInMillis() + 8 * ONE_HOUR_MILLS) % ONE_DAY_MILLS) / 1000;
         int startSecond = getSecond(dayStartTime);
         int endSecond = getSecond(dayEndTime);
-        System.out.println(todaySecond);
-        System.out.println(startSecond);
-        System.out.println(endSecond);
-        if(endSecond > startSecond && todaySecond >= startSecond && todaySecond < endSecond){
+        PrintUtil.dateLine(todaySecond);
+        PrintUtil.dateLine(startSecond);
+        PrintUtil.dateLine(endSecond);
+        if (endSecond > startSecond && todaySecond >= startSecond && todaySecond < endSecond) {
             return true;
         }
         return false;

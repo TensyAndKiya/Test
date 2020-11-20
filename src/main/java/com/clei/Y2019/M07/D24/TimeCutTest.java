@@ -1,5 +1,7 @@
 package com.clei.Y2019.M07.D24;
 
+import com.clei.utils.PrintUtil;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,8 +16,8 @@ public class TimeCutTest {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date startDate = sdf.parse("2019-07-24 09:46:37");
         Date endDate = sdf.parse("2019-07-24 10:53:33");
-        endDate = updateEndTime(Calendar.MINUTE,true,10,10,startDate,endDate);
-        System.out.println(sdf.format(endDate));
+        endDate = updateEndTime(Calendar.MINUTE, true, 10, 10, startDate, endDate);
+        PrintUtil.dateLine(sdf.format(endDate));
     }
 
     private static Date updateEndTime(int chargeInterval, boolean countStart, int firstSection, int section, Date orderStartTime, Date orderEndTime){
@@ -49,7 +51,7 @@ public class TimeCutTest {
                 }
             }
         }else{
-            System.out.println("分段时长单位必须大于0！");
+            PrintUtil.dateLine("分段时长单位必须大于0！");
         }
         return orderEndTime;
     }

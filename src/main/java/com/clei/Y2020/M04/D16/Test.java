@@ -1,9 +1,15 @@
 package com.clei.Y2020.M04.D16;
 
 import com.alibaba.fastjson.JSONObject;
+import com.clei.utils.PrintUtil;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 /**
  * 连续字符的开始结束索引
@@ -18,10 +24,10 @@ public class Test {
         // 呵呵呵
         // 嘿嘿嘿
 
-        System.out.println(1000 * 60 * 60 * 24);
+        PrintUtil.dateLine(1000 * 60 * 60 * 24);
 
         BigDecimal a = new BigDecimal("-0.01");
-        System.out.println(a.compareTo(BigDecimal.ZERO));
+        PrintUtil.dateLine(a.compareTo(BigDecimal.ZERO));
 
         Map<String,Object> map = new HashMap<>();
         map.put("no",1);
@@ -50,7 +56,7 @@ public class Test {
         list.add(map);
         list.add(map2);
 
-        System.out.println(JSONObject.toJSONString(list));
+        PrintUtil.dateLine(JSONObject.toJSONString(list));
 
 
         List<Integer> result = new LinkedList<>();
@@ -86,7 +92,7 @@ public class Test {
 
         }
 
-        System.out.println("result: " + result);
+        PrintUtil.dateLine("result: " + result);
 
     }
 

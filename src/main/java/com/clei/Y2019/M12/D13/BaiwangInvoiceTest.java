@@ -25,7 +25,6 @@ public class BaiwangInvoiceTest {
     private static ConcurrentHashMap<String,Object> tokenRequestMap = new ConcurrentHashMap<>(2);
 
     public static void main(String[] args){
-
         // token参数
         tokenRequestMap.put("access_token","");
         tokenRequestMap.put("refresh_date",new Date());
@@ -57,7 +56,6 @@ public class BaiwangInvoiceTest {
 
 
     public static void getAccessToken() {
-
         Object accessToken = tokenRequestMap.get("access_token");
         //如果距离过期时间小于5分钟 则刷新ACCESSTOKEN
         if (null == accessToken || "".equals(accessToken)) {
@@ -110,8 +108,8 @@ public class BaiwangInvoiceTest {
 
     private static boolean newInvoice(Map<String,Object> invoicingRecord,Map<String,Object> tokenMap,float jshj,String userName){
 
-        System.out.println(i);
-        i ++;
+        PrintUtil.dateLine(i);
+        i++;
 
         JSONObject params = new JSONObject();
         JSONObject dataParams = new JSONObject();

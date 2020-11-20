@@ -1,4 +1,4 @@
-package com.clei.algorithm;
+package com.clei.algorithm.other;
 
 import com.clei.utils.PrintUtil;
 
@@ -16,7 +16,7 @@ public class KthSmallNum {
 
         int kSmall = getKthSmallNum(arr1,0,arr1.length - 1,arr2,0,arr2.length - 1,6);
 
-        System.out.println(kSmall);
+        PrintUtil.println(kSmall);
     }
 
     public static int getKthSmallNum(int[] a,int s1,int e1,int[] b,int s2,int e2,int k){

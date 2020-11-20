@@ -1,12 +1,22 @@
 package com.clei.Y2019.M11.D05;
 
 import com.alibaba.fastjson.JSONObject;
+import com.clei.utils.PrintUtil;
 import sun.misc.BASE64Decoder;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.Random;
 import java.util.zip.GZIPInputStream;
 
@@ -36,13 +46,13 @@ public class DownEleInvoiceTest {
                 str = str.substring(index + MARK_LENGTH,endIndex);
                 Random random = new Random();
                 fileName = fileName + "" + random.nextInt(10) + random.nextInt(10) + random.nextInt(10) + ".pdf";
-                System.out.println(fileName);
-                getInvoicePdf(str,fileName);
+                PrintUtil.dateLine(fileName);
+                getInvoicePdf(str, fileName);
             }
         }
         br.close();
 
-        System.out.println("总共" + count + "个文件");
+        PrintUtil.dateLine("总共" + count + "个文件");
     }
 
     private static void getInvoicePdf(String str,String fileName) throws Exception {
@@ -64,8 +74,8 @@ public class DownEleInvoiceTest {
 
         byteToFile(data,fileName);
 
-        System.out.println(fileName);
-        count ++;
+        PrintUtil.dateLine(fileName);
+        count++;
 
     }
 

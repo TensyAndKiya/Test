@@ -1,5 +1,7 @@
 package com.clei.Y2018.M11.D09;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -13,7 +15,7 @@ public class RandTest {
             // [0,2) = [0,1]
             sum+=rand.nextInt(2);
         }
-        System.out.println(sum);
+        PrintUtil.dateLine(sum);
 
         //<>
         Map<String,String> aaa=new HashMap<>();
@@ -31,7 +33,7 @@ public class RandTest {
         Iterator<Map.Entry<String,String>> it=map.entrySet().iterator();
         while(it.hasNext()){
             Map.Entry<String,String> entry=it.next();
-            System.out.println("key: "+entry.getKey()+"\tvalue: "+entry.getValue());
+            PrintUtil.dateLine("key: " + entry.getKey() + "\tvalue: " + entry.getValue());
         }
     }
 }

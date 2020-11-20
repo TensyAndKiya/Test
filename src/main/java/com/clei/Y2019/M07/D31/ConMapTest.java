@@ -1,5 +1,7 @@
 package com.clei.Y2019.M07.D31;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
@@ -10,12 +12,12 @@ public class ConMapTest {
     public static void main(String[] args) throws InterruptedException {
         /*Runnable1 r = new Runnable1(map);
         for (int i = 0; i < 100; i++) {
-            System.out.println(JSONObject.toJSONString(map));
+            PrintUtil.dateLine(JSONObject.toJSONString(map));
             Thread.sleep((long)(Math.random() * 30) + 10);
             new Thread(r).start();
         }*/
-        System.out.println(map.put("aa",1L));
-        System.out.println(map.put("aa",2L));
+        PrintUtil.dateLine(map.put("aa", 1L));
+        PrintUtil.dateLine(map.put("aa", 2L));
     }
 }
 
@@ -29,7 +31,7 @@ class Runnable1 implements Runnable{
         int i = (int) (Math.random()*26) + 65;
         String k = (char)i + "";
         if(map.containsKey(k)){
-            System.out.println("已经有key: " + k);
+            PrintUtil.dateLine("已经有key: " + k);
             return;
         }
         map.put(k,System.currentTimeMillis());

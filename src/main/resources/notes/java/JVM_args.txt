@@ -19,6 +19,8 @@
 
 -XX:+PrintGCDetails 打印GC信息
 
+-XX:+PrintGCDetails -Xloggc:../logs/gc.log -XX:+PrintGCTimeStamps 打印GC信息并指定gc日志文件位置
+
 CMS(Concurrent Mark Sweep)收集器 （并发收集，低停顿）
     过程：初始标记 =》并发标记 =》重新标记 =》并发清扫
     （初始标记与重新标记仍需stop the world）

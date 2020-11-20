@@ -7,6 +7,8 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalQuery;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -16,16 +18,26 @@ public class DateUtil {
 
     private final static String FORMATTER_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
-    private final static DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(FORMATTER_PATTERN);
+    private final static String FORMATTER_PATTERN_MS = "yyyy-MM-dd HH:mm:ss.SSS";
 
-    private final static ConcurrentHashMap<String,DateTimeFormatter> FORMATTER_MAP = new ConcurrentHashMap(4);
+    /**
+     * 默认parse的日期类型
+     */
+    private final static TemporalQuery<LocalDateTime> QUERY = LocalDateTime::from;
+
+    private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(FORMATTER_PATTERN);
+
+    private final static DateTimeFormatter DATE_TIME_FORMATTER_MS = DateTimeFormatter.ofPattern(FORMATTER_PATTERN_MS);
+
+    private final static ConcurrentHashMap<String, DateTimeFormatter> FORMATTER_MAP = new ConcurrentHashMap(4);
 
     private final static ZoneId ZONE_ID = ZoneId.of("GMT+8");
 
     private final static ZoneOffset ZONE_OFFSET = ZoneOffset.ofHours(8);
 
     static {
-        FORMATTER_MAP.put(FORMATTER_PATTERN,FORMATTER);
+        FORMATTER_MAP.put(FORMATTER_PATTERN, DATE_TIME_FORMATTER);
+        FORMATTER_MAP.put(FORMATTER_PATTERN_MS, DATE_TIME_FORMATTER_MS);
     }
 
     public static String getDefaultPattern() {
@@ -42,41 +54,75 @@ public class DateUtil {
     }
 
     /**
+     * 返回指定格式的格式的 当前日期时间字符串
+     *
+     * @param ms 是否打印毫秒
+     * @return
+     */
+    public static String currentDateTime(boolean ms) {
+        return format(LocalDateTime.now(), ms ? DATE_TIME_FORMATTER_MS : DATE_TIME_FORMATTER);
+    }
+
+    /**
+     * 返回指定格式的格式的 当前日期时间字符串
+     *
+     * @param pattern 指定日期格式
+     * @return
+     */
+    public static String currentDateTime(String pattern) {
+        return format(LocalDateTime.now(), pattern);
+    }
+
+    /**
      * 根据epochMilli返回格式化日期字符串
      *
      * @param millis
      * @return
      */
     public static String formatMillis(long millis) {
-        validateMilliOrSecond(millis);
         return format(fromMillis(millis));
     }
 
-    public static String format(LocalDateTime localDateTime) {
-        return format(localDateTime, FORMATTER);
+    /**
+     * 根据epochMilli返回格式化日期字符串
+     *
+     * @param millis
+     * @param pattern 指定格式化样例
+     * @return
+     */
+    public static String formatMillis(long millis, String pattern) {
+        return format(fromMillis(millis), pattern);
     }
 
-    public static String format(LocalDateTime localDateTime, String pattern) {
-        validateStr(pattern);
-        DateTimeFormatter dateTimeFormatter = FORMATTER_MAP.get(pattern);
-        if (null != dateTimeFormatter) {
-            return format(localDateTime, dateTimeFormatter);
-        }else{
-            try{
-                dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
-                String result = format(localDateTime,dateTimeFormatter);
-                //放入格式化器map里
-                FORMATTER_MAP.put(pattern,dateTimeFormatter);
-                return result;
-            }catch (Exception e) {
-                throw new RuntimeException(e.getMessage());
-            }
-        }
+    /**
+     * 根据epochMilli返回格式化日期字符串
+     *
+     * @param millis
+     * @param dateTimeFormatter 指定格式化器
+     * @return
+     */
+    public static String formatMillis(long millis, DateTimeFormatter dateTimeFormatter) {
+        return format(fromMillis(millis), dateTimeFormatter);
     }
 
-    private static String format(LocalDateTime localDateTime, DateTimeFormatter formatter) {
-        validateLocalDateTime(localDateTime);
-        return localDateTime.format(formatter);
+    /**
+     * 使用TemporalAccessor增加扩展性
+     *
+     * @param temporal
+     * @return
+     */
+    public static String format(TemporalAccessor temporal) {
+        return format(temporal, DATE_TIME_FORMATTER);
+    }
+
+    public static String format(TemporalAccessor temporal, String pattern) {
+        DateTimeFormatter dateTimeFormatter = getDateTimeFormatter(pattern);
+        return format(temporal, dateTimeFormatter);
+    }
+
+    private static String format(TemporalAccessor temporal, DateTimeFormatter dateTimeFormatter) {
+        validateDateTime(temporal);
+        return dateTimeFormatter.format(temporal);
     }
 
     /**
@@ -129,34 +175,29 @@ public class DateUtil {
     }
 
     public static LocalDateTime parse(String date) {
-        return parse(date, FORMATTER);
+        return parse(date, QUERY);
+    }
+
+    public static <T> T parse(String date, TemporalQuery<T> query) {
+        return parse(date, DATE_TIME_FORMATTER, query);
     }
 
     public static LocalDateTime parse(String date, String pattern) {
-        validateStr(pattern);
-        DateTimeFormatter dateTimeFormatter = FORMATTER_MAP.get(pattern);
-        if (null != dateTimeFormatter) {
-            return parse(date, dateTimeFormatter);
-        }else{
-            try{
-                dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
-                LocalDateTime result = parse(date,dateTimeFormatter);
-                //放入格式化器map里
-                FORMATTER_MAP.put(pattern,dateTimeFormatter);
-                return result;
-            }catch (Exception e){
-                throw new RuntimeException(e.getMessage());
-            }
-        }
+        return parse(date, pattern, QUERY);
     }
 
-    private static LocalDateTime parse(String date,DateTimeFormatter formatter){
+    public static <T> T parse(String date, String pattern, TemporalQuery<T> query) {
+        DateTimeFormatter dateTimeFormatter = getDateTimeFormatter(pattern);
+        return parse(date, dateTimeFormatter, query);
+    }
+
+    private static <T> T parse(String date, DateTimeFormatter dateTimeFormatter, TemporalQuery<T> query) {
         validateStr(date);
-        return LocalDateTime.parse(date,formatter);
+        return dateTimeFormatter.parse(date, query);
     }
 
-    public static Instant toInstant(LocalDateTime localDateTime){
-        validateLocalDateTime(localDateTime);
+    public static Instant toInstant(LocalDateTime localDateTime) {
+        validateDateTime(localDateTime);
         return localDateTime.toInstant(ZONE_OFFSET);
     }
 
@@ -165,7 +206,7 @@ public class DateUtil {
     }
 
     public static long toEpochSecond(LocalDateTime localDateTime) {
-        validateLocalDateTime(localDateTime);
+        validateDateTime(localDateTime);
         return localDateTime.toEpochSecond(ZONE_OFFSET);
         // return toInstant(localDateTime).getEpochSecond();
     }
@@ -176,8 +217,8 @@ public class DateUtil {
         }
     }
 
-    private static void validateLocalDateTime(LocalDateTime localDateTime) {
-        if (null == localDateTime) {
+    private static void validateDateTime(TemporalAccessor temporal) {
+        if (null == temporal) {
             throw new RuntimeException("传入参数为null！");
         }
     }
@@ -186,5 +227,26 @@ public class DateUtil {
         if (null == str || "".equals(str)) {
             throw new RuntimeException("传入字符串为" + null == str ? "null！" : "空串！");
         }
+    }
+
+    /**
+     * 根据pattern获取DateTimeFormatter
+     *
+     * @param pattern
+     * @return
+     */
+    private static DateTimeFormatter getDateTimeFormatter(String pattern) {
+        validateStr(pattern);
+        DateTimeFormatter dateTimeFormatter = FORMATTER_MAP.get(pattern);
+        if (null == dateTimeFormatter) {
+            try {
+                dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
+                //放入格式化器map里
+                FORMATTER_MAP.put(pattern, dateTimeFormatter);
+            } catch (Exception e) {
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+        return dateTimeFormatter;
     }
 }

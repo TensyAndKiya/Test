@@ -1,8 +1,12 @@
 package com.clei.Y2020.M07.D01;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 使用Thread.sleep不是很优雅
@@ -15,7 +19,7 @@ public class ReplaceThreadSleepTest {
 
     public static void main(String[] args) throws Exception{
 
-        useTimer();
+        // useTimer();
 
         useScheduledExecutorService();
     }
@@ -35,7 +39,7 @@ public class ReplaceThreadSleepTest {
 
         TimerTask task2 = new MyTimerTask(timer);
 
-        System.out.println(System.currentTimeMillis() + " - Timer");
+        PrintUtil.dateLine(System.currentTimeMillis() + " - Timer");
 
         timer.schedule(task1,1000L);
 
@@ -49,17 +53,16 @@ public class ReplaceThreadSleepTest {
      * 使用ScheduledExecutorService
      */
     private static void useScheduledExecutorService(){
-
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
-        System.out.println(System.currentTimeMillis() + " - ScheduledExecutorService");
+        PrintUtil.dateLine(System.currentTimeMillis() + " - ScheduledExecutorService");
 
         executor.schedule(() -> {
-            System.out.println(System.currentTimeMillis() + " - ScheduledExecutorService Hello World!");
-        },1000L, TimeUnit.MILLISECONDS);
+            PrintUtil.dateLine(System.currentTimeMillis() + " - ScheduledExecutorService Hello World!");
+        }, 8000L, TimeUnit.MILLISECONDS);
 
         // 关闭
-        // executor.shutdown();
+        executor.shutdown();
 
     }
 
@@ -76,7 +79,7 @@ class MyTimerTask extends TimerTask{
     @Override
     public void run() {
 
-        System.out.println(System.currentTimeMillis() + " - Timer - Hello World!");
+        PrintUtil.dateLine(System.currentTimeMillis() + " - Timer - Hello World!");
 
         // 一个TimerTask的耗时操作会影响另一个TimerTask的开始时间
         /*try {

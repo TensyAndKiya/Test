@@ -1,5 +1,7 @@
 package com.clei.Y2019.M04.D29;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -8,7 +10,7 @@ public class ThreadTest {
     public static void main(String[] args) {
         /*for (int i = 0; i < LOOP; i++) {
             new Thread( () ->{
-                System.out.println(Thread.currentThread().getName());
+                PrintUtil.dateLine(Thread.currentThread().getName());
             } ).start();
         }*/
         Set<String> set = new CopyOnWriteArraySet<>();
@@ -31,7 +33,7 @@ public class ThreadTest {
         public void run() {
             for(String s : set){
                 if(s.equals("String " + i)){
-                    System.out.println(s);
+                    PrintUtil.dateLine(s);
                     set.remove(s);
                     break;
                 }

@@ -1,5 +1,7 @@
 package com.clei.Y2018.M08.D20;
 
+import com.clei.utils.PrintUtil;
+
 public class ExtendsTest {
     public static void main(String[] args){
         A b=new B();
@@ -16,29 +18,29 @@ public class ExtendsTest {
 
 class A{
     public A(String arg){
-        System.out.println("This is arg A");
-        System.out.println("arg: "+arg);
+        PrintUtil.dateLine("This is arg A");
+        PrintUtil.dateLine("arg: " + arg);
     }
 
-    public A(String arg1,String arg2){
-        System.out.println("This is arg 2 A");
-        System.out.println("arg1: "+arg1+"\targ2: "+arg2);
+    public A(String arg1,String arg2) {
+        PrintUtil.dateLine("This is arg 2 A");
+        PrintUtil.dateLine("arg1: " + arg1 + "\targ2: " + arg2);
     }
 
     public A(){
-        System.out.println("This is A");
+        PrintUtil.dateLine("This is A");
     }
 }
 
 class B extends A{
     public B(){
         this("测试一下");
-        System.out.println("This is B");
+        PrintUtil.dateLine("This is B");
 
     }
 
-    public B(String arg){
-        System.out.println("This is arg B");
-        System.out.println("arg: "+arg);
+    public B(String arg) {
+        PrintUtil.dateLine("This is arg B");
+        PrintUtil.dateLine("arg: " + arg);
     }
 }

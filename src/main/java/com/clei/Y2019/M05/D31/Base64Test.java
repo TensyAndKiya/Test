@@ -1,5 +1,6 @@
 package com.clei.Y2019.M05.D31;
 
+import com.clei.utils.PrintUtil;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -12,8 +13,8 @@ public class Base64Test {
     private static String IMG_PATH = "D:\\img\\img.jpg";
     public static void main(String[] args) {
         String imgStr = imgEncode(IMG_PATH);
-        System.out.println(imgStr);
-        System.out.println(imgDecode(imgStr));
+        PrintUtil.dateLine(imgStr);
+        PrintUtil.dateLine(imgDecode(imgStr));
     }
 
     private static String imgEncode(String imgPath){

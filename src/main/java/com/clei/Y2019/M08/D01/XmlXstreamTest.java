@@ -1,11 +1,16 @@
 package com.clei.Y2019.M08.D01;
 
+import com.clei.utils.PrintUtil;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
-import okhttp3.*;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -48,41 +53,41 @@ public class XmlXstreamTest {
             message = new String(Base64decode(message),charset);
         }
         if(code.equals("0000")){
-            System.out.println("开具发票成功,message: " + message);
+            PrintUtil.dateLine("开具发票成功,message: " + message);
             new Thread(() -> {
                 try {
                     Thread.sleep(8000);
                     // 下载
-                    String result = populateXML(XZ_InterfaceCode,downloadInvoiceXML(fpqqlsh,orderId));
-                    System.out.println("下载发票结果：：：" + result);
-                    String zipCode = getElementContent(result,"zipCode");
-                    String encryptCode = getElementContent(result,"encryptCode");
-                    String content = getElementContent(result,"content");
+                    String result = populateXML(XZ_InterfaceCode, downloadInvoiceXML(fpqqlsh, orderId));
+                    PrintUtil.dateLine("下载发票结果：：：" + result);
+                    String zipCode = getElementContent(result, "zipCode");
+                    String encryptCode = getElementContent(result, "encryptCode");
+                    String content = getElementContent(result, "content");
                     content = decrypt3DES(Base64decode(content));
 
-                    System.out.println("really really result : " + content);
+                    PrintUtil.dateLine("really really result : " + content);
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }).start();
         }else{
-            System.out.println("开具发票失败,message: " + message);
+            PrintUtil.dateLine("开具发票失败,message: " + message);
         }
     }
 
     // 装备并发送xml
     private static String populateXML(String interfaceCode,String contentXML) throws Exception {
         contentXML = trim(contentXML);
-        System.out.println("contentXML:");
-        System.out.println(contentXML);
+        PrintUtil.dateLine("contentXML:");
+        PrintUtil.dateLine(contentXML);
         String content = Base64encode(encrypt3DES(contentXML));
-        String outerXML = outerXML(interfaceCode,content);
+        String outerXML = outerXML(interfaceCode, content);
         outerXML = trimOuter(outerXML);
-        System.out.println("outerXML:");
-        System.out.println(outerXML);
-        String result = sendXML(url,outerXML);
-        System.out.println(result);
+        PrintUtil.dateLine("outerXML:");
+        PrintUtil.dateLine(outerXML);
+        String result = sendXML(url, outerXML);
+        PrintUtil.dateLine(result);
         return result;
     }
 
@@ -97,7 +102,7 @@ public class XmlXstreamTest {
         // response.body().
         if(response.isSuccessful()){
             String result = response.body().string();
-            System.out.println("result");
+            PrintUtil.dateLine("result");
             return result;
         }else{
             return "fail";
@@ -182,7 +187,7 @@ public class XmlXstreamTest {
         invoiceHeader.setXhfyhzh("saleAccountNo");
         invoiceHeader.setGhfmc("个人");
         invoiceHeader.setGhfqylx("03");
-        invoiceHeader.setGhfsj("18408244077");
+        invoiceHeader.setGhfsj("184XXXXXXXX");
         invoiceHeader.setGhfemail("yueyaye@163.com");
         invoiceHeader.setKpy("张三");
         // invoiceHeader.setSky("收款人");
@@ -267,7 +272,7 @@ public class XmlXstreamTest {
         String startElement = '<' + element + '>';
         int start = xml.indexOf(startElement);
         if(start == -1){
-            System.out.println("错误，返回结果不包含" + element + "信息");
+            PrintUtil.dateLine("错误，返回结果不包含" + element + "信息");
             return null;
         }
         String endElement = "</" + element + '>';

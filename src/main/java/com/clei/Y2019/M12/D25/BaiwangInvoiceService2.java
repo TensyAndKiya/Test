@@ -3,6 +3,7 @@ package com.clei.Y2019.M12.D25;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.clei.utils.DateUtil;
+import com.clei.utils.PrintUtil;
 import com.clei.utils.RequestUtils;
 import sun.misc.BASE64Encoder;
 
@@ -13,7 +14,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * 百旺开票测试2
@@ -21,10 +26,6 @@ import java.util.*;
 public class BaiwangInvoiceService2 {
 
     public static void main(String[] args) throws Exception {
-
-        LocalDateTime now = LocalDateTime.now();
-
-
 
         String aesKey = "5EE6C2C11DD421F2";
 
@@ -35,36 +36,34 @@ public class BaiwangInvoiceService2 {
         cInfo.put("taxNo","110109500321655");
         cInfo.put("companyName","百旺电子测试2");
         cInfo.put("address","南山区蛇口、");
-        cInfo.put("phone","83484949");
-        cInfo.put("bankName","xx银行、");
-        cInfo.put("bankAccount","88888888888");
-        cInfo.put("taxRate","0.09");
-        cInfo.put("drawer","张三");
-        cInfo.put("reviewer","李四");
-        cInfo.put("payee","王五");
+        cInfo.put("phone", "83484949");
+        cInfo.put("bankName", "xx银行、");
+        cInfo.put("bankAccount", "88888888888");
+        cInfo.put("taxRate", "0.09");
+        cInfo.put("drawer", "张三");
+        cInfo.put("reviewer", "李四");
+        cInfo.put("payee", "王五");
 
-        iInfo.put("taxNo","");
-        iInfo.put("invoiceTitle","陈某");
-        iInfo.put("address","中国四川");
-        iInfo.put("phone","18408244088");
-        iInfo.put("bankName","中国人民银行");
-        iInfo.put("bankAccount","12345678");
-        iInfo.put("amount","1.00");
-        iInfo.put("email","yueyaye@163.com");
-
-
+        iInfo.put("taxNo", "");
+        iInfo.put("invoiceTitle", "陈某");
+        iInfo.put("address", "中国四川");
+        iInfo.put("phone", "184XXXXXXXX");
+        iInfo.put("bankName", "中国人民银行");
+        iInfo.put("bankAccount", "12345678");
+        iInfo.put("amount", "1.00");
+        iInfo.put("email", "yueyaye@163.com");
 
 
-        JSONObject content = requestData(cInfo,iInfo);
+        JSONObject content = requestData(cInfo, iInfo);
         // content = content.replaceAll("\r","").replaceAll("\n","");
 
         String contentStr = content.toJSONString();
 
-        System.out.println("content : " + contentStr);
+        PrintUtil.dateLine("content : " + contentStr);
 
         contentStr = new BASE64Encoder().encodeBuffer(contentStr.getBytes("UTF-8")).replaceAll("\r","").replaceAll("\n","");
 
-        System.out.println("contentStr : " + contentStr);
+        PrintUtil.dateLine("contentStr : " + contentStr);
 
         String contentMD5 = MD5(contentStr.getBytes("UTF-8"));
 
@@ -78,15 +77,14 @@ public class BaiwangInvoiceService2 {
         JSONObject outerInfo = outerInfo(cInfo,contentStr,encryptStr);
 
 
+        // PrintUtil.dateLine("contentKey : " + encryptStr);
 
-        // System.out.println("contentKey : " + encryptStr);
-
-        System.out.println("final : " + outerInfo.toJSONString());
+        PrintUtil.dateLine("final : " + outerInfo.toJSONString());
 
 
         String result = RequestUtils.getHttpConnectResult(outerInfo.toJSONString(),"https://dev.fapiao.com:18944/fpt-dsqz/invoice");
 
-        System.out.println("result : " + result);
+        PrintUtil.dateLine("result : " + result);
 
 
     }
@@ -135,7 +133,7 @@ public class BaiwangInvoiceService2 {
 
         obj.put("interface",interfaceInfo);
 
-        System.out.println(obj.toJSONString());
+        PrintUtil.dateLine(obj.toJSONString());
 
         return obj;
 

@@ -1,8 +1,19 @@
 package com.clei.Y2019.M04.D23;
 
-import java.io.*;
+import com.clei.utils.PrintUtil;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class ThreadNameCount {
     private static String LOG_File = "C:\\Users\\liudg\\Desktop\\logs\\2019-04-23 error\\all_info_0422.log";
@@ -24,11 +35,11 @@ public class ThreadNameCount {
             }
         }
         br.close();
-        System.out.println("筛选完毕");
+        PrintUtil.dateLine("筛选完毕");
         List<ThreadDiff> list = mapToTD(countMap);
         Collections.sort(list);
         list.forEach( td ->{
-            System.out.println(td);
+            PrintUtil.dateLine(td);
         } );
     }
 

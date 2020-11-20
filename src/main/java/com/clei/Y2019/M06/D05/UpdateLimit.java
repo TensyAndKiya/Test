@@ -1,6 +1,12 @@
 package com.clei.Y2019.M06.D05;
 
-import java.io.*;
+import com.clei.utils.PrintUtil;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Properties;
 
 public class UpdateLimit {
@@ -11,20 +17,20 @@ public class UpdateLimit {
             try{
                 limit = Integer.parseInt(limitStr);
             }catch (Exception e){
-                System.out.println("请输入正确的数字(0--100)");
+                PrintUtil.dateLine("请输入正确的数字(0--100)");
                 return;
             }
             if(limit < 0 || limit > 100){
-                System.out.println("请输入正确的数字(0--100)");
+                PrintUtil.dateLine("请输入正确的数字(0--100)");
                 return;
             }
             Properties prop = getProperties();
             //设置值
             prop.setProperty("limit_threshold",limit + "");
             if(updateProp(prop,null)){
-                System.out.println("修改值为" + limit + "成功！");
+                PrintUtil.dateLine("修改值为" + limit + "成功！");
             }else{
-                System.out.println("修改值为" + limit + "失败！请重试");
+                PrintUtil.dateLine("修改值为" + limit + "失败！请重试");
             }
         }
     }
@@ -35,14 +41,14 @@ public class UpdateLimit {
         try {
             properties.load(inputStream);
         } catch (IOException e) {
-            System.out.println("加载配置文件异常!");
+            PrintUtil.dateLine("加载配置文件异常!");
             e.printStackTrace();
             return null;
         }finally {
             try {
                 inputStream.close();
             } catch (IOException e) {
-                System.out.println("关闭输入流异常!");
+                PrintUtil.dateLine("关闭输入流异常!");
                 e.printStackTrace();
             }
         }
@@ -57,7 +63,7 @@ public class UpdateLimit {
         final String PATH = UpdateLimit.class.getClassLoader().getResource("load.properties").getPath();
         File file = new File(PATH);
         if(!file.exists()){
-            System.out.println("写入负载配置文件失败，文件不存在！");
+            PrintUtil.dateLine("写入负载配置文件失败，文件不存在！");
             return false;
         }
         OutputStream outputStream = null;
@@ -66,7 +72,7 @@ public class UpdateLimit {
             outputStream = new FileOutputStream(file);
             prop.store(outputStream,comment);
         }catch (Exception e){
-            System.out.println("加载属性文件出错！");
+            PrintUtil.dateLine("加载属性文件出错！");
             e.printStackTrace();
             return false;
         }finally {
@@ -74,7 +80,7 @@ public class UpdateLimit {
                 try{
                     outputStream.close();
                 }catch(Exception ee){
-                    System.out.println("关闭输出流出错！");
+                    PrintUtil.dateLine("关闭输出流出错！");
                     ee.printStackTrace();
                 }
             }

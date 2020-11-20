@@ -1,21 +1,23 @@
 package com.clei.Y2019.M04.D08;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.Calendar;
 import java.util.Date;
 
 public class FinalTest {
     public static void main(String[] args) {
         //function(new Dog());
-        System.out.println(new Date().getTime());
-        System.out.println(System.currentTimeMillis());
-        System.out.println(Calendar.getInstance().getTimeInMillis());
+        PrintUtil.dateLine(new Date().getTime());
+        PrintUtil.dateLine(System.currentTimeMillis());
+        PrintUtil.dateLine(Calendar.getInstance().getTimeInMillis());
     }
 
     private static void function(final Dog dog){
-        System.out.println(dog);
+        PrintUtil.dateLine(dog);
         // dog = new Dog();
         dog.setAge(998);
-        System.out.println(dog);
+        PrintUtil.dateLine(dog);
     }
 
     static class Dog{

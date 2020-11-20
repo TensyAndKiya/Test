@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * 道路拥堵路段排名 entity
  *
- * @author chenlei51
+ * @author KIyA51
  * @version 1.0.0
  * @date 2020-09-09
  */

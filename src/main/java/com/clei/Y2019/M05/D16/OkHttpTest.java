@@ -1,9 +1,11 @@
 package com.clei.Y2019.M05.D16;
 
+import com.clei.utils.PrintUtil;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,7 +39,7 @@ public class OkHttpTest {
         builder.add("colorType","0");
         builder.add("sizeType","10");
         FormBody formBody = builder.build();
-        System.out.println(formBody.contentType());
+        PrintUtil.dateLine(formBody.contentType());
         Request request = new Request.Builder()
                 .url("http://localhost:8080/park/sentrybox/calculator/calculate?JSESSIONID=11299d11-4612-4676-adc0-b7a9bf67b995")
                 .post(formBody)
@@ -46,7 +48,7 @@ public class OkHttpTest {
         Response response = okHttpClient.newCall(request).execute();
         if(null != response && response.isSuccessful()){
             String result = response.body().string();
-            System.out.println("result: " + result);
+            PrintUtil.dateLine("result: " + result);
         }
         if(null != response){
             response.close();

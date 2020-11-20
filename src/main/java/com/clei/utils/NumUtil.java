@@ -32,29 +32,81 @@ public class NumUtil {
 
     /**
      * 数字进制转换
+     *
      * @param str
      * @param from
      * @param to
      * @return
      */
-    public static String transRadix(String str, int from, int to){
+    public static String transRadix(String str, int from, int to) {
         // 校验数据合法性
-        if(from < 2 || from > 36 || to < 2 || to > 36){
+        if (from < 2 || from > 36 || to < 2 || to > 36) {
             throw new RuntimeException("你是沙雕吗？");
         }
-        if(!StringUtil.isDigitOrChar(str)){
+        if (!StringUtil.isDigitOrChar(str)) {
             throw new RuntimeException("你是真滴沙雕！");
         }
 
         // 获取10进制的num
-        int num = Integer.parseInt(str,from);
+        int num = Integer.parseInt(str, from);
 
         // 转成to进制的String
-        return Integer.toString(num,to);
+        return Integer.toString(num, to);
+    }
+
+    /**
+     * 转成二级制字符串，32位长度的
+     *
+     * @param i
+     * @return
+     */
+    public static String toBinaryString(int i) {
+        StringBuilder sb = new StringBuilder(Integer.toBinaryString(i));
+        // 前面补0
+        int diff = 32 - sb.length();
+        for (int j = 0; j < diff; j++) {
+            sb.insert(0, '0');
+        }
+        return sb.toString();
+    }
+
+    /**
+     * num^(i - 1) + ... + num^0
+     *
+     * @param num
+     * @param i
+     * @return
+     */
+    public static int getPowSum(int num, int i) {
+        int sum = 0;
+        while (i > 0) {
+            sum += getPow(num, --i);
+        }
+        return sum;
+    }
+
+    /**
+     * num的i次方 num^i
+     *
+     * @param num
+     * @param i
+     * @return
+     */
+    public static int getPow(int num, int i) {
+        if (i < 0) {
+            throw new RuntimeException("参数错误");
+        }
+        int result = 1;
+        while (i > 0) {
+            result *= num;
+            i--;
+        }
+        return result;
     }
 
     public static void main(String[] args) {
+        System.out.println(getPowSum(3, 4));
 
-        System.out.println(transRadix("x",333,10));
+        PrintUtil.dateLine(transRadix("x", 36, 10));
     }
 }

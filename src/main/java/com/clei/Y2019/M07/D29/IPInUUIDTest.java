@@ -1,5 +1,7 @@
 package com.clei.Y2019.M07.D29;
 
+import com.clei.utils.PrintUtil;
+
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -35,9 +37,9 @@ public class IPInUUIDTest {
 
     public static void main(String[] args) {
         String str = getIPStr();
-        System.out.println("IP:" + IP);
-        System.out.println("IPStr:" + str);
-        System.out.println("IP:" + getIP(str));
+        PrintUtil.dateLine("IP:" + IP);
+        PrintUtil.dateLine("IPStr:" + str);
+        PrintUtil.dateLine("IP:" + getIP(str));
     }
 
     private static String getIPStr(){

@@ -2,6 +2,7 @@ package com.clei.temp;
 
 import com.clei.utils.DateUtil;
 import com.clei.utils.FileUtil;
+import com.clei.utils.PrintUtil;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -31,42 +32,42 @@ public class TempTest {
 
         List<Node> list2 = new ArrayList<>(list1);
 
-        System.out.println(list1 == list2);
-        System.out.println(list1.get(0) == list2.get(0));
+        PrintUtil.dateLine(list1 == list2);
+        PrintUtil.dateLine(list1.get(0) == list2.get(0));
 
         Iterator<Node> it = list2.iterator();
-        while (it.hasNext()){
+        while (it.hasNext()) {
             it.next();
             it.remove();
         }
 
-        System.out.println(list1.size());
-        System.out.println(list2.size());
+        PrintUtil.dateLine(list1.size());
+        PrintUtil.dateLine(list2.size());
 
         long nowMillis = System.currentTimeMillis();
         LocalDateTime today = LocalDateTime.now();
         LocalDateTime tomorrow = today.plusDays(1);
 
-        System.out.println(DateUtil.toEpochSecond(today));
-        System.out.println(DateUtil.toEpochSecond(tomorrow));
+        PrintUtil.dateLine(DateUtil.toEpochSecond(today));
+        PrintUtil.dateLine(DateUtil.toEpochSecond(tomorrow));
 
-        System.out.println(DateUtil.toEpochMilli(today));
-        System.out.println(nowMillis + 86400 * 1000);
-        System.out.println(DateUtil.toEpochMilli(tomorrow));
+        PrintUtil.dateLine(DateUtil.toEpochMilli(today));
+        PrintUtil.dateLine(nowMillis + 86400 * 1000);
+        PrintUtil.dateLine(DateUtil.toEpochMilli(tomorrow));
 
-        System.out.println(nowMillis + 86400 * 1000 - DateUtil.toEpochMilli(tomorrow));
-        System.out.println(tomorrow.toInstant(ZoneOffset.ofHours(8)).toEpochMilli() / 1000);
-        System.out.println(tomorrow.toInstant(ZoneOffset.ofHours(0)).toEpochMilli() / 1000);
-        System.out.println(DateUtil.toEpochSecond(tomorrow) - DateUtil.toEpochSecond(today));
+        PrintUtil.dateLine(nowMillis + 86400 * 1000 - DateUtil.toEpochMilli(tomorrow));
+        PrintUtil.dateLine(tomorrow.toInstant(ZoneOffset.ofHours(8)).toEpochMilli() / 1000);
+        PrintUtil.dateLine(tomorrow.toInstant(ZoneOffset.ofHours(0)).toEpochMilli() / 1000);
+        PrintUtil.dateLine(DateUtil.toEpochSecond(tomorrow) - DateUtil.toEpochSecond(today));
 
-        System.out.println(ChronoUnit.MINUTES.between(tomorrow,today));
-        System.out.println(tomorrow.until(today,ChronoUnit.MINUTES));
+        PrintUtil.dateLine(ChronoUnit.MINUTES.between(tomorrow, today));
+        PrintUtil.dateLine(tomorrow.until(today, ChronoUnit.MINUTES));
 
 
-        LocalDateTime l1 = LocalDateTime.of(2020,8,31,0,0);
-        System.out.println(DateUtil.toEpochMilli(l1));
-        System.out.println(DateUtil.toEpochMilli(l1.plusDays(1)));
-        System.out.println(DateUtil.format(l1.withHour(3)));
+        LocalDateTime l1 = LocalDateTime.of(2020, 8, 31, 0, 0);
+        PrintUtil.dateLine(DateUtil.toEpochMilli(l1));
+        PrintUtil.dateLine(DateUtil.toEpochMilli(l1.plusDays(1)));
+        PrintUtil.dateLine(DateUtil.format(l1.withHour(3)));
 
         test();
 
@@ -125,7 +126,7 @@ public class TempTest {
             }
         });
 
-        indexMap.forEach((k,v) -> System.out.println(k + "    " + v));
+        indexMap.forEach((k, v) -> PrintUtil.dateLine(k + "    " + v));
     }
 
     static class Node{

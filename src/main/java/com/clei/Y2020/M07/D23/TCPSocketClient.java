@@ -1,5 +1,7 @@
 package com.clei.Y2020.M07.D23;
 
+import com.clei.utils.PrintUtil;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -26,11 +28,11 @@ public class TCPSocketClient {
 
         int length = is.read(buffer);
 
-        System.out.println(length);
+        PrintUtil.dateLine(length);
 
         String content = new String(buffer,0,length,"UTF-8");
 
-        System.out.println(content);
+        PrintUtil.dateLine(content);
 
         // 再写入
         os = socket.getOutputStream();

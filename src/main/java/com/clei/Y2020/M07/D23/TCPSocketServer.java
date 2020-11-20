@@ -1,5 +1,7 @@
 package com.clei.Y2020.M07.D23;
 
+import com.clei.utils.PrintUtil;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
@@ -17,7 +19,7 @@ public class TCPSocketServer {
 
         while (true){
 
-            System.out.println("begin");
+            PrintUtil.dateLine("begin");
 
             Socket socket = serverSocket.accept();
 
@@ -35,7 +37,7 @@ public class TCPSocketServer {
                 // 读取
                 int length = is.read(buffer);
 
-                System.out.println(length);
+                PrintUtil.dateLine(length);
 
                 if(-1 == length){
 
@@ -48,7 +50,7 @@ public class TCPSocketServer {
 
                 String content = new String(buffer,0,length,"UTF-8");
 
-                System.out.println(content);
+                PrintUtil.dateLine(content);
 
                 // 写入
                 os.write("侠客行".getBytes("UTF-8"));

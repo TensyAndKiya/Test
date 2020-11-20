@@ -183,6 +183,7 @@ public class EncryptUtil {
         for (int i = 0; i < length; i++) {
             byte b = arr[i];
 
+            // 一个byte变两个char，前4位和后四位各一个
             str[i * 2] = hd[b >>> 4 & 0xF];
             str[i * 2 + 1] = hd[b & 0xF];
         }

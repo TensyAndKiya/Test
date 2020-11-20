@@ -1,13 +1,23 @@
 package com.clei.utils.encrypt;
 
+import com.clei.utils.PrintUtil;
 import org.apache.commons.codec.binary.Base64;
 
-import java.security.*;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author lanchunqiu
@@ -167,8 +177,8 @@ public class JdjrSignature {
         Map<String, String> params = new HashMap<>();
         params.put("appId", "appId");
         params.put("bizParam", "{\"actKey\":\"N32MNf\",\"ip\":\"127.0.0.1\",\"phone\":\"18200000000\"}");
-        System.out.println("私钥：" + keyPairs.getPrivateKey());
-        System.out.println("公钥：" + keyPairs.getPublicKey());
+        PrintUtil.dateLine("私钥：" + keyPairs.getPrivateKey());
+        PrintUtil.dateLine("公钥：" + keyPairs.getPublicKey());
         String sign = JdjrSignature.sign(params, keyPairs.getPrivateKey());
         params.put("sign", sign);
         boolean result = JdjrSignature.check(params, keyPairs.getPublicKey());

@@ -1,5 +1,7 @@
 package com.clei.Y2019.M04.D26;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,7 +14,7 @@ public class HashSetTest {
         }
         try{
             for(String s : set){
-                System.out.println(s);
+                PrintUtil.dateLine(s);
 //                set.add("String " + rand.nextInt(998));
                 if(s.equals("String 89")){
                    set.add("String 100");

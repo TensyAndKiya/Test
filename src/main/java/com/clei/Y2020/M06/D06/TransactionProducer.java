@@ -1,11 +1,16 @@
 package com.clei.Y2020.M06.D06;
 
+import com.clei.utils.PrintUtil;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.client.producer.TransactionMQProducer;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -52,7 +57,7 @@ public class TransactionProducer {
             // 指定消息存储在哪个队列中
             SendResult result = producer.sendMessageInTransaction(msg,Integer.valueOf(i));
 
-            System.out.println(i + " 发送结果：" + result);
+            PrintUtil.dateLine(i + " 发送结果：" + result);
         }
 
         Thread.sleep(10000000);
