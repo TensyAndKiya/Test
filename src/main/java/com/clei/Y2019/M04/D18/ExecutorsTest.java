@@ -7,16 +7,20 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class ExcutorsTest {
+/**
+ * Executors test
+ *
+ * @author KIyA
+ */
+public class ExecutorsTest {
+
     public static void main(String[] args) throws InterruptedException {
         //cachedPoolTest();
         //fixedPoolTest();
         //scheduledPoolTest();
         workStealingPoolTest();
-        while(true){
-
-        }
     }
+
     private static void cachedPoolTest() throws InterruptedException {
         ExecutorService executorService = Executors.newCachedThreadPool();
         for (int i = 0; i < 10; i++) {
@@ -26,6 +30,7 @@ public class ExcutorsTest {
         }
         executorService.shutdown();
     }
+
     private static void fixedPoolTest() throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
         for (int i = 0; i < 10; i++) {
@@ -33,11 +38,13 @@ public class ExcutorsTest {
         }
         executorService.shutdown();
     }
+
     private static void scheduledPoolTest() throws InterruptedException {
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(3);
-        executorService.scheduleAtFixedRate(new MyRunnable(),1,1, TimeUnit.SECONDS);
+        executorService.scheduleAtFixedRate(new MyRunnable(), 1, 1, TimeUnit.SECONDS);
         //executorService.shutdown();
     }
+
     private static void workStealingPoolTest() throws InterruptedException {
         ExecutorService executorService = Executors.newWorkStealingPool(2);
         for (int i = 0; i < 10; i++) {
@@ -47,8 +54,8 @@ public class ExcutorsTest {
     }
 }
 
+class MyRunnable implements Runnable {
 
-class MyRunnable implements Runnable{
     @Override
     public void run() {
         PrintUtil.dateLine(Thread.currentThread().getName() + " 执行了任务！");
