@@ -1,2 +1,2 @@
-# MyParkCODailyPractice
-我在park公司的日常练习以及一些小计划
+# practice and test
+生活与工作中的一些小想法
