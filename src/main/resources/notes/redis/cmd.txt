@@ -4,7 +4,21 @@ src/redis-cli -h 127.0.0.1 -p 6379 -a liuli
 auth liuli
 # 查看匹配的键
 keys *
+# 游标遍历匹配键 估计匹配键较多的时候用
+scan [cursor] match [pattern] count [count]
+# 查看当前有多少key
+dbsize
+# 查看key类型
+type key
+# 发布消息 无状态，无法保证可达
+publish topic message
+# 订阅消息
+subscribe topic
 
+# 不存在则设置值
+setnx key value
+# 不存在则设置 && 存在则设置
+set key value [EX seconds | PX milliseconds] [NX|XX]
 # string 设置键值
 set aa bb
 # 查看值
@@ -48,6 +62,9 @@ lrange names 0 -2
 lpop names
 # list 移除list尾第一个元素并返回
 rpop names
+# 阻塞弹出 异步队列
+blpop key timeout
+brpop key timeout
 
 # set 往set加元素，key不存在则创建，返回0 表示已有 1 表示添加成功
 sadd types aa

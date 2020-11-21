@@ -22,7 +22,7 @@ tail -f all_info.log -n 100
 光标向上移n行 nh(例：12k)
 删除一行 dd
 
-# grep 技巧 （global regular expression print）
+# grep技巧(Globally search given Regular Expression and Print)
 #统计test.log里文本1234出现行数
 cat test.log | grep -c 1234
 grep 1234 test.log -c
@@ -54,6 +54,25 @@ grep 'text' all_info.log -B 3
 grep 'text' all_info.log -C 3
 grep 'text' all_info.log -3
 
+# awk技巧(Aho, Weinberger & Kernighan interpreted language)
+# 输出第二列或第三列满足条件的第一二三列
+awk '$2 == 18 || $3 == 0 {print $1,$2,$3}' user.txt
+# 输出表头及第二列或第三列满足条件的第一二三列
+awk '($2 == 18 || $3 == 0) || NR == 1 {print $1,$2,$3}' user.txt
+# 根据第三列分组并统计各组出现次数，并输出
+awk '{arr[$3]++} END {for(i in arr) print i "\t" arr[i]}' user.txt
+
+# sed技巧(Stream Editor)
+# 将以空白符开头的Str替换成String s表示字符串
+sed -i 's/^\s\+Str/String/' Sed.java
+# 将以.结尾的字符换成;
+sed -i 's/\.$/\;/' Sed.java
+# 将World数字结尾的换成World
+sed -i 's/World[1-9]!/World/' Sed.java
+# 将World数字结尾的换成World g表示每一行全部替换
+sed -i 's/World[1-9]!/World/g' Sed.java
+# 删除包含hasaki字符串的行 d表示删除行
+sed -i '/hasaki/d' Sed.java
 
 # 查看文件大小
 du -sh 查看当前所在文件夹大小 默认单位M
