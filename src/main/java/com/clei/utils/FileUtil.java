@@ -185,12 +185,12 @@ public class FileUtil {
             for (int i = 0; i < array.length; i++) {
 
                 if(i % 16 == 0){
-                    PrintUtil.dateLine();
+                    PrintUtil.println();
                 }else if(i % 2 == 0){
-                    PrintUtil.date(' ');
+                    PrintUtil.print(' ');
                 }
 
-                PrintUtil.date(array[i]);
+                PrintUtil.print(array[i]);
             }
         }
     }

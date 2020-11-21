@@ -14,13 +14,9 @@ import com.clei.utils.PrintUtil;
 public class BinFileToHexStringTest {
 
     public static void main(String[] args) throws Exception {
-
-        PrintUtil.dateLine("开始");
-        FileUtil.binFileToHexString("F:\\Game\\GAME\\法利恩戰記（Furion Chronicles）\\Save\\save02.sav");
-        PrintUtil.dateLine("结束");
-
-        System.out.println(Integer.toHexString(20));
-
+        PrintUtil.log("开始");
+        FileUtil.binFileToHexString("D:\\Temp\\A.class");
+        PrintUtil.println();
+        PrintUtil.log("结束");
     }
-
 }
