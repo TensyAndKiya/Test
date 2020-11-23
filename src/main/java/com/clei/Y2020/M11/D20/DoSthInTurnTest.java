@@ -3,7 +3,6 @@ package com.clei.Y2020.M11.D20;
 import com.clei.utils.PrintUtil;
 import com.clei.utils.SystemUtil;
 
-import java.io.IOException;
 import java.util.concurrent.locks.LockSupport;
 
 /**
@@ -13,7 +12,7 @@ import java.util.concurrent.locks.LockSupport;
  */
 public class DoSthInTurnTest {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         print(4, 5);
         SystemUtil.pause();
     }
