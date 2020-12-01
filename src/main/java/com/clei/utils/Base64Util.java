@@ -3,7 +3,9 @@ package com.clei.utils;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 
 public class Base64Util {
 
@@ -29,7 +31,6 @@ public class Base64Util {
         File file = new File(filePath);
         if(!file.exists()){
             file.getParentFile().mkdirs();
-            file.createNewFile();
         }
         FileOutputStream fos = new FileOutputStream(file);
         BufferedOutputStream bos = new BufferedOutputStream(fos);

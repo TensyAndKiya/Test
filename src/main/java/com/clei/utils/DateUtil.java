@@ -9,6 +9,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQuery;
+import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -209,6 +210,26 @@ public class DateUtil {
         validateDateTime(localDateTime);
         return localDateTime.toEpochSecond(ZONE_OFFSET);
         // return toInstant(localDateTime).getEpochSecond();
+    }
+
+    /**
+     * LocalDateTime -> Date
+     *
+     * @param localDateTime
+     * @return
+     */
+    public static Date localDateTimeToDate(LocalDateTime localDateTime) {
+        return Date.from(localDateTime.toInstant(ZONE_OFFSET));
+    }
+
+    /**
+     * Date -> LocalDateTime
+     *
+     * @param date
+     * @return
+     */
+    public static LocalDateTime DateToLocalDateTime(Date date) {
+        return LocalDateTime.ofInstant(date.toInstant(), ZONE_OFFSET);
     }
 
     private static void validateMilliOrSecond(long l) {
