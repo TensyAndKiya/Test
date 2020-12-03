@@ -206,6 +206,16 @@ public class DateUtil {
         return toInstant(localDateTime).toEpochMilli();
     }
 
+    /**
+     * String date -> epochMilli
+     *
+     * @param date
+     * @return
+     */
+    public static long toEpochMilli(String date) {
+        return toEpochMilli(parse(date));
+    }
+
     public static long toEpochSecond(LocalDateTime localDateTime) {
         validateDateTime(localDateTime);
         return localDateTime.toEpochSecond(ZONE_OFFSET);

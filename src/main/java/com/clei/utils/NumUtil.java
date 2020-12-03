@@ -104,6 +104,16 @@ public class NumUtil {
         return result;
     }
 
+    /**
+     * 判断一个整数是否是奇数
+     *
+     * @param num
+     * @return
+     */
+    private static boolean isOdd(int num) {
+        return 1 == (1 & num);
+    }
+
     public static void main(String[] args) {
         System.out.println(getPowSum(3, 4));
 
