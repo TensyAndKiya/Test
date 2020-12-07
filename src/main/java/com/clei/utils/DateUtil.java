@@ -36,6 +36,26 @@ public class DateUtil {
 
     private final static ZoneOffset ZONE_OFFSET = ZoneOffset.ofHours(8);
 
+    /**
+     * 一秒钟毫秒数
+     */
+    private final static long SECOND_MILLIS = 1000L;
+
+    /**
+     * 一分钟毫秒数
+     */
+    private final static long MINUTE_MILLIS = SECOND_MILLIS * 60;
+
+    /**
+     * 一小时毫秒数
+     */
+    private final static long HOUR_MILLIS = MINUTE_MILLIS * 60;
+
+    /**
+     * 一天毫秒数
+     */
+    private final static long DAY_MILLIS = HOUR_MILLIS * 24;
+
     static {
         FORMATTER_MAP.put(FORMATTER_PATTERN, DATE_TIME_FORMATTER);
         FORMATTER_MAP.put(FORMATTER_PATTERN_MS, DATE_TIME_FORMATTER_MS);
@@ -121,11 +141,6 @@ public class DateUtil {
         return format(temporal, dateTimeFormatter);
     }
 
-    private static String format(TemporalAccessor temporal, DateTimeFormatter dateTimeFormatter) {
-        validateDateTime(temporal);
-        return dateTimeFormatter.format(temporal);
-    }
-
     /**
      * 昨日之始
      *
@@ -192,11 +207,6 @@ public class DateUtil {
         return parse(date, dateTimeFormatter, query);
     }
 
-    private static <T> T parse(String date, DateTimeFormatter dateTimeFormatter, TemporalQuery<T> query) {
-        validateStr(date);
-        return dateTimeFormatter.parse(date, query);
-    }
-
     public static Instant toInstant(LocalDateTime localDateTime) {
         validateDateTime(localDateTime);
         return localDateTime.toInstant(ZONE_OFFSET);
@@ -240,6 +250,75 @@ public class DateUtil {
      */
     public static LocalDateTime DateToLocalDateTime(Date date) {
         return LocalDateTime.ofInstant(date.toInstant(), ZONE_OFFSET);
+    }
+
+    /**
+     * 两个日期的时间差 3天2小时1分这样子
+     *
+     * @param start
+     * @param end
+     * @return
+     */
+    public static String getDuration(LocalDateTime start, LocalDateTime end) {
+        return getDuration(toEpochMilli(start), toEpochMilli(end));
+    }
+
+    /**
+     * 两个日期的时间差 3天2小时1分这样子
+     *
+     * @param start
+     * @param end
+     * @return
+     */
+    public static String getDuration(Date start, Date end) {
+        return getDuration(start.getTime(), end.getTime());
+    }
+
+    /**
+     * 两个日期的时间差 3天2小时1分这样子
+     *
+     * @param start
+     * @param end
+     * @return
+     */
+    public static String getDuration(long start, long end) {
+        long diff = end - start;
+        if (0 > diff) {
+            throw new RuntimeException("时间错误！");
+        }
+        // 否则至少一分钟
+        if (MINUTE_MILLIS > diff) {
+            return "0分";
+        }
+        StringBuilder sb = new StringBuilder();
+        long dayDiff = diff / DAY_MILLIS;
+        if (0 < dayDiff) {
+            sb.append(dayDiff);
+            sb.append("天");
+        }
+        diff = diff % DAY_MILLIS;
+        long hourDiff = diff / HOUR_MILLIS;
+        if (0 < hourDiff) {
+            sb.append(hourDiff);
+            sb.append("小时");
+        }
+        diff = diff % HOUR_MILLIS;
+        long minuteDiff = diff / MINUTE_MILLIS;
+        if (0 < minuteDiff) {
+            sb.append(minuteDiff);
+            sb.append("分");
+        }
+        return sb.toString();
+    }
+
+    private static String format(TemporalAccessor temporal, DateTimeFormatter dateTimeFormatter) {
+        validateDateTime(temporal);
+        return dateTimeFormatter.format(temporal);
+    }
+
+    private static <T> T parse(String date, DateTimeFormatter dateTimeFormatter, TemporalQuery<T> query) {
+        validateStr(date);
+        return dateTimeFormatter.parse(date, query);
     }
 
     private static void validateMilliOrSecond(long l) {
