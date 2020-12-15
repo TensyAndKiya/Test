@@ -8,13 +8,14 @@ import java.util.Random;
 import java.util.regex.Pattern;
 
 public class StringUtil {
-    public static String createOrderNo(){
+
+    public static String createOrderNo() {
         String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + "";
         String seed = "999999";
         String noStr = new Random().nextInt(Integer.parseInt(seed)) + "";
         StringBuffer result = new StringBuffer();
         result.append(timestamp);
-        for(int i=0; i<(seed.length()-noStr.length()); i++){
+        for (int i = 0; i < (seed.length() - noStr.length()); i++) {
             result.append("0");
         }
         result.append(noStr);
@@ -132,18 +133,36 @@ public class StringUtil {
 
     /**
      * 是数字或字符
+     *
      * @param str
      * @return
      */
-    public static boolean isDigitOrChar(String str){
+    public static boolean isDigitOrChar(String str) {
         String pattern = "[0-9A-Za-z]*";
 
-        return Pattern.matches(pattern,str);
+        return Pattern.matches(pattern, str);
     }
 
-    public static String[] arrayRemoveDuplicate(){
+    public static String[] arrayRemoveDuplicate() {
         String[] array = new String[0];
         array = new HashSet<String>(Arrays.asList(array)).toArray(array);
         return array;
+    }
+
+    /**
+     * 反转字符串
+     *
+     * @param str
+     * @return
+     */
+    public static String reverse(String str) {
+        // 空直接返回
+        if (isEmpty(str)) {
+            return str;
+        }
+        // 转成数组再翻转
+        char[] arr = str.toCharArray();
+        ArrayUtil.reverse(arr);
+        return new String(arr);
     }
 }

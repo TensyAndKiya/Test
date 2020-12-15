@@ -2,7 +2,6 @@ package com.clei.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -253,6 +252,19 @@ public class ArrayUtil {
     }
 
     /**
+     * 交换char数组两个数位置
+     *
+     * @param arr
+     * @param i
+     * @param j
+     */
+    public static void swap(char[] arr, int i, int j) {
+        char t = arr[i];
+        arr[i] = arr[j];
+        arr[j] = t;
+    }
+
+    /**
      * 将数字num插入到数组的i位置
      *
      * @param arr
@@ -271,23 +283,49 @@ public class ArrayUtil {
     }
 
     /**
+     * 翻转
+     *
+     * @param arr
+     * @return
+     */
+    public static void reverse(int[] arr) {
+        int length = arr.length;
+        int times = length / 2;
+        for (int i = 0; i < times; i++) {
+            swap(arr, i, length - i - 1);
+        }
+    }
+
+    /**
+     * char数组反转
+     *
+     * @param arr
+     * @return
+     */
+    public static void reverse(char[] arr) {
+        int length = arr.length;
+        int times = length / 2;
+        for (int i = 0; i < times; i++) {
+            swap(arr, i, length - i - 1);
+        }
+    }
+
+    /**
      * array 里 的值 不在 collection 里 的 凑一个array
      *
      * @param array
-     * @param collection
+     * @param set
      * @return
      */
-    private static int[] getLastArray(int[] array, Collection<Integer> collection) {
-        int[] newArray = new int[array.length - collection.size()];
-
+    private static int[] getLastArray(int[] array, Set<Integer> set) {
+        int[] newArray = new int[array.length - set.size()];
         int j = 0;
         for (int i : array) {
-            if (!collection.contains(i)) {
+            if (!set.contains(i)) {
                 newArray[j] = i;
                 j++;
             }
         }
-
         return newArray;
     }
 

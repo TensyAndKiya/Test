@@ -23,12 +23,14 @@ public class AsyncProducer {
         DefaultMQProducer producer = new DefaultMQProducer("FirstGroup");
 
         // 设置mq server address
-        producer.setNamesrvAddr("127.0.0.1:9876");
+        producer.setNamesrvAddr("127.0.0.1:9876;127.0.0.1:9877");
+
+        // producer.setInstanceName("allMNoS");
 
         // 启动
         try {
             producer.start();
-        }catch (MQClientException e){
+        } catch (MQClientException e) {
             e.printStackTrace();
             PrintUtil.dateLine("mq 启动失败！");
             return;
@@ -46,8 +48,11 @@ public class AsyncProducer {
                 final int index = i;
 
                 // 创建消息
-                Message msg = new Message("FirstTopic","FirstTag","FirstKey" + i,
+                Message msg = new Message("FirstTopic", "FirstTag", "FirstKey" + i,
                         ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET));
+
+                //
+                // msg.setDelayTimeLevel(0);
 
                 // 发送
                 producer.send(msg, new SendCallback() {
