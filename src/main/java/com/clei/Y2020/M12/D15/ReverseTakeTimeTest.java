@@ -17,18 +17,19 @@ public class ReverseTakeTimeTest {
         int times = 100000000;
         // 反转的字符串
         String str = "012345678910";
+        // 通过自定义reverse方法
         watch.start();
         for (int i = 0; i < times; i++) {
             StringUtil.reverse(str);
         }
         watch.stop();
         PrintUtil.log("耗时：{}ms", watch.getLastTaskTimeMillis());
+        // 通过StringBuilder reverse
         watch.start();
         for (int i = 0; i < times; i++) {
             new StringBuilder(str).reverse().toString();
         }
         watch.stop();
-
         PrintUtil.log("耗时：{}ms", watch.getLastTaskTimeMillis());
     }
 }

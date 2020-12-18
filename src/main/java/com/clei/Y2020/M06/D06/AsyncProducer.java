@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 public class AsyncProducer {
     public static void main(String[] args) throws Exception{
         // 初始化一个producer group
-        DefaultMQProducer producer = new DefaultMQProducer("FirstGroup");
+        DefaultMQProducer producer = new DefaultMQProducer("ProducerGroup1");
 
         // 设置mq server address
         producer.setNamesrvAddr("127.0.0.1:9876;127.0.0.1:9877");
@@ -32,7 +32,7 @@ public class AsyncProducer {
             producer.start();
         } catch (MQClientException e) {
             e.printStackTrace();
-            PrintUtil.dateLine("mq 启动失败！");
+            PrintUtil.log("mq 启动失败！");
             return;
         }
 
@@ -59,14 +59,14 @@ public class AsyncProducer {
                     @Override
                     public void onSuccess(SendResult sendResult) {
                         countDownLatch.countDown();
-                        PrintUtil.dateLine(index + " 发送成功 结果：" + sendResult);
+                        PrintUtil.log(index + " 发送成功 结果：" + sendResult);
                     }
 
                     @Override
                     public void onException(Throwable throwable) {
                         countDownLatch.countDown();
                         throwable.printStackTrace();
-                        PrintUtil.dateLine(index + " 发送失败 ");
+                        PrintUtil.log(index + " 发送失败 ");
                     }
                 });
             }
@@ -81,6 +81,5 @@ public class AsyncProducer {
 
         // 关闭
         producer.shutdown();
-
     }
 }

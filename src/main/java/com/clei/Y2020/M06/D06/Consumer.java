@@ -6,7 +6,6 @@ import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.message.MessageExt;
-import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -24,8 +23,10 @@ public class Consumer {
 
     public static void main(String[] args) throws MQClientException {
 
+        System.out.println(System.currentTimeMillis());
+
         // 初始化消费者并设置组名
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("FirstGroup");
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("ConsumerGroup1");
 
         // 设置 ms nameServer address
         consumer.setNamesrvAddr("127.0.0.1:9876;127.0.0.1:9877");
@@ -35,8 +36,8 @@ public class Consumer {
 
         // 默认消费模式是CLUSTERING
         PrintUtil.log("消费模式： {}", consumer.getMessageModel());
-        consumer.setMessageModel(MessageModel.BROADCASTING);
-        PrintUtil.log("消费模式： {}", consumer.getMessageModel());
+        /*consumer.setMessageModel(MessageModel.BROADCASTING);
+        PrintUtil.log("消费模式： {}", consumer.getMessageModel());*/
 
         // 注册消息处理监听器 MessageListenerConcurrently 多线程处理
         /*consumer.registerMessageListener((List<MessageExt> messages, ConsumeConcurrentlyContext context) -> {
