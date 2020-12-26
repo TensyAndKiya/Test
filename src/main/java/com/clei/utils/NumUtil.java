@@ -110,7 +110,7 @@ public class NumUtil {
      * @param num
      * @return
      */
-    private static boolean isOdd(int num) {
+    public static boolean isOdd(int num) {
         return 1 == (1 & num);
     }
 
