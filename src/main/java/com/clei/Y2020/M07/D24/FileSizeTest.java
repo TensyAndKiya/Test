@@ -10,9 +10,6 @@ import com.clei.utils.FileUtil;
 public class FileSizeTest {
 
     public static void main(String[] args) throws Exception {
-
-        FileUtil.getFileSize("C:\\Users\\yueya\\AppData\\Local","B");
-
+        FileUtil.getFileSize("D:\\Work", "M");
     }
-
 }

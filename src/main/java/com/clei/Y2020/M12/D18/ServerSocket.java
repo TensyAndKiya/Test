@@ -9,6 +9,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.nio.charset.Charset;
 import java.util.Iterator;
 
 /**
@@ -69,10 +70,14 @@ public class ServerSocket {
             }*/
             String str = new String(buffer.array(), 0, read);
             PrintUtil.log(str);
-            buffer.compact();
+            buffer.clear();
             // 再读
             read = clientChannel.read(buffer);
         }
+        // 响应消息
+        ByteBuffer writeBuffer = ByteBuffer.wrap("hasaki".getBytes(Charset.forName("UTF-8")));
+        clientChannel.write(writeBuffer);
+
         if (-1 == read) {
             clientChannel.close();
         }

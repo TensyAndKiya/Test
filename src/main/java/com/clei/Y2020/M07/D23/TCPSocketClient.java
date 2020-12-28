@@ -1,6 +1,7 @@
 package com.clei.Y2020.M07.D23;
 
 import com.clei.utils.PrintUtil;
+import com.clei.utils.SystemUtil;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -14,7 +15,7 @@ public class TCPSocketClient {
 
     public static void main(String[] args) throws Exception {
 
-        Socket socket = new Socket("127.0.0.1",8001);
+        Socket socket = new Socket("127.0.0.1", 8888);
 
         // 写入
         OutputStream os = socket.getOutputStream();
@@ -30,13 +31,16 @@ public class TCPSocketClient {
 
         PrintUtil.dateLine(length);
 
-        String content = new String(buffer,0,length,"UTF-8");
+        String content = new String(buffer, 0, length, "UTF-8");
 
         PrintUtil.dateLine(content);
 
         // 再写入
         os = socket.getOutputStream();
         os.write("千里不留行".getBytes("UTF-8"));
+
+        // 暂停
+        SystemUtil.pause();
 
         is.close();
 
