@@ -18,6 +18,19 @@ import java.util.List;
 public class FileUtil {
 
     /**
+     * test main
+     *
+     * @param args
+     */
+    public static void main(String[] args) {
+        long start = System.currentTimeMillis();
+        // rename("D:\\Temp\\aaa", "bbb");
+        rename("D:\\Work\\KIyA2", "KIyA3");
+        long end = System.currentTimeMillis();
+        PrintUtil.log("耗时：{}ms", end - start);
+    }
+
+    /**
      * 重载一下 用路径可以代替file
      *
      * @param path
@@ -206,6 +219,72 @@ public class FileUtil {
             length = file.length();
         }
         return length;
+    }
+
+    /**
+     * 将路径为path的文件/文件夹重命名为fileName
+     * File.renameTo只适合单个文件或文件夹的操作
+     *
+     * @param path
+     * @param fileName
+     */
+    public static void rename(String path, String fileName) {
+        if (StringUtil.isEmpty(path) || StringUtil.isEmpty(fileName)) {
+            throw new RuntimeException("源文件或新文件名不能为空");
+        }
+        File source = new File(path);
+        if (!source.exists()) {
+            throw new RuntimeException("源文件不存在");
+        }
+        File target = new File(source.getParent() + File.separator + fileName);
+        source.renameTo(target);
+    }
+
+    /**
+     * 将路径为path1的文件/文件夹移动到path2目录下
+     *
+     * @param path1
+     * @param path2
+     */
+    public static void move(String path1, String path2) {
+        if (StringUtil.isEmpty(path1) || StringUtil.isEmpty(path2)) {
+            throw new RuntimeException("源文件或目标目录不能为空");
+        }
+        File source = new File(path1);
+        if (!source.exists()) {
+            throw new RuntimeException("源文件不存在");
+        }
+        // 若是文件且目标目录不存在则创建
+        File target = new File(path2);
+        if (!source.isDirectory() && !target.getParentFile().exists()) {
+            target.getParentFile().mkdirs();
+        }
+        // 若是文件夹则也移动下面的文件
+        move(source, path2);
+    }
+
+    /**
+     * 将source文件/文件夹移动路径为path的文件
+     *
+     * @param source
+     * @param path
+     */
+    private static void move(File source, String path) {
+        // 若源文件是目录则也要移动下面的文件
+        File target = new File(path);
+        if (source.isDirectory()) {
+            // 目录不存在则创建
+            target.mkdirs();
+            File[] files = source.listFiles();
+            for (File f : files) {
+                move(f, path + File.separator + f.getName());
+            }
+            // 删除原目录
+            source.delete();
+        } else {
+            // 文件则移动
+            source.renameTo(target);
+        }
     }
 
     /**

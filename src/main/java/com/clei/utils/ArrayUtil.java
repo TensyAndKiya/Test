@@ -311,6 +311,27 @@ public class ArrayUtil {
     }
 
     /**
+     * 多个int数组合并数组合并
+     *
+     * @param arr
+     * @return
+     */
+    public static int[] merge(int[]... arr) {
+        int length = 0;
+        for (int[] a : arr) {
+            length += a.length;
+        }
+        int[] result = new int[length];
+        int from = 0;
+        for (int[] a : arr) {
+            int arrLength = a.length;
+            System.arraycopy(a, 0, result, from, arrLength);
+            from += arrLength;
+        }
+        return result;
+    }
+
+    /**
      * array 里 的值 不在 collection 里 的 凑一个array
      *
      * @param array
