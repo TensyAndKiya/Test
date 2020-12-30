@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class TransactionProducer {
     public static void main(String[] args) throws Exception{
         // 初始化一个producer group
-        TransactionMQProducer producer = new TransactionMQProducer("FirstGroup");
+        TransactionMQProducer producer = new TransactionMQProducer("TransactionProducerGroup1");
 
         // 设置mq name server address
         producer.setNamesrvAddr("127.0.0.1:9876");

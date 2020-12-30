@@ -288,7 +288,7 @@ public class DateUtil {
         }
         // 否则至少一分钟
         if (MINUTE_MILLIS > diff) {
-            return "0分";
+            return "1分";
         }
         StringBuilder sb = new StringBuilder();
         long dayDiff = diff / DAY_MILLIS;

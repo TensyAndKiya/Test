@@ -15,7 +15,7 @@ import org.apache.rocketmq.remoting.common.RemotingHelper;
 public class BroadcastProducer {
     public static void main(String[] args) throws Exception{
         // 初始化一个producer group
-        DefaultMQProducer producer = new DefaultMQProducer("FirstGroup");
+        DefaultMQProducer producer = new DefaultMQProducer("ProducerGroup1");
 
         // 设置mq name server address
         producer.setNamesrvAddr("127.0.0.1:9876");

@@ -22,7 +22,7 @@ public class BroadcastConsumer {
     public static void main(String[] args) throws MQClientException {
 
         // 初始化消费者并设置组名
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("FirstGroup");
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("ConsumerGroup1");
 
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
 
