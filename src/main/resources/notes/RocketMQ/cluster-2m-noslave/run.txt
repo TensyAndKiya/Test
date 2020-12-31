@@ -1,0 +1,7 @@
+# 启动命令
+# namesrv
+mqnamesr.cmd -c namesrv-a.properties
+mqnamesr.cmd -c namesrv-b.properties
+# broker
+mqbroker.cmd -c broker-a.properties
+mqbroker.cmd -c broker-b.properties
