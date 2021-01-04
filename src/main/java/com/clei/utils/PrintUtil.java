@@ -2,6 +2,8 @@ package com.clei.utils;
 
 /**
  * 方便自己的输出打印
+ *
+ * @author KIyA
  */
 public class PrintUtil {
 
@@ -10,6 +12,29 @@ public class PrintUtil {
     private final static char LINEFEED = '\n';
     private final static String PLACE_STR = "{}";
     private final static int PLACE_LEN = PLACE_STR.length();
+
+    /**
+     * 默认分隔符
+     */
+    private final static char SEPARATOR = '-';
+
+    /**
+     * 默认分隔线长度
+     */
+    private final static int SEPARATOR_LINE_LENGTH = 64;
+
+    /**
+     * 默认分割线
+     */
+    private final static String SEPARATOR_LINE;
+
+    static {
+        StringBuilder sb = new StringBuilder(SEPARATOR_LINE_LENGTH);
+        for (int i = 0; i < SEPARATOR_LINE_LENGTH; i++) {
+            sb.append(SEPARATOR);
+        }
+        SEPARATOR_LINE = sb.toString();
+    }
 
     public static void println() {
         System.out.println();
@@ -139,6 +164,26 @@ public class PrintUtil {
             sb.append(getStackTrace((Throwable) lastArg));
         }
         return sb.toString();
+    }
+
+    /**
+     * 打印分割线
+     */
+    public static void separatorLine() {
+        println(SEPARATOR_LINE);
+    }
+
+    /**
+     * 打印分割线 使用指定分隔符
+     *
+     * @param separator
+     */
+    public static void separatorLine(char separator) {
+        StringBuilder sb = new StringBuilder(SEPARATOR_LINE_LENGTH);
+        for (int i = 0; i < SEPARATOR_LINE_LENGTH; i++) {
+            sb.append(separator);
+        }
+        println(sb.toString());
     }
 
     /**
