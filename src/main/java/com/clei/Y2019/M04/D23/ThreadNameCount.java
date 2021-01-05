@@ -1,80 +1,76 @@
 package com.clei.Y2019.M04.D23;
 
+import com.clei.utils.DateUtil;
 import com.clei.utils.PrintUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * 获取到一个日志文件里某天的错误排序
+ *
+ * @author KIyA
+ */
 public class ThreadNameCount {
+
     private static String LOG_File = "C:\\Users\\liudg\\Desktop\\logs\\2019-04-23 error\\all_info_0422.log";
     private final static String ERROR = " ERROR ";
-    private final static String INFO = " INFO ";
     private final static String DAY = "2019-04-22-";
 
     public static void main(String[] args) throws Exception {
         File logFile = new File(LOG_File);
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(logFile),"UTF-8"));
-        Map<String,ThreadDiff> countMap = new HashMap<>();
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), "UTF-8"));
+        Map<String, ThreadDiff> countMap = new HashMap<>();
         String line;
-        while( (line = br.readLine()) != null ){
-            if(line.startsWith(DAY) && line.contains(ERROR)){
+        while ((line = br.readLine()) != null) {
+            if (line.startsWith(DAY) && line.contains(ERROR)) {
                 int index = line.indexOf(ERROR);
-                String dateTime = line.substring(0,19);
-                String threadName = line.substring(21,index - 1);
-                createEntity(countMap,threadName,dateTime);
+                String dateTime = line.substring(0, 19);
+                String threadName = line.substring(21, index - 1);
+                createEntity(countMap, threadName, dateTime);
             }
         }
         br.close();
         PrintUtil.dateLine("筛选完毕");
-        List<ThreadDiff> list = mapToTD(countMap);
+        List<ThreadDiff> list = new ArrayList<>(countMap.values());
         Collections.sort(list);
-        list.forEach( td ->{
-            PrintUtil.dateLine(td);
-        } );
+        list.forEach(td -> PrintUtil.dateLine(td));
     }
 
-    private static void createEntity(Map<String,ThreadDiff> map,String threadName,String dateTime) throws Exception{
+    private static void createEntity(Map<String, ThreadDiff> map, String threadName, String dateTime) throws Exception {
         ThreadDiff td = map.get(threadName);
-        final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
-        Date date = SDF.parse(dateTime);
-        if(null == td){
-            map.put(threadName,new ThreadDiff(threadName,1,date,null,0));
-        }else{
+        LocalDateTime date = DateUtil.parse(dateTime, "yyyy-MM-dd-HH:mm:ss");
+        if (null == td) {
+            map.put(threadName, new ThreadDiff(threadName, 1, date, null, 0));
+        } else {
             td.setCount(td.getCount() + 1);
             td.setEnd(date);
-            td.setDiff((td.getEnd().getTime() - td.getBegin().getTime())/1000);
+            td.setDiff(ChronoUnit.SECONDS.between(td.getBegin(), td.getEnd()));
         }
     }
 
-    private static List<ThreadDiff> mapToTD(Map<String,ThreadDiff> map){
-        List<ThreadDiff> list = new ArrayList<>();
-        map.forEach( (k,v) -> {
-            list.add(v);
-        } );
-        return list;
-    }
+    private static class ThreadDiff implements Comparable<ThreadDiff> {
 
-    private static class ThreadDiff implements Comparable<ThreadDiff>{
         private String thread;
         private int count;
-        private Date begin;
-        private Date end;
+        private LocalDateTime begin;
+        private LocalDateTime end;
         private long diff;
 
         public ThreadDiff() {
         }
 
-        public ThreadDiff(String thread, int count, Date begin, Date end, long diff) {
+        public ThreadDiff(String thread, int count, LocalDateTime begin, LocalDateTime end, long diff) {
             this.thread = thread;
             this.count = count;
             this.begin = begin;
@@ -84,7 +80,7 @@ public class ThreadNameCount {
 
         @Override
         public int compareTo(ThreadDiff ec) {
-            return Long.compare(ec.getDiff(),diff);
+            return Long.compare(ec.getDiff(), diff);
         }
 
         @Override
@@ -102,12 +98,11 @@ public class ThreadNameCount {
 
         @Override
         public String toString() {
-            final SimpleDateFormat SDF = new SimpleDateFormat("yyyy MM dd HH mm ss");
             return "ThreadDiff{" +
                     "thread='" + thread + '\'' +
                     ", diff=" + diff +
-                    ", begin=" + SDF.format(begin) +
-                    ", end=" + (null == end?"":SDF.format(end)) +
+                    ", begin=" + DateUtil.format(begin) +
+                    ", end=" + (null == end ? "" : DateUtil.format(end)) +
                     ", count=" + count +
                     '}';
         }
@@ -128,19 +123,19 @@ public class ThreadNameCount {
             this.count = count;
         }
 
-        public Date getBegin() {
+        public LocalDateTime getBegin() {
             return begin;
         }
 
-        public void setBegin(Date begin) {
+        public void setBegin(LocalDateTime begin) {
             this.begin = begin;
         }
 
-        public Date getEnd() {
+        public LocalDateTime getEnd() {
             return end;
         }
 
-        public void setEnd(Date end) {
+        public void setEnd(LocalDateTime end) {
             this.end = end;
         }
 

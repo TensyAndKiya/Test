@@ -334,7 +334,7 @@ public class FileUtil {
     /**
      * 文件大小对象
      */
-    private static class FileSize implements Comparable {
+    private static class FileSize implements Comparable<FileSize> {
 
         // 文件名
         private String name;
@@ -358,12 +358,8 @@ public class FileUtil {
         }
 
         @Override
-        public int compareTo(Object o) {
-            if (o instanceof FileSize) {
-                return new Long(this.size).compareTo(new Long(((FileSize) o).getSize()));
-            } else {
-                return 0;
-            }
+        public int compareTo(FileSize o) {
+            return new Long(this.size).compareTo(new Long(o.getSize()));
         }
     }
 }

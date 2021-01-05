@@ -6,8 +6,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-//温江的哟wenjiang
+/**
+ * 日历类使用测试
+ *
+ * @author KIyA
+ */
 public class CalendarTest {
+
     public static void main(String[] args) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
         final String dateStr1 = "2018 08 08 12:12:12";

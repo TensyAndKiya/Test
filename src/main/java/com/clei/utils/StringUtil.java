@@ -1,26 +1,30 @@
 package com.clei.utils;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.regex.Pattern;
 
+/**
+ * 字符串工具类
+ *
+ * @author KIyA
+ */
 public class StringUtil {
 
     public static String createOrderNo() {
-        String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + "";
-        String seed = "999999";
-        String noStr = new Random().nextInt(Integer.parseInt(seed)) + "";
-        StringBuffer result = new StringBuffer();
-        result.append(timestamp);
-        for (int i = 0; i < (seed.length() - noStr.length()); i++) {
-            result.append("0");
+        String timestamp = DateUtil.format(LocalDateTime.now(), "yyyyMMddHHmmss");
+        Integer max = 999999;
+        int randomInt = new Random().nextInt(999999);
+        StringBuilder sb = new StringBuilder();
+        sb.append(timestamp);
+        int length = String.valueOf(max).length() - String.valueOf(randomInt).length();
+        for (int i = 0; i < length; i++) {
+            sb.append('0');
         }
-        result.append(noStr);
-
-        return result.toString();
+        sb.append(randomInt);
+        return sb.toString();
     }
 
     public static boolean isNotEmpty(String str) {
