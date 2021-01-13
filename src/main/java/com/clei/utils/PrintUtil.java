@@ -21,7 +21,7 @@ public class PrintUtil {
     /**
      * 默认分隔线长度
      */
-    private final static int SEPARATOR_LINE_LENGTH = 64;
+    private final static int SEPARATOR_LINE_LENGTH = 128;
 
     /**
      * 默认分割线

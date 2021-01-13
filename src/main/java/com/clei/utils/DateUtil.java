@@ -30,7 +30,7 @@ public class DateUtil {
 
     private final static DateTimeFormatter DATE_TIME_FORMATTER_MS = DateTimeFormatter.ofPattern(FORMATTER_PATTERN_MS);
 
-    private final static ConcurrentHashMap<String, DateTimeFormatter> FORMATTER_MAP = new ConcurrentHashMap(4);
+    private final static ConcurrentHashMap<String, DateTimeFormatter> FORMATTER_MAP = new ConcurrentHashMap<>(4);
 
     private final static ZoneId ZONE_ID = ZoneId.of("GMT+8");
 
@@ -323,19 +323,19 @@ public class DateUtil {
 
     private static void validateMilliOrSecond(long l) {
         if (l < 0) {
-            throw new RuntimeException("传入参数小于0！");
+            throw new IllegalArgumentException("传入参数小于0！");
         }
     }
 
     private static void validateDateTime(TemporalAccessor temporal) {
         if (null == temporal) {
-            throw new RuntimeException("传入参数为null！");
+            throw new IllegalArgumentException("传入参数为null！");
         }
     }
 
     private static void validateStr(String str) {
         if (null == str || "".equals(str)) {
-            throw new RuntimeException("传入字符串为" + null == str ? "null！" : "空串！");
+            throw new IllegalArgumentException("传入字符串为" + (null == str ? "null！" : "空串！"));
         }
     }
 
@@ -349,13 +349,9 @@ public class DateUtil {
         validateStr(pattern);
         DateTimeFormatter dateTimeFormatter = FORMATTER_MAP.get(pattern);
         if (null == dateTimeFormatter) {
-            try {
-                dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
-                //放入格式化器map里
-                FORMATTER_MAP.put(pattern, dateTimeFormatter);
-            } catch (Exception e) {
-                throw new RuntimeException(e.getMessage());
-            }
+            dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
+            //放入格式化器map里
+            FORMATTER_MAP.put(pattern, dateTimeFormatter);
         }
         return dateTimeFormatter;
     }

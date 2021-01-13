@@ -4,6 +4,7 @@ import com.clei.entity.Person;
 import com.clei.utils.PrintUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +17,6 @@ import java.util.stream.Stream;
  * @author KIyA
  */
 public class StreamTest {
-
-    private static String[] ignoredInterfaces = {};
 
     public static void main(String[] args) {
         List<Person> list = new ArrayList<>();
@@ -97,6 +96,10 @@ public class StreamTest {
         // join
         PrintUtil.log(list.stream().map(Person::getName).collect(Collectors.joining()));
         PrintUtil.log(list.stream().map(Person::getName).collect(Collectors.joining("`")));
+
+        // flatMap
+        String[] strArr = {"Hello", "World"};
+        Arrays.stream(strArr).map(s -> s.split("")).flatMap(Arrays::stream).forEach(PrintUtil::log);
 
         // 排序
         list.stream().sorted(Comparator.comparingInt(Person::getSex).thenComparingInt(Person::getAge).reversed()).forEach(PrintUtil::log);
