@@ -3,6 +3,8 @@ package com.clei.temp;
 import com.clei.entity.Person;
 import com.clei.utils.PrintUtil;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -17,6 +19,11 @@ import java.util.stream.Collectors;
 public class TempTest {
 
     public static void main(String[] args) {
+
+        System.getenv().forEach((k, v) -> PrintUtil.log("k :{}, v: {}", k, v));
+
+        PrintUtil.log(ChronoUnit.SECONDS.between(LocalDateTime.now(), LocalDateTime.of(2021, 2, 9, 18, 30)));
+
         float a = 0.000f;
         float b = 0.0000f;
         float c = 0.00000f;

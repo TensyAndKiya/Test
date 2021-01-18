@@ -14,13 +14,17 @@ tail -f all_info.log -n 100
 跳到最后一行 G,shift+g 或者 Caps Lock大写后 g
 跳到第一行的第一个字符 gg
 跳到行首 Home键/^键/0数字键
-跳到行尾 End键/$键
+跳到行尾 End键/$键/A
 光标向下移n行到末尾 n$
 光标向左移n个字符 nh(例：12h)
 光标向右移n个字符 nl(例：12l，小写的L)
 光标向下移n行 nh(例：12j)
 光标向上移n行 nh(例：12k)
-删除一行 dd
+删除当前行 dd
+复制当前行 yy
+当前行下方打开一行 o 小呕
+当前行上方打开一行 O 大呕
+撤销 u
 
 # grep技巧(Globally search given Regular Expression and Print)
 #统计test.log里文本1234出现行数
