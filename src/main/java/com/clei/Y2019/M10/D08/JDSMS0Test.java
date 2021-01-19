@@ -19,7 +19,7 @@ public class JDSMS0Test {
         messageData.put("content", "赵客缦胡缨，吴钩霜雪明。银鞍照白马，飒沓如流星。");
         messageData.put("sign","【客户签名1】");
         message.put("data",messageData);
-        String result = OkHttpUtil.doPost(url,message.toJSONString());
+        String result = OkHttpUtil.doPostJson(url, message.toJSONString());
         PrintUtil.dateLine("result : " + result);
     }
 }

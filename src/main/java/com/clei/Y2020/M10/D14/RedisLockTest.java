@@ -45,7 +45,7 @@ public class RedisLockTest {
         CountDownLatch latch = new CountDownLatch(times);
         while (times > 0) {
             executor.submit(() -> {
-                String result = OkHttpUtil.doGetRequest(url);
+                String result = OkHttpUtil.doGet(url);
 
                 // 0处理失败 1处理中 2处理成功 3处理出错
                 if (StringUtil.isEmpty(result)) {

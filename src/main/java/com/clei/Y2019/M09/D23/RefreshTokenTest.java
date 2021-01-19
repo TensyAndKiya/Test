@@ -16,7 +16,7 @@ public class RefreshTokenTest {
         obj.put("openid", "Ck0MxKBl5It1ln2wHqoVRRYwyIu35KZrQ09OaqhCaZDRNFr31751555312185047");
         obj.put("app_secret", "sAVCABbDO7e2cv9U60NekjfW6wd9GFtlphvV9u4DaE9kljzWH6P1555312185049");
 
-        String result = OkHttpUtil.doPost(url,obj.toJSONString());
+        String result = OkHttpUtil.doPostJson(url, obj.toJSONString());
         PrintUtil.dateLine(result);
     }
 }

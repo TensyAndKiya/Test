@@ -20,6 +20,6 @@ public class SendInvoiceMailTest {
         map.put("encryptCode", "1");
         map.put("zipCode", "1");
         String url = "http://localhost:8080/park/springrs/eleInvoice/notify";
-        OkHttpUtil.doPost(url, map);
+        OkHttpUtil.doPostJson(url, map);
     }
 }

@@ -159,7 +159,7 @@ public class BaiwangInvoiceTest {
         params.put("data",dataParams);//数据
 
         PrintUtil.println("开始开发票 params: " + params);
-        String response = OkHttpUtil.doPost(API_BUSS_URL, params.toJSONString());
+        String response = OkHttpUtil.doPostJson(API_BUSS_URL, params.toJSONString());
         PrintUtil.println("开具蓝字发票 response:" + response);
 
         if(StringUtil.isNotEmpty(response)){
@@ -189,7 +189,7 @@ public class BaiwangInvoiceTest {
         params.put("serviceKey","ebi_InvoiceHandle_newInvoiceDelay");
         params.put("data",dataParams);
 
-        String response = OkHttpUtil.doPost(API_BUSS_URL, params.toJSONString());
+        String response = OkHttpUtil.doPostJson(API_BUSS_URL, params.toJSONString());
 
         PrintUtil.println("在线交付:" + response);
 
@@ -216,7 +216,7 @@ public class BaiwangInvoiceTest {
             params.put("openid", openId);
             params.put("app_secret", tokenRequestMap.get("app_secret").toString());
 
-            String response = OkHttpUtil.doPost(API_TOKEN_URL, params.toString());
+            String response = OkHttpUtil.doPostJson(API_TOKEN_URL, params.toString());
             PrintUtil.println("刷新AccessToken response:" + response);
 
             JSONObject map = JSONObject.parseObject(response);

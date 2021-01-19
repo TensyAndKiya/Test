@@ -15,8 +15,23 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <jersey.version>2.29</jersey.version>
         <spring.version>5.2.7.RELEASE</spring.version>
+        <netty.version>4.1.58.Final</netty.version>
+        <codec.version>1.13</codec.version>
+        <jol.version>0.14</jol.version>
+        <rocketmq.version>4.7.0</rocketmq.version>
+        <alipay.version>4.8.10.ALL</alipay.version>
+        <jd.sms.version>1.2.0</jd.sms.version>
+        <jjwt.version>0.9.1</jjwt.version>
+        <xstream.version>1.4.15</xstream.version>
+        <fastjson.version>1.2.75</fastjson.version>
+        <javax.mail.version>1.4.7</javax.mail.version>
+        <cglib.version>3.2.10</cglib.version>
+        <okhttp.version>3.14.1</okhttp.version>
+        <mysql.connector.version>8.0.16</mysql.connector.version>
+        <mybatis.version>3.4.5</mybatis.version>
+        <compiler.plugin.version>3.8.1</compiler.plugin.version>
+        <assembly.plugin.version>3.3.0</assembly.plugin.version>
     </properties>
 
     <dependencies>
@@ -24,106 +39,74 @@
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
-            <version>3.4.5</version>
+            <version>${mybatis.version}</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.16</version>
+            <version>${mysql.connector.version}</version>
         </dependency>
         <!-- OKHttp -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>3.14.1</version>
+            <version>${okhttp.version}</version>
         </dependency>
         <!-- cglib动态代理 -->
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
-            <version>3.2.10</version>
+            <version>${cglib.version}</version>
         </dependency>
         <!-- javaMail -->
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
-            <version>1.4.7</version>
+            <version>${javax.mail.version}</version>
         </dependency>
         <!-- fastjson -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.50</version>
+            <version>${fastjson.version}</version>
         </dependency>
         <!-- xstream -->
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>
-            <version>1.4.15</version>
-        </dependency>
-        <!-- Jersey -->
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>${jersey.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.containers</groupId>
-            <artifactId>jersey-container-servlet</artifactId>
-            <version>${jersey.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-moxy</artifactId>
-            <version>${jersey.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-multipart</artifactId>
-            <version>${jersey.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.glassfish.jersey.inject</groupId>
-            <artifactId>jersey-hk2</artifactId>
-            <version>${jersey.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>8.0.1</version>
+            <version>${xstream.version}</version>
         </dependency>
         <!-- Json Web Token -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
+            <version>${jjwt.version}</version>
         </dependency>
         <!-- JD sms -->
         <dependency>
             <groupId>com.jdcloud.sdk</groupId>
             <artifactId>sms</artifactId>
-            <version>1.2.0</version>
+            <version>${jd.sms.version}</version>
         </dependency>
         <!-- 支付宝支付 -->
         <dependency>
             <groupId>com.alipay.sdk</groupId>
             <artifactId>alipay-sdk-java</artifactId>
-            <version>4.8.10.ALL</version>
+            <version>${alipay.version}</version>
         </dependency>
 
         <!-- rocketmq-client -->
         <dependency>
             <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-client</artifactId>
-            <version>4.7.0</version>
+            <version>${rocketmq.version}</version>
         </dependency>
 
         <!-- JAVA OBJECT LAYOUT core -->
         <dependency>
             <groupId>org.openjdk.jol</groupId>
             <artifactId>jol-core</artifactId>
-            <version>0.14</version>
+            <version>${jol.version}</version>
         </dependency>
 
         <!-- Spring -->
@@ -133,13 +116,21 @@
             <version>${spring.version}</version>
         </dependency>
 
-        <!-- 暂无用 -->
+        <!-- 编码解码 -->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.13</version>
+            <version>${codec.version}</version>
         </dependency>
 
+        <!-- netty -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+
+        <!-- 项目本地的包 -->
         <dependency>
             <groupId>aspose</groupId>
             <artifactId>aspose-words</artifactId>
@@ -156,6 +147,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compiler.plugin.version}</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -164,12 +156,13 @@
             </plugin>
             <!-- 打可执行jar包！！！ -->
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>${assembly.plugin.version}</version>
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.clei.Y2019.M08.D10.JerseyClientTest</mainClass>
+                            <mainClass>com.clei.Y2019.M08.D10.CarEnterReqTest</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

@@ -27,7 +27,7 @@ public class DownloadBaiwangInvoiceTest {
         obj.put("access_token",accessToken);
         obj.put("serviceKey",serviceKey);
         obj.put("data",data);
-        String result = OkHttpUtil.doPost(url,obj.toJSONString());
+        String result = OkHttpUtil.doPostJson(url, obj.toJSONString());
         JSONObject obj1 = JSON.parseObject(result);
         PrintUtil.dateLine(obj1);
         JSONObject obj2 = JSON.parseObject(obj1.getString("rows"));
