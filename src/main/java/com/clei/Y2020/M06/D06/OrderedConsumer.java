@@ -18,10 +18,11 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  * @author KIyA
  * @date 2020-06-06
- *
+ * <p>
  * 有序消费
  */
 public class OrderedConsumer {
+
     public static void main(String[] args) throws MQClientException {
 
         // 初始化消费者并设置组名
@@ -33,7 +34,7 @@ public class OrderedConsumer {
         consumer.setNamesrvAddr("127.0.0.1:9876");
 
         // 订阅topic
-        consumer.subscribe("FirstTopic","tagA || tagC || tagD");
+        consumer.subscribe("FirstTopic", "tagA || tagC || tagD");
 
         // 注册消息处理监听器 MessageListenerOrderly 单线程处理
         consumer.registerMessageListener(new MessageListenerOrderly() {
@@ -49,25 +50,17 @@ public class OrderedConsumer {
 
                 this.consumTimes.incrementAndGet();
 
-                if(this.consumTimes.get() % 2 == 0){
+                if (this.consumTimes.get() % 2 == 0) {
 
                     return ConsumeOrderlyStatus.SUCCESS;
 
-                }else if (this.consumTimes.get() % 3 == 0){
-
-                    return ConsumeOrderlyStatus.ROLLBACK;
-
-                }else if(this.consumTimes.get() % 4 == 0){
-
-                    return ConsumeOrderlyStatus.COMMIT;
-
-                }else if(this.consumTimes.get() % 5 == 0){
+                } else if (this.consumTimes.get() % 5 == 0) {
 
                     context.setSuspendCurrentQueueTimeMillis(3000);
 
                     return ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;
 
-                }else {
+                } else {
 
                     return ConsumeOrderlyStatus.SUCCESS;
 
@@ -79,18 +72,18 @@ public class OrderedConsumer {
         consumer.start();
     }
 
-    private static void handleMsg(List<MessageExt> messages){
+    private static void handleMsg(List<MessageExt> messages) {
         Thread thread = Thread.currentThread();
         String threadId = thread.getName() + '_' + thread.getId();
 
-        PrintUtil.println("{} 收到新消息 : {}",threadId,messages);
+        PrintUtil.println("{} 收到新消息 : {}", threadId, messages);
 
-        for (MessageExt msg : messages){
+        for (MessageExt msg : messages) {
             PrintUtil.println("{} topic : {}", threadId, msg.getTopic());
             PrintUtil.println("{} tag : {}", threadId, msg.getTags());
             PrintUtil.println("{} msgId : {}", threadId, msg.getMsgId());
             try {
-                PrintUtil.println("{} body : {}", threadId, new String(msg.getBody(),"UTF-8"));
+                PrintUtil.println("{} body : {}", threadId, new String(msg.getBody(), "UTF-8"));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }

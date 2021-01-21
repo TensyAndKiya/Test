@@ -8,8 +8,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
 /**
+ * 10人赛跑
+ *
  * @author KIyA
- * @backStory 10人赛跑
  */
 public class TenPersonRace {
 
@@ -18,9 +19,10 @@ public class TenPersonRace {
         CountDownLatch latch1 = new CountDownLatch(1);
         CountDownLatch latch2 = new CountDownLatch(10);
 
-        CopyOnWriteArrayList<Score> list = new CopyOnWriteArrayList();
+        CopyOnWriteArrayList<Score> list = new CopyOnWriteArrayList<>();
 
-        for (int i = 0; i < 10; i++) {
+        int person = 10;
+        for (int i = 0; i < person; i++) {
 
             String name = "person " + i;
 
@@ -33,15 +35,15 @@ public class TenPersonRace {
 
                     int result = new Random().nextInt(1000);
 
-                    list.add(new Score(name,result));
-
-                    latch2.countDown();
+                    list.add(new Score(name, result));
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                } finally {
+                    latch2.countDown();
                 }
 
-            },name).start();
+            }, name).start();
         }
 
         // 比赛开始
@@ -55,7 +57,7 @@ public class TenPersonRace {
 
         // 全部
         System.out.println("全部");
-        sList.stream().forEach(System.out::println);
+        sList.forEach(System.out::println);
 
         // 前三名
         System.out.println("前三");
@@ -68,7 +70,8 @@ public class TenPersonRace {
 
     }
 
-    static class Score{
+    static class Score {
+
         private String name;
         private int score;
 

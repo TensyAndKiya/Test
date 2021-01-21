@@ -1,5 +1,6 @@
 package com.clei.Y2019.M08.D01;
 
+import com.clei.utils.Base64Util;
 import com.clei.utils.PrintUtil;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -11,14 +12,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -50,7 +48,7 @@ public class XmlXstreamTest {
         String code = getElementContent(invoiceResult,"returnCode");
         String message = getElementContent(invoiceResult,"returnMessage");
         if(null != message && !"".equals(message)){
-            message = new String(Base64decode(message),charset);
+            message = new String(Base64Util.decode(message), charset);
         }
         if(code.equals("0000")){
             PrintUtil.dateLine("开具发票成功,message: " + message);
@@ -63,7 +61,7 @@ public class XmlXstreamTest {
                     String zipCode = getElementContent(result, "zipCode");
                     String encryptCode = getElementContent(result, "encryptCode");
                     String content = getElementContent(result, "content");
-                    content = decrypt3DES(Base64decode(content));
+                    content = decrypt3DES(Base64Util.decode(content));
 
                     PrintUtil.dateLine("really really result : " + content);
 
@@ -81,7 +79,7 @@ public class XmlXstreamTest {
         contentXML = trim(contentXML);
         PrintUtil.dateLine("contentXML:");
         PrintUtil.dateLine(contentXML);
-        String content = Base64encode(encrypt3DES(contentXML));
+        String content = Base64Util.encode(encrypt3DES(contentXML));
         String outerXML = outerXML(interfaceCode, content);
         outerXML = trimOuter(outerXML);
         PrintUtil.dateLine("outerXML:");
@@ -310,14 +308,6 @@ public class XmlXstreamTest {
 
         byte[] result = cipher.doFinal(bytes);
         return new String(result,charset);
-    }
-
-    private static String Base64encode(byte[] bytes) throws UnsupportedEncodingException {
-        return new BASE64Encoder().encode(bytes);
-    }
-
-    private static byte[] Base64decode(String str) throws IOException {
-        return new BASE64Decoder().decodeBuffer(str);
     }
 }
 

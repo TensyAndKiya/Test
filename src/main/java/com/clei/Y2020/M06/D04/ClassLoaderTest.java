@@ -31,7 +31,7 @@ public class ClassLoaderTest {
         PrintUtil.dateLine(grandFather);
 
         // rt.jar
-        PrintUtil.dateLine(new String().getClass().getClassLoader());
+        PrintUtil.dateLine(String.class.getClassLoader());
 
         // 类加载的三种方式
         ClassLoader cl = ClassLoaderTest.class.getClassLoader();
@@ -65,7 +65,7 @@ public class ClassLoaderTest {
         // 自定义类加载器使用
         MyClassLoader myClassLoader = new MyClassLoader("E:\\TEMP");
 
-        Class clazz = myClassLoader.loadClass("ClassLoaderTestTest");
+        Class<?> clazz = myClassLoader.loadClass("ClassLoaderTestTest");
 
         Object object = clazz.newInstance();
 

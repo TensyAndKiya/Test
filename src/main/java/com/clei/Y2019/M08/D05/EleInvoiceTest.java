@@ -9,15 +9,9 @@ import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
-import javax.crypto.Cipher;
 import javax.crypto.Mac;
-import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -89,7 +83,7 @@ public class EleInvoiceTest {
         json.put("DDH",orderId);
         String content = json.toJSONString();
         PrintUtil.dateLine("未加密的推送发票报文： " + content);
-        content = Base64encode(content.getBytes(CHARSET_UTF8));
+        content = Base64Util.encode(content.getBytes(CHARSET_UTF8));
         PrintUtil.dateLine("加密后的推送发票报文： " + content);
         TreeMap<String, String> param = getParam(content,paramMap.get("secret_id").toString());
         String sign = generateSign(param,paramMap.get("secret_key").toString(),POST,INTERFACE_PUSH_INVOICE);
@@ -153,7 +147,7 @@ public class EleInvoiceTest {
         jsonContent.put("FPKJXX_DDXX", getOrder());
         String content = jsonContent.toJSONString();
         PrintUtil.dateLine("未加密的请求发票报文： " + content);
-        content = Base64encode(content.getBytes(CHARSET_UTF8));
+        content = Base64Util.encode(content.getBytes(CHARSET_UTF8));
         PrintUtil.dateLine("加密后的请求发票报文： " + content);
         return content;
     }
@@ -213,37 +207,6 @@ public class EleInvoiceTest {
         return new SimpleDateFormat(pattern).format(new Date());
     }
 
-    private static byte[] encrypt3DES(String str) throws Exception {
-        String algorithm = "DESede";
-        // key
-        SecretKey secretKey = new SecretKeySpec(DES_KEY.getBytes(CHARSET_UTF8), algorithm);
-        // 加密
-        Cipher cipher = Cipher.getInstance(algorithm);
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-
-        return cipher.doFinal(str.getBytes(CHARSET_UTF8));
-    }
-
-    private static String decrypt3DES(byte[] bytes) throws Exception {
-        // key
-        String algorithm = "DESede";
-        SecretKey secretKey = new SecretKeySpec(DES_KEY.getBytes(CHARSET_UTF8), algorithm);
-        // 解密
-        Cipher cipher = Cipher.getInstance(algorithm);
-        cipher.init(Cipher.DECRYPT_MODE, secretKey);
-
-        byte[] result = cipher.doFinal(bytes);
-        return new String(result, CHARSET_UTF8);
-    }
-
-    private static String Base64encode(byte[] bytes) throws UnsupportedEncodingException {
-        return new BASE64Encoder().encode(bytes);
-    }
-
-    private static byte[] Base64decode(String str) throws IOException {
-        return new BASE64Decoder().decodeBuffer(str);
-    }
-
     private static TreeMap<String, String> getParam(String content,String secretId) {
         TreeMap<String, String> map = new TreeMap<>();
         map.put("content", content);
@@ -278,7 +241,7 @@ public class EleInvoiceTest {
         Mac mac = Mac.getInstance(ALGORITHM_SIGN);
         mac.init(keySpec);
         byte[] bytes = mac.doFinal(srcStr.getBytes(CHARSET_UTF8));
-        return Base64encode(bytes);
+        return Base64Util.encode(bytes);
     }
 
     public static void doPost(String url,Map<String, String> param) throws Exception {
@@ -325,7 +288,7 @@ public class EleInvoiceTest {
     }
 
     private static String notify(String content,String secretId,String encryptCode,String zipCode) throws Exception {
-        byte[] data = Base64Util.base64decode(content);
+        byte[] data = Base64Util.decode(content);
         // 解压缩
         if("1".equals(zipCode)){
             data = EncryptUtil.deCompress(data);

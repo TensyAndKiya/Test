@@ -36,6 +36,24 @@ public class StringUtil {
     }
 
     /**
+     * 是否是空白字符串
+     *
+     * @param str
+     * @return
+     */
+    public static boolean isBlank(String str) {
+        if (isNotEmpty(str)) {
+            char[] arr = str.toCharArray();
+            for (char c : arr) {
+                if (!Character.isWhitespace(c)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
      * 去掉空白
      *
      * @param str

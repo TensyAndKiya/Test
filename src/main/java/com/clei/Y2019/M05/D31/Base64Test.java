@@ -1,8 +1,7 @@
 package com.clei.Y2019.M05.D31;
 
+import com.clei.utils.Base64Util;
 import com.clei.utils.PrintUtil;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -26,26 +25,24 @@ public class Base64Test {
             inputStream.read(data);
         }catch (Exception e){
             e.printStackTrace();
-        }finally {
-            if(null != inputStream){
-                try{
+        } finally {
+            if (null != inputStream) {
+                try {
                     inputStream.close();
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
-        //加密
-        BASE64Encoder encoder = new BASE64Encoder();
-        return encoder.encode(data);
+        //加密;
+        return Base64Util.encode(data);
     }
 
     private static String imgDecode(String imgStr){
         String imgPath = "D:\\img\\img2.jpg";
-        BASE64Decoder decoder = new BASE64Decoder();
         OutputStream outputStream = null;
         try{
-            byte[] data = decoder.decodeBuffer(imgStr);
+            byte[] data = Base64Util.decode(imgStr);
             if(null != data && data.length > 0){
                 for (int i = 0; i < data.length; i++) {
                     if(data[i] < 0){

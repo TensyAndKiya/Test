@@ -75,7 +75,7 @@ public class ServerSocket {
             read = clientChannel.read(buffer);
         }
         // 响应消息
-        ByteBuffer writeBuffer = ByteBuffer.wrap("hasaki".getBytes(Charset.forName("UTF-8")));
+        ByteBuffer writeBuffer = ByteBuffer.wrap("hasaki\n".getBytes(Charset.forName("UTF-8")));
         clientChannel.write(writeBuffer);
 
         if (-1 == read) {
@@ -111,7 +111,6 @@ public class ServerSocket {
             serverChannel = ServerSocketChannel.open();
             // server地址端口
             serverChannel.socket().bind(new InetSocketAddress("127.0.0.1", PORT));
-            serverChannel.configureBlocking(false);
             // 非阻塞
             serverChannel.configureBlocking(false);
             // 注册到selector

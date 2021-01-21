@@ -4,11 +4,12 @@ package com.clei.Y2020.M06.D15;
  * Tiger bean
  */
 public class Tiger {
-    private String name;
 
-    private int age;
+    private String name = "小老虎";
 
-    private int color;
+    private int age = 18;
+
+    private int color = 1;
 
     public Tiger() {
     }

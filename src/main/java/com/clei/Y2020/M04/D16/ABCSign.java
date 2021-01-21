@@ -1,6 +1,8 @@
 package com.clei.Y2020.M04.D16;
 
+import com.clei.utils.Base64Util;
 import com.clei.utils.PrintUtil;
+import com.clei.utils.StringUtil;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 
@@ -19,7 +21,7 @@ import java.util.Enumeration;
 
 public class ABCSign {
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         // sha256();
         String str = "{\"orgSeqNo\":\"QP190528161459052249\",\"seqNo\":\"QP190528150425052249\",\"partnerId\":\"103882200110039\"}";
         String merchantCerPath = "F:\\work\\Eeparking\\ABC\\103882200110039.pfx";
@@ -29,22 +31,22 @@ public class ABCSign {
     }
 
     /**
-     *
      * @date 2017年11月30日
      */
     public static void sha256() {
         String jsonKey = "{'key':'value'}1B4I3E3QU18C0101007F00002C32AED5";
 
-        PrintUtil.dateLine("A: " + getSHA256StrJava(jsonKey));// java 代码实现
+        // java 代码实现
+        PrintUtil.dateLine("A: " + getSHA256StrJava(jsonKey));
 
-        PrintUtil.dateLine("B: " + getSHA256StrUseApacheCodec(jsonKey));// apache工具栏
+        // apache工具类
+        PrintUtil.dateLine("B: " + getSHA256StrUseApacheCodec(jsonKey));
     }
 
     /**
      * 利用java原生的摘要实现SHA256加密
      *
-     * @param str
-     *            加密后的报文
+     * @param str 加密后的报文
      * @return
      */
     public static String getSHA256StrJava(String str) {
@@ -106,12 +108,13 @@ public class ABCSign {
 
     /**
      * 使用商户证书签名
+     *
      * @param str
      * @param merchantCerPath
      * @param merchantCerPassword
      * @throws Exception
      */
-    public static String readPfxAndSha1WithRsa(String str, String merchantCerPath, String merchantCerPassword) throws Exception{
+    public static String readPfxAndSha1WithRsa(String str, String merchantCerPath, String merchantCerPassword) throws Exception {
 
         KeyStore ks = KeyStore.getInstance("PKCS12");
         FileInputStream fis = new FileInputStream(merchantCerPath);
@@ -119,7 +122,7 @@ public class ABCSign {
         // If the keystore password is empty(""), then we have to set
         // to null, otherwise it won't work!!!
         char[] nPassword = null;
-        if ((merchantCerPassword == null) || merchantCerPassword.trim().equals("")) {
+        if (StringUtil.isBlank(str)) {
             nPassword = null;
         } else {
             nPassword = merchantCerPassword.toCharArray();
@@ -134,8 +137,8 @@ public class ABCSign {
         // In MS IE 6.
         Enumeration<String> enums = ks.aliases();
         String keyAlias = null;
-        if (enums.hasMoreElements()) // we are readin just one certificate.
-        {
+        // we are readin just one certificate.
+        if (enums.hasMoreElements()) {
             keyAlias = enums.nextElement();
         }
 
@@ -159,11 +162,12 @@ public class ABCSign {
 
     /**
      * 验签
+     *
      * @param str
      * @param sign
      * @param cerPath
      */
-    public static boolean readCerAndVerifySign(String str, String sign, String cerPath) throws Exception{
+    public static boolean readCerAndVerifySign(String str, String sign, String cerPath) throws Exception {
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
         X509Certificate cert = (X509Certificate) cf.generateCertificate(new FileInputStream(new File(
                 cerPath)));
@@ -173,8 +177,7 @@ public class ABCSign {
         verifySign.initVerify(publicKey);
         // 用于验签的数据
         verifySign.update(str.getBytes());
-        boolean flag = verifySign
-                .verify(com.alibaba.fastjson.util.Base64.decodeFast(sign));//验签由第三方做
+        boolean flag = verifySign.verify(Base64Util.decode(sign));//验签由第三方做
 
         return flag;
     }

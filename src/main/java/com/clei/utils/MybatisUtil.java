@@ -12,6 +12,7 @@ import com.clei.Y2020.M09.D22.SectionInfo;
 import com.clei.Y2020.M09.D22.SectionPoint;
 import com.clei.Y2020.M09.D22.SectionRunState;
 import com.clei.utils.other.ColumnDao;
+import io.netty.util.CharsetUtil;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -26,12 +27,12 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -54,7 +55,7 @@ public class MybatisUtil {
     private final static String DATABASE = "hdsp_itms";
     private final static String TABLE = "road_section_info";
     private final static char UNDERLINE = '_';
-    private final static Map<String, String> javaTypeMap = new HashMap<>();
+    private final static Map<String, String> JAVA_TYPE_MAP = new HashMap<>();
     private static boolean javaTypeMapInit = false;
 
     // 102 agv == 3 || p2 floor ||
@@ -62,11 +63,7 @@ public class MybatisUtil {
     public static void main(String[] args) throws Exception {
         String env = ENV;
         if (args.length > 0) {
-            if (args[0].equals("prod")) {
-                env = "prod";
-            } else {
-                env = "test";
-            }
+            env = "prod".equalsIgnoreCase(args[0]) ? "prod" : "test";
         }
 
         // ---------------Road Begin---------------
@@ -124,7 +121,7 @@ public class MybatisUtil {
 
         List<RoadObject> sectionList = new ArrayList<>();
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "UTF-8"));
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), CharsetUtil.UTF_8));
         String str;
 
         while (null != (str = br.readLine())) {
@@ -161,7 +158,7 @@ public class MybatisUtil {
             if (c == 'G' || c == 'g' || c == 'S' || c == 's') {
                 roadType = 3;
             } else {
-                if (type.equals("1") || type.equals("2")) {
+                if ("1".equals(type) || "2".equals(type)) {
                     roadType = 2;
                 }
             }
@@ -293,7 +290,7 @@ public class MybatisUtil {
      * 根据数据库道路路段信息 随机设置 运行状态
      *
      * @param env
-     * @throws Exception
+     * @throws Exception 异常
      */
     private static void insertRoadSectionRunStateInfo(String env) throws Exception {
         SqlSession session = getSession(env);
@@ -317,7 +314,7 @@ public class MybatisUtil {
             b2 = b2.setScale(2, RoundingMode.HALF_UP);
 
             BigDecimal b3 = new BigDecimal(String.valueOf(m.get("length")));
-            b3 = b3.divide(new BigDecimal(2)).setScale(2, RoundingMode.HALF_UP);
+            b3 = b3.divide(new BigDecimal(2), 2, RoundingMode.HALF_UP);
 
             m.put("congestionIndex", b1);
             m.put("speed", b2);
@@ -335,7 +332,7 @@ public class MybatisUtil {
      * 里面多个文件，内容格式一致
      * 根据日期存到表里
      *
-     * @param env
+     * @param env 环境
      * @throws Exception
      */
     private static void insertTempSectionRunState(String env) throws Exception {
@@ -370,7 +367,7 @@ public class MybatisUtil {
             int j = 0;
             int k = 0;
             for (File f : files) {
-                BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF-8"));
+                BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8));
                 String str;
                 while (null != (str = br.readLine())) {
                     i++;
@@ -414,10 +411,9 @@ public class MybatisUtil {
             PrintUtil.dateLine("可用数据条数： " + origin.size());
 
             String tableName = "road_section_run_state_" + tableDate.replaceAll("-", "");
-            ;
 
             // 切割并插入
-            cutAndInsert(origin, 0, 1, tableName, mapper);
+            cutAndInsert(origin, 1, tableName, mapper);
 
             // mapper.batchInsertTempSectionRunState(origin,tableName);
 
@@ -775,7 +771,7 @@ public class MybatisUtil {
                 sb.append(congestionArr[c.getCongestionType()]);
                 sb.append(' ');
 
-                String mileage = 1 == BigDecimal.ONE.compareTo(c.getLength()) ? c.getLength().multiply(new BigDecimal(1000)).intValue() + "m" : c.getLength().toString() + "km";
+                String mileage = 0 < BigDecimal.ONE.compareTo(c.getLength()) ? c.getLength().multiply(new BigDecimal(1000)).intValue() + "m" : c.getLength().toString() + "km";
                 sb.append(mileage);
                 c.setCongestionDescription(sb.toString());
                 // 排名
@@ -836,8 +832,8 @@ public class MybatisUtil {
                 m.put("lonEnd", lonEnd);
                 m.put("latEnd", latEnd);
 
-                Boolean oneWay = Boolean.valueOf(String.valueOf(m.get("oneWay")));
-                Integer laneNumber = Integer.parseInt(String.valueOf(m.get("laneNumber")));
+                boolean oneWay = Boolean.parseBoolean(String.valueOf(m.get("oneWay")));
+                int laneNumber = Integer.parseInt(String.valueOf(m.get("laneNumber")));
                 String laneConfig = (oneWay ? "单向" : "双向") + numberArr[laneNumber] + "车道";
 
                 m.put("laneConfig", laneConfig);
@@ -884,7 +880,7 @@ public class MybatisUtil {
             mapper.truncateTable(truncateTableName);
 
             // 3. 插入数据
-            cutAndInsert(sectionRunStateList, 0, 2, "", mapper);
+            cutAndInsert(sectionRunStateList, 2, "", mapper);
             PrintUtil.dateLine("更新report_hour_road_run_state成功");
         }
 
@@ -1031,7 +1027,7 @@ public class MybatisUtil {
                     // 批量插入
                     if (congestionHourForcatList.size() > 0) {
                         // 排下序
-                        Collections.sort(congestionHourForcatList, comparator);
+                        congestionHourForcatList.sort(comparator);
                         mapper.batchInsertReportForcast(congestionHourForcatList);
                         PrintUtil.dateLine("批量插入" + dateStr + "日预测数据成功");
                     } else {
@@ -1086,7 +1082,7 @@ public class MybatisUtil {
         // 根据uuid获取到路段信息
         List<Map<String, Object>> sectionList = mapper.getRoadSectionByUuidList(list);
 
-        for (Map m : sectionList) {
+        for (Map<String, Object> m : sectionList) {
             String uuid = m.get("uuid").toString();
 
             String tempStr = uuidMap.get(uuid);
@@ -1133,7 +1129,7 @@ public class MybatisUtil {
         int tempCount = pointSize / n;
 
         // 最多5个点分配一个车 避免车辆太过密集
-        recordCount = recordCount > tempCount ? tempCount : recordCount;
+        recordCount = Math.min(recordCount, tempCount);
 
         // 选中点记录 map
         Map<String, Integer> selectedMap = new HashMap<>(recordCount);
@@ -1211,7 +1207,7 @@ public class MybatisUtil {
         // 批量插入
         // mapper.batchInsertVehicleState(list);
 
-        cutAndInsert(list, 0, 3, "", mapper);
+        cutAndInsert(list, 3, "", mapper);
 
         session.close();
 
@@ -1296,7 +1292,8 @@ public class MybatisUtil {
         double min = 0.01;
         Long roadSectionId = null;
 
-        double EARTH_RADIUS = 6378.137;
+        // 地球半径
+        double earthRadius = 6378.137;
         BigDecimal pi = new BigDecimal(Math.PI);
         double temp = pi.divide(new BigDecimal(180), 10, RoundingMode.HALF_UP).doubleValue();
 
@@ -1310,7 +1307,7 @@ public class MybatisUtil {
             double b = lon1.doubleValue() * temp - lon.doubleValue() * temp;
             double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) +
                     Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
-            s = s * EARTH_RADIUS;
+            s = s * earthRadius;
 
             if (s < min) {
                 roadSectionId = p.getRoadSectionId();
@@ -1325,23 +1322,22 @@ public class MybatisUtil {
      * 切割批量导入
      *
      * @param list      数据
-     * @param n         切割每份多少条
      * @param type      插入类型
      * @param tableName 表名
      * @param mapper    mapper接口
      */
-    private static void cutAndInsert(List list, int n, int type, String tableName, ColumnDao mapper) {
+    private static <T> void cutAndInsert(List<T> list, int type, String tableName, ColumnDao mapper) {
 
         // 默认每次10w条
-        int number = 0 == n ? 100000 : n;
+        int number = 100000;
         int size = list.size();
         int start = 0;
 
         while (true) {
 
             int end = start + number;
-            end = end > size ? size : end;
-            List l = new ArrayList<>(list.subList(start, end));
+            end = Math.min(end, size);
+            List<T> l = new ArrayList<>(list.subList(start, end));
             // 批量插入
             switch (type) {
                 case 1:
@@ -1376,9 +1372,9 @@ public class MybatisUtil {
      */
     private static Integer getCongestionType(BigDecimal congestionIndex) {
 
-        int congestionType = congestionIndex.subtract(BigDecimal.ONE).divide(new BigDecimal(0.3), 18, RoundingMode.CEILING).intValue();
+        int congestionType = congestionIndex.subtract(BigDecimal.ONE).divide(new BigDecimal("0.3"), 18, RoundingMode.CEILING).intValue();
 
-        congestionType = congestionType < 1 ? 1 : congestionType > 5 ? 5 : congestionType;
+        congestionType = congestionType < 1 ? 1 : Math.min(congestionType, 5);
 
         return congestionType;
 
@@ -1426,8 +1422,7 @@ public class MybatisUtil {
         Reader reader = Resources.getResourceAsReader("mybatisConf/mybatisConf.xml");
         SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(reader, env);
         // 自动提交 true
-        SqlSession session = sessionFactory.openSession(true);
-        return session;
+        return sessionFactory.openSession(true);
     }
 
     /**
@@ -1477,7 +1472,7 @@ public class MybatisUtil {
             for (String s : set) {
                 if (s.equalsIgnoreCase(cn)) {
                     cn = s;
-                }else {
+                } else {
                     ct = s;
                 }
             }
@@ -1559,7 +1554,6 @@ public class MybatisUtil {
             // 下划线
             if (UNDERLINE == c) {
                 underlinePrefix = true;
-                continue;
             } else {
                 // 小写字母
                 if ('a' <= c && 'z' >= c) {
@@ -1597,9 +1591,9 @@ public class MybatisUtil {
             initJavaTypeMap();
         }
         // 结果
-        String javaType = javaTypeMap.get(type);
+        String javaType = JAVA_TYPE_MAP.get(type);
         if (null == javaType) {
-            javaType = javaTypeMap.get("default");
+            javaType = JAVA_TYPE_MAP.get("default");
         }
 
         return javaType;
@@ -1607,24 +1601,24 @@ public class MybatisUtil {
 
     private static void initJavaTypeMap() {
         // 整数
-        javaTypeMap.put("tinyint", "java.lang.Boolean");
-        javaTypeMap.put("smallint", "java.lang.Short");
-        javaTypeMap.put("int", "java.lang.Integer");
-        javaTypeMap.put("bigint", "java.lang.Long");
+        JAVA_TYPE_MAP.put("tinyint", "java.lang.Boolean");
+        JAVA_TYPE_MAP.put("smallint", "java.lang.Short");
+        JAVA_TYPE_MAP.put("int", "java.lang.Integer");
+        JAVA_TYPE_MAP.put("bigint", "java.lang.Long");
         // 字符串
-        javaTypeMap.put("text", "java.lang.String");
-        javaTypeMap.put("char", "java.lang.String");
-        javaTypeMap.put("varchar", "java.lang.String");
-        javaTypeMap.put("date", "java.lang.String");
+        JAVA_TYPE_MAP.put("text", "java.lang.String");
+        JAVA_TYPE_MAP.put("char", "java.lang.String");
+        JAVA_TYPE_MAP.put("varchar", "java.lang.String");
+        JAVA_TYPE_MAP.put("date", "java.lang.String");
         // 小数
-        javaTypeMap.put("float", "java.lang.Float");
-        javaTypeMap.put("double", "java.lang.Double");
-        javaTypeMap.put("decimal", "java.math.BigDecimal");
+        JAVA_TYPE_MAP.put("float", "java.lang.Float");
+        JAVA_TYPE_MAP.put("double", "java.lang.Double");
+        JAVA_TYPE_MAP.put("decimal", "java.math.BigDecimal");
         // 日期
-        javaTypeMap.put("datetime", "java.util.Date");
-        javaTypeMap.put("timestamp", "java.util.Date");
+        JAVA_TYPE_MAP.put("datetime", "java.util.Date");
+        JAVA_TYPE_MAP.put("timestamp", "java.util.Date");
         // 默认类型
-        javaTypeMap.put("default", "java.lang.String");
+        JAVA_TYPE_MAP.put("default", "java.lang.String");
         // 初始化完毕
         javaTypeMapInit = true;
     }
@@ -1634,7 +1628,7 @@ public class MybatisUtil {
      *
      * @param env 环境参数
      */
-    private static void test(String env) throws Exception {
+    private static void test(String env) {
 
         /*SqlSession session = getSession(env);
 

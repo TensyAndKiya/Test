@@ -6,7 +6,6 @@ import com.clei.utils.DateUtil;
 import com.clei.utils.EncryptUtil;
 import com.clei.utils.PrintUtil;
 import com.clei.utils.RequestUtils;
-import sun.misc.BASE64Encoder;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -62,7 +61,7 @@ public class BaiwangInvoiceService3 {
 
         byte[] encryptBytes = encrypt(contentMD5.getBytes("UTF-8"), aesKey);
 
-        String encryptStr = new BASE64Encoder().encodeBuffer(encryptBytes).replaceAll("\r", "").replaceAll("\n", "");
+        String encryptStr = Base64Util.encode(encryptBytes).replaceAll("\r", "").replaceAll("\n", "");
 
         String outerInfo = outerInfo(cInfo, content, encryptStr);
 
@@ -88,7 +87,7 @@ public class BaiwangInvoiceService3 {
         String returnContent = data.getString("content");
 
         PrintUtil.dateLine("content : " + returnContent);
-        byte[] base64 = Base64Util.base64decode(returnContent);
+        byte[] base64 = Base64Util.decode(returnContent);
 
         PrintUtil.dateLine(new String(base64, "utf-8"));
 
@@ -249,7 +248,7 @@ public class BaiwangInvoiceService3 {
 
         PrintUtil.dateLine("content " + content.toString());
 
-        String str = new BASE64Encoder().encodeBuffer(content.toString().getBytes("UTF-8"))
+        String str = Base64Util.encode(content.toString().getBytes("UTF-8"))
                 .replaceAll("\r", "").replaceAll("\n", "");
 
         return str;

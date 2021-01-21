@@ -1,8 +1,8 @@
 package com.clei.Y2019.M11.D05;
 
 import com.alibaba.fastjson.JSONObject;
+import com.clei.utils.Base64Util;
 import com.clei.utils.PrintUtil;
-import sun.misc.BASE64Decoder;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -56,7 +56,7 @@ public class DownEleInvoiceTest {
     }
 
     private static void getInvoicePdf(String str,String fileName) throws Exception {
-        byte[] data = new BASE64Decoder().decodeBuffer(str);
+        byte[] data = Base64Util.decode(str);
 
         data = deCompress(data);
 
@@ -70,7 +70,7 @@ public class DownEleInvoiceTest {
 
         String pdfBase64Str = json.getString(PDF_KEY);
 
-        data = new BASE64Decoder().decodeBuffer(pdfBase64Str);
+        data = Base64Util.decode(pdfBase64Str);
 
         byteToFile(data,fileName);
 

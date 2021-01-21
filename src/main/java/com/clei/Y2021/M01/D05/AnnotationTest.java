@@ -6,6 +6,7 @@ import com.clei.annotation.Test3;
 import com.clei.function.Consumer2;
 import com.clei.utils.PrintUtil;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.function.Consumer;
@@ -61,9 +62,9 @@ public class AnnotationTest {
     /**
      * 正常执行则通过
      *
-     * @throws Exception
+     * @throws Exception 异常
      */
-    private static void doTest(Class clazz, Consumer<Method> noExConsumer, Consumer2<Method, Throwable> exConsumer) throws Exception {
+    private static void doTest(Class<? extends Annotation> clazz, Consumer<Method> noExConsumer, Consumer2<Method, Throwable> exConsumer) throws Exception {
         // 被测试的类
         Class<?> testClass = Class.forName("com.clei.Y2021.M01.D05.AnnotationTest");
         // 其所有公共方法
@@ -114,19 +115,21 @@ public class AnnotationTest {
     @Test2(IndexOutOfBoundsException.class)
     @Test3({IndexOutOfBoundsException.class, NullPointerException.class})
     public static void m4() {
-        int[] arr = new int[0];
-        PrintUtil.log(arr[0]);
+        int[] arr = new int[]{0};
+        int i = Integer.parseInt("1");
+        PrintUtil.log(arr[i]);
     }
 
     @Test1
     @Test2(IndexOutOfBoundsException.class)
     @Test3({IndexOutOfBoundsException.class, NullPointerException.class})
     public static void m5() {
-        String str = null;
-        str.equals("xxx");
+        // 为了绕过always null的提示，用了一个方法生产null
+        String str1 = m6();
+        PrintUtil.log(str1);
     }
 
-    public static void m6() {
-
+    public static String m6() {
+        return null;
     }
 }

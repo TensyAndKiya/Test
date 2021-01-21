@@ -17,6 +17,7 @@ public interface ColumnDao {
 
     /**
      * 批量插入roadInfo
+     *
      * @param list
      */
     void batchInsertRoadInfo(List<RoadObject> list);
@@ -105,7 +106,7 @@ public interface ColumnDao {
      *
      * @param list
      */
-    void batchInsertVehicleState(List<Map<String, Object>> list);
+    <T> void batchInsertVehicleState(List<T> list);
 
     /**
      * 根据uuid获取到路段信息

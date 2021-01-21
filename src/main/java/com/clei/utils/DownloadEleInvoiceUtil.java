@@ -19,7 +19,7 @@ public class DownloadEleInvoiceUtil {
     }
 
     private static String notify(String content, String secretId, String encryptCode, String zipCode) throws Exception {
-        byte[] data = Base64Util.base64decode(content);
+        byte[] data = Base64Util.decode(content);
         // 解压缩
         if ("1".equals(zipCode)) {
             data = EncryptUtil.deCompress(data);

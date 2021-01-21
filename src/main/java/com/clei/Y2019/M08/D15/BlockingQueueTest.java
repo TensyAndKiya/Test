@@ -19,10 +19,11 @@ public class BlockingQueueTest {
     private static class MyRunnable2 implements Runnable{
         private LinkedBlockingQueue<String> queue;
         private int length;
-        public MyRunnable2(LinkedBlockingQueue queue,int length){
+        public MyRunnable2(LinkedBlockingQueue<String> queue, int length) {
             this.queue = queue;
             this.length = length;
         }
+
         @Override
         public void run() {
             PrintUtil.dateLine("run2");
@@ -47,10 +48,12 @@ public class BlockingQueueTest {
     private static class MyRunnable1 implements Runnable{
         private LinkedBlockingQueue<String> queue;
         private int length;
-        public MyRunnable1(LinkedBlockingQueue queue,int length){
+
+        public MyRunnable1(LinkedBlockingQueue<String> queue, int length) {
             this.queue = queue;
             this.length = length;
         }
+
         @Override
         public void run() {
             PrintUtil.dateLine("run1");

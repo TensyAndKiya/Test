@@ -2,10 +2,10 @@ package com.clei.Y2019.M12.D25;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.clei.utils.Base64Util;
 import com.clei.utils.DateUtil;
 import com.clei.utils.PrintUtil;
 import com.clei.utils.RequestUtils;
-import sun.misc.BASE64Encoder;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -61,7 +61,7 @@ public class BaiwangInvoiceService2 {
 
         PrintUtil.dateLine("content : " + contentStr);
 
-        contentStr = new BASE64Encoder().encodeBuffer(contentStr.getBytes("UTF-8")).replaceAll("\r","").replaceAll("\n","");
+        contentStr = Base64Util.encode(contentStr.getBytes("UTF-8")).replaceAll("\r", "").replaceAll("\n", "");
 
         PrintUtil.dateLine("contentStr : " + contentStr);
 
@@ -69,18 +69,13 @@ public class BaiwangInvoiceService2 {
 
         byte[] encryptBytes = encrypt(contentMD5.getBytes("UTF-8"),aesKey);
 
-        String encryptStr = new BASE64Encoder().encodeBuffer(encryptBytes).replaceAll("\r","").replaceAll("\n","");
-
-
-
+        String encryptStr = Base64Util.encode(encryptBytes).replaceAll("\r", "").replaceAll("\n", "");
 
         JSONObject outerInfo = outerInfo(cInfo,contentStr,encryptStr);
-
 
         // PrintUtil.dateLine("contentKey : " + encryptStr);
 
         PrintUtil.dateLine("final : " + outerInfo.toJSONString());
-
 
         String result = RequestUtils.getHttpConnectResult(outerInfo.toJSONString(),"https://dev.fapiao.com:18944/fpt-dsqz/invoice");
 
@@ -124,8 +119,8 @@ public class BaiwangInvoiceService2 {
         data.put("dataDescription",dataDescription);
         dataDescription.put("zipCode","0");
 
-        data.put("content",new BASE64Encoder().encodeBuffer(content.getBytes("UTF-8")).replaceAll("\r","").replaceAll("\n",""));
-        data.put("contentKey",contentKey);
+        data.put("content", Base64Util.encode(content.getBytes("UTF-8")).replaceAll("\r", "").replaceAll("\n", ""));
+        data.put("contentKey", contentKey);
 
         interfaceInfo.put("globalInfo",global);
         interfaceInfo.put("returnStateInfo",returnInfo);

@@ -1,8 +1,7 @@
 package com.clei.Y2019.M08.D02;
 
+import com.clei.utils.Base64Util;
 import com.clei.utils.PrintUtil;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -40,12 +39,12 @@ public class DesTest {
 
         byte[] bytes = cipher.doFinal(str.getBytes(charset));
         // 用Base64转成字符串
-        return new BASE64Encoder().encode(bytes);
+        return Base64Util.encode(bytes);
     }
 
     private static String decryptDESCBC(String str) throws Exception {
         // 用Base64转成byte[]
-        byte[] bytes = new BASE64Decoder().decodeBuffer(str);
+        byte[] bytes = Base64Util.decode(str);
         // key
         DESKeySpec desKeySpec = new DESKeySpec(key.getBytes(charset));
         SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("DES");
@@ -74,12 +73,12 @@ public class DesTest {
 
         byte[] bytes = cipher.doFinal(str.getBytes(charset));
         // 用Base64转成字符串
-        return new BASE64Encoder().encode(bytes);
+        return Base64Util.encode(bytes);
     }
 
     private static String decrypt3DESECB(String str) throws Exception {
         // 用Base64转成byte[]
-        byte[] bytes = new BASE64Decoder().decodeBuffer(str);
+        byte[] bytes = Base64Util.decode(str);
         // key
         DESedeKeySpec desKeySpec = new DESedeKeySpec(key.getBytes(charset));
         SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("DESede");
@@ -103,12 +102,12 @@ public class DesTest {
 
         byte[] bytes = cipher.doFinal(str.getBytes(charset));
         // 用Base64转成字符串
-        return new BASE64Encoder().encode(bytes);
+        return Base64Util.encode(bytes);
     }
 
     public static String decrypt3DES(String str) throws Exception {
         // 用Base64转成byte[]
-        byte[] bytes = new BASE64Decoder().decodeBuffer(str);
+        byte[] bytes = Base64Util.decode(str);
         // key
         String algorithm = "DESede";
         SecretKey secretKey = new SecretKeySpec(key.getBytes(charset),algorithm);

@@ -1,8 +1,7 @@
 package com.clei.Y2019.M08.D07;
 
+import com.clei.utils.Base64Util;
 import com.clei.utils.PrintUtil;
-import com.thoughtworks.xstream.core.util.Base64Encoder;
-import sun.misc.BASE64Decoder;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -36,13 +35,13 @@ public class ZipTest {
         zos.closeEntry();
         bytes = bos.toByteArray();
         PrintUtil.dateLine(bytes.length);
-        String result = new Base64Encoder().encode(bytes);
+        String result = Base64Util.encode(bytes);
         bos.close();
         return result;
     }
 
     private static String unZip(String str) throws Exception{
-        byte[] bytes = new BASE64Decoder().decodeBuffer(str);
+        byte[] bytes = Base64Util.decode(str);
         ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
         ZipInputStream zis = new ZipInputStream(bis);
         byte[] byteResult = null;
