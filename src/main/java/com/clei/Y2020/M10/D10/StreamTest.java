@@ -77,12 +77,11 @@ public class StreamTest {
         PrintUtil.log("sum :{}", sum);
 
         // toMap 前提是key不重复，不然会报IllegalStateException : Duplicate key
-        Stream.iterate(1, i -> i + 1).limit(5).collect(Collectors.toMap(i -> i, i -> i * 3)).forEach((k, v) -> {
-            PrintUtil.log("k :{}, v :{}", k, v);
-        });
+        Stream.iterate(1, i -> i + 1).limit(5).collect(Collectors.toMap(i -> i, i -> i * 3)).forEach((k, v) -> PrintUtil.log("k :{}, v :{}", k, v));
 
         // 分组 奇偶分
         Map<Boolean, List<Integer>> partitionMap = Stream.iterate(1, i -> i + 1).limit(10).collect(Collectors.partitioningBy(i -> i % 2 == 0));
+
         partitionMap.forEach((k, v) -> PrintUtil.log("k :{}, v :{}", k, v));
 
         // 分组 性别

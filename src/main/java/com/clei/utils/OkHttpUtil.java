@@ -8,11 +8,13 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -79,6 +81,17 @@ public class OkHttpUtil {
      */
     public static String doGet(String url) {
         return doRequest(url, null);
+    }
+
+    /**
+     * Get 请求
+     *
+     * @param url
+     * @param charset 指定返回字符串的字符集
+     * @return
+     */
+    public static String doGet(String url, Charset charset) {
+        return doRequest(url, null, charset);
     }
 
     /**
@@ -160,7 +173,7 @@ public class OkHttpUtil {
      * @return
      */
     private static RequestBody getJsonBody(String param) {
-        return RequestBody.create(MediaType.parse("application/json; charset=utf-8"), param);
+        return RequestBody.create(param, MediaType.parse("application/json; charset=utf-8"));
     }
 
     /**
@@ -195,9 +208,7 @@ public class OkHttpUtil {
      * @return
      */
     private static RequestBody getFormBody(File file) {
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), file);
-        new MultipartBody.Builder().build();
-        return requestBody;
+        return RequestBody.create(file, MediaType.parse("application/octet-stream"));
     }
 
     /**
@@ -220,9 +231,10 @@ public class OkHttpUtil {
      *
      * @param url
      * @param requestBody
+     * @param charsets    指定返回字符串使用的字符集
      * @return
      */
-    private static String doRequest(String url, RequestBody requestBody) {
+    private static String doRequest(String url, RequestBody requestBody, Charset... charsets) {
         Request.Builder builder = new Request.Builder().url(url);
         // null GET
         if (null == requestBody) {
@@ -241,10 +253,16 @@ public class OkHttpUtil {
         if (null != response) {
             if (response.isSuccessful()) {
                 String result = null;
+                ResponseBody body = response.body();
                 try {
-                    result = response.body().string();
+                    if (charsets.length > 0) {
+                        byte[] bytes = body.bytes();
+                        result = new String(bytes, charsets[0]);
+                    } else {
+                        result = body.string();
+                    }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    PrintUtil.log("", e);
                 }
                 PrintUtil.log("请求[{}]成功，结果：{}", url, result);
                 return result;

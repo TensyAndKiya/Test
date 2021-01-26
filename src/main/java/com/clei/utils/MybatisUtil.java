@@ -11,6 +11,7 @@ import com.clei.Y2020.M09.D22.DateToDate;
 import com.clei.Y2020.M09.D22.SectionInfo;
 import com.clei.Y2020.M09.D22.SectionPoint;
 import com.clei.Y2020.M09.D22.SectionRunState;
+import com.clei.Y2021.M01.D22.Area;
 import com.clei.utils.other.ColumnDao;
 import io.netty.util.CharsetUtil;
 import org.apache.ibatis.io.Resources;
@@ -1212,6 +1213,23 @@ public class MybatisUtil {
         session.close();
 
         PrintUtil.dateLine("批量插入车辆状态成功");
+    }
+
+    /**
+     * 插入2020年中国行政区划信息
+     *
+     * @param areaList 区域信息 list
+     */
+    public static void insertArea(List<Area> areaList) throws Exception {
+        // 用默认env
+        SqlSession session = getSession(ENV);
+        ColumnDao mapper = session.getMapper(ColumnDao.class);
+        PrintUtil.dateLine("批量插入区划信息开始");
+        PrintUtil.dateLine("总数据条数： " + areaList.size());
+        // 批量插入
+        mapper.batchInsertArea(areaList);
+        session.close();
+        PrintUtil.dateLine("批量插入区划信息成功");
     }
 
     /**

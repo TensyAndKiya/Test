@@ -6,13 +6,25 @@ import com.clei.Y2020.M09.D22.CongestionHourForcat;
 import com.clei.Y2020.M09.D22.CongestionTop;
 import com.clei.Y2020.M09.D22.DateToDate;
 import com.clei.Y2020.M09.D22.SectionInfo;
+import com.clei.Y2021.M01.D22.Area;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
 
+/**
+ * mybatis mapper
+ *
+ * @author KIyA
+ */
 public interface ColumnDao {
 
+    /**
+     * 获取表列信息
+     *
+     * @param map
+     * @return
+     */
     List<Map<String, String>> getColumnInfo(Map<String, String> map);
 
     /**
@@ -159,6 +171,13 @@ public interface ColumnDao {
      * @param sectionRunStateList
      */
     void batchInsertReportHour(List sectionRunStateList);
+
+    /**
+     * 批量插入行政区划信息
+     *
+     * @param list 区域信息 list
+     */
+    void batchInsertArea(List<Area> list);
 
     /**
      * 获取双向的道路和路段
