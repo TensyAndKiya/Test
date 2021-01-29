@@ -19,15 +19,15 @@ public class SynchronizedTest {
     private static String refreshToken(String key) throws InterruptedException {
         String lock = ("refreshToken" + key).intern();
         synchronized (lock){
-            PrintUtil.dateLine("lock1");
+            PrintUtil.log("lock1");
             Long curTime = System.currentTimeMillis();
             Long requestTime = requestMap.get(key);
             if(null != requestTime && curTime - requestTime < 30000){
-                PrintUtil.dateLine("lock2");
+                PrintUtil.log("lock2");
                 return tokenMap.get(key);
             }
             Thread.sleep(1000);
-            PrintUtil.dateLine("lock3");
+            PrintUtil.log("lock3");
             String token = Math.random() + " token";
             tokenMap.put(key,token);
             requestMap.put(key,curTime);
@@ -39,7 +39,7 @@ public class SynchronizedTest {
         @Override
         public void run() {
             try {
-                PrintUtil.dateLine(refreshToken("park1"));
+                PrintUtil.log(refreshToken("park1"));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

@@ -21,9 +21,9 @@ public class DelayQueueTest {
 
         QueryResult q3 = new QueryResult(curMillis + 9000);
 
-        PrintUtil.dateLine(q1.getStopMillis());
-        PrintUtil.dateLine(q2.getStopMillis());
-        PrintUtil.dateLine(q3.getStopMillis());
+        PrintUtil.log(q1.getStopMillis());
+        PrintUtil.log(q2.getStopMillis());
+        PrintUtil.log(q3.getStopMillis());
 
         DelayQueue<QueryResult> queue = new DelayQueue<>();
 
@@ -32,12 +32,12 @@ public class DelayQueueTest {
         queue.add(q3);
 
         int size = queue.size();
-        PrintUtil.dateLine(queue.size());
+        PrintUtil.log(queue.size());
 
         // take之后会改变queue的size 所以不要用queue.size()控制循环
         for (int i = 0; i < size; i++) {
             QueryResult result = queue.take();
-            PrintUtil.dateLine(System.currentTimeMillis() + " delay : " + result.getDelay(TimeUnit.MILLISECONDS) + " stop : " + result.getStopMillis());
+            PrintUtil.log(System.currentTimeMillis() + " delay : " + result.getDelay(TimeUnit.MILLISECONDS) + " stop : " + result.getStopMillis());
         }
     }
 }

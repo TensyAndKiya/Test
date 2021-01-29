@@ -7,6 +7,6 @@ import com.clei.utils.PrintUtil;
  */
 public class UnLoad {
     static {
-        PrintUtil.dateLine("This is UnLoad static block！");
+        PrintUtil.log("This is UnLoad static block！");
     }
 }

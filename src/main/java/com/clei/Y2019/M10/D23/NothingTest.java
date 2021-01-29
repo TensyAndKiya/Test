@@ -13,7 +13,7 @@ public class NothingTest {
         list.add("aa");
         list.add("aa");
         list.add("aa");
-        PrintUtil.dateLine(list);
-        PrintUtil.dateLine(new Date(1571742900000L));
+        PrintUtil.log(list);
+        PrintUtil.log(new Date(1571742900000L));
     }
 }

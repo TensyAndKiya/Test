@@ -13,7 +13,7 @@ public class UDPSocketServer {
 
         while (true){
 
-            PrintUtil.dateLine("begin");
+            PrintUtil.log("begin");
 
             byte[] buffer = new byte[1024];
 
@@ -26,12 +26,12 @@ public class UDPSocketServer {
 
             String content = new String(data,"UTF-8");
 
-            PrintUtil.dateLine(content);
+            PrintUtil.log(content);
 
             // 响应
             byte[] response = "何不语".getBytes("UTF-8");
 
-            PrintUtil.dateLine("address : " + packet.getAddress() + " port : " + packet.getPort());
+            PrintUtil.log("address : " + packet.getAddress() + " port : " + packet.getPort());
 
             DatagramPacket packetToClient = new DatagramPacket(response,response.length,packet.getAddress(),packet.getPort());
 

@@ -22,9 +22,9 @@ public class PropertiesTest {
         Properties prop = getPropByFile();
         String parks = prop.getProperty("limit_parks");
         String[] park = parks.split(",");
-        PrintUtil.dateLine(park.length);
+        PrintUtil.log(park.length);
         for(String s : park){
-            PrintUtil.dateLine(s);
+            PrintUtil.log(s);
         }
     }
 
@@ -32,7 +32,7 @@ public class PropertiesTest {
         Properties prop = new Properties();
         File file = new File(PATH);
         if(!file.exists()){
-            PrintUtil.dateLine("读取负载配置文件失败，文件不存在！");
+            PrintUtil.log("读取负载配置文件失败，文件不存在！");
             return null;
         }
         InputStream inputStream = null;
@@ -40,14 +40,14 @@ public class PropertiesTest {
             inputStream = new FileInputStream(file);
             prop.load(inputStream);
         }catch (Exception e){
-            PrintUtil.dateLine("加载属性文件出错！");
+            PrintUtil.log("加载属性文件出错！");
             e.printStackTrace();
         }finally {
             if(null != inputStream){
                 try{
                     inputStream.close();
                 }catch(Exception ee){
-                    PrintUtil.dateLine("关闭输入流出错！");
+                    PrintUtil.log("关闭输入流出错！");
                     ee.printStackTrace();
                 }
             }
@@ -73,7 +73,7 @@ public class PropertiesTest {
             try{
                 percent = Integer.parseInt(percentStr);
             }catch (Exception e){
-                PrintUtil.dateLine("获取阀值出错！！");
+                PrintUtil.log("获取阀值出错！！");
             }
         }
         return percent;
@@ -143,7 +143,7 @@ public class PropertiesTest {
                 prop.setProperty("percent",per + "");
                 return updateProp(prop,null);
             } catch (Exception e){
-                PrintUtil.dateLine("更新属性文件出错！");
+                PrintUtil.log("更新属性文件出错！");
                 return false;
             }
         }else{
@@ -157,7 +157,7 @@ public class PropertiesTest {
         }
         File file = new File(PATH);
         if(!file.exists()){
-            PrintUtil.dateLine("写入负载配置文件失败，文件不存在！");
+            PrintUtil.log("写入负载配置文件失败，文件不存在！");
             return false;
         }
         OutputStream outputStream = null;
@@ -167,7 +167,7 @@ public class PropertiesTest {
             outputStream = new FileOutputStream(file);
             prop.store(outputStream,comment);
         }catch (Exception e){
-            PrintUtil.dateLine("加载属性文件出错！");
+            PrintUtil.log("加载属性文件出错！");
             e.printStackTrace();
             return false;
         }finally {
@@ -175,7 +175,7 @@ public class PropertiesTest {
                 try{
                     outputStream.close();
                 }catch(Exception ee){
-                    PrintUtil.dateLine("关闭输出流出错！");
+                    PrintUtil.log("关闭输出流出错！");
                     ee.printStackTrace();
                 }
             }

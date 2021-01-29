@@ -39,7 +39,7 @@ public class ReplaceThreadSleepTest {
 
         TimerTask task2 = new MyTimerTask(timer);
 
-        PrintUtil.dateLine(System.currentTimeMillis() + " - Timer");
+        PrintUtil.log(System.currentTimeMillis() + " - Timer");
 
         timer.schedule(task1,1000L);
 
@@ -55,10 +55,10 @@ public class ReplaceThreadSleepTest {
     private static void useScheduledExecutorService(){
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
-        PrintUtil.dateLine(System.currentTimeMillis() + " - ScheduledExecutorService");
+        PrintUtil.log(System.currentTimeMillis() + " - ScheduledExecutorService");
 
         executor.schedule(() -> {
-            PrintUtil.dateLine(System.currentTimeMillis() + " - ScheduledExecutorService Hello World!");
+            PrintUtil.log(System.currentTimeMillis() + " - ScheduledExecutorService Hello World!");
         }, 8000L, TimeUnit.MILLISECONDS);
 
         // 关闭
@@ -79,7 +79,7 @@ class MyTimerTask extends TimerTask{
     @Override
     public void run() {
 
-        PrintUtil.dateLine(System.currentTimeMillis() + " - Timer - Hello World!");
+        PrintUtil.log(System.currentTimeMillis() + " - Timer - Hello World!");
 
         // 一个TimerTask的耗时操作会影响另一个TimerTask的开始时间
         /*try {

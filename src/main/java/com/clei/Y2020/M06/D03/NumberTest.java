@@ -10,31 +10,32 @@ import com.clei.utils.PrintUtil;
  * @date 2020-06-03 这个可以从包名看出来
  */
 public class NumberTest {
+
     public static void main(String[] args) {
 
-        PrintUtil.println(16 >>> 2);
-        PrintUtil.println(16 >> 2);
+        PrintUtil.log(16 >>> 2);
+        PrintUtil.log(16 >> 2);
 
-        System.out.println(Integer.toBinaryString(-1));
+        PrintUtil.log(Integer.toBinaryString(-1));
 
         // >>> 是左边补0
-        PrintUtil.println(Integer.toBinaryString(-16));
-        PrintUtil.println(Integer.toBinaryString(-16 >>> 1));
-        PrintUtil.println(Integer.toBinaryString(-16 >>> 2));
-        PrintUtil.println(Integer.toBinaryString(-16 >> 1));
-        PrintUtil.println(Integer.toBinaryString(-16 >> 2));
-        PrintUtil.println(Integer.toBinaryString(Integer.MAX_VALUE));
-        PrintUtil.println(-16 >>> 1);
-        PrintUtil.println(-16 >>> 2);
-        PrintUtil.println(Integer.MAX_VALUE);
+        PrintUtil.log(Integer.toBinaryString(-16));
+        PrintUtil.log(Integer.toBinaryString(-16 >>> 1));
+        PrintUtil.log(Integer.toBinaryString(-16 >>> 2));
+        PrintUtil.log(Integer.toBinaryString(-16 >> 1));
+        PrintUtil.log(Integer.toBinaryString(-16 >> 2));
+        PrintUtil.log(Integer.toBinaryString(Integer.MAX_VALUE));
+        PrintUtil.log(-16 >>> 1);
+        PrintUtil.log(-16 >>> 2);
+        PrintUtil.log(Integer.MAX_VALUE);
         // >> 是有符号的
-        PrintUtil.println(-16 >> 2);
+        PrintUtil.log(-16 >> 2);
 
-        PrintUtil.println(1 << 2);
-        PrintUtil.println(-1 << 2);
+        PrintUtil.log(1 << 2);
+        PrintUtil.log(-1 << 2);
 
         // 为啥没有<<<呢，因为<<是右边补0，影响不了正负
-        System.out.println(NumUtil.toBinaryString(-1));
-        System.out.println(NumUtil.toBinaryString(-1).length());
+        PrintUtil.log(NumUtil.toBinaryString(-1));
+        PrintUtil.log(NumUtil.toBinaryString(-1).length());
     }
 }

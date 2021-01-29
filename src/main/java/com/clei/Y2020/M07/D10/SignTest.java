@@ -18,13 +18,13 @@ public class SignTest {
 
         String md53 = MD5Util.md5(str, 0);
 
-        PrintUtil.dateLine(md51);
+        PrintUtil.log(md51);
 
-        PrintUtil.dateLine(md52);
+        PrintUtil.log(md52);
 
-        PrintUtil.dateLine(md53);
+        PrintUtil.log(md53);
 
-        PrintUtil.dateLine(EncryptUtil.sha1(md51));
+        PrintUtil.log(EncryptUtil.sha1(md51));
 
         TreeMap<String,Object> param = new TreeMap<>();
         // 接口名
@@ -56,10 +56,10 @@ public class SignTest {
 
         String signStr = appSecret + publicParamStr + "中文汉字哦" + appSecret;
 
-        PrintUtil.dateLine(signStr);
+        PrintUtil.log(signStr);
 
-        PrintUtil.dateLine(EncryptUtil.md5(signStr));
-        PrintUtil.dateLine(EncryptUtil.md5(signStr, "UTF8", false));
-        PrintUtil.dateLine(EncryptUtil.md5(signStr, "UTF-8", true));
+        PrintUtil.log(EncryptUtil.md5(signStr));
+        PrintUtil.log(EncryptUtil.md5(signStr, "UTF8", false));
+        PrintUtil.log(EncryptUtil.md5(signStr, "UTF-8", true));
     }
 }

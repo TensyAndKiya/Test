@@ -21,9 +21,9 @@ public class DesTest {
 
     public static void main(String[] args) throws Exception {
         String str = "sk中文英文特殊符号！@#￥！@#￥！@#￥";
-        PrintUtil.dateLine(str);
-        PrintUtil.dateLine(encrypt3DESECB(str));
-        PrintUtil.dateLine(encrypt3DES(str));
+        PrintUtil.log(str);
+        PrintUtil.log(encrypt3DESECB(str));
+        PrintUtil.log(encrypt3DES(str));
     }
 
     private static String encryptDESCBC(String str) throws Exception {

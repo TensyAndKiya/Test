@@ -12,7 +12,7 @@ class MyTest{
     public void myFunction(){
         int[] arr = {1, 2};
         if(arr.length > 1){
-            PrintUtil.dateLine(arr[0]);
+            PrintUtil.log(arr[0]);
         }
     }
 }

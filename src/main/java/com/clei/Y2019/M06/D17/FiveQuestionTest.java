@@ -8,9 +8,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class FiveQuestionTest {
     public static void main(String[] args) {
-        PrintUtil.dateLine(q1());
-        PrintUtil.dateLine(q2());
-        //PrintUtil.dateLine(q3());
+        PrintUtil.log(q1());
+        PrintUtil.log(q2());
+        //PrintUtil.log(q3());
         q4();
         q5();
         q6();
@@ -49,9 +49,9 @@ public class FiveQuestionTest {
     //b好
     private static void q4(){
         BigDecimal a = new BigDecimal(0.1);
-        PrintUtil.dateLine(a);
+        PrintUtil.log(a);
         BigDecimal b = new BigDecimal("0.1");
-        PrintUtil.dateLine(b);
+        PrintUtil.log(b);
     }
 
     //并发锁问题
@@ -62,7 +62,7 @@ public class FiveQuestionTest {
                 //需要加锁的代码
             }
         }catch (Exception e){
-            PrintUtil.dateLine("ERROR!!!!");
+            PrintUtil.log("ERROR!!!!");
             e.printStackTrace();
         }finally {
             lock.unlock();
@@ -74,12 +74,12 @@ public class FiveQuestionTest {
     private static void q6() {
         String param1 = "param";
         String param2 = "PARAM";
-        PrintUtil.dateLine(param1.hashCode());
-        PrintUtil.dateLine(param2.hashCode());
-        PrintUtil.dateLine(strSwitch1(param1));
-        PrintUtil.dateLine(strSwitch1(param2));
-        PrintUtil.dateLine(strSwitch2(param1));
-        PrintUtil.dateLine(strSwitch2(param2));
+        PrintUtil.log(param1.hashCode());
+        PrintUtil.log(param2.hashCode());
+        PrintUtil.log(strSwitch1(param1));
+        PrintUtil.log(strSwitch1(param2));
+        PrintUtil.log(strSwitch2(param1));
+        PrintUtil.log(strSwitch2(param2));
     }
 
     private static String strSwitch1(String param){

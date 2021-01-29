@@ -4,7 +4,7 @@ import com.clei.utils.PrintUtil;
 
 public class PushCommitTest {
     public static void main(String[] args){
-        PrintUtil.dateLine("测试一下A分支commit然后到B分支能不能push");
-        PrintUtil.dateLine("事实证明这样是不行的");
+        PrintUtil.log("测试一下A分支commit然后到B分支能不能push");
+        PrintUtil.log("事实证明这样是不行的");
     }
 }

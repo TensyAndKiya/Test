@@ -21,16 +21,16 @@ public class LittleTest {
 
         //subList may bug bug
         List<Integer> list3 = list.subList(1, 4);
-        PrintUtil.dateLine(list3);
+        PrintUtil.log(list3);
 
         List<Integer> list4 = new ArrayList<>(list3);
 
         list3.add(18);
-        PrintUtil.dateLine(list3);
-        PrintUtil.dateLine(list4);
-        PrintUtil.dateLine(list);
+        PrintUtil.log(list3);
+        PrintUtil.log(list4);
+        PrintUtil.log(list);
 
-        PrintUtil.dateLine(Arrays.toString(arr));
+        PrintUtil.log(Arrays.toString(arr));
 
         for (int i = 0; i < arr.length - 1; i++) {
             boolean change = false;
@@ -47,13 +47,13 @@ public class LittleTest {
             }
         }
 
-        PrintUtil.dateLine(Arrays.toString(arr));
+        PrintUtil.log(Arrays.toString(arr));
 
         String x = new String("xxx");
         String y = "xxx";
         String z = "xxx";
-        PrintUtil.dateLine(x == y);
-        PrintUtil.dateLine(y == z);
-        PrintUtil.dateLine(x.equals(y));
+        PrintUtil.log(x == y);
+        PrintUtil.log(y == z);
+        PrintUtil.log(x.equals(y));
     }
 }

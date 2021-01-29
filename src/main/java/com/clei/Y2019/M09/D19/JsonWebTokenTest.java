@@ -18,8 +18,8 @@ public class JsonWebTokenTest {
         user.put("username", "zhangsan");
         user.put("password", "hasaki");
         String token = JWTUtil.createToken(user);
-        PrintUtil.dateLine("token : " + token);
+        PrintUtil.log("token : " + token);
         Claims claims = JWTUtil.parseToken(token);
-        PrintUtil.dateLine(JSONObject.toJSONString(claims.get("obj", Map.class)));
+        PrintUtil.log(JSONObject.toJSONString(claims.get("obj", Map.class)));
     }
 }

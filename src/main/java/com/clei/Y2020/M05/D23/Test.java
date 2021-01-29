@@ -42,7 +42,7 @@ public class Test {
 
                 if(arrB[j] - arrA[i] <= R){
 
-                    PrintUtil.dateLine(arrA[i] + " " + arrB[j]);
+                    PrintUtil.log(arrA[i] + " " + arrB[j]);
 
                 }
 

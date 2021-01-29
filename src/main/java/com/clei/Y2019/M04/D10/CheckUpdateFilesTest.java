@@ -26,27 +26,27 @@ public class CheckUpdateFilesTest {
         if(sb.indexOf("AlipayConfig.java") > -1){
             count ++;
         }else{
-            PrintUtil.dateLine("AlipayConfig.java");
+            PrintUtil.log("AlipayConfig.java");
         }
         if(sb.indexOf("AlipayWXConfig.java") > -1){
             count ++;
         }else{
-            PrintUtil.dateLine("AlipayWXConfig.java");
+            PrintUtil.log("AlipayWXConfig.java");
         }
         if(sb.indexOf("CdPayConfig.java") > -1){
             count ++;
         }else{
-            PrintUtil.dateLine("CdPayConfig.java");
+            PrintUtil.log("CdPayConfig.java");
         }
         if(sb.indexOf("application.properties") > -1){
             count ++;
         }else{
-            PrintUtil.dateLine("application.properties");
+            PrintUtil.log("application.properties");
         }
         if( count == 4 ){
-            PrintUtil.dateLine("PASS!");
+            PrintUtil.log("PASS!");
         }else{
-            PrintUtil.dateLine("ERROR!WARNING!ERROR!WARNING!ERROR!WARNING!ERROR!WARNING!");
+            PrintUtil.log("ERROR!WARNING!ERROR!WARNING!ERROR!WARNING!ERROR!WARNING!");
         }
     }
 }

@@ -17,26 +17,26 @@ public class ClassLoaderTest {
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
-        PrintUtil.dateLine(classLoader);
+        PrintUtil.log(classLoader);
 
         ClassLoader parent = classLoader.getParent();
 
-        PrintUtil.dateLine(parent);
+        PrintUtil.log(parent);
 
         ClassLoader grandFather = parent.getParent();
 
         // 找不到ExtClassLoader的父Loader，
         // 原因是Bootstrap Loader（引导类加载器）是用C语言实现的，
         // 找不到一个确定的返回父Loader的方式，于是就返回null
-        PrintUtil.dateLine(grandFather);
+        PrintUtil.log(grandFather);
 
         // rt.jar
-        PrintUtil.dateLine(String.class.getClassLoader());
+        PrintUtil.log(String.class.getClassLoader());
 
         // 类加载的三种方式
         ClassLoader cl = ClassLoaderTest.class.getClassLoader();
 
-        PrintUtil.dateLine(cl == classLoader);
+        PrintUtil.log(cl == classLoader);
 
         // 1.不会执行初始化块
         // cl.loadClass("com.clei.Y2020.M06.D04.UnLoad");
@@ -77,7 +77,7 @@ public class ClassLoaderTest {
 
         test.invoke(object);
 
-        PrintUtil.dateLine(object);
+        PrintUtil.log(object);
     }
 
 }

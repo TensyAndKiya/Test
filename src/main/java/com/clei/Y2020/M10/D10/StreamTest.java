@@ -29,7 +29,7 @@ public class StreamTest {
         list.add(new Person("王炸", 23, 0));
         list.add(new Person("陈某", 24, 1));
 
-        PrintUtil.dateLine(falseMethod(1) || falseMethod(2) && trueMethod(1));
+        PrintUtil.log(falseMethod(1) || falseMethod(2) && trueMethod(1));
 
         Stream.iterate(0, i -> i + 2).limit(10).forEach(PrintUtil::log);
 
@@ -121,17 +121,17 @@ public class StreamTest {
                 .skip(1)
                 .collect(Collectors.toList());
 
-        PrintUtil.dateLine();
+        PrintUtil.log();
         ll.forEach(PrintUtil::println);
     }
 
     public static boolean trueMethod(int i) {
-        PrintUtil.dateLine("" + i + true);
+        PrintUtil.log("" + i + true);
         return true;
     }
 
     public static boolean falseMethod(int i) {
-        PrintUtil.dateLine("" + i + false);
+        PrintUtil.log("" + i + false);
         return false;
     }
 

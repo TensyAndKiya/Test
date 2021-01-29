@@ -9,7 +9,7 @@ import java.io.UnsupportedEncodingException;
 public class Base64Test {
     private static String charset = "UTF-8";
     public static void main(String[] args) throws IOException {
-        PrintUtil.dateLine(encode("hasaki"));
+        PrintUtil.log(encode("hasaki"));
     }
 
     private static String encode(String str) throws UnsupportedEncodingException {

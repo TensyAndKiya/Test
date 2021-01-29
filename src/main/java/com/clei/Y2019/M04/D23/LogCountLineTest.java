@@ -17,7 +17,7 @@ public class LogCountLineTest {
     private static String TEMP_FILE = "C:\\Users\\liudg\\Desktop\\logs\\2019-04-23 error\\temp2.log";
     public static void main(String[] args) throws Exception{
         Scanner input = new Scanner(System.in,"UTF-8");
-        PrintUtil.dateLine("请输入匹配字符串：");
+        PrintUtil.log("请输入匹配字符串：");
         String searchStr = input.nextLine();
         File logFile = new File(LOG_FILE);
         File tempFile = new File(TEMP_FILE);
@@ -33,6 +33,6 @@ public class LogCountLineTest {
             }
         }
         br.close();
-        PrintUtil.dateLine("searchStr : " + searchStr + "\t count : " + count);
+        PrintUtil.log("searchStr : " + searchStr + "\t count : " + count);
     }
 }

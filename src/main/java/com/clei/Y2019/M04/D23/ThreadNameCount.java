@@ -41,10 +41,10 @@ public class ThreadNameCount {
             }
         }
         br.close();
-        PrintUtil.dateLine("筛选完毕");
+        PrintUtil.log("筛选完毕");
         List<ThreadDiff> list = new ArrayList<>(countMap.values());
         Collections.sort(list);
-        list.forEach(td -> PrintUtil.dateLine(td));
+        list.forEach(td -> PrintUtil.log(td));
     }
 
     private static void createEntity(Map<String, ThreadDiff> map, String threadName, String dateTime) throws Exception {

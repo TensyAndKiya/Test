@@ -12,12 +12,12 @@ public class ConMapTest {
     public static void main(String[] args) throws InterruptedException {
         /*Runnable1 r = new Runnable1(map);
         for (int i = 0; i < 100; i++) {
-            PrintUtil.dateLine(JSONObject.toJSONString(map));
+            PrintUtil.log(JSONObject.toJSONString(map));
             Thread.sleep((long)(Math.random() * 30) + 10);
             new Thread(r).start();
         }*/
-        PrintUtil.dateLine(map.put("aa", 1L));
-        PrintUtil.dateLine(map.put("aa", 2L));
+        PrintUtil.log(map.put("aa", 1L));
+        PrintUtil.log(map.put("aa", 2L));
     }
 }
 
@@ -31,7 +31,7 @@ class Runnable1 implements Runnable{
         int i = (int) (Math.random()*26) + 65;
         String k = (char)i + "";
         if(map.containsKey(k)){
-            PrintUtil.dateLine("已经有key: " + k);
+            PrintUtil.log("已经有key: " + k);
             return;
         }
         map.put(k,System.currentTimeMillis());

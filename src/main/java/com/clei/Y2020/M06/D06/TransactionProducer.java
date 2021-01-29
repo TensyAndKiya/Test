@@ -57,7 +57,7 @@ public class TransactionProducer {
             // 指定消息存储在哪个队列中
             SendResult result = producer.sendMessageInTransaction(msg,Integer.valueOf(i));
 
-            PrintUtil.dateLine(i + " 发送结果：" + result);
+            PrintUtil.log(i + " 发送结果：" + result);
         }
 
         Thread.sleep(10000000);

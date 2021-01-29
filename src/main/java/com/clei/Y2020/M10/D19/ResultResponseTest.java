@@ -18,19 +18,19 @@ public class ResultResponseTest {
 
         Result<Person> result = new Result<>(true, "成功", "200", p);
 
-        PrintUtil.dateLine(result.getData().toString());
+        PrintUtil.log(result.getData().toString());
 
-        PrintUtil.dateLine(JSONObject.toJSONString(result));
+        PrintUtil.log(JSONObject.toJSONString(result));
 
         Response<Person> response = convert(result);
 
         Person person = response.getResult();
 
-        PrintUtil.dateLine(person.getClass().getName());
+        PrintUtil.log(person.getClass().getName());
 
-        PrintUtil.dateLine(response.getResult().toString());
+        PrintUtil.log(response.getResult().toString());
 
-        PrintUtil.dateLine(JSONObject.toJSONString(response));
+        PrintUtil.log(JSONObject.toJSONString(response));
     }
 
     /**

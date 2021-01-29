@@ -5,7 +5,7 @@ import com.clei.utils.PrintUtil;
 public class FinallyTest {
     public static void main(String[] args) {
         int i = getNum();
-        PrintUtil.dateLine(i);
+        PrintUtil.log(i);
     }
 
     private static int getNum(){

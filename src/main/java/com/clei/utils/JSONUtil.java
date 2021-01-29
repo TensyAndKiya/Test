@@ -33,7 +33,7 @@ public class JSONUtil {
 
     public static void main(String[] args) throws Exception{
 
-        PrintUtil.dateLine(getJSON());
+        PrintUtil.log(getJSON());
 
     }
 

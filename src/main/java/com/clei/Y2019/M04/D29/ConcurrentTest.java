@@ -21,8 +21,8 @@ public class ConcurrentTest {
         traverseMap(map);
         setRemove(set);
         mapRemove(map);
-        PrintUtil.dateLine(set.remove("998"));
-        PrintUtil.dateLine(map.remove("998"));
+        PrintUtil.log(set.remove("998"));
+        PrintUtil.log(map.remove("998"));
     }
 
 
@@ -32,7 +32,7 @@ public class ConcurrentTest {
             set.add("String " + i);
         }
         long end = System.currentTimeMillis();
-        PrintUtil.dateLine("set耗时：" + (end - begin));
+        PrintUtil.log("set耗时：" + (end - begin));
     }
 
     private static void putInMap(Map<String,Object> map){
@@ -42,7 +42,7 @@ public class ConcurrentTest {
             map.put("String " + i,obj);
         }
         long end = System.currentTimeMillis();
-        PrintUtil.dateLine("map耗时：" + (end - begin));
+        PrintUtil.log("map耗时：" + (end - begin));
     }
 
     private static void traverseSet(Set<String> set){
@@ -53,7 +53,7 @@ public class ConcurrentTest {
             }
         }
         long end = System.currentTimeMillis();
-        PrintUtil.dateLine("set耗时：" + (end - begin));
+        PrintUtil.log("set耗时：" + (end - begin));
     }
 
     private static void traverseMap(Map<String,Object> map){
@@ -64,7 +64,7 @@ public class ConcurrentTest {
             }
         });
         long end = System.currentTimeMillis();
-        PrintUtil.dateLine("map耗时：" + (end - begin));
+        PrintUtil.log("map耗时：" + (end - begin));
     }
 
     private static void setRemove(Set<String> set){
@@ -73,7 +73,7 @@ public class ConcurrentTest {
         set.remove("String 500000");
         set.remove("String 999999");
         long end = System.currentTimeMillis();
-        PrintUtil.dateLine("set耗时：" + (end - begin));
+        PrintUtil.log("set耗时：" + (end - begin));
     }
 
     private static void mapRemove(Map<String,Object> map){
@@ -82,7 +82,7 @@ public class ConcurrentTest {
         map.remove("String 500000");
         map.remove("String 999999");
         long end = System.currentTimeMillis();
-        PrintUtil.dateLine("map耗时：" + (end - begin));
+        PrintUtil.log("map耗时：" + (end - begin));
     }
 
 }

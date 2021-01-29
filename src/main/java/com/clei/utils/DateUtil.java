@@ -7,6 +7,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQuery;
 import java.util.Date;
@@ -309,6 +310,18 @@ public class DateUtil {
             sb.append("分");
         }
         return sb.toString();
+    }
+
+    /**
+     * 判断两个日期是否是同一天
+     *
+     * @param temporal1
+     * @param temporal2
+     * @return
+     */
+    public static boolean isSameDay(TemporalAccessor temporal1, TemporalAccessor temporal2) {
+        return temporal1.get(ChronoField.YEAR) == temporal2.get(ChronoField.YEAR)
+                && temporal1.get(ChronoField.DAY_OF_YEAR) == temporal2.get(ChronoField.DAY_OF_YEAR);
     }
 
     private static String format(TemporalAccessor temporal, DateTimeFormatter dateTimeFormatter) {

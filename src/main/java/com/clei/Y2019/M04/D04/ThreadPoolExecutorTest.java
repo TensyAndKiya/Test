@@ -34,14 +34,14 @@ public class ThreadPoolExecutorTest {
         );
 
         for (int i = 0; i < 100; i++) {
-            PrintUtil.dateLine("提交第 " + i + " 个任务！");
+            PrintUtil.log("提交第 " + i + " 个任务！");
             executor.execute(() -> {
                 try {
                     Thread.sleep(150);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                PrintUtil.dateLine(Thread.currentThread().getName() + "执行完毕。。。");
+                PrintUtil.log(Thread.currentThread().getName() + "执行完毕。。。");
             });
         }
     }
@@ -51,7 +51,7 @@ public class ThreadPoolExecutorTest {
         @Override
         public Thread newThread(Runnable r) {
             String name = "KIyA_ThreadFactory_Thread_"+ai.addAndGet(1);
-            PrintUtil.dateLine("创建了线程 ： " + name);
+            PrintUtil.log("创建了线程 ： " + name);
             return new Thread(r, name);
         }
     }
@@ -63,7 +63,7 @@ public class ThreadPoolExecutorTest {
                 //阻塞方法
                 executor.getQueue().put(r);
             } catch (InterruptedException e) {
-                PrintUtil.dateLine("放入阻塞队列失败！！！");
+                PrintUtil.log("放入阻塞队列失败！！！");
                 e.printStackTrace();
             }
         }

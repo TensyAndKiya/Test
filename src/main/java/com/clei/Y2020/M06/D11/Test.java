@@ -10,15 +10,15 @@ public class Test {
 
     public static void main(String[] args) {
 
-        PrintUtil.dateLine(ClassLayout.parseClass(Long.class).toPrintable());
-        PrintUtil.dateLine(ClassLayout.parseClass(Boolean.class).toPrintable());
-        PrintUtil.dateLine(ClassLayout.parseClass(Temp.class).toPrintable());
-        PrintUtil.dateLine(ClassLayout.parseClass(Temp2.class).toPrintable());
+        PrintUtil.log(ClassLayout.parseClass(Long.class).toPrintable());
+        PrintUtil.log(ClassLayout.parseClass(Boolean.class).toPrintable());
+        PrintUtil.log(ClassLayout.parseClass(Temp.class).toPrintable());
+        PrintUtil.log(ClassLayout.parseClass(Temp2.class).toPrintable());
 
-        PrintUtil.dateLine(ClassLayout.parseInstance(new Long(1234)).toPrintable());
-        PrintUtil.dateLine(ClassLayout.parseInstance(Boolean.FALSE).toPrintable());
-        PrintUtil.dateLine(ClassLayout.parseInstance(new Temp()).toPrintable());
-        PrintUtil.dateLine(ClassLayout.parseInstance(new Temp2()).toPrintable());
+        PrintUtil.log(ClassLayout.parseInstance(new Long(1234)).toPrintable());
+        PrintUtil.log(ClassLayout.parseInstance(Boolean.FALSE).toPrintable());
+        PrintUtil.log(ClassLayout.parseInstance(new Temp()).toPrintable());
+        PrintUtil.log(ClassLayout.parseInstance(new Temp2()).toPrintable());
     }
 }
 

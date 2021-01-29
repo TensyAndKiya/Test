@@ -18,29 +18,29 @@ public class ExtendsTest {
 
 class A{
     public A(String arg){
-        PrintUtil.dateLine("This is arg A");
-        PrintUtil.dateLine("arg: " + arg);
+        PrintUtil.log("This is arg A");
+        PrintUtil.log("arg: " + arg);
     }
 
     public A(String arg1,String arg2) {
-        PrintUtil.dateLine("This is arg 2 A");
-        PrintUtil.dateLine("arg1: " + arg1 + "\targ2: " + arg2);
+        PrintUtil.log("This is arg 2 A");
+        PrintUtil.log("arg1: " + arg1 + "\targ2: " + arg2);
     }
 
     public A(){
-        PrintUtil.dateLine("This is A");
+        PrintUtil.log("This is A");
     }
 }
 
 class B extends A{
     public B(){
         this("测试一下");
-        PrintUtil.dateLine("This is B");
+        PrintUtil.log("This is B");
 
     }
 
     public B(String arg) {
-        PrintUtil.dateLine("This is arg B");
-        PrintUtil.dateLine("arg: " + arg);
+        PrintUtil.log("This is arg B");
+        PrintUtil.log("arg: " + arg);
     }
 }

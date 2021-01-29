@@ -19,7 +19,7 @@ public class ForEachTest {
         list.add("sahaki");
         // forEach语法
         for (String s : list) {
-            PrintUtil.dateLine(s);
+            PrintUtil.log(s);
         }
         // 集合forEach方法
         list.forEach(PrintUtil::dateLine);
@@ -45,7 +45,7 @@ public class ForEachTest {
 
         @Override
         public void forEach(Consumer<? super T> action) {
-            PrintUtil.dateLine("forEach");
+            PrintUtil.log("forEach");
             list.forEach(action);
         }
 

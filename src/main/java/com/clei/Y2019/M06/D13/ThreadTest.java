@@ -26,13 +26,13 @@ public class ThreadTest {
         executor.submit(futureTask);
         executor.shutdown();
         try {
-            PrintUtil.dateLine("Task执行结果： " + futureTask.get());
+            PrintUtil.log("Task执行结果： " + futureTask.get());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        PrintUtil.dateLine("Main线程执行完毕！");
+        PrintUtil.log("Main线程执行完毕！");
     }
 }
 
@@ -45,21 +45,21 @@ class MyThread1 extends Thread{
     }
     @Override
     public void run(){
-        PrintUtil.dateLine("进程" + this.getName() + "运行中...");
+        PrintUtil.log("进程" + this.getName() + "运行中...");
     }
 }
 
 class MyThread2 implements  Runnable{
     @Override
     public void run() {
-        PrintUtil.dateLine("进程" + Thread.currentThread().getName() + "运行中...");
+        PrintUtil.log("进程" + Thread.currentThread().getName() + "运行中...");
     }
 }
 
 class MyThread3 implements Callable<String>{
     @Override
     public String call(){
-        PrintUtil.dateLine("进程" + Thread.currentThread().getName() + "运行中...");
+        PrintUtil.log("进程" + Thread.currentThread().getName() + "运行中...");
         StringBuilder sb=new StringBuilder();
 
         try{
@@ -71,7 +71,7 @@ class MyThread3 implements Callable<String>{
                 sb.append(str+'\n');
             }
             br.close();
-            PrintUtil.dateLine("进程" + Thread.currentThread().getName() + "执行完毕!...");
+            PrintUtil.log("进程" + Thread.currentThread().getName() + "执行完毕!...");
         }catch (RuntimeException e){
             sb.delete(0,sb.length());
         }catch (Exception e){

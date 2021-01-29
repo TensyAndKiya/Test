@@ -49,14 +49,14 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<String> {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         PrintUtil.log("channelActive");
-        PrintUtil.dateLine("[" + ctx.channel().remoteAddress() + "] 在线");
+        PrintUtil.log("[" + ctx.channel().remoteAddress() + "] 在线");
         super.channelActive(ctx);
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         PrintUtil.log("channelInactive");
-        PrintUtil.dateLine("[" + ctx.channel().remoteAddress() + "] 掉线");
+        PrintUtil.log("[" + ctx.channel().remoteAddress() + "] 掉线");
         super.channelInactive(ctx);
     }
 
@@ -98,7 +98,7 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<String> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        PrintUtil.dateLine("[" + ctx.channel().remoteAddress() + "] 异常关闭");
+        PrintUtil.log("[" + ctx.channel().remoteAddress() + "] 异常关闭");
         // 遇到异常就关闭连接
         ctx.close();
     }

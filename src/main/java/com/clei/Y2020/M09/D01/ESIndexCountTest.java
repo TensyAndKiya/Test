@@ -74,6 +74,6 @@ public class ESIndexCountTest {
             }
         });
 
-        indexMap.forEach((k, v) -> PrintUtil.dateLine(k + "    " + v));
+        indexMap.forEach((k, v) -> PrintUtil.log(k + "    " + v));
     }
 }

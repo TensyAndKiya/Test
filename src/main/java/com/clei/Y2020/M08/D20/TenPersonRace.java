@@ -1,5 +1,7 @@
 package com.clei.Y2020.M08.D20;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
@@ -31,7 +33,7 @@ public class TenPersonRace {
                 try {
                     latch1.await();
 
-                    System.out.println(name + "出发");
+                    PrintUtil.log(name + "出发");
 
                     int result = new Random().nextInt(1000);
 
@@ -56,17 +58,17 @@ public class TenPersonRace {
         List<Score> sList = list.stream().sorted(Comparator.comparingInt(Score::getScore).reversed()).collect(Collectors.toList());
 
         // 全部
-        System.out.println("全部");
+        PrintUtil.log("全部");
         sList.forEach(System.out::println);
 
         // 前三名
-        System.out.println("前三");
+        PrintUtil.log("前三");
         sList.stream().limit(3).forEach(System.out::println);
 
         // 平均成绩
-        System.out.println("平均成绩");
+        PrintUtil.log("平均成绩");
         double avg = sList.stream().mapToInt(Score::getScore).average().orElse(0D);
-        System.out.println(avg);
+        PrintUtil.log(avg);
 
     }
 

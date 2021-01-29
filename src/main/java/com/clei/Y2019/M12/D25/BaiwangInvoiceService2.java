@@ -59,11 +59,11 @@ public class BaiwangInvoiceService2 {
 
         String contentStr = content.toJSONString();
 
-        PrintUtil.dateLine("content : " + contentStr);
+        PrintUtil.log("content : " + contentStr);
 
         contentStr = Base64Util.encode(contentStr.getBytes("UTF-8")).replaceAll("\r", "").replaceAll("\n", "");
 
-        PrintUtil.dateLine("contentStr : " + contentStr);
+        PrintUtil.log("contentStr : " + contentStr);
 
         String contentMD5 = MD5(contentStr.getBytes("UTF-8"));
 
@@ -73,13 +73,13 @@ public class BaiwangInvoiceService2 {
 
         JSONObject outerInfo = outerInfo(cInfo,contentStr,encryptStr);
 
-        // PrintUtil.dateLine("contentKey : " + encryptStr);
+        // PrintUtil.log("contentKey : " + encryptStr);
 
-        PrintUtil.dateLine("final : " + outerInfo.toJSONString());
+        PrintUtil.log("final : " + outerInfo.toJSONString());
 
         String result = RequestUtils.getHttpConnectResult(outerInfo.toJSONString(),"https://dev.fapiao.com:18944/fpt-dsqz/invoice");
 
-        PrintUtil.dateLine("result : " + result);
+        PrintUtil.log("result : " + result);
 
 
     }
@@ -128,7 +128,7 @@ public class BaiwangInvoiceService2 {
 
         obj.put("interface",interfaceInfo);
 
-        PrintUtil.dateLine(obj.toJSONString());
+        PrintUtil.log(obj.toJSONString());
 
         return obj;
 

@@ -1,6 +1,7 @@
 package com.clei.Y2019.M08.D01;
 
 import com.clei.utils.Base64Util;
+import com.clei.utils.DateUtil;
 import com.clei.utils.PrintUtil;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -18,8 +19,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Random;
 
 public class XmlXstreamTest {
@@ -41,56 +40,56 @@ public class XmlXstreamTest {
 
     public static void main(String[] args) throws Exception {
 
-        String fpqqlsh = UserName + getCurrentTime("yyyyMMddHHmmss") +getRandom(20);
-        String orderId = getCurrentTime("yyyyMMddHHmmss") + getRandom(6);
+        String fpqqlsh = UserName + DateUtil.currentDateTime("yyyyMMddHHmmss") + getRandom(20);
+        String orderId = DateUtil.currentDateTime("yyyyMMddHHmmss") + getRandom(6);
         // 开发票
-        String invoiceResult = populateXML(kp_InterfaceCode,invoiceXML(fpqqlsh,orderId));
-        String code = getElementContent(invoiceResult,"returnCode");
-        String message = getElementContent(invoiceResult,"returnMessage");
-        if(null != message && !"".equals(message)){
+        String invoiceResult = populateXML(kp_InterfaceCode, invoiceXML(fpqqlsh, orderId));
+        String code = getElementContent(invoiceResult, "returnCode");
+        String message = getElementContent(invoiceResult, "returnMessage");
+        if (null != message && !"".equals(message)) {
             message = new String(Base64Util.decode(message), charset);
         }
-        if(code.equals("0000")){
-            PrintUtil.dateLine("开具发票成功,message: " + message);
+        if (code.equals("0000")) {
+            PrintUtil.log("开具发票成功,message: " + message);
             new Thread(() -> {
                 try {
                     Thread.sleep(8000);
                     // 下载
                     String result = populateXML(XZ_InterfaceCode, downloadInvoiceXML(fpqqlsh, orderId));
-                    PrintUtil.dateLine("下载发票结果：：：" + result);
+                    PrintUtil.log("下载发票结果：：：" + result);
                     String zipCode = getElementContent(result, "zipCode");
                     String encryptCode = getElementContent(result, "encryptCode");
                     String content = getElementContent(result, "content");
                     content = decrypt3DES(Base64Util.decode(content));
 
-                    PrintUtil.dateLine("really really result : " + content);
+                    PrintUtil.log("really really result : " + content);
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }).start();
-        }else{
-            PrintUtil.dateLine("开具发票失败,message: " + message);
+        } else {
+            PrintUtil.log("开具发票失败,message: " + message);
         }
     }
 
     // 装备并发送xml
-    private static String populateXML(String interfaceCode,String contentXML) throws Exception {
+    private static String populateXML(String interfaceCode, String contentXML) throws Exception {
         contentXML = trim(contentXML);
-        PrintUtil.dateLine("contentXML:");
-        PrintUtil.dateLine(contentXML);
+        PrintUtil.log("contentXML:");
+        PrintUtil.log(contentXML);
         String content = Base64Util.encode(encrypt3DES(contentXML));
         String outerXML = outerXML(interfaceCode, content);
         outerXML = trimOuter(outerXML);
-        PrintUtil.dateLine("outerXML:");
-        PrintUtil.dateLine(outerXML);
+        PrintUtil.log("outerXML:");
+        PrintUtil.log(outerXML);
         String result = sendXML(url, outerXML);
-        PrintUtil.dateLine(result);
+        PrintUtil.log(result);
         return result;
     }
 
-    private static String sendXML(String url,String xml) throws IOException {
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/xml;charset=utf-8"),xml);
+    private static String sendXML(String url, String xml) throws IOException {
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/xml;charset=utf-8"), xml);
         Request request = new Request.Builder()
                 .url(url)
                 .post(requestBody)
@@ -98,33 +97,33 @@ public class XmlXstreamTest {
 
         Response response = new OkHttpClient().newCall(request).execute();
         // response.body().
-        if(response.isSuccessful()){
+        if (response.isSuccessful()) {
             String result = response.body().string();
-            PrintUtil.dateLine("result");
+            PrintUtil.log("result");
             return result;
-        }else{
+        } else {
             return "fail";
         }
     }
 
-    private static String outerXML(String interfaceCode,String content){
+    private static String outerXML(String interfaceCode, String content) {
         // 通用外层报文
-        XStream stream = new XStream(new DomDriver("UTF-8",new XmlFriendlyNameCoder("-_","_")));
+        XStream stream = new XStream(new DomDriver("UTF-8", new XmlFriendlyNameCoder("-_", "_")));
         // 处理注解
         stream.processAnnotations(Interface.class);
         stream.processAnnotations(GlobalInfo.class);
         GlobalInfo info = getGlobalInfo(interfaceCode);
-        ReturnStateInfo returnStateInfo = new ReturnStateInfo("","");
-        DataDescription dataDescription = new DataDescription("0","1","3DES");
-        Data data = new Data(dataDescription,content);
-        Interface iFace = new Interface(info,returnStateInfo,data);
+        ReturnStateInfo returnStateInfo = new ReturnStateInfo("", "");
+        DataDescription dataDescription = new DataDescription("0", "1", "3DES");
+        Data data = new Data(dataDescription, content);
+        Interface iFace = new Interface(info, returnStateInfo, data);
         String xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
         return xml + stream.toXML(iFace);
     }
 
-    private static String invoiceXML(String fpqqlsh,String orderId){
+    private static String invoiceXML(String fpqqlsh, String orderId) {
         // 开具发票报文
-        XStream stream = new XStream(new DomDriver("UTF-8",new XmlFriendlyNameCoder("-_","_")));
+        XStream stream = new XStream(new DomDriver("UTF-8", new XmlFriendlyNameCoder("-_", "_")));
         // 处理注解
         stream.processAnnotations(CreateInvoiceRequest.class);
         stream.processAnnotations(InvoiceHeader.class);
@@ -133,16 +132,16 @@ public class XmlXstreamTest {
         stream.processAnnotations(InvoiceOrder.class);
         // 填充数据
         InvoiceItems invoiceItems = getInvoiceItems();
-        InvoiceHeader invoiceHeader = getInvoiceHeader(fpqqlsh,invoiceItems);
+        InvoiceHeader invoiceHeader = getInvoiceHeader(fpqqlsh, invoiceItems);
         InvoiceOrder invoiceOrder = new InvoiceOrder(orderId);
 
-        CreateInvoiceRequest invoiceRequest = new CreateInvoiceRequest(invoiceHeader,invoiceItems,invoiceOrder);
+        CreateInvoiceRequest invoiceRequest = new CreateInvoiceRequest(invoiceHeader, invoiceItems, invoiceOrder);
         return stream.toXML(invoiceRequest);
     }
 
-    private static String downloadInvoiceXML(String fpqqlsh,String orderId){
+    private static String downloadInvoiceXML(String fpqqlsh, String orderId) {
         // 下载发票报文
-        XStream stream = new XStream(new DomDriver("UTF-8",new XmlFriendlyNameCoder("-_","_")));
+        XStream stream = new XStream(new DomDriver("UTF-8", new XmlFriendlyNameCoder("-_", "_")));
         // 处理注解
         stream.processAnnotations(DownloadInvoiceRequest.class);
         // 填充数据
@@ -154,7 +153,7 @@ public class XmlXstreamTest {
         return stream.toXML(invoiceRequest);
     }
 
-    private static GlobalInfo getGlobalInfo(String interfaceCode){
+    private static GlobalInfo getGlobalInfo(String interfaceCode) {
         GlobalInfo info = new GlobalInfo();
         info.setTerminalCode(TerminalCode);
         info.setAppId(AppId);
@@ -162,14 +161,14 @@ public class XmlXstreamTest {
         info.setInterfaceCode(interfaceCode);
         info.setUserName(UserName);
         info.setRequestCode(RequestCode);
-        info.setRequestTime(getCurrentTime("yyyy-MM-dd HH:mm:ss ss"));
+        info.setRequestTime(DateUtil.currentDateTime("yyyy-MM-dd HH:mm:ss ss"));
         info.setTaxpayerId(TaxpayerId);
         info.setAuthorizationCode(AuthorizationCode);
         info.setDataExchangeId(getRandom(50));
         return info;
     }
 
-    private static InvoiceHeader getInvoiceHeader(String fpqqlsh,InvoiceItems invoiceItems){
+    private static InvoiceHeader getInvoiceHeader(String fpqqlsh, InvoiceItems invoiceItems) {
         InvoiceHeader invoiceHeader = new InvoiceHeader();
         invoiceHeader.setFpqqlsh(fpqqlsh);
         invoiceHeader.setDsptbm(UserName);
@@ -196,7 +195,7 @@ public class XmlXstreamTest {
         invoiceHeader.setQdbz("0");
         // 价税合计 税额和不含税金额计算
         BigDecimal hjje = new BigDecimal(invoiceItems.getInvoiceItem().getXmje());
-        float hjse = getScaleFloat((hjje.floatValue() * SL)/(1 + SL));
+        float hjse = getScaleFloat((hjje.floatValue() * SL) / (1 + SL));
         invoiceHeader.setKphjje("" + hjje.floatValue());
         invoiceHeader.setHjbhsje("" + getScaleFloat(hjje.floatValue() - hjse));
         invoiceHeader.setHjse("" + hjse);
@@ -205,8 +204,7 @@ public class XmlXstreamTest {
     }
 
 
-
-    private static InvoiceItems getInvoiceItems(){
+    private static InvoiceItems getInvoiceItems() {
         InvoiceItem invoiceItem = new InvoiceItem();
         invoiceItem.setXmmc("车辆停放服务");
         // invoiceItem.setXmdw("");
@@ -221,18 +219,13 @@ public class XmlXstreamTest {
         return new InvoiceItems(invoiceItem);
     }
 
-
-    private static String getCurrentTime(String pattern){
-        return new SimpleDateFormat(pattern).format(new Date());
-    }
-
-    private static String getRandom(int num){
+    private static String getRandom(int num) {
 //      48-57 65-90 97-122
-        StringBuffer id=new StringBuffer();
+        StringBuffer id = new StringBuffer();
         Random random = new Random();
         for (int i = 0; i < num; i++) {
             char s = 0;
-            int j=random.nextInt(3) % 4;
+            int j = random.nextInt(3) % 4;
             switch (j) {
                 case 0:
                     //随机生成数字
@@ -252,67 +245,68 @@ public class XmlXstreamTest {
         return id.toString();
     }
 
-    private static String trim(String str){
-        return str.replaceAll("  ","")
-                .replaceAll("\n","");
+    private static String trim(String str) {
+        return str.replaceAll("  ", "")
+                .replaceAll("\n", "");
     }
 
-    private static String trimOuter(String str){
+    private static String trimOuter(String str) {
         // 使用xstrem会多出来 &#xd;
-        return trim(str).replaceAll("&#xd;","\n");
+        return trim(str).replaceAll("&#xd;", "\n");
     }
 
-    private static float getScaleFloat(float f){
-        return new BigDecimal(f).setScale(2,BigDecimal.ROUND_HALF_UP).floatValue();
+    private static float getScaleFloat(float f) {
+        return new BigDecimal(f).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
     }
 
-    private static String getElementContent(String xml,String element){
+    private static String getElementContent(String xml, String element) {
         String startElement = '<' + element + '>';
         int start = xml.indexOf(startElement);
-        if(start == -1){
-            PrintUtil.dateLine("错误，返回结果不包含" + element + "信息");
+        if (start == -1) {
+            PrintUtil.log("错误，返回结果不包含" + element + "信息");
             return null;
         }
         String endElement = "</" + element + '>';
         int end = xml.indexOf(endElement);
-        String value = xml.substring(start + startElement.length(),end);
+        String value = xml.substring(start + startElement.length(), end);
         return value;
     }
 
-    private static String zip(String str){
+    private static String zip(String str) {
         return str;
     }
 
-    private static String unZip(String str){
+    private static String unZip(String str) {
         return str;
     }
 
-    private static byte[] encrypt3DES(String str) throws Exception{
+    private static byte[] encrypt3DES(String str) throws Exception {
         String algorithm = "DESede";
         // key
-        SecretKey secretKey = new SecretKeySpec(DESKey.getBytes(charset),algorithm);
+        SecretKey secretKey = new SecretKeySpec(DESKey.getBytes(charset), algorithm);
         // 加密
         Cipher cipher = Cipher.getInstance(algorithm);
-        cipher.init(Cipher.ENCRYPT_MODE,secretKey);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 
         return cipher.doFinal(str.getBytes(charset));
     }
 
-    private static String decrypt3DES(byte[] bytes) throws Exception{
+    private static String decrypt3DES(byte[] bytes) throws Exception {
         // key
         String algorithm = "DESede";
-        SecretKey secretKey = new SecretKeySpec(DESKey.getBytes(charset),algorithm);
+        SecretKey secretKey = new SecretKeySpec(DESKey.getBytes(charset), algorithm);
         // 解密
         Cipher cipher = Cipher.getInstance(algorithm);
-        cipher.init(Cipher.DECRYPT_MODE,secretKey);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
 
         byte[] result = cipher.doFinal(bytes);
-        return new String(result,charset);
+        return new String(result, charset);
     }
 }
 
 @XStreamAlias("interface")
-class Interface{
+class Interface {
+
     @XStreamAsAttribute
     private String xmlns = "";
     @XStreamAlias("xmlns:xsi")
@@ -391,7 +385,8 @@ class Interface{
     }
 }
 
-class GlobalInfo{
+class GlobalInfo {
+
     private String terminalCode = "";
     private String appId = "";
     private String version = "";
@@ -405,7 +400,8 @@ class GlobalInfo{
     private String responseCode = "";
     private String dataExchangeId = "";
 
-    public GlobalInfo() {}
+    public GlobalInfo() {
+    }
 
     public String getTerminalCode() {
         return terminalCode;
@@ -504,7 +500,8 @@ class GlobalInfo{
     }
 }
 
-class ReturnStateInfo{
+class ReturnStateInfo {
+
     private String returnCode = "";
     private String returnMessage = "";
 
@@ -513,7 +510,8 @@ class ReturnStateInfo{
         this.returnMessage = returnMessage;
     }
 
-    public ReturnStateInfo() {}
+    public ReturnStateInfo() {
+    }
 
     public String getReturnCode() {
         return returnCode;
@@ -532,7 +530,8 @@ class ReturnStateInfo{
     }
 }
 
-class Data{
+class Data {
+
     private DataDescription dataDescription;
     private String content = "";
 
@@ -541,7 +540,8 @@ class Data{
         this.content = content;
     }
 
-    public Data() {}
+    public Data() {
+    }
 
     public DataDescription getDataDescription() {
         return dataDescription;
@@ -560,7 +560,8 @@ class Data{
     }
 }
 
-class DataDescription{
+class DataDescription {
+
     private String zipCode = "";
     private String encryptCode = "";
     private String codeType = "";
@@ -571,7 +572,8 @@ class DataDescription{
         this.codeType = codeType;
     }
 
-    public DataDescription() {}
+    public DataDescription() {
+    }
 
     public String getZipCode() {
         return zipCode;
@@ -599,7 +601,8 @@ class DataDescription{
 }
 
 @XStreamAlias("REQUEST_FPXXXZ_NEW")
-class DownloadInvoiceRequest{
+class DownloadInvoiceRequest {
+
     @XStreamAlias("class")
     @XStreamAsAttribute
     private String type = "REQUEST_FPXXXZ_NEW";
@@ -667,7 +670,8 @@ class DownloadInvoiceRequest{
 }
 
 @XStreamAlias("REQUEST_FPKJXX")
-class CreateInvoiceRequest{
+class CreateInvoiceRequest {
+
     @XStreamAlias("class")
     @XStreamAsAttribute
     private String type = "REQUEST_FPKJXX";
@@ -713,7 +717,8 @@ class CreateInvoiceRequest{
     }
 }
 
-class InvoiceHeader{
+class InvoiceHeader {
+
     @XStreamAlias("class")
     @XStreamAsAttribute
     private String type = "FPKJXX_FPTXX";
@@ -814,7 +819,8 @@ class InvoiceHeader{
     @XStreamAlias("BYZD5")
     private String byzd5 = "";
 
-    public InvoiceHeader() {}
+    public InvoiceHeader() {
+    }
 
     public String getType() {
         return type;
@@ -1209,7 +1215,8 @@ class InvoiceHeader{
     }
 }
 
-class InvoiceItems{
+class InvoiceItems {
+
     // 去他大爷滴，这里少了个分号就爆9219 内层报文格式存在问题！！！
     @XStreamAlias("class")
     @XStreamAsAttribute
@@ -1240,7 +1247,8 @@ class InvoiceItems{
     }
 }
 
-class InvoiceItem{
+class InvoiceItem {
+
     @XStreamAlias("XMMC")
     private String xmmc = "";
     @XStreamAlias("XMDW")
@@ -1284,7 +1292,8 @@ class InvoiceItem{
     @XStreamAlias("BYZD5")
     private String byzd5 = "";
 
-    public InvoiceItem() {}
+    public InvoiceItem() {
+    }
 
     public String getXmmc() {
         return xmmc;
@@ -1431,7 +1440,8 @@ class InvoiceItem{
     }
 }
 
-class InvoiceOrder{
+class InvoiceOrder {
+
     @XStreamAlias("class")
     @XStreamAsAttribute
     private String type = "FPKJXX_DDXX";

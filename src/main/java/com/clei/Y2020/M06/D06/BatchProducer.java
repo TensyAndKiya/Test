@@ -39,7 +39,7 @@ public class BatchProducer {
         // 发送
         SendResult result = producer.send(list);
 
-        PrintUtil.dateLine(" 发送结果：" + result);
+        PrintUtil.log(" 发送结果：" + result);
 
         // 关闭
         producer.shutdown();

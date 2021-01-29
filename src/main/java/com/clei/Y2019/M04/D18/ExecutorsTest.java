@@ -58,6 +58,6 @@ class MyRunnable implements Runnable {
 
     @Override
     public void run() {
-        PrintUtil.dateLine(Thread.currentThread().getName() + " 执行了任务！");
+        PrintUtil.log(Thread.currentThread().getName() + " 执行了任务！");
     }
 }

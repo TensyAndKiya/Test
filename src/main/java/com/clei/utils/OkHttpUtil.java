@@ -33,7 +33,7 @@ public class OkHttpUtil {
      * @return
      */
     public static String doPostJson(String url, String param) {
-        PrintUtil.dateLine("请求url:{},请求参数:{}", url, param);
+        PrintUtil.log("请求url:{},请求参数:{}", url, param);
         return doRequest(url, getJsonBody(param));
     }
 
@@ -46,7 +46,7 @@ public class OkHttpUtil {
      */
     public static String doPostJson(String url, Object param) {
         String json = JSONObject.toJSONString(param);
-        PrintUtil.dateLine("请求url:{},请求参数:{}", url, json);
+        PrintUtil.log("请求url:{},请求参数:{}", url, json);
         return doRequest(url, getJsonBody(json));
     }
 

@@ -11,7 +11,7 @@ public class DeleteClassFileTest {
         // 删除指定目录下的.class文件
         FileUtil.fileOperation(file, f -> {
             if(f.getName().endsWith(".class")){
-                PrintUtil.dateLine(f.getName() + "  " + f.delete());
+                PrintUtil.log(f.getName() + "  " + f.delete());
             }
         });
     }

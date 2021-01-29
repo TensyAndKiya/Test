@@ -35,7 +35,7 @@ public class Algorithm003 {
 
     public static void main(String[] args) {
 
-        PrintUtil.dateLine(length("abcabcbb"));
+        PrintUtil.log(length("abcabcbb"));
 
     }
 

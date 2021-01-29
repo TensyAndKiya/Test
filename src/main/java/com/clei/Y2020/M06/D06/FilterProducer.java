@@ -35,7 +35,7 @@ public class FilterProducer {
             // 发送
             SendResult result = producer.send(msg);
 
-            PrintUtil.dateLine(i + " 发送结果：" + result);
+            PrintUtil.log(i + " 发送结果：" + result);
         }
 
         // 关闭

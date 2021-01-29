@@ -2,10 +2,6 @@ package com.clei.Y2019.M05.D15;
 
 import com.clei.utils.PrintUtil;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
@@ -14,15 +10,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class IsBetweenDayTest {
-    private static int num = 0;
+
+    private static AtomicInteger num = new AtomicInteger(0);
+
     public static void main(String[] args) {
-
-        try{
-            Thread.sleep(15000);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
         ThreadPoolExecutor executor = new ThreadPoolExecutor(
                 50,
                 101,
@@ -33,90 +24,59 @@ public class IsBetweenDayTest {
                 new IsBetweenDayTest.CustomRejectedExecutionHandler()
         );
 
-        for (int i = 1; i < 100000001; i++) {
-            PrintUtil.dateLine("提交第 " + i + " 个任务！");
+        int times = 100000001;
+        for (int i = 1; i < times; i++) {
+            PrintUtil.log("提交第 " + i + " 个任务！");
             executor.execute(new MyRunnable());
         }
-        //executor.shutdown();
+        // executor.shutdown();
     }
 
-    public synchronized static void over(){
-        PrintUtil.dateLine("第" + (++num) + "个任务执行完毕！");
+    /**
+     * 判断 一个时刻是否在两个时刻之间 HH:mm:ss格式的
+     *
+     * @param dayTime
+     * @param dayStartTime
+     * @param dayEndTime
+     * @return
+     */
+    private static boolean isBetween(String dayTime, String dayStartTime, String dayEndTime) {
+        return dayTime.compareTo(dayStartTime) > -1 && dayTime.compareTo(dayEndTime) < 1;
     }
 
+    private static class MyRunnable implements Runnable {
 
-    public static boolean isBetweenDay(Calendar cal, String dayStartTime, String dayEndTime) {
-
-        boolean isBetween = false;
-
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-
-        Date dayStartDate = null;
-        Date dayEndDate = null;
-
-        try {
-            dayStartDate = sdf.parse(dayStartTime);
-            dayEndDate = sdf.parse(dayEndTime);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        Calendar startTime = Calendar.getInstance();
-        Calendar endTime = Calendar.getInstance();
-        startTime.setTime(dayStartDate);
-        endTime.setTime(dayEndDate);
-
-        startTime.set(Calendar.YEAR, cal.get(Calendar.YEAR));
-        startTime.set(Calendar.MONTH, cal.get(Calendar.MONTH));
-        startTime.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH));
-        startTime.add(Calendar.MILLISECOND, -1);
-
-        endTime.set(Calendar.YEAR, cal.get(Calendar.YEAR));
-        endTime.set(Calendar.MONTH, cal.get(Calendar.MONTH));
-        endTime.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH));
-        endTime.add(Calendar.MILLISECOND, -1);
-
-        long startTimeInMillis = startTime.getTimeInMillis();
-        long endTimeInMillis = endTime.getTimeInMillis();
-        long sourceTimeInMillis = cal.getTimeInMillis();
-
-        if (sourceTimeInMillis >= startTimeInMillis && sourceTimeInMillis <= endTimeInMillis) {
-            isBetween = true;
-        }
-        return isBetween;
-    }
-
-    private static class MyRunnable implements Runnable{
         @Override
         public void run() {
-            Calendar cal = Calendar.getInstance();
+            String date = "07:01:01";
             String date1 = "07:00:00";
             String date2 = "22:00:00";
-            isBetweenDay(cal,date1,date2);
-            over();
+            isBetween(date, date1, date2);
+            PrintUtil.log("第" + num.addAndGet(1) + "个任务执行完毕！");
         }
     }
 
     private static class CustomThreadFactory implements ThreadFactory {
+
         private AtomicInteger ai = new AtomicInteger(0);
+
         @Override
         public Thread newThread(Runnable r) {
-            String name = "KIyA_ThreadFactory_Thread_"+ai.addAndGet(1);
-            PrintUtil.dateLine("创建了线程 ： " + name);
+            String name = "KIyA_ThreadFactory_Thread_" + ai.addAndGet(1);
+            PrintUtil.log("创建了线程 ： {}", name);
             return new Thread(r, name);
         }
     }
 
     private static class CustomRejectedExecutionHandler implements RejectedExecutionHandler {
+
         @Override
         public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
             try {
                 //阻塞方法
                 executor.getQueue().put(r);
             } catch (InterruptedException e) {
-                PrintUtil.dateLine("放入阻塞队列失败！！！");
-                e.printStackTrace();
+                PrintUtil.log("放入阻塞队列失败！！！", e);
             }
         }
     }

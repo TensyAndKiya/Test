@@ -25,12 +25,12 @@ public class ArrayUtil {
         long end = System.currentTimeMillis();
         PrintUtil.println("耗时 ： {}ms", end - begin);
 
-        PrintUtil.dateLine("origin : " + Arrays.toString(array));
-        PrintUtil.dateLine("result : " + Arrays.toString(randomArray));
+        PrintUtil.log("origin : " + Arrays.toString(array));
+        PrintUtil.log("result : " + Arrays.toString(randomArray));
         shuffle(randomArray);
-        PrintUtil.dateLine("shuffle result : " + Arrays.toString(randomArray));
+        PrintUtil.log("shuffle result : " + Arrays.toString(randomArray));
 
-        PrintUtil.dateLine("size : " + randomArray.length);
+        PrintUtil.log("size : " + randomArray.length);
     }
 
     // 从 0 到 n 里 选 num 个

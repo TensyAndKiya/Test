@@ -130,8 +130,8 @@ public class MybatisUtil {
             String[] array = str.split("\u0001");
             int length = array.length;
 
-/*            PrintUtil.dateLine(array.length);
-            PrintUtil.dateLine(Arrays.toString(array));*/
+/*            PrintUtil.log(array.length);
+            PrintUtil.log(Arrays.toString(array));*/
 
             String roadName = array[3];
 
@@ -212,7 +212,7 @@ public class MybatisUtil {
 
         // 插入到表并获取到roadId
         mapper.batchInsertRoadInfo(roadList);
-        PrintUtil.dateLine("批量插入道路数据成功 size : " + roadList.size());
+        PrintUtil.log("批量插入道路数据成功 size : " + roadList.size());
 
         // 给所有路段设置roadId
         for (RoadObject obj : roadList) {
@@ -228,11 +228,11 @@ public class MybatisUtil {
 
         // 插入到表并获取到roadSectionId
         mapper.batchInsertRoadSectionInfo(sectionList);
-        PrintUtil.dateLine("批量插入路段数据成功 size : " + sectionList.size());
+        PrintUtil.log("批量插入路段数据成功 size : " + sectionList.size());
 
         // 插入到表
         mapper.batchInsertRoadSectionNode(sectionList);
-        PrintUtil.dateLine("批量插入路段节点数据成功 size : " + sectionList.size());
+        PrintUtil.log("批量插入路段节点数据成功 size : " + sectionList.size());
 
         br.close();
 
@@ -283,7 +283,7 @@ public class MybatisUtil {
 
         session.close();
 
-        PrintUtil.dateLine("更新道路路段单双向及车道数成功");
+        PrintUtil.log("更新道路路段单双向及车道数成功");
     }
 
 
@@ -405,11 +405,11 @@ public class MybatisUtil {
                 br.close();
             }
 
-            PrintUtil.dateLine("数据日期： " + tableDate);
-            PrintUtil.dateLine("实际数据条数： " + i);
-            PrintUtil.dateLine("找不到路段id： " + j);
-            PrintUtil.dateLine("路段时间重复： " + k);
-            PrintUtil.dateLine("可用数据条数： " + origin.size());
+            PrintUtil.log("数据日期： " + tableDate);
+            PrintUtil.log("实际数据条数： " + i);
+            PrintUtil.log("找不到路段id： " + j);
+            PrintUtil.log("路段时间重复： " + k);
+            PrintUtil.log("可用数据条数： " + origin.size());
 
             String tableName = "road_section_run_state_" + tableDate.replaceAll("-", "");
 
@@ -516,7 +516,7 @@ public class MybatisUtil {
         }
         br.close();
 
-        PrintUtil.dateLine("数据条数： " + origin.size());
+        PrintUtil.log("数据条数： " + origin.size());
 
         // 批量插入
         mapper.batchInsertCheckpoint(origin);
@@ -625,7 +625,7 @@ public class MybatisUtil {
             }
         }
 
-        PrintUtil.dateLine("real checkpoint size : " + checkpointList.size());
+        PrintUtil.log("real checkpoint size : " + checkpointList.size());
 
         // 清空原有数据
         String truncateTableName = "road_checkpoint";
@@ -637,7 +637,7 @@ public class MybatisUtil {
         mapper.batchInsertCheckpoint(checkpointList);
         mapper.batchInsertSectionCheckpointRel(checkpointList);
 
-        PrintUtil.dateLine("随机批量插入卡口成功");
+        PrintUtil.log("随机批量插入卡口成功");
 
         session.close();
     }
@@ -694,11 +694,11 @@ public class MybatisUtil {
             // 若没有数据则加一分钟重新插入
             if (result < 1) {
                 updateAllData(env, dt.plusMinutes(1).format(dtf), useSameDayOfWeek, toDate, methods);
-                PrintUtil.dateLine(dateTime + " 道路运行状态数据插入失败");
+                PrintUtil.log(dateTime + " 道路运行状态数据插入失败");
                 // 做完了，返回
                 return;
             } else {
-                PrintUtil.dateLine(dateTime + " 道路运行状态数据插入成功");
+                PrintUtil.log(dateTime + " 道路运行状态数据插入成功");
             }
         }
 
@@ -706,7 +706,7 @@ public class MybatisUtil {
         if (1 == methods[methodCounter++]) {
 
             mapper.updateCongestionIndex();
-            PrintUtil.dateLine("更新congestionIndex成功");
+            PrintUtil.log("更新congestionIndex成功");
         }
 
         // 第三步 更新speed
@@ -717,7 +717,7 @@ public class MybatisUtil {
             mapper.truncateTable(truncateTableName);
             // 2. 插入数据
             mapper.insertRoadSpeed();
-            PrintUtil.dateLine("更新speed成功");
+            PrintUtil.log("更新speed成功");
         }
 
         // 第四步 更新mileage
@@ -728,7 +728,7 @@ public class MybatisUtil {
             mapper.truncateTable(truncateTableName);
             // 2. 插入数据
             mapper.insertCongestionMileage();
-            PrintUtil.dateLine("更新congestionMileage成功");
+            PrintUtil.log("更新congestionMileage成功");
         }
 
         // 第五步 更新congestionTop
@@ -779,7 +779,7 @@ public class MybatisUtil {
                 c.setRank(++i);
             }
             mapper.batchInsertCongestionTop10(congestionTopList);
-            PrintUtil.dateLine("更新congestionTop成功");
+            PrintUtil.log("更新congestionTop成功");
         }
 
         // 第六步 更新warnCongestion
@@ -856,7 +856,7 @@ public class MybatisUtil {
 
             // 4. 插入数据
             mapper.batchInsertWarnCongestion(sectionList);
-            PrintUtil.dateLine("更新warnCongestion成功");
+            PrintUtil.log("更新warnCongestion成功");
         }
 
         // 第七步 更新report_hour_road_run_state
@@ -864,7 +864,7 @@ public class MybatisUtil {
 
             // 1. 获取源数据
             List<Map<String, Object>> sectionRunStateList = mapper.getRoadSectionRunStateByTable(tableName, dt.plusMinutes(1).format(dtf));
-            PrintUtil.dateLine("查询到sectionRunState 数据 size : " + sectionRunStateList.size());
+            PrintUtil.log("查询到sectionRunState 数据 size : " + sectionRunStateList.size());
             // 修改数据格式
             String dateDay = toDate.format(dateFormatter);
             for (Map<String, Object> m : sectionRunStateList) {
@@ -882,7 +882,7 @@ public class MybatisUtil {
 
             // 3. 插入数据
             cutAndInsert(sectionRunStateList, 2, "", mapper);
-            PrintUtil.dateLine("更新report_hour_road_run_state成功");
+            PrintUtil.log("更新report_hour_road_run_state成功");
         }
 
         // 第八步 更新report_hour_congestion_forcast
@@ -922,11 +922,11 @@ public class MybatisUtil {
 
                 if (dateToDateList.size() > 0) {
                     for (DateToDate d : dateToDateList) {
-                        mapper.updateReportForcastDate(d);
-                        PrintUtil.dateLine("更新" + d.getSource() + " -> " + d.getTarget() + "预测拥堵数据成功");
+                        mapper.updateReportForecastData(d);
+                        PrintUtil.log("更新" + d.getSource() + " -> " + d.getTarget() + "预测拥堵数据成功");
                     }
                 } else {
-                    PrintUtil.dateLine("无需更新预测拥堵数据");
+                    PrintUtil.log("无需更新预测拥堵数据");
                 }
 
             } else {
@@ -1030,9 +1030,9 @@ public class MybatisUtil {
                         // 排下序
                         congestionHourForcatList.sort(comparator);
                         mapper.batchInsertReportForcast(congestionHourForcatList);
-                        PrintUtil.dateLine("批量插入" + dateStr + "日预测数据成功");
+                        PrintUtil.log("批量插入" + dateStr + "日预测数据成功");
                     } else {
-                        PrintUtil.dateLine("批量插入" + dateStr + "日预测数据失败");
+                        PrintUtil.log("批量插入" + dateStr + "日预测数据失败");
                     }
                 }
             }
@@ -1122,7 +1122,7 @@ public class MybatisUtil {
 
         int pointSize = sectionPointList.size();
 
-        PrintUtil.dateLine("路段点个数： " + pointSize);
+        PrintUtil.log("路段点个数： " + pointSize);
 
         // 路段点与车的比例 1:n
         int n = 500;
@@ -1144,7 +1144,7 @@ public class MybatisUtil {
 
         int i = 1;
 
-        PrintUtil.dateLine("批量插入车辆状态数据准备");
+        PrintUtil.log("批量插入车辆状态数据准备");
 
         // 记录数判断
         boolean endLoop = false;
@@ -1201,9 +1201,9 @@ public class MybatisUtil {
             }
         }
 
-        PrintUtil.dateLine("批量插入车辆状态开始");
+        PrintUtil.log("批量插入车辆状态开始");
 
-        PrintUtil.dateLine("总数据条数： " + list.size());
+        PrintUtil.log("总数据条数： " + list.size());
 
         // 批量插入
         // mapper.batchInsertVehicleState(list);
@@ -1212,7 +1212,7 @@ public class MybatisUtil {
 
         session.close();
 
-        PrintUtil.dateLine("批量插入车辆状态成功");
+        PrintUtil.log("批量插入车辆状态成功");
     }
 
     /**
@@ -1224,12 +1224,12 @@ public class MybatisUtil {
         // 用默认env
         SqlSession session = getSession(ENV);
         ColumnDao mapper = session.getMapper(ColumnDao.class);
-        PrintUtil.dateLine("批量插入区划信息开始");
-        PrintUtil.dateLine("总数据条数： " + areaList.size());
+        PrintUtil.log("批量插入区划信息开始");
+        PrintUtil.log("总数据条数： " + areaList.size());
         // 批量插入
         mapper.batchInsertArea(areaList);
         session.close();
-        PrintUtil.dateLine("批量插入区划信息成功");
+        PrintUtil.log("批量插入区划信息成功");
     }
 
     /**
@@ -1368,11 +1368,11 @@ public class MybatisUtil {
                     mapper.batchInsertVehicleState(l);
                     break;
                 default:
-                    PrintUtil.dateLine("未知插入类型");
+                    PrintUtil.log("未知插入类型");
                     return;
             }
 
-            PrintUtil.dateLine("已经插入数据条数： " + end);
+            PrintUtil.log("已经插入数据条数： " + end);
 
             if (end == size) {
                 break;
@@ -1470,7 +1470,7 @@ public class MybatisUtil {
 
         List<Map<String, String>> list = getColumnInfo(env);
 
-        PrintUtil.dateLine("list : " + list);
+        PrintUtil.log("list : " + list);
 
         StringBuilder resultMap = new StringBuilder("<resultMap id=\"baseMap\" type=\"\">");
         StringBuilder columnSql = new StringBuilder("<sql id=\"baseColumn\">\n");
@@ -1551,13 +1551,13 @@ public class MybatisUtil {
         columnSql.deleteCharAt(columnSql.length() - 1);
         columnSql.append("\n</sql>");
 
-        PrintUtil.dateLine(resultMap.toString());
-        PrintUtil.dateLine(columnSql.toString());
-        PrintUtil.dateLine(properties.toString());
-        PrintUtil.dateLine(selectAsSql.toString());
-        PrintUtil.dateLine(insertColumnSql.toString());
-        PrintUtil.dateLine(insertPropertySql.toString());
-        PrintUtil.dateLine(updateSql.toString());
+        PrintUtil.log(resultMap.toString());
+        PrintUtil.log(columnSql.toString());
+        PrintUtil.log(properties.toString());
+        PrintUtil.log(selectAsSql.toString());
+        PrintUtil.log(insertColumnSql.toString());
+        PrintUtil.log(insertPropertySql.toString());
+        PrintUtil.log(updateSql.toString());
     }
 
     private static String getProperty(String column) {

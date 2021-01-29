@@ -27,9 +27,9 @@ public class CountPathApiTest {
         int size = apiList.size();
         if(size > 0){
             for(String s : apiList){
-                PrintUtil.dateLine(s);
+                PrintUtil.log(s);
             }
-            PrintUtil.dateLine("\nSize : " + size);
+            PrintUtil.log("\nSize : " + size);
         }
     }
 

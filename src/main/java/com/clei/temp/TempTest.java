@@ -1,8 +1,12 @@
 package com.clei.temp;
 
+import com.alibaba.fastjson.JSONObject;
 import com.clei.entity.Person;
+import com.clei.utils.DateUtil;
 import com.clei.utils.PrintUtil;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -18,7 +22,20 @@ import java.util.stream.Collectors;
  */
 public class TempTest {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnsupportedEncodingException {
+        JSONObject json = new JSONObject();
+        json.put("userId", 1234L);
+        json.put("mobile", "18408244077");
+        json.put("email", "yueyaye@163.com");
+        json.put("username", "hasaki");
+        json.put("groupCode", "9527");
+        System.out.println(json.toJSONString());
+        System.out.println(URLEncoder.encode(json.toJSONString(), "UTF-8"));
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime before = now.minusMonths(5);
+        PrintUtil.log(DateUtil.format(now));
+        PrintUtil.log(DateUtil.format(before));
 
         System.getenv().forEach((k, v) -> PrintUtil.log("k :{}, v: {}", k, v));
 

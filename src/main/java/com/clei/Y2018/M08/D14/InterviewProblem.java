@@ -10,7 +10,7 @@ import java.util.Map;
 public class InterviewProblem {
     public static void main(String[] args){
         List<Integer> result=getZhishu(100);
-        PrintUtil.dateLine(result);
+        PrintUtil.log(result);
 
         char[] chars="abcdefabcadeffbghxx".toCharArray();
         outChar(chars);
@@ -58,7 +58,7 @@ public class InterviewProblem {
         }
         for(Map.Entry<Character,Integer> entry:map.entrySet()){
             if(entry.getValue().equals(max)){
-                PrintUtil.dateLine("KEY: " + entry.getKey() + "\tVALUE: " + entry.getValue());
+                PrintUtil.log("KEY: " + entry.getKey() + "\tVALUE: " + entry.getValue());
             }
         }
     }

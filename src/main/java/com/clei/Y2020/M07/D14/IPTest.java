@@ -9,7 +9,7 @@ public class IPTest {
 
         String ip = "192.168.1.22";
 
-        PrintUtil.dateLine(isLimitIp(ip));
+        PrintUtil.log(isLimitIp(ip));
 
     }
 

@@ -12,8 +12,8 @@ public class Base64Test {
     private static String IMG_PATH = "D:\\img\\img.jpg";
     public static void main(String[] args) {
         String imgStr = imgEncode(IMG_PATH);
-        PrintUtil.dateLine(imgStr);
-        PrintUtil.dateLine(imgDecode(imgStr));
+        PrintUtil.log(imgStr);
+        PrintUtil.log(imgDecode(imgStr));
     }
 
     private static String imgEncode(String imgPath){

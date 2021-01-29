@@ -29,7 +29,7 @@ public class LineCountTest {
         List<LineCount> list = mapToEC(countMap);
         Collections.sort(list);
         for (int i =0;i < 100 && i < list.size();i ++){
-            PrintUtil.dateLine(list.get(i));
+            PrintUtil.log(list.get(i));
         }
     }
 

@@ -14,7 +14,7 @@ public class DownloadEleInvoiceUtil {
         fileName = fileName + "\\" + input.nextLine() + ".pdf";
         String notifyStr = notify(content, "", "1", "1");
         JSONObject json = JSONObject.parseObject(notifyStr);
-        json.forEach((k, v) -> PrintUtil.dateLine(k + " " + v.toString().length()));
+        json.forEach((k, v) -> PrintUtil.log(k + " " + v.toString().length()));
         Base64Util.base64ToFile(json.getString("PDF_FILE"), "D:\\files\\" + fileName);
     }
 

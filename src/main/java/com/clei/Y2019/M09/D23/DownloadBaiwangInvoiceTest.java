@@ -29,11 +29,11 @@ public class DownloadBaiwangInvoiceTest {
         obj.put("data",data);
         String result = OkHttpUtil.doPostJson(url, obj.toJSONString());
         JSONObject obj1 = JSON.parseObject(result);
-        PrintUtil.dateLine(obj1);
+        PrintUtil.log(obj1);
         JSONObject obj2 = JSON.parseObject(obj1.getString("rows"));
-        PrintUtil.dateLine(obj2);
+        PrintUtil.log(obj2);
         String str = obj2.getString("url");
-        PrintUtil.dateLine(str);
+        PrintUtil.log(str);
         Base64Util.base64ToFile(str, "D:\\invoice1.pdf");
     }
 }

@@ -15,9 +15,9 @@ public class StringCompareTest {
         list.add("sdate");
         list.add("sdatetime");
         list.add("sDatetime");
-        PrintUtil.dateLine(list);
+        PrintUtil.log(list);
         Collections.sort(list, new MyStrComparator());
-        PrintUtil.dateLine(list);
+        PrintUtil.log(list);
     }
 
     private static class MyStrComparator implements Comparator<String>, Serializable {

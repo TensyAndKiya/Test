@@ -21,9 +21,9 @@ public class DesEncryptTest {
     public static void main(String[] args) throws Exception {
         String str = "abcdefghijklmnop";
         String encryptedStr = encrypt(str);
-        PrintUtil.dateLine(encryptedStr);
+        PrintUtil.log(encryptedStr);
         String decryptedStr = decrypt(encryptedStr);
-        PrintUtil.dateLine(decryptedStr);
+        PrintUtil.log(decryptedStr);
     }
 
     private static String encrypt(String content) throws Exception {

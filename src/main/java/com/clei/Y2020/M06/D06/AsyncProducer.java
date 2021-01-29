@@ -72,12 +72,12 @@ public class AsyncProducer {
             }
         }catch (Exception e){
             e.printStackTrace();
-            PrintUtil.dateLine("mq 发送消息失败！");
+            PrintUtil.log("mq 发送消息失败！");
         }
 
         boolean result = countDownLatch.await(5, TimeUnit.SECONDS);
 
-        PrintUtil.dateLine("result : " + result);
+        PrintUtil.log("result : " + result);
 
         // 关闭
         producer.shutdown();

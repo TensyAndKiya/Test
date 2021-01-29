@@ -26,7 +26,7 @@ public class FilePathTest {
         for (int i = 0; i < level; i++) {
             tableStr.append('\t');
         }
-        PrintUtil.dateLine(tableStr + file.getAbsolutePath());
+        PrintUtil.log(tableStr + file.getAbsolutePath());
         if(file.isDirectory()){
             File[] files = file.listFiles();
             if(null != files){

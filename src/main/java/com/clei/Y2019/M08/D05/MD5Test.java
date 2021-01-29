@@ -10,6 +10,6 @@ public class MD5Test {
 
         String str = MD5Util.md5(mobile + codeKey);
         String str2 = "18672f066e94c871df6774ec8d4ac6e6";
-        PrintUtil.dateLine(str.equals(str2));
+        PrintUtil.log(str.equals(str2));
     }
 }

@@ -4,7 +4,7 @@ import com.clei.utils.PrintUtil;
 
 public class Java8Test4 {
     public static void main(String[] args) {
-        Dog dog = () -> PrintUtil.dateLine("汪汪汪");
+        Dog dog = () -> PrintUtil.log("汪汪汪");
         dog.run();
         Dog.protect();
         dog.bark();
@@ -23,15 +23,15 @@ interface Dog{
 
     // 默认方法
     default void run(){
-        PrintUtil.dateLine("跑起来");
+        PrintUtil.log("跑起来");
     }
 
     default void eat(){
-        PrintUtil.dateLine("开饭啦");
+        PrintUtil.log("开饭啦");
     }
 
     // 静态方法
     static void protect(){
-        PrintUtil.dateLine("保护朋友");
+        PrintUtil.log("保护朋友");
     }
 }

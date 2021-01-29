@@ -10,14 +10,14 @@ public class MemoryTest {
         new Thread( () -> {
             Runtime rt = Runtime.getRuntime();
             List<String> list = new ArrayList<>();
-            PrintUtil.dateLine((rt.totalMemory() >> 10) + "K");
-            PrintUtil.dateLine((rt.freeMemory() >> 10) + "K");
+            PrintUtil.log((rt.totalMemory() >> 10) + "K");
+            PrintUtil.log((rt.freeMemory() >> 10) + "K");
             for (int i = 0; i < 100000000; i++) {
 
                 list.add(new String("hasaki"));
             }
-            PrintUtil.dateLine((rt.totalMemory() >> 10) + "K");
-            PrintUtil.dateLine((rt.freeMemory() >> 10) + "K");
+            PrintUtil.log((rt.totalMemory() >> 10) + "K");
+            PrintUtil.log((rt.freeMemory() >> 10) + "K");
         } ,"MemoryTestThread").start();
     }
 }

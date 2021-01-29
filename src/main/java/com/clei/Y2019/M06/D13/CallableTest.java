@@ -16,10 +16,10 @@ public class CallableTest {
         FutureTask<String> futureTask = new FutureTask<>(callable);
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(futureTask);
-        PrintUtil.dateLine("结果1： " + futureTask.get(1, TimeUnit.SECONDS));
+        PrintUtil.log("结果1： " + futureTask.get(1, TimeUnit.SECONDS));
 
         Future<String> future = executor.submit(callable);
-        PrintUtil.dateLine("结果2： " + future.get(1, TimeUnit.SECONDS));
+        PrintUtil.log("结果2： " + future.get(1, TimeUnit.SECONDS));
 
         executor.shutdown();
     }

@@ -19,7 +19,7 @@ public class RandTest {
             // [0,2) = [0,1]
             sum += rand.nextInt(2);
         }
-        PrintUtil.dateLine(sum);
+        PrintUtil.log(sum);
 
         //<>
         Map<String, String> temp = new HashMap<>(0);
@@ -37,7 +37,7 @@ public class RandTest {
         };
 
         for (Map.Entry<String, String> entry : map.entrySet()) {
-            PrintUtil.dateLine("key: " + entry.getKey() + "\tvalue: " + entry.getValue());
+            PrintUtil.log("key: " + entry.getKey() + "\tvalue: " + entry.getValue());
         }
     }
 }

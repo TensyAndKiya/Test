@@ -17,36 +17,36 @@ public class TableSizeForTest {
 
     public static void main(String[] args) {
 
-        PrintUtil.dateLine(Math.pow(2, 14 - 14));
-        PrintUtil.dateLine(Math.pow(2, 14 - 19));
-        PrintUtil.dateLine(Math.pow(2, 14 - 14));
-        PrintUtil.dateLine(Math.pow(2, 14 - 17));
-        PrintUtil.dateLine(Math.pow(2, 14 - 16));
-        PrintUtil.dateLine(Math.pow(2, 14 - 15));
-        PrintUtil.dateLine(Math.pow(2, 14 - 1));
+        PrintUtil.log(Math.pow(2, 14 - 14));
+        PrintUtil.log(Math.pow(2, 14 - 19));
+        PrintUtil.log(Math.pow(2, 14 - 14));
+        PrintUtil.log(Math.pow(2, 14 - 17));
+        PrintUtil.log(Math.pow(2, 14 - 16));
+        PrintUtil.log(Math.pow(2, 14 - 15));
+        PrintUtil.log(Math.pow(2, 14 - 1));
 
         int capacity = 7;
 
-        PrintUtil.dateLine(tableSizeFor(7));
+        PrintUtil.log(tableSizeFor(7));
     }
 
     /**
      * Returns a power of two size for the given target capacity.
      */
     static final int tableSizeFor(int cap) {
-        PrintUtil.dateLine(cap);
+        PrintUtil.log(cap);
         int n = cap - 1;
-        PrintUtil.dateLine(n);
+        PrintUtil.log(n);
         n |= n >>> 1;
-        PrintUtil.dateLine(n);
+        PrintUtil.log(n);
         n |= n >>> 2;
-        PrintUtil.dateLine(n);
+        PrintUtil.log(n);
         n |= n >>> 4;
-        PrintUtil.dateLine(n);
+        PrintUtil.log(n);
         n |= n >>> 8;
-        PrintUtil.dateLine(n);
+        PrintUtil.log(n);
         n |= n >>> 16;
-        PrintUtil.dateLine(n);
+        PrintUtil.log(n);
         return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
     }
 

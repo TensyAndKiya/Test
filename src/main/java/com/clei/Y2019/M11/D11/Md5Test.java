@@ -11,9 +11,9 @@ public class Md5Test {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime signMark = now.minusHours(12);
-        PrintUtil.dateLine(now.format(df));
-        PrintUtil.dateLine(signMark.format(df));
-        // PrintUtil.dateLine(md5(md5("123456pda")));
+        PrintUtil.log(now.format(df));
+        PrintUtil.log(signMark.format(df));
+        // PrintUtil.log(md5(md5("123456pda")));
     }
 
 

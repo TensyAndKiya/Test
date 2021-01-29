@@ -16,7 +16,7 @@ public class LogContentTest{
     private final static String LOG_DIRECTORY = "C:\\Users\\liudg\\Desktop\\logs\\2019-04-23 error";
     public static void main(String[] args) throws Exception{
         Scanner input = new Scanner(System.in,"UTF-8");
-        PrintUtil.dateLine("请输入匹配字符串：");
+        PrintUtil.log("请输入匹配字符串：");
         //String outputFileName = input.next();
         String searchStr = input.next();
         File logFile = new File(LOG_DIRECTORY + File.separator + "all_error_0422.log");
@@ -32,17 +32,17 @@ public class LogContentTest{
                 if (line.contains("successPaid")) {
                     successPaid = true;
                 }
-                PrintUtil.dateLine(preLine);
-                PrintUtil.dateLine(line);
+                PrintUtil.log(preLine);
+                PrintUtil.log(line);
             }
             preLine = line;
         }
         br.close();
         bw.close();
         if(successPaid){
-            PrintUtil.dateLine("支付成功！");
+            PrintUtil.log("支付成功！");
         }else{
-            PrintUtil.dateLine("支付失败！");
+            PrintUtil.log("支付失败！");
         }
 
     }

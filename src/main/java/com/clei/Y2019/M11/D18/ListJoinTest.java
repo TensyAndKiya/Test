@@ -15,11 +15,11 @@ public class ListJoinTest {
 
         BigDecimal b = new BigDecimal("0.01");
         BigDecimal c = BigDecimal.ZERO;
-        PrintUtil.dateLine(b.compareTo(c));
+        PrintUtil.log(b.compareTo(c));
 
         float f = 0.051314f;
         f = new BigDecimal(f).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-        PrintUtil.dateLine(f == 0.05f);
+        PrintUtil.log(f == 0.05f);
 
         List<Map<String,Object>> l = new ArrayList<>();
         Map<String,Object> m = new HashMap<>();
@@ -37,7 +37,7 @@ public class ListJoinTest {
         m2.put("occupyType",0);
         m2.put("occupyNum",2);
         l.add(m2);
-        PrintUtil.dateLine(JSONObject.toJSONString(l));
+        PrintUtil.log(JSONObject.toJSONString(l));
 
 
         List<String> list = new ArrayList<>();
@@ -46,7 +46,7 @@ public class ListJoinTest {
         list.add(null);
         list.add("bb");
         list.add(null);
-        PrintUtil.dateLine(list.stream().filter(v -> null != v).collect(Collectors.joining(",")));
+        PrintUtil.log(list.stream().filter(v -> null != v).collect(Collectors.joining(",")));
 
         List<String> ll = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
@@ -55,8 +55,8 @@ public class ListJoinTest {
 
         for (int i = 0; i < 10; i++) {
             List<String> lll = ll.subList(i * 10, (i + 1) * 10);
-            PrintUtil.dateLine(lll.stream().collect(Collectors.joining(",")));
-            PrintUtil.dateLine("------------------------------------------------------");
+            PrintUtil.log(lll.stream().collect(Collectors.joining(",")));
+            PrintUtil.log("------------------------------------------------------");
         }
 
     }

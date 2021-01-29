@@ -204,8 +204,8 @@ public class LotterySignature {
         KeyPairs keyPairs = generateKey();
 
 
-        PrintUtil.dateLine(keyPairs.getPrivateKey());
-        PrintUtil.dateLine(keyPairs.getPublicKey());
+        PrintUtil.log(keyPairs.getPrivateKey());
+        PrintUtil.log(keyPairs.getPublicKey());
 
         keyPairs.setPrivateKey("MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCIQFMXCV44Uj7BG20VRKH3RdCBsSj9OsYOmWE9TxOjXeCdRogB1RW+2qXPvrdRv4ufbosefxfKoKHNc6URaYESTQHg8wX3ieEhe8PLXZ8imN7t05yoHql3zpbJ2f1ju0JvUMt/NEOz3tnxlRpbRJEaxgKxBLP6If9v+gFvHbekfWW/B+i/4QKVNyFssEzn2Zf4LjQnXkFdqf+0w00//IRaQgoHTj9xI5XufSHJZ8erO5Sn4AizY0gKFI287jso8Y1ccI3zVM5dKcn9PjmRQy8iKKISyFx00+K2pzWsIu2rUkbhYDaFPDD6e5VXWI4fcyIH0WW3/rBMVZBk9zfeDCtdAgMBAAECggEABH4if0L20WKc4R83ZJkjwhSSQISH9nmmqDqUg0IFQsDItEbsGytckTOCfiwqvU5Um0g43COStELBsxWaHs3czK6vXiyFSNlKDCGZni4THj/uMedlZgHE0seEH1nJyi0VjrgaTbJ6fQbfJuEkwlerdTeMRSwDhz7xvk5/F5viP1E61GNXrjv+tHueqNC+jHeY6cZNgJ4ACjhrwsRBve4aK6Zr1MxVfV4Xw5QXhKUE7CaG/8QijXN0Fn5DNO12DfFmSdDHbHefFd5go0ZY5UnKQonUk/4yvBG23soeXN/OwIbMgE8Dqkghwh1jh0woBdOu36ZN/lctfmmMcDodBFLR4QKBgQDPTghv5KV/mXUj6/1bH9qlm0RlRd+jVbAmf/bY0p/RQnEY9Dx/vlE5zMaDc4EnH1Cm1yC5p7Sx6b1a7ouzYCCxkyuN3EPMyjlQmh+9D6LiMX/LrQkmIoA3QiA64f2cBcQjwOXHE0GhhWVhsERy5DSgio+WMJuIReMAk2IfHCZk+QKBgQCoQZeSQfqZylHoILISc8A8ANdp1z9HpR9nVyap81zsshqwAw6ieS3qrrPDkHoMF2okJ81eQg5cFd/Sl1avqKiNsXNKkxexbzoZPGIb4hfD9Qgv28NkBFMVqEwVzNmqN8rn4d5NpePPhFnjBBwfvCrgVtqNd9kqcWpJelPprPLmhQKBgCgGC9D2lxFMonYeANtQChnBIXJgDC5vw8ObHyB7gcmYB1fnB6suJmZ/Z7BHY58XB64+iJ3viA51b06YEba/D3DZViZcaWangGtUZl5NH4iGQAMl1Eddj92bUbesnBc8ccLpYjOOPzSdGZbDvmNkNdjtB43aspybyZj5247gE3WZAoGBAKa2lyBsD4piVVXTT53I4yiRDN/qTuEGU19pkv3CDMjakGbmIJILz9tAzw1vEf75FEpOxcYnXWMQqX1YRqQ2UQxUTxANPuSoeMCYe/10wGeBWmNRNQDc6BYFc54GI4XtUjcALexx+o+bbBTr9ZHcN/+hD1ws7BiJ1+6GLq7SlrqhAoGACrsBZdRZ3UffyL95YIDKOQZ7cgyPd6iLPn9Oe4ELrZHKHGEa+tG1HkSczcYgCjq25+h8QZ+5+jObNOcvkQA7WWQNuJ6kPpqk/gisMrrJ9gr6Pdb4NdtxE4xwJoMZ8Nbwy0udHfq0UudnJGAi00yRoKx+6OlqsdlDbhhETqFv8p8=");
         keyPairs.setPrivateKey(keyPairs.getPrivateKey().replaceAll("\r", "").replaceAll("\n", ""));
@@ -214,8 +214,8 @@ public class LotterySignature {
         keyPairs.setPublicKey("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiEBTFwleOFI+wRttFUSh90XQgbEo/TrGDplhPU8To13gnUaIAdUVvtqlz763Ub+Ln26LHn8XyqChzXOlEWmBEk0B4PMF94nhIXvDy12fIpje7dOcqB6pd86Wydn9Y7tCb1DLfzRDs97Z8ZUaW0SRGsYCsQSz+iH/b/oBbx23pH1lvwfov+EClTchbLBM59mX+C40J15BXan/tMNNP/yEWkIKB04/cSOV7n0hyWfHqzuUp+AIs2NIChSNvO47KPGNXHCN81TOXSnJ/T45kUMvIiiiEshcdNPitqc1rCLtq1JG4WA2hTww+nuVV1iOH3MiB9Flt/6wTFWQZPc33gwrXQIDAQAB");
         keyPairs.setPublicKey(keyPairs.getPublicKey().replaceAll("\r", "").replaceAll("\n", ""));
 
-        PrintUtil.dateLine(keyPairs.getPrivateKey());
-        PrintUtil.dateLine(keyPairs.getPublicKey());
+        PrintUtil.log(keyPairs.getPrivateKey());
+        PrintUtil.log(keyPairs.getPublicKey());
 
         //签名
         Map<String, String> params = new HashMap<>();

@@ -12,7 +12,7 @@ public class DeleteFileTest {
     }
 
     private static void deleteTarget() {
-        PrintUtil.dateLine("输入文件(g || t || d)");
+        PrintUtil.log("输入文件(g || t || d)");
         Scanner input = new Scanner(System.in,"UTF-8");
         char c = input.next().charAt(0);
         String folder = "dev";
@@ -61,7 +61,7 @@ public class DeleteFileTest {
                         for (File f : fs) {
                             if (f.getName().equals("target")) {
                                 clear = false;
-                                PrintUtil.dateLine(f.getAbsolutePath());
+                                PrintUtil.log(f.getAbsolutePath());
                                 break;
                             }
                         }
@@ -70,9 +70,9 @@ public class DeleteFileTest {
             }
         }
         if (clear) {
-            PrintUtil.dateLine(folder + "\t删除完毕！！！");
+            PrintUtil.log(folder + "\t删除完毕！！！");
         } else {
-            PrintUtil.dateLine("NOT CLEAR!");
+            PrintUtil.log("NOT CLEAR!");
         }
 
     }

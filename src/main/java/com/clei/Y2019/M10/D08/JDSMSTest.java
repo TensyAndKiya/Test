@@ -40,7 +40,7 @@ public class JDSMSTest {
         request.setParams(params);
         // 发送
         BatchSendResponse response = smsClient.batchSend(request);
-        PrintUtil.dateLine("env : " + JSONObject.toJSONString(smsClient.getEnvironment()));
+        PrintUtil.log("env : " + JSONObject.toJSONString(smsClient.getEnvironment()));
         if(null != response){
             PrintUtil.println("京东云 文本短信 群发 结果 requestId:{},result:{}",response.getRequestId(), JSONObject.toJSONString(response.getResult()));
         }else {

@@ -20,6 +20,6 @@ public class JDSMS0Test {
         messageData.put("sign","【客户签名1】");
         message.put("data",messageData);
         String result = OkHttpUtil.doPostJson(url, message.toJSONString());
-        PrintUtil.dateLine("result : " + result);
+        PrintUtil.log("result : " + result);
     }
 }

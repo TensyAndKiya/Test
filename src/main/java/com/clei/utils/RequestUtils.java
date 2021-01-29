@@ -42,18 +42,18 @@ public class RequestUtils {
 	 * @return
 	 */
 	public static String getHttpConnectResult(String content, String address) {
-		String resultData = "";
-		PrintUtil.dateLine("http请求开始，请求地址：" + address);
-		OutputStream wr = null;
-		HttpsURLConnection conn = null;
-		try {
-			URL url = new URL(address);
-			conn = (HttpsURLConnection) url.openConnection();
-			conn.setDoOutput(true);
-			conn.setDoInput(true);
-			conn.setRequestMethod("POST");
-			conn.setConnectTimeout(60000);// 设置连接主机的超时时间
-			conn.setReadTimeout(60000);// 设置从主机读取数据的超时时间
+            String resultData = "";
+            PrintUtil.log("http请求开始，请求地址：" + address);
+            OutputStream wr = null;
+            HttpsURLConnection conn = null;
+            try {
+                URL url = new URL(address);
+                conn = (HttpsURLConnection) url.openConnection();
+                conn.setDoOutput(true);
+                conn.setDoInput(true);
+                conn.setRequestMethod("POST");
+                conn.setConnectTimeout(60000);// 设置连接主机的超时时间
+                conn.setReadTimeout(60000);// 设置从主机读取数据的超时时间
 
 			SSLSocketFactory ssf = getSSLContext().getSocketFactory();
 			conn.setSSLSocketFactory(ssf);
@@ -62,12 +62,12 @@ public class RequestUtils {
 			wr.flush();
 			resultData = IOUtils.toString(conn.getInputStream(), "utf-8");
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			PrintUtil.dateLine("http请求失败！请求地址不正确！请求地址：" + address);
-		} catch (IOException e) {
-			e.printStackTrace();
-			PrintUtil.dateLine("http请求失败！发生i/o错误，请求地址：" + address);
-		} finally {
+                e.printStackTrace();
+                PrintUtil.log("http请求失败！请求地址不正确！请求地址：" + address);
+            } catch (IOException e) {
+                e.printStackTrace();
+                PrintUtil.log("http请求失败！发生i/o错误，请求地址：" + address);
+            } finally {
 			try {
 				if (wr != null) {
 					wr.close();

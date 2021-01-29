@@ -1,5 +1,7 @@
 package com.clei.algorithm.other;
 
+import com.clei.utils.PrintUtil;
+
 /**
  * 欧几里得算法，辗转相除法
  *
@@ -8,7 +10,7 @@ package com.clei.algorithm.other;
 public class Euclid {
 
     public static void main(String[] args) {
-        System.out.println(getGCD(-24, -18));
+        PrintUtil.log(getGCD(-24, -18));
     }
 
     /**

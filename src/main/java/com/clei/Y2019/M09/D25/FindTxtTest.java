@@ -25,7 +25,7 @@ public class FindTxtTest {
         String str;
         while(null != (str = br.readLine())){
             if(str.contains("PaymentResult")){
-                PrintUtil.dateLine(file.getName());
+                PrintUtil.log(file.getName());
                 break;
             }
         }

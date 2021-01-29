@@ -29,16 +29,16 @@ public class CarEnterReqTest {
             prefix = args[0];
             tps = Integer.parseInt(args[1]);
         } else {
-            PrintUtil.dateLine("参数不对！！！");
+            PrintUtil.log("参数不对！！！");
         }
         long start = System.currentTimeMillis();
         CountDownLatch latch = new CountDownLatch(tps);
         doPost(tps, latch);
         // 等待全部执行完毕
         latch.await();
-        PrintUtil.dateLine("耗时 ：：" + (System.currentTimeMillis() - start) + "ms");
-        PrintUtil.dateLine("总数 : " + tps);
-        PrintUtil.dateLine("成功数 : " + SUCCESS);
+        PrintUtil.log("耗时 ：：" + (System.currentTimeMillis() - start) + "ms");
+        PrintUtil.log("总数 : " + tps);
+        PrintUtil.log("成功数 : " + SUCCESS);
     }
 
     private static void doPost(int tps, CountDownLatch latch) {

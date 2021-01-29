@@ -8,7 +8,7 @@ public class Str2JSONStrTest {
     private static final String NOTIFY_URL = "http://111.11.11.111:1111/park/cdPayNotify.jsp";
 
     public static void main(String[] args) {
-        PrintUtil.dateLine("请输入字符串：");
+        PrintUtil.log("请输入字符串：");
         Scanner input = new Scanner(System.in,"UTF-8");
         String str = input.nextLine();
 
@@ -24,7 +24,7 @@ public class Str2JSONStrTest {
         }
         String temp = sb.toString();
         temp = temp.substring(0, temp.length() - 1);
-        PrintUtil.dateLine(NOTIFY_URL + temp);
+        PrintUtil.log(NOTIFY_URL + temp);
 
         /*for(String s : kv){
             int index = s.indexOf("=");
@@ -36,11 +36,11 @@ public class Str2JSONStrTest {
             map.put(k,v);
         }
 
-        PrintUtil.dateLine("{");
+        PrintUtil.log("{");
         map.forEach( (k,v) -> {
-            PrintUtil.dateLine("\t"+"\"" + k + "\":\"" + v + "\",");
+            PrintUtil.log("\t"+"\"" + k + "\":\"" + v + "\",");
         } );
-        PrintUtil.dateLine("}");*/
+        PrintUtil.log("}");*/
     }
 
     private static String replace(String str,char c){

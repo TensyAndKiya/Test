@@ -25,7 +25,7 @@ public class TransactionListenerImpl implements TransactionListener {
     @Override
     public LocalTransactionState executeLocalTransaction(Message message, Object o) {
 
-        PrintUtil.dateLine(DateUtil.currentDateTime() + " message : " + message + " obj : " + o);
+        PrintUtil.log(DateUtil.currentDateTime() + " message : " + message + " obj : " + o);
 
         Integer value = transactionIndex.getAndIncrement();
 
@@ -39,7 +39,7 @@ public class TransactionListenerImpl implements TransactionListener {
     @Override
     public LocalTransactionState checkLocalTransaction(MessageExt messageExt) {
 
-        PrintUtil.dateLine(DateUtil.currentDateTime() + "  " + messageExt);
+        PrintUtil.log(DateUtil.currentDateTime() + "  " + messageExt);
 
         Integer status = localTrans.get(messageExt.getTransactionId());
 

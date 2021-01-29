@@ -23,7 +23,7 @@ public class Consumer {
 
     public static void main(String[] args) throws MQClientException {
 
-        System.out.println(System.currentTimeMillis());
+        PrintUtil.log(System.currentTimeMillis());
 
         // 初始化消费者并设置组名
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("ConsumerGroup1");

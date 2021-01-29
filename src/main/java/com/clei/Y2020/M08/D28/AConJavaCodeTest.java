@@ -110,7 +110,7 @@ public class AConJavaCodeTest {
             size += entry.getValue().size();
         }
 
-        PrintUtil.dateLine("size : " + size);
+        PrintUtil.log("size : " + size);
 
         PrintUtil.println("操作：{} 耗时：{}ms",type,end - start);
 

@@ -26,6 +26,6 @@ public class SubStrTest {
                 max = max > leng ? max : leng;
             }
         }
-        PrintUtil.dateLine("RESULT: " + max);
+        PrintUtil.log("RESULT: " + max);
     }
 }

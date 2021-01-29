@@ -17,15 +17,15 @@ public class ZipTest {
     private final static String CHARSET_UTF8 = "UTF-8";
     public static void main(String[] args) throws Exception {
         String str = "我是你滴大爷爷呀！";
-        PrintUtil.dateLine("原文 ：" + str);
+        PrintUtil.log("原文 ：" + str);
         String zipStr = zip(str);
-        PrintUtil.dateLine("压缩后 ：" + zipStr);
-        PrintUtil.dateLine("解压后 ：" + unZip(zipStr));
+        PrintUtil.log("压缩后 ：" + zipStr);
+        PrintUtil.log("解压后 ：" + unZip(zipStr));
     }
 
     private static String zip(String str) throws Exception{
         byte[] bytes = str.getBytes(CHARSET_UTF8);
-        PrintUtil.dateLine(bytes.length);
+        PrintUtil.log(bytes.length);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ZipOutputStream zos = new ZipOutputStream(bos);
         ZipEntry zipEntry = new ZipEntry("zip");
@@ -34,7 +34,7 @@ public class ZipTest {
         zos.write(bytes);
         zos.closeEntry();
         bytes = bos.toByteArray();
-        PrintUtil.dateLine(bytes.length);
+        PrintUtil.log(bytes.length);
         String result = Base64Util.encode(bytes);
         bos.close();
         return result;

@@ -47,13 +47,13 @@ public class Algorithm002 {
         h.next = i;
         i.next = j;*/
 
-        PrintUtil.dateLine(getNodeVal(a));
+        PrintUtil.log(getNodeVal(a));
 
-        PrintUtil.dateLine(getNodeVal(new Node(9)));
+        PrintUtil.log(getNodeVal(new Node(9)));
 
         Node result = getNode(a,new Node(9));
 
-        PrintUtil.dateLine(getNodeVal(result));
+        PrintUtil.log(getNodeVal(result));
 
     }
 

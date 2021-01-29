@@ -6,7 +6,7 @@ public class StrTest {
     public static void main(String[] args) {
         String str = "我是谁？";
         for (int i = 0; i < str.length(); i++) {
-            PrintUtil.dateLine(str.toCharArray()[i]);
+            PrintUtil.log(str.toCharArray()[i]);
         }
     }
 }

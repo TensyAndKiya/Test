@@ -19,7 +19,7 @@ public class TCPSocketServer {
 
         while (true){
 
-            PrintUtil.dateLine("begin");
+            PrintUtil.log("begin");
 
             Socket socket = serverSocket.accept();
 
@@ -37,7 +37,7 @@ public class TCPSocketServer {
                 // 读取
                 int length = is.read(buffer);
 
-                PrintUtil.dateLine(length);
+                PrintUtil.log(length);
 
                 if(-1 == length){
 
@@ -50,7 +50,7 @@ public class TCPSocketServer {
 
                 String content = new String(buffer,0,length,"UTF-8");
 
-                PrintUtil.dateLine(content);
+                PrintUtil.log(content);
 
                 // 写入
                 os.write("侠客行".getBytes("UTF-8"));

@@ -16,12 +16,12 @@ public class InstanceTest {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate eDate = LocalDate.parse(endDate, df);
 
-        PrintUtil.dateLine(ChronoUnit.DAYS.between(eDate, LocalDate.now()));
-        PrintUtil.dateLine(ChronoUnit.DAYS.between(LocalDate.now(), eDate));
+        PrintUtil.log(ChronoUnit.DAYS.between(eDate, LocalDate.now()));
+        PrintUtil.log(ChronoUnit.DAYS.between(LocalDate.now(), eDate));
 
 
         Object oo = null;
-        PrintUtil.dateLine(("" + oo).equals("null"));
+        PrintUtil.log(("" + oo).equals("null"));
 
 
         List<String> list = new ArrayList<>();
@@ -34,19 +34,19 @@ public class InstanceTest {
         Object obj = list;
         Object obj2 = array;
 
-        PrintUtil.dateLine(obj.getClass().getCanonicalName());
-        PrintUtil.dateLine(obj2.getClass().getCanonicalName());
+        PrintUtil.log(obj.getClass().getCanonicalName());
+        PrintUtil.log(obj2.getClass().getCanonicalName());
 
         Collection c = (Collection) obj;
-        PrintUtil.dateLine(c.size());
+        PrintUtil.log(c.size());
 
         String[] arr = (String[]) obj2;
-        PrintUtil.dateLine(arr.length);
+        PrintUtil.log(arr.length);
 
-        PrintUtil.dateLine(obj instanceof Collection);
-        PrintUtil.dateLine(obj instanceof List);
-        PrintUtil.dateLine(obj instanceof ArrayList);
+        PrintUtil.log(obj instanceof Collection);
+        PrintUtil.log(obj instanceof List);
+        PrintUtil.log(obj instanceof ArrayList);
 
-        PrintUtil.dateLine(obj2 instanceof String);
+        PrintUtil.log(obj2 instanceof String);
     }
 }

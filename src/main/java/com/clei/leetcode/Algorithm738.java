@@ -1,5 +1,7 @@
 package com.clei.leetcode;
 
+import com.clei.utils.PrintUtil;
+
 /**
  * 单调递增的数字
  * 给定一个非负整数N，找出小于或等于N的最大的整数，同时这个整数需要满足其各个位数上的数字是单调递增。
@@ -27,7 +29,7 @@ package com.clei.leetcode;
 public class Algorithm738 {
 
     public static void main(String[] args) {
-        System.out.println(monotoneIncreasingDigits(332));
+        PrintUtil.log(monotoneIncreasingDigits(332));
     }
 
     public static int monotoneIncreasingDigits(int N) {

@@ -34,7 +34,7 @@ public class PostMadlyTest {
         Response response = okHttpClient.newCall(request).execute();
         if(null != response && response.isSuccessful()){
             String result = response.body().string();
-            PrintUtil.dateLine("result: " + result);
+            PrintUtil.log("result: " + result);
         }
         if(null != response){
             response.close();

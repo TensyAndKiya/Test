@@ -31,11 +31,11 @@ public class ExceptionCountTest {
             }
         }
         br.close();
-        PrintUtil.dateLine("筛选完毕");
+        PrintUtil.log("筛选完毕");
         List<ExceptionCount> list = mapToEC(countMap);
         Collections.sort(list);
         for(ExceptionCount ec : list){
-            PrintUtil.dateLine(ec);
+            PrintUtil.log(ec);
         }
     }
 

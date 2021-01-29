@@ -14,11 +14,11 @@ public class InterviewProblem {
         Map<String, String> map = new HashMap<>();
         map.put("key1", "key1");
         map.put("key2", "key2");
-        PrintUtil.dateLine(map.get("key1"));
-        PrintUtil.dateLine(map.remove("key1"));
-        PrintUtil.dateLine(map.remove("key3"));
-        PrintUtil.dateLine(map.put("key1", "new key1"));
-        PrintUtil.dateLine(map.put("key2", "new key2"));
+        PrintUtil.log(map.get("key1"));
+        PrintUtil.log(map.remove("key1"));
+        PrintUtil.log(map.remove("key3"));
+        PrintUtil.log(map.put("key1", "new key1"));
+        PrintUtil.log(map.put("key2", "new key2"));
 
         //
         User u1 = new User(5, "张三");
@@ -28,13 +28,13 @@ public class InterviewProblem {
         list.add(u1);
         list.add(u2);
         list.add(u3);
-        PrintUtil.dateLine(list);
+        PrintUtil.log(list);
         //list.sort(new UserComparator());
         //Collections.sort(list,new UserComparator());
         Collections.sort(list);
-        PrintUtil.dateLine(list);
+        PrintUtil.log(list);
         Collections.reverse(list);
-        PrintUtil.dateLine(list);
+        PrintUtil.log(list);
     }
 }
 

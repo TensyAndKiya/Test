@@ -16,7 +16,7 @@ public class MergeSortStudy {
         }
         mergeSort(arr, 0, arr.length - 1);
         PrintUtil.println();
-        PrintUtil.dateLine();
+        PrintUtil.log();
         for (int i : arr) {
             PrintUtil.print(i + "\t");
         }

@@ -11,6 +11,6 @@ public class LittleTest {
     }
 
     public static void main(String[] args) throws Exception {
-        PrintUtil.dateLine(getRightName("我是你滴大爷爷呀唉", 8));
+        PrintUtil.log(getRightName("我是你滴大爷爷呀唉", 8));
     }
 }

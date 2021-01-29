@@ -27,6 +27,6 @@ public class NothingTest {
             }
         }
 
-        PrintUtil.dateLine(dateMonth);
+        PrintUtil.log(dateMonth);
     }
 }

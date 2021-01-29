@@ -49,7 +49,7 @@ public class String2GeoArrayTest {
         }
         sb.append(']');
 
-        PrintUtil.dateLine(sb.toString());
+        PrintUtil.log(sb.toString());
 
     }
 }

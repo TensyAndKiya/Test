@@ -44,7 +44,7 @@ public class OrderedProducer {
             // 指定消息存储在哪个队列中
             SendResult result = producer.send(msg,selector,orderId);
 
-            PrintUtil.dateLine(i + " 发送结果：" + result);
+            PrintUtil.log(i + " 发送结果：" + result);
         }
 
         // 关闭

@@ -22,6 +22,6 @@ public class CopyOnWriteArraySetTest {
             }
         }
 
-        PrintUtil.dateLine(set);
+        PrintUtil.log(set);
     }
 }

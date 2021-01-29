@@ -14,7 +14,7 @@ public class LogContentByDateTest {
     private final static String LOG_DIRECTORY = "C:\\Users\\liudg\\Desktop\\logs\\2019-04-23 error";
     public static void main(String[] args) throws Exception {
 //        Scanner input = new Scanner(System.in,"UTF-8");
-//        PrintUtil.dateLine("请输入开始时间和结束时间：");
+//        PrintUtil.log("请输入开始时间和结束时间：");
         //2019-04-22-15:3  从30分开始
         //2019-04-22-16  到 4点结束
         String startDate = "2019-04-11-16:31";
@@ -41,6 +41,6 @@ public class LogContentByDateTest {
         }
         br.close();
         bw.close();
-        PrintUtil.dateLine("筛选完毕");
+        PrintUtil.log("筛选完毕");
     }
 }

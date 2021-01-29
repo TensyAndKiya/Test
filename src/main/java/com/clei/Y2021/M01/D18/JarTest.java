@@ -1,5 +1,7 @@
 package com.clei.Y2021.M01.D18;
 
+import com.clei.utils.PrintUtil;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -32,7 +34,7 @@ public class JarTest {
         unJar(jarPath, targetPath, replaceFiles);
         // 重新打包
         String command = "jar -cvfm hasaki.jar " + targetPath + "META-INF\\MANIFEST.MF -C " + targetPath + " .";
-        System.out.println("command : " + command);
+        PrintUtil.log("command : {}", command);
         Process exec = Runtime.getRuntime().exec(command);
         printExec(exec.getInputStream());
         printExec(exec.getErrorStream());
@@ -76,7 +78,7 @@ public class JarTest {
                 InputStream is;
                 // 替换class
                 if (replaceMap.containsKey(fileName)) {
-                    System.out.println("replaced file : " + fileName);
+                    PrintUtil.log("replaced file : {}", fileName);
                     is = new FileInputStream(replaceMap.get(fileName));
                 } else {
                     is = jar.getInputStream(jarEntry);
@@ -107,7 +109,7 @@ public class JarTest {
         BufferedReader br = new BufferedReader(isr);
         String line;
         while (null != (line = br.readLine())) {
-            System.out.println(line);
+            PrintUtil.println(line);
         }
         is.close();
     }

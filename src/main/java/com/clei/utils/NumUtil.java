@@ -115,8 +115,8 @@ public class NumUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(getPowSum(3, 4));
+        PrintUtil.log(getPowSum(3, 4));
 
-        PrintUtil.dateLine(transRadix("x", 36, 10));
+        PrintUtil.log(transRadix("x", 36, 10));
     }
 }

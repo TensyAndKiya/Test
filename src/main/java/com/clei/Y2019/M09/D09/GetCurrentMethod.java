@@ -17,7 +17,7 @@ public class GetCurrentMethod {
     private static boolean theMethod(int a,String b){
         StackTraceElement element = Thread.currentThread().getStackTrace()[1];
         String method = element.getMethodName();
-        PrintUtil.dateLine(method);
+        PrintUtil.log(method);
         return false;
     }
 

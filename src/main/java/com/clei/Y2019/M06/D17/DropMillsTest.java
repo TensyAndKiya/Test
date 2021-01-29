@@ -7,9 +7,9 @@ import java.util.Date;
 public class DropMillsTest {
     public static void main(String[] args) {
         Date date = new Date();
-        PrintUtil.dateLine("原来的毫秒数：" + date.getTime());
+        PrintUtil.log("原来的毫秒数：" + date.getTime());
         dropMills(date);
-        PrintUtil.dateLine("现在的毫秒数：" + date.getTime());
+        PrintUtil.log("现在的毫秒数：" + date.getTime());
     }
 
     private static void dropMills(final Date date){

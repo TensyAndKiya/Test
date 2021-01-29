@@ -25,17 +25,17 @@ public class Java8Test5 {
         listWang.forEach(System.out :: println);
         // 找出女人的数目
         long girlCount = list.stream().filter(v -> v.getSex() == 0).count();
-        PrintUtil.dateLine(girlCount);
+        PrintUtil.log(girlCount);
 
         // 排序
-        PrintUtil.dateLine("原来顺序");
+        PrintUtil.log("原来顺序");
         list.forEach(System.out::println);
-        PrintUtil.dateLine("排序后");
+        PrintUtil.log("排序后");
         list.sort(Comparator.comparingInt(Person::getAge).reversed());
         list.forEach(System.out :: println);
 
         // 所有人
         String everyone = list.stream().map(Person::getName).collect(Collectors.joining(","));
-        PrintUtil.dateLine(everyone);
+        PrintUtil.log(everyone);
     }
 }

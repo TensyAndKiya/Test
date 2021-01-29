@@ -16,17 +16,17 @@ public class SignTest {
 
     public static void main(String[] args) {
 
-        PrintUtil.dateLine(new BigDecimal("9.567").setScale(2, RoundingMode.CEILING).toString());
+        PrintUtil.log(new BigDecimal("9.567").setScale(2, RoundingMode.CEILING).toString());
 
         Instant instant = Instant.ofEpochMilli(System.currentTimeMillis());
         LocalDateTime entranceTime = LocalDateTime.ofInstant(instant, ZoneId.of("GMT+8"));
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
 
-        PrintUtil.dateLine(entranceTime.format(dtf));
+        PrintUtil.log(entranceTime.format(dtf));
 
         String json = "{'key':'value','key2':'value2'}";
 
-        PrintUtil.dateLine(getSHA256StrJava(json));
+        PrintUtil.log(getSHA256StrJava(json));
     }
 
 

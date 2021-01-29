@@ -182,7 +182,7 @@ public class FileUtil {
         // list = list.stream().sorted(Comparator.comparingLong(FileSize::getSize)).collect(Collectors.toList());
         list.sort(Comparator.comparing(FileSize::getSize).reversed());
         for (FileSize fs : list) {
-            PrintUtil.dateLine(fs.toString(unit));
+            PrintUtil.log(fs.toString(unit));
         }
     }
 

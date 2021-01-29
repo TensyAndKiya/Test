@@ -7,14 +7,14 @@ import java.time.LocalDateTime;
 
 public class DateUtilsTest {
     public static void main(String[] args) {
-        PrintUtil.dateLine(System.currentTimeMillis());
+        PrintUtil.log(System.currentTimeMillis());
         LocalDateTime localDateTime = LocalDateTime.now();
         String dateStr = DateUtil.format(localDateTime);
         LocalDateTime localDateTime1 = DateUtil.parse(dateStr);
-        PrintUtil.dateLine(dateStr);
-        PrintUtil.dateLine(localDateTime1);
-        PrintUtil.dateLine(DateUtil.toEpochSecond(localDateTime));
-        PrintUtil.dateLine(DateUtil.toEpochMilli(localDateTime));
-        PrintUtil.dateLine(DateUtil.toInstant(localDateTime).toEpochMilli());
+        PrintUtil.log(dateStr);
+        PrintUtil.log(localDateTime1);
+        PrintUtil.log(DateUtil.toEpochSecond(localDateTime));
+        PrintUtil.log(DateUtil.toEpochMilli(localDateTime));
+        PrintUtil.log(DateUtil.toInstant(localDateTime).toEpochMilli());
     }
 }

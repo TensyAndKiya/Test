@@ -256,5 +256,5 @@ public interface ColumnDao {
      *
      * @param d
      */
-    void updateReportForcastDate(DateToDate d);
+    void updateReportForecastData(DateToDate d);
 }

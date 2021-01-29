@@ -27,7 +27,7 @@ public class ABCSign {
         String merchantCerPath = "F:\\work\\Eeparking\\ABC\\103882200110039.pfx";
         String merchantCerPassword = "abcd1234";
 
-        PrintUtil.dateLine(readPfxAndSha1WithRsa(str, merchantCerPath, merchantCerPassword));
+        PrintUtil.log(readPfxAndSha1WithRsa(str, merchantCerPath, merchantCerPassword));
     }
 
     /**
@@ -37,10 +37,10 @@ public class ABCSign {
         String jsonKey = "{'key':'value'}1B4I3E3QU18C0101007F00002C32AED5";
 
         // java 代码实现
-        PrintUtil.dateLine("A: " + getSHA256StrJava(jsonKey));
+        PrintUtil.log("A: " + getSHA256StrJava(jsonKey));
 
         // apache工具类
-        PrintUtil.dateLine("B: " + getSHA256StrUseApacheCodec(jsonKey));
+        PrintUtil.log("B: " + getSHA256StrUseApacheCodec(jsonKey));
     }
 
     /**

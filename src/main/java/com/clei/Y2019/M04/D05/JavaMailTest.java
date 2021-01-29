@@ -29,7 +29,7 @@ public class JavaMailTest {
             // ms.sendAttachMail(MAIL_TO);
             // ms.sendMixedMail(MAIL_TO);
         } catch (Exception e) {
-            PrintUtil.dateLine("邮件发送失败！！！");
+            PrintUtil.log("邮件发送失败！！！");
             e.printStackTrace();
         }
     }

@@ -9,7 +9,7 @@ public class BigDecimalTest {
         float a = 12.00f;
         float b = 0.05f;
         float c = new BigDecimal((a * b) / (1 + a)).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-        PrintUtil.dateLine((a * b) / (1 + a));
-        PrintUtil.dateLine(c);
+        PrintUtil.log((a * b) / (1 + a));
+        PrintUtil.log(c);
     }
 }

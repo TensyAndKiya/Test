@@ -177,8 +177,8 @@ public class JdjrSignature {
         Map<String, String> params = new HashMap<>();
         params.put("appId", "appId");
         params.put("bizParam", "{\"actKey\":\"N32MNf\",\"ip\":\"127.0.0.1\",\"phone\":\"18200000000\"}");
-        PrintUtil.dateLine("私钥：" + keyPairs.getPrivateKey());
-        PrintUtil.dateLine("公钥：" + keyPairs.getPublicKey());
+        PrintUtil.log("私钥：" + keyPairs.getPrivateKey());
+        PrintUtil.log("公钥：" + keyPairs.getPublicKey());
         String sign = JdjrSignature.sign(params, keyPairs.getPrivateKey());
         params.put("sign", sign);
         boolean result = JdjrSignature.check(params, keyPairs.getPublicKey());

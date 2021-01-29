@@ -8,11 +8,11 @@ import java.time.format.DateTimeFormatter;
 public class OrderNoTest {
     public static void main(String[] args) {
         LocalDateTime now = LocalDateTime.now();
-        PrintUtil.dateLine(now.getYear());
-        PrintUtil.dateLine(now.getMonthValue());
-        PrintUtil.dateLine(now.getDayOfMonth());
+        PrintUtil.log(now.getYear());
+        PrintUtil.log(now.getMonthValue());
+        PrintUtil.log(now.getDayOfMonth());
 
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
-        PrintUtil.dateLine(now.format(df));
+        PrintUtil.log(now.format(df));
     }
 }

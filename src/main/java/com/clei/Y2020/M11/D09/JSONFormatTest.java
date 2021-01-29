@@ -2,6 +2,7 @@ package com.clei.Y2020.M11.D09;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.clei.utils.PrintUtil;
 
 import java.util.List;
 import java.util.Random;
@@ -17,15 +18,15 @@ public class JSONFormatTest {
 
         Random random = new Random();
         for (int i = 0; i < 10; i++) {
-            System.out.println(random.nextBoolean());
+            PrintUtil.log(random.nextBoolean());
         }
 
         TTT t = new TTT();
 
-        System.out.println(JSONObject.toJSONString(t));
-        System.out.println(JSONObject.toJSONString(t, SerializerFeature.WriteMapNullValue));
-        System.out.println(JSONObject.toJSONString(t, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullListAsEmpty));
-        System.out.println(JSONObject.toJSONString(t, SerializerFeature.WriteMapNullValue, SerializerFeature.QuoteFieldNames));
+        PrintUtil.log(JSONObject.toJSONString(t));
+        PrintUtil.log(JSONObject.toJSONString(t, SerializerFeature.WriteMapNullValue));
+        PrintUtil.log(JSONObject.toJSONString(t, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullListAsEmpty));
+        PrintUtil.log(JSONObject.toJSONString(t, SerializerFeature.WriteMapNullValue, SerializerFeature.QuoteFieldNames));
     }
 
     private static class TTT {

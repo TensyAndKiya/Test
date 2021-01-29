@@ -28,9 +28,9 @@ public class CopyTxtContentTest {
         String str;
         while(null != (str = br.readLine())){
             if(str.contains("cluster")) {
-                PrintUtil.dateLine(file.getAbsolutePath());
-                PrintUtil.dateLine(file.getName());
-                PrintUtil.dateLine("hasaki:::");
+                PrintUtil.log(file.getAbsolutePath());
+                PrintUtil.log(file.getName());
+                PrintUtil.log("hasaki:::");
                 break;
             }
         }

@@ -7,6 +7,6 @@ import java.util.Date;
 public class NullToStringTest {
     public static void main(String[] args) {
         Date date = null;
-        PrintUtil.dateLine(date + "");
+        PrintUtil.log(date + "");
     }
 }

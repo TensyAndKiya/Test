@@ -10,7 +10,7 @@ public class Test {
         String s1 = "aa";
         String s2 = "aa";
 
-        PrintUtil.dateLine("s1 == s2 : " + (s1 == s2));
+        PrintUtil.log("s1 == s2 : " + (s1 == s2));
 
         Test test = null;
 
@@ -21,7 +21,7 @@ public class Test {
     }
 
     public static void test(){
-        PrintUtil.dateLine("哈哈哈");
+        PrintUtil.log("哈哈哈");
     }
 
     /**
@@ -49,9 +49,9 @@ public class Test {
         LocalDate targetDate = date.plusDays(dayDiff);
 
         if(dayDiff < 0 || targetDate.isAfter(monthEnd)){
-            PrintUtil.dateLine(0);
+            PrintUtil.log(0);
         }else {
-            PrintUtil.dateLine(targetDate);
+            PrintUtil.log(targetDate);
         }
 
     }

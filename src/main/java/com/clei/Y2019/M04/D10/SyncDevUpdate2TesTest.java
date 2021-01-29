@@ -17,15 +17,15 @@ public class SyncDevUpdate2TesTest {
     private final static String[] CONFIG_FILES = {"AlipayConfig.java","AlipayWXConfig.java","CdPayConfig.java","application.properties","main.jsp","mainV2.jsp","monitor.jsp","sub_monitor.jsp","inOut.jsp"};
 
     public static void main(String[] args) {
-        PrintUtil.dateLine("Sync A to B");
-        PrintUtil.dateLine("输入A B");
+        PrintUtil.log("Sync A to B");
+        PrintUtil.log("输入A B");
         Scanner input = new Scanner(System.in, "UTF-8");
         String from = input.next();
         String to = input.next();
         String fromPath = "D:\\CLIdeaWorkspace\\" + from + "\\park\\";
         String toPath = "D:\\CLIdeaWorkspace\\" + to + "\\park\\";
         Map<String, String> updateFiles = new HashMap<>();
-        PrintUtil.dateLine("输入需要同步的文件");
+        PrintUtil.log("输入需要同步的文件");
         String str = input.nextLine();
         while (!str.contains("no changes added to commit")) {
             if (str.length() != 0 && str.contains("park-")) {
@@ -48,24 +48,24 @@ public class SyncDevUpdate2TesTest {
         updateFiles.forEach((k, v) -> {
             try {
                 overrideFile(k, v);
-                PrintUtil.dateLine(k + "\t成功！");
+                PrintUtil.log(k + "\t成功！");
             } catch (Exception e) {
                 e.printStackTrace();
                 return;
             }
         });
-        PrintUtil.dateLine("同步修改文件成功！！！");
+        PrintUtil.log("同步修改文件成功！！！");
     }
 
     private static void overrideFile(String path,String toPath) throws Exception{
         File file = new File(path);
         if(!file.exists()){
-            PrintUtil.dateLine("文件 " + path + "不存在！");
+            PrintUtil.log("文件 " + path + "不存在！");
             return ;
         }
         File newFile = new File(toPath);
         if(!newFile.exists()){
-            PrintUtil.dateLine("文件 " + toPath + "不存在！");
+            PrintUtil.log("文件 " + toPath + "不存在！");
             return ;
         }
         FileInputStream fis = null;
@@ -81,7 +81,7 @@ public class SyncDevUpdate2TesTest {
                 fos.write(buffer,0,length);
             }
         }catch (Exception e){
-            PrintUtil.dateLine("求你了大佬，不要报错！！！！");
+            PrintUtil.log("求你了大佬，不要报错！！！！");
             e.printStackTrace();
         }finally {
             if(null != fis){

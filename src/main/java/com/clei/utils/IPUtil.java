@@ -32,7 +32,7 @@ public class IPUtil {
                     .getNetworkInterfaces(); nics.hasMoreElements(); ) {
                 NetworkInterface ifc = nics.nextElement();
                 if (ifc.isUp()) {
-                    PrintUtil.dateLine("Testing interface: " + ifc.getDisplayName());
+                    PrintUtil.log("Testing interface: " + ifc.getDisplayName());
                     if (ifc.getIndex() < lowest || result == null) {
                         lowest = ifc.getIndex();
                     } else if (result != null) {
@@ -45,11 +45,11 @@ public class IPUtil {
                                 .getInetAddresses(); addrs.hasMoreElements(); ) {
                             InetAddress address = addrs.nextElement();
 
-                            PrintUtil.dateLine("displayName : {}, hostName : {}, address : {}, ipV4 : {}, loopBack : {}", ifc.getDisplayName(), address.getHostName(), address.getHostAddress(), (address instanceof Inet4Address), address.isLoopbackAddress());
+                            PrintUtil.log("displayName : {}, hostName : {}, address : {}, ipV4 : {}, loopBack : {}", ifc.getDisplayName(), address.getHostName(), address.getHostAddress(), (address instanceof Inet4Address), address.isLoopbackAddress());
 
                             if (address instanceof Inet4Address
                                     && !address.isLoopbackAddress()) {
-                                PrintUtil.dateLine("Found non-loopback interface: "
+                                PrintUtil.log("Found non-loopback interface: "
                                         + ifc.getDisplayName());
                                 result = address;
                             }
@@ -59,7 +59,7 @@ public class IPUtil {
                 }
             }
         } catch (IOException ex) {
-            PrintUtil.dateLine("Cannot get first non-loopback address", ex);
+            PrintUtil.log("Cannot get first non-loopback address", ex);
         }
 
         if (result != null) {
@@ -69,7 +69,7 @@ public class IPUtil {
         try {
             return InetAddress.getLocalHost();
         } catch (UnknownHostException e) {
-            PrintUtil.dateLine("Unable to retrieve localhost");
+            PrintUtil.log("Unable to retrieve localhost");
         }
 
         return null;
@@ -84,7 +84,7 @@ public class IPUtil {
     private static boolean ignoreInterface(String interfaceName) {
         for (String regex : ignoredInterfaces) {
             if (interfaceName.matches(regex)) {
-                PrintUtil.dateLine("Ignoring interface: " + interfaceName);
+                PrintUtil.log("Ignoring interface: " + interfaceName);
                 return true;
             }
         }

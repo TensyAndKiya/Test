@@ -14,11 +14,11 @@ public class LocalDateTest {
         LocalDate aDate = LocalDate.parse(a, df);
         LocalDate now = LocalDate.now();
 
-        PrintUtil.dateLine("before : " + now.isBefore(now));
-        PrintUtil.dateLine("after : " + now.isAfter(now));
+        PrintUtil.log("before : " + now.isBefore(now));
+        PrintUtil.log("after : " + now.isAfter(now));
 
 
-        PrintUtil.dateLine("差异1 ： " + ChronoUnit.DAYS.between(now, aDate));
+        PrintUtil.log("差异1 ： " + ChronoUnit.DAYS.between(now, aDate));
 
         LocalDateTime ll = LocalDateTime.of(2019, 11, 1, 0, 0);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -27,11 +27,11 @@ public class LocalDateTest {
         String date1 = "2019-11-14 11:11:11";
         String date2 = "2019-11-14 11:11:12";
 
-        PrintUtil.dateLine("差异 ： " + ChronoUnit.SECONDS.between(LocalDateTime.parse(date1, dtf), LocalDateTime.parse(date2, dtf)));
-        PrintUtil.dateLine("差异 ： " + ChronoUnit.DAYS.between(LocalDateTime.parse(date1, dtf), LocalDateTime.parse(date2, dtf)));
+        PrintUtil.log("差异 ： " + ChronoUnit.SECONDS.between(LocalDateTime.parse(date1, dtf), LocalDateTime.parse(date2, dtf)));
+        PrintUtil.log("差异 ： " + ChronoUnit.DAYS.between(LocalDateTime.parse(date1, dtf), LocalDateTime.parse(date2, dtf)));
 
 
-        PrintUtil.dateLine(ll.format(dtf));
-        PrintUtil.dateLine(ll.plusMonths(1).minusDays(1).format(dtf));
+        PrintUtil.log(ll.format(dtf));
+        PrintUtil.log(ll.plusMonths(1).minusDays(1).format(dtf));
     }
 }

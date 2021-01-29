@@ -8,6 +8,6 @@ import java.util.Map;
 public class MapTest {
     public static void main(String[] args){
         Map<String,String> map = new HashMap<>();
-        PrintUtil.dateLine(null == map.get("access"));
+        PrintUtil.log(null == map.get("access"));
     }
 }

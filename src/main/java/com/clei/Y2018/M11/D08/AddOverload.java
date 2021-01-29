@@ -6,7 +6,7 @@ public class AddOverload<T extends Number> {
     public static void main(String[] args){
         AddOverload<Integer> aaa=new AddOverload<>();
         int result=(int)aaa.add(3,4);
-        PrintUtil.dateLine(result);
+        PrintUtil.log(result);
 
         TTT tt=(x,y)->x+y;
         tt.f1(3,4);

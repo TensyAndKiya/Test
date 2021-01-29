@@ -11,9 +11,9 @@ public class StrEqualsTest {
 
         for (int i = 0; i < str2.length(); i++) {
             if(arr1[i] != arr2[i]){
-                PrintUtil.dateLine("index: " + i);
-                PrintUtil.dateLine(str1.substring(i));
-                PrintUtil.dateLine(str2.substring(i));
+                PrintUtil.log("index: " + i);
+                PrintUtil.log(str1.substring(i));
+                PrintUtil.log(str2.substring(i));
                 break;
             }
         }

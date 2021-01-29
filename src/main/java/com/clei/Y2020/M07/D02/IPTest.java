@@ -5,7 +5,7 @@ import com.clei.utils.PrintUtil;
 public class IPTest {
     public static void main(String[] args) {
 
-        PrintUtil.dateLine(validateIP("255.255.255.256"));
+        PrintUtil.log(validateIP("255.255.255.256"));
 
     }
 

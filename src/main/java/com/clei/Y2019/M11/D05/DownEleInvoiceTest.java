@@ -46,13 +46,13 @@ public class DownEleInvoiceTest {
                 str = str.substring(index + MARK_LENGTH,endIndex);
                 Random random = new Random();
                 fileName = fileName + "" + random.nextInt(10) + random.nextInt(10) + random.nextInt(10) + ".pdf";
-                PrintUtil.dateLine(fileName);
+                PrintUtil.log(fileName);
                 getInvoicePdf(str, fileName);
             }
         }
         br.close();
 
-        PrintUtil.dateLine("总共" + count + "个文件");
+        PrintUtil.log("总共" + count + "个文件");
     }
 
     private static void getInvoicePdf(String str,String fileName) throws Exception {
@@ -74,7 +74,7 @@ public class DownEleInvoiceTest {
 
         byteToFile(data,fileName);
 
-        PrintUtil.dateLine(fileName);
+        PrintUtil.log(fileName);
         count++;
 
     }

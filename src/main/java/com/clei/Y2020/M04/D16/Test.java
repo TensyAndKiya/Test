@@ -24,10 +24,10 @@ public class Test {
         // 呵呵呵
         // 嘿嘿嘿
 
-        PrintUtil.dateLine(1000 * 60 * 60 * 24);
+        PrintUtil.log(1000 * 60 * 60 * 24);
 
         BigDecimal a = new BigDecimal("-0.01");
-        PrintUtil.dateLine(a.compareTo(BigDecimal.ZERO));
+        PrintUtil.log(a.compareTo(BigDecimal.ZERO));
 
         Map<String,Object> map = new HashMap<>();
         map.put("no",1);
@@ -56,7 +56,7 @@ public class Test {
         list.add(map);
         list.add(map2);
 
-        PrintUtil.dateLine(JSONObject.toJSONString(list));
+        PrintUtil.log(JSONObject.toJSONString(list));
 
 
         List<Integer> result = new LinkedList<>();
@@ -92,7 +92,7 @@ public class Test {
 
         }
 
-        PrintUtil.dateLine("result: " + result);
+        PrintUtil.log("result: " + result);
 
     }
 

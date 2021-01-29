@@ -10,7 +10,7 @@ public class ThreadTest {
     public static void main(String[] args) {
         /*for (int i = 0; i < LOOP; i++) {
             new Thread( () ->{
-                PrintUtil.dateLine(Thread.currentThread().getName());
+                PrintUtil.log(Thread.currentThread().getName());
             } ).start();
         }*/
         Set<String> set = new CopyOnWriteArraySet<>();
@@ -33,7 +33,7 @@ public class ThreadTest {
         public void run() {
             for(String s : set){
                 if(s.equals("String " + i)){
-                    PrintUtil.dateLine(s);
+                    PrintUtil.log(s);
                     set.remove(s);
                     break;
                 }

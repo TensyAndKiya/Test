@@ -18,9 +18,9 @@ import java.util.concurrent.TimeUnit;
 public class RedisLockTest {
 
     public static void main(String[] args) throws InterruptedException {
-        PrintUtil.dateLine("request begin.");
+        PrintUtil.log("request begin.");
         request("http://localhost:8888/redis/setNx", 600);
-        PrintUtil.dateLine("request end.");
+        PrintUtil.log("request end.");
     }
 
     private static void request(String url, int times) throws InterruptedException {
@@ -85,15 +85,15 @@ public class RedisLockTest {
                     d++;
                     break;
                 default:
-                    PrintUtil.dateLine("未知结果类型");
+                    PrintUtil.log("未知结果类型");
             }
         }
 
         PrintUtil.println("耗时 ： {}ms", end - begin);
-        PrintUtil.dateLine("处理成功... {}", c);
-        PrintUtil.dateLine("处理中... {}", b);
-        PrintUtil.dateLine("处理失败... {}", a);
-        PrintUtil.dateLine("处理出错... {}", d);
+        PrintUtil.log("处理成功... {}", c);
+        PrintUtil.log("处理中... {}", b);
+        PrintUtil.log("处理失败... {}", a);
+        PrintUtil.log("处理出错... {}", d);
     }
 
 }

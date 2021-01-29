@@ -21,11 +21,11 @@ public class StepTest {
         // 这个太慢了 先注释掉
         // step(step);
 
-        PrintUtil.dateLine(num);
+        PrintUtil.log(num);
 
         Long temp = tempNewStep(step);
 
-        PrintUtil.dateLine(temp);
+        PrintUtil.log(temp);
 
     }
 

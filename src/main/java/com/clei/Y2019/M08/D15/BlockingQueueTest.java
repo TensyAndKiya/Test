@@ -26,7 +26,7 @@ public class BlockingQueueTest {
 
         @Override
         public void run() {
-            PrintUtil.dateLine("run2");
+            PrintUtil.log("run2");
             Random random = new Random();
             try {
                 Thread.sleep(random.nextInt(2000));
@@ -56,7 +56,7 @@ public class BlockingQueueTest {
 
         @Override
         public void run() {
-            PrintUtil.dateLine("run1");
+            PrintUtil.log("run1");
             Random random = new Random();
             try {
                 Thread.sleep(random.nextInt(2000));

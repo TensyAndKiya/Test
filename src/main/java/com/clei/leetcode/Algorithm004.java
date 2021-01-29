@@ -37,7 +37,7 @@ public class Algorithm004 {
 
         double median = getMedian(arr1,arr2);
 
-        PrintUtil.dateLine("中位数: " + median);
+        PrintUtil.log("中位数: " + median);
 
     }
 

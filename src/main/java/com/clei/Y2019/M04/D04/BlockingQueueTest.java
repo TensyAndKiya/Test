@@ -16,7 +16,7 @@ public class BlockingQueueTest {
                 configPath.append("/").append(str[i]);
             }
         }
-        PrintUtil.dateLine(path);
-        PrintUtil.dateLine(configPath.toString() + "/conf/");
+        PrintUtil.log(path);
+        PrintUtil.log(configPath.toString() + "/conf/");
     }
 }

@@ -14,7 +14,7 @@ public class HashSetTest {
         }
         try{
             for(String s : set){
-                PrintUtil.dateLine(s);
+                PrintUtil.log(s);
 //                set.add("String " + rand.nextInt(998));
                 if(s.equals("String 89")){
                    set.add("String 100");

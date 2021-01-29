@@ -56,7 +56,7 @@ public class LearnAboutThrowable {
 
 
         } else {
-            PrintUtil.dateLine("你这Java环境有问题！！！rt.jar都没有！！！");
+            PrintUtil.log("你这Java环境有问题！！！rt.jar都没有！！！");
         }
     }
 
@@ -70,7 +70,7 @@ public class LearnAboutThrowable {
         List<ClassNode> subClassList = map.get(className);
         for (String name : classFiles) {
             if (isChildClass(name, className)) {
-                PrintUtil.dateLine(className);
+                PrintUtil.log(className);
                 subClassList.add(new ClassNode(name, map.get(name)));
                 fillSubClassList(name, classFiles, map);
             }

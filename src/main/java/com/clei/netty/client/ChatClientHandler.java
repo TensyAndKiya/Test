@@ -15,6 +15,6 @@ public class ChatClientHandler extends SimpleChannelInboundHandler<String> {
     protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
         PrintUtil.log("channelRead0");
         // 输出消息
-        PrintUtil.dateLine(msg);
+        PrintUtil.log(msg);
     }
 }

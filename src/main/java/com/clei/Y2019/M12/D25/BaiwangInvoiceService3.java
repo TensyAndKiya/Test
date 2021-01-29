@@ -55,7 +55,7 @@ public class BaiwangInvoiceService3 {
         String content = requestData(cInfo, iInfo);
         // content = content.replaceAll("\r","").replaceAll("\n","");
 
-        PrintUtil.dateLine("content " + content);
+        PrintUtil.log("content " + content);
 
         String contentMD5 = MD5(content.getBytes("UTF-8"));
 
@@ -65,13 +65,13 @@ public class BaiwangInvoiceService3 {
 
         String outerInfo = outerInfo(cInfo, content, encryptStr);
 
-        // PrintUtil.dateLine("contentKey : " + encryptStr);
+        // PrintUtil.log("contentKey : " + encryptStr);
 
-        PrintUtil.dateLine("final : " + outerInfo);
+        PrintUtil.log("final : " + outerInfo);
 
         String result = RequestUtils.getHttpConnectResult(outerInfo, "https://dev.fapiao.com:19444/fpt-dsqz/invoice");
 
-        PrintUtil.dateLine("result : " + result);
+        PrintUtil.log("result : " + result);
 
         JSONObject obj = JSONObject.parseObject(result);
 
@@ -86,16 +86,16 @@ public class BaiwangInvoiceService3 {
         // 业务数据内容
         String returnContent = data.getString("content");
 
-        PrintUtil.dateLine("content : " + returnContent);
+        PrintUtil.log("content : " + returnContent);
         byte[] base64 = Base64Util.decode(returnContent);
 
-        PrintUtil.dateLine(new String(base64, "utf-8"));
+        PrintUtil.log(new String(base64, "utf-8"));
 
-        PrintUtil.dateLine("length1 : " + base64.length);
+        PrintUtil.log("length1 : " + base64.length);
         byte[] aesBytes = EncryptUtil.decryptAES(base64, aesKey);
         String finalResult = new String(EncryptUtil.decryptAES(aesBytes, aesKey));
 
-        PrintUtil.dateLine(finalResult);
+        PrintUtil.log(finalResult);
     }
 
     // 外层信息
@@ -246,7 +246,7 @@ public class BaiwangInvoiceService3 {
         content.append("}");
         content.append("}");
 
-        PrintUtil.dateLine("content " + content.toString());
+        PrintUtil.log("content " + content.toString());
 
         String str = Base64Util.encode(content.toString().getBytes("UTF-8"))
                 .replaceAll("\r", "").replaceAll("\n", "");

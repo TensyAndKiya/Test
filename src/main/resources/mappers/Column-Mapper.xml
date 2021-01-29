@@ -406,7 +406,7 @@
         )
     </update>
 
-    <update id="updateReportForcastDate" parameterType="com.clei.Y2020.M09.D22.DateToDate">
+    <update id="updateReportForecastData" parameterType="com.clei.Y2020.M09.D22.DateToDate">
         UPDATE road_report_hour_congestion_forcast
         SET date = #{target}
         WHERE date = #{source};

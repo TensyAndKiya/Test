@@ -10,12 +10,12 @@ public class MathRoundTest {
         double d = 123.1455858123D;
         //method 1
         BigDecimal bd = new BigDecimal(String.valueOf(d));
-        PrintUtil.dateLine(bd);
-        PrintUtil.dateLine(bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        PrintUtil.log(bd);
+        PrintUtil.log(bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
         //method 2
         DecimalFormat df = new DecimalFormat("#.00");
-        PrintUtil.dateLine(df.format(bd.doubleValue()));
+        PrintUtil.log(df.format(bd.doubleValue()));
         //method 3
-        PrintUtil.dateLine(Math.round(d * 100) / 100f);
+        PrintUtil.log(Math.round(d * 100) / 100f);
     }
 }

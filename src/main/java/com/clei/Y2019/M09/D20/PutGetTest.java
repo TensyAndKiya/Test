@@ -14,7 +14,7 @@ public class PutGetTest {
 
     public static void main(String[] args) {
         Runnable r1 = () -> map.put("key", "value" + Math.random());
-        Runnable r2 = () -> PrintUtil.dateLine(map.get("key"));
+        Runnable r2 = () -> PrintUtil.log(map.get("key"));
         int times = 100;
         for (int i = 0; i < times; i++) {
             new Thread(r1).start();

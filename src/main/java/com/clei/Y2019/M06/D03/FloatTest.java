@@ -7,13 +7,13 @@ public class FloatTest {
         double d = 2.1474836E7;
         int i = (int) d;
         float f = 2.1474836E7f;
-        PrintUtil.dateLine(i);
+        PrintUtil.log(i);
 
-        PrintUtil.dateLine("FLOAT_MAX:" + Float.MAX_VALUE);
-        PrintUtil.dateLine("FLOAT_MIN:" + Float.MIN_VALUE);
-        PrintUtil.dateLine("INTEGER_MAX:" + Integer.MAX_VALUE);
-        PrintUtil.dateLine("INTEGER_MIN:" + Integer.MIN_VALUE);
-        PrintUtil.dateLine(Integer.MAX_VALUE / 100);
-        PrintUtil.dateLine(Integer.MAX_VALUE / 100 == f);
+        PrintUtil.log("FLOAT_MAX:" + Float.MAX_VALUE);
+        PrintUtil.log("FLOAT_MIN:" + Float.MIN_VALUE);
+        PrintUtil.log("INTEGER_MAX:" + Integer.MAX_VALUE);
+        PrintUtil.log("INTEGER_MIN:" + Integer.MIN_VALUE);
+        PrintUtil.log(Integer.MAX_VALUE / 100);
+        PrintUtil.log(Integer.MAX_VALUE / 100 == f);
     }
 }

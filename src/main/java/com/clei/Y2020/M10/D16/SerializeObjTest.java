@@ -14,15 +14,15 @@ public class SerializeObjTest {
     public static void main(String[] args) {
 
         String[] arr = {"CC,BB", "DD,EE"};
-        PrintUtil.dateLine(StringUtils.join(arr, ";"));
+        PrintUtil.log(StringUtils.join(arr, ";"));
 
         Vehicle vv = new Vehicle("川A00001", true);
 
         String json = JSONObject.toJSONString(vv);
 
-        PrintUtil.dateLine(json);
+        PrintUtil.log(json);
 
-        PrintUtil.dateLine(JSONObject.parseObject(json, Vehicle.class));
+        PrintUtil.log(JSONObject.parseObject(json, Vehicle.class));
 
         // 结论 通过fastJson来操作没啥影响
         // Boolean / boolean 都没事

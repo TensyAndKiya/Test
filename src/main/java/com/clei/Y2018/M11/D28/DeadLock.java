@@ -26,20 +26,20 @@ class MyThread extends Thread{
     }
     @Override
     public void run(){
-        PrintUtil.dateLine("进程" + this.getName() + "运行中...");
+        PrintUtil.log("进程" + this.getName() + "运行中...");
         synchronized (obj1) {
-            PrintUtil.dateLine("获得obj1");
-            PrintUtil.dateLine("等待获取obj2....................");
+            PrintUtil.log("获得obj1");
+            PrintUtil.log("等待获取obj2....................");
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             synchronized (obj2) {
-                PrintUtil.dateLine("获得obj1");
+                PrintUtil.log("获得obj1");
             }
         }
-        PrintUtil.dateLine("进程" + this.getName() + "结束");
+        PrintUtil.log("进程" + this.getName() + "结束");
     }
 }
 
@@ -56,19 +56,19 @@ class MyThread1 extends Thread{
     }
     @Override
     public void run(){
-        PrintUtil.dateLine("进程" + this.getName() + "运行中...");
+        PrintUtil.log("进程" + this.getName() + "运行中...");
         synchronized (obj2) {
-            PrintUtil.dateLine("获得obj2");
-            PrintUtil.dateLine("等待获取obj1....................");
+            PrintUtil.log("获得obj2");
+            PrintUtil.log("等待获取obj1....................");
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             synchronized (obj1) {
-                PrintUtil.dateLine("获得obj2");
+                PrintUtil.log("获得obj2");
             }
         }
-        PrintUtil.dateLine("进程" + this.getName() + "结束");
+        PrintUtil.log("进程" + this.getName() + "结束");
     }
 }

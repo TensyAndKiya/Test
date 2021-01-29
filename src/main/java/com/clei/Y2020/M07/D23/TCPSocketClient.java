@@ -29,11 +29,11 @@ public class TCPSocketClient {
 
         int length = is.read(buffer);
 
-        PrintUtil.dateLine(length);
+        PrintUtil.log(length);
 
         String content = new String(buffer, 0, length, "UTF-8");
 
-        PrintUtil.dateLine(content);
+        PrintUtil.log(content);
 
         // 再写入
         os = socket.getOutputStream();

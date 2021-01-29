@@ -37,9 +37,9 @@ public class IPInUUIDTest {
 
     public static void main(String[] args) {
         String str = getIPStr();
-        PrintUtil.dateLine("IP:" + IP);
-        PrintUtil.dateLine("IPStr:" + str);
-        PrintUtil.dateLine("IP:" + getIP(str));
+        PrintUtil.log("IP:" + IP);
+        PrintUtil.log("IPStr:" + str);
+        PrintUtil.log("IP:" + getIP(str));
     }
 
     private static String getIPStr(){
