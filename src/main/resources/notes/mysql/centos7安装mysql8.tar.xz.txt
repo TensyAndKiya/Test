@@ -1,0 +1,94 @@
+#卸载系统自带的Mariadb
+[root@hdp265dnsnfs ~]# rpm -qa|grep mariadb
+mariadb-libs-5.5.44-2.el7.centos.x86_64
+[root@hdp265dnsnfs ~]# rpm -e --nodeps mariadb-libs-5.5.44-2.el7.centos.x86_64
+
+# 修改配置文件
+[root@hdp265dnsnfs ~]# vim /etc/my.cnf
+
+#检查mysql是否存在
+[root@hdp265dnsnfs ~]# rpm -qa | grep mysql
+
+#检查mysql组和用户是否存在，如无创建
+[root@hdp265dnsnfs ~]# cat /etc/group | grep mysql
+[root@hdp265dnsnfs ~]#  cat /etc/passwd | grep mysql
+
+#创建mysql用户组
+[root@hdp265dnsnfs ~]# groupadd mysql
+#创建一个用户名为mysql的用户并加入mysql用户组
+[root@hdp265dnsnfs ~]# useradd -g mysql mysql
+#指定password
+[root@hdp265dnsnfs ~]# passwd mysql
+Changing password for user mysql.
+New password:
+BAD PASSWORD: The password is a palindrome
+Retype new password:
+passwd: all authentication tokens updated successfully.
+
+# 解压
+xz -d mysql8.tar.xz
+tar mysql8.tar
+
+# 目录创建
+cd mysql
+mkdir data logs
+
+# 更改用户和组
+chown -R mysql:mysql mysql/
+配置/etc/my.cnf
+我的配置详见my.cnf
+
+cd /bin
+./mysqld  --initialize
+初始化密码可以在mysql/logs/error.log里找到（我的是在这里找到的）
+
+[root@hdp265dnsnfs mysql8]# cp ./support-files/mysql.server /etc/init.d/mysqld
+# 复制代码
+[root@hdp265dnsnfs mysql8]# /etc/init.d/mysqld restart
+Shutting down MySQL.. SUCCESS!
+Starting MySQL. SUCCESS!
+
+#设置开机启动
+
+[root@hdp265dnsnfs mysql8]# chkconfig --level 35 mysqld on
+[root@hdp265dnsnfs mysql8]# chkconfig --list mysqld
+
+[root@hdp265dnsnfs mysql8]# chmod +x /etc/rc.d/init.d/mysqld
+[root@hdp265dnsnfs mysql8]# chkconfig --add mysqld
+[root@hdp265dnsnfs mysql8]# chkconfig --list mysqld
+[root@hdp265dnsnfs mysql8]# service mysqld status
+ SUCCESS! MySQL running (4475)
+
+export PATH=$PATH:/var/mysql8/bin
+
+[root@hdp265dnsnfs mysql8]# source /etc/profile
+
+[root@hdp265dnsnfs bin]# mysql -uroot -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 13
+Server version: 8.0.23 MySQL Community Server - GPL
+
+alter user 'root'@'localhost' identified with mysql_native_password by 'myPassword' 来修改密码
+最后来个 create user 'kiya'@'%' identified with mysql_native_password by 'myPassword' 让任何主机可以用kiya登录
+
+给予所有权限，让用这个的小伙子能像root一样为所欲为，慎用哦！！！
+GRANT ALL PRIVILEGES ON *.* TO 'kiya'@'%';
+
+flush privileges;
+
+看看端口开启否。。
+
+[root@LINKINPARK ~]# firewall-cmd --query-port 3306/tcp
+no
+[root@LINKINPARK ~]# firewall-cmd --permanent --zone=public --add-port=3306/tcp
+success
+[root@LINKINPARK ~]# firewall-cmd --reload
+success
+[root@LINKINPARK ~]# systemctl restart firewalld.service
+[root@LINKINPARK ~]# firewall-cmd --query-port 3306/tcp
+yes
+[root@LINKINPARK ~]# firewall-cmd --zone=public --list-ports
+3306/tcp
+
+成功。。

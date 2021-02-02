@@ -160,8 +160,11 @@ public class OkHttpUtil {
             sb.append(URLEncoder.encode(String.valueOf(next.getValue()), "UTF-8"));
             sb.append('&');
         }
-        if ('&' == sb.charAt(sb.length() - 1)) {
-            sb.deleteCharAt(sb.length() - 1);
+        // 最后一个字符处理
+        int endIndex = sb.length() - 1;
+        char lastChar = sb.charAt(endIndex);
+        if ('?' == lastChar || '&' == lastChar) {
+            sb.deleteCharAt(lastChar);
         }
         return sb.toString();
     }
@@ -255,11 +258,13 @@ public class OkHttpUtil {
                 String result = null;
                 ResponseBody body = response.body();
                 try {
-                    if (charsets.length > 0) {
-                        byte[] bytes = body.bytes();
-                        result = new String(bytes, charsets[0]);
-                    } else {
-                        result = body.string();
+                    if (null != body) {
+                        if (charsets.length > 0) {
+                            byte[] bytes = body.bytes();
+                            result = new String(bytes, charsets[0]);
+                        } else {
+                            result = body.string();
+                        }
                     }
                 } catch (IOException e) {
                     PrintUtil.log("", e);

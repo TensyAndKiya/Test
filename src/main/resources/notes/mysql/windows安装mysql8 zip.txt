@@ -1,4 +1,4 @@
-Mysql 5.7 Zip 安装步骤
+Mysql 8 Zip 安装步骤
 
 1. my.ini
 放置于mysql根目录下
