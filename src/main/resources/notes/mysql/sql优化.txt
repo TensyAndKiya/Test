@@ -77,7 +77,7 @@ SERIALIZABLE         X    X        X
 # 当前读与快照读
 当前读【select ... lock in share mode; select ... for update; update ; delete ; insert ;】
     加了锁的增删改查语句，读取的是最新版本的数据，读取后保证其它并发事务不能修改当前记录，给读取的记录加了锁
-快照读取【非SERIALIZABLE隔离级别下的不加锁的select语句】
+快照读【非SERIALIZABLE隔离级别下的不加锁的select语句】
 
 # 间隙锁 = gap锁【next-key锁 = 行锁 + gap锁】
 
