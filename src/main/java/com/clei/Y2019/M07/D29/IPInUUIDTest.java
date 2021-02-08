@@ -2,7 +2,6 @@ package com.clei.Y2019.M07.D29;
 
 import com.clei.utils.PrintUtil;
 
-import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.UUID;
@@ -12,17 +11,16 @@ import java.util.UUID;
  * 网关返回时根据IP返回给指定服务器
  */
 public class IPInUUIDTest {
+
     private static String IP;
     private static String PREFIX = "";
-    // 模拟logger
-    private static PrintStream OUT = System.out;
 
     static {
         try {
             IP = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
             e.printStackTrace();
-            OUT.println("error");
+            PrintUtil.println("error");
             IP = "127.0.0.1";
         }
         String arr[] = IP.split("[.]");
@@ -42,26 +40,26 @@ public class IPInUUIDTest {
         PrintUtil.log("IP:" + getIP(str));
     }
 
-    private static String getIPStr(){
+    private static String getIPStr() {
         String uuid = uuid();
-        String result = PREFIX + uuid.substring(0,uuid.length() - PREFIX.length());
+        String result = PREFIX + uuid.substring(0, uuid.length() - PREFIX.length());
         return result;
     }
 
-    private static String getIP(String IPStr){
+    private static String getIP(String IPStr) {
         String ip = "";
         for (int i = 0; i < 4; i++) {
-            String str = IPStr.substring(i * 2,i * 2 + 2);
-            if(str.startsWith("G")){
-                str = str.substring(1,2);
+            String str = IPStr.substring(i * 2, i * 2 + 2);
+            if (str.startsWith("G")) {
+                str = str.substring(1, 2);
             }
-            ip += Integer.valueOf(str,16) + ".";
+            ip += Integer.valueOf(str, 16) + ".";
         }
-        ip = ip.substring(0,ip.length() - 1);
+        ip = ip.substring(0, ip.length() - 1);
         return ip;
     }
 
-    private static String uuid(){
+    private static String uuid() {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }
 }

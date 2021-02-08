@@ -59,11 +59,11 @@ public class TenPersonRace {
 
         // 全部
         PrintUtil.log("全部");
-        sList.forEach(System.out::println);
+        sList.forEach(PrintUtil::println);
 
         // 前三名
         PrintUtil.log("前三");
-        sList.stream().limit(3).forEach(System.out::println);
+        sList.stream().limit(3).forEach(PrintUtil::println);
 
         // 平均成绩
         PrintUtil.log("平均成绩");

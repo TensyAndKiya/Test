@@ -1,5 +1,7 @@
 package com.clei.Y2019.M06.D29;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.function.Consumer;
 
 import static com.clei.utils.PrintUtil.println;
@@ -34,7 +36,7 @@ public class Java8Test1 {
         println("a - b : {}",operation(a,b,subtract));
         println("a * b : {}",operation(a,b,multiply));
 
-        Consumer<String> consumer = System.out::println;
+        Consumer<String> consumer = PrintUtil::println;
         consumer.accept("这个东西也算个lambda吗？");
     }
 

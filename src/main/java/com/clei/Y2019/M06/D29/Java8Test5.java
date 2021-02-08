@@ -22,17 +22,17 @@ public class Java8Test5 {
 
         // 找出姓王的
         List<Person> listWang = list.stream().filter(p -> p.getName().startsWith("王")).collect(Collectors.toList());
-        listWang.forEach(System.out :: println);
+        listWang.forEach(PrintUtil::println);
         // 找出女人的数目
         long girlCount = list.stream().filter(v -> v.getSex() == 0).count();
         PrintUtil.log(girlCount);
 
         // 排序
         PrintUtil.log("原来顺序");
-        list.forEach(System.out::println);
+        list.forEach(PrintUtil::println);
         PrintUtil.log("排序后");
         list.sort(Comparator.comparingInt(Person::getAge).reversed());
-        list.forEach(System.out :: println);
+        list.forEach(PrintUtil::println);
 
         // 所有人
         String everyone = list.stream().map(Person::getName).collect(Collectors.joining(","));
