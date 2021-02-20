@@ -47,7 +47,7 @@ public class NumUtil {
             throw new RuntimeException("你是真滴沙雕！");
         }
 
-        // 获取10进制的num
+        // 获取from进制的num
         int num = Integer.parseInt(str, from);
 
         // 转成to进制的String
@@ -112,6 +112,21 @@ public class NumUtil {
      */
     public static boolean isOdd(int num) {
         return 1 == (1 & num);
+    }
+
+    /**
+     * 阶乘 n!
+     *
+     * @param n
+     */
+    public static int factorial(int n) {
+        if (n < 2) {
+            return 1;
+        }
+        if (n > 12) {
+            throw new RuntimeException("int类型会溢出");
+        }
+        return n * factorial(n - 1);
     }
 
     public static void main(String[] args) {

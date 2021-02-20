@@ -1,9 +1,13 @@
 package com.clei.utils;
 
+import org.springframework.util.CollectionUtils;
+
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Random;
+import java.util.StringJoiner;
 import java.util.regex.Pattern;
 
 /**
@@ -167,7 +171,7 @@ public class StringUtil {
 
     public static String[] arrayRemoveDuplicate() {
         String[] array = new String[0];
-        array = new HashSet<String>(Arrays.asList(array)).toArray(array);
+        array = new HashSet<>(Arrays.asList(array)).toArray(array);
         return array;
     }
 
@@ -186,5 +190,56 @@ public class StringUtil {
         char[] arr = str.toCharArray();
         ArrayUtil.reverse(arr);
         return new String(arr);
+    }
+
+    /**
+     * 字符串拼接
+     * 通过StringJoiner实现
+     *
+     * @param list       字符串集合
+     * @param emptyValue 字符串集合为空时返回的值
+     * @param delimiter  分隔符
+     * @param prefix     前缀
+     * @param suffix     后缀
+     * @return
+     */
+    public static String join(Collection<String> list, String emptyValue, String delimiter, String prefix, String suffix) {
+        if (CollectionUtils.isEmpty(list)) {
+            return emptyValue;
+        }
+        StringJoiner joiner = new StringJoiner(delimiter, prefix, suffix);
+        for (String s : list) {
+            joiner.add(s);
+        }
+        return joiner.toString();
+    }
+
+    /**
+     * 字符串拼接
+     * 自己通过StringBuilder实现
+     *
+     * @param list       字符串集合
+     * @param emptyValue 字符串集合为空时返回的值
+     * @param delimiter  分隔符
+     * @param prefix     前缀
+     * @param suffix     后缀
+     * @return
+     */
+    public static String strJoin(Collection<String> list, String emptyValue, String delimiter, String prefix, String suffix) {
+        if (CollectionUtils.isEmpty(list)) {
+            return emptyValue;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(prefix);
+        for (String s : list) {
+            sb.append(s);
+            sb.append(delimiter);
+        }
+        if (isNotEmpty(delimiter)) {
+            int length = sb.length();
+            sb.delete(length - delimiter.length(), length);
+        }
+        sb.append(suffix);
+        return sb.toString();
     }
 }

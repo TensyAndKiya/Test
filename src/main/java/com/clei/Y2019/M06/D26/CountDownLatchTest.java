@@ -1,6 +1,9 @@
 package com.clei.Y2019.M06.D26;
 
+import com.clei.utils.ThreadUtil;
+
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import static com.clei.utils.PrintUtil.println;
@@ -13,28 +16,29 @@ public class CountDownLatchTest {
     private static CountDownLatch countDownLatch = new CountDownLatch(2);
 
     public static void main(String[] args) {
+        ThreadPoolExecutor pool = ThreadUtil.pool();
 
-        new Thread(() -> {
-            try{
+        pool.execute(() -> {
+            try {
                 Thread.sleep(2500);
-            }catch (Exception e){
+            } catch (Exception e) {
                 // 吃掉异常
             }
             println("吃饭");
             countDownLatch.countDown();
-        }).start();
+        });
 
-        new Thread(() -> {
-            try{
+        pool.execute(() -> {
+            try {
                 Thread.sleep(500);
-            }catch (Exception e){
+            } catch (Exception e) {
                 // 吃掉异常
             }
             println("学习");
             countDownLatch.countDown();
-        }).start();
+        });
 
-        new Thread(() -> {
+        pool.execute(() -> {
             try {
                 // 一直要吃饭后学习后才睡觉
                 // countDownLatch.await();
@@ -46,6 +50,8 @@ public class CountDownLatchTest {
                 println("异常！！！");
             }
             println("睡觉");
-        }).start();
+        });
+
+        pool.shutdown();
     }
 }
