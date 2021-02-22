@@ -49,5 +49,4 @@ public class Person {
                 ", sex=" + (sex == 1 ? "男" : "女") +
                 '}';
     }
-
 }

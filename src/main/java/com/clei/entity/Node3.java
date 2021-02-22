@@ -78,22 +78,8 @@ public class Node3 {
         return sb.toString();
     }
 
-    /*@Override
-    public String toString() {
-        return "Node3{" +
-                "i=" + i +
-                ", left=" + left +
-                ", middle=" + middle +
-                ", right=" + right +
-                '}';
-    }*/
-
     public int getI() {
         return i;
-    }
-
-    public void queueI(int i) {
-        this.i = i;
     }
 
     public String getName() {
@@ -108,23 +94,11 @@ public class Node3 {
         return left;
     }
 
-    public void queueLeft(Node3 left) {
-        this.left = left;
-    }
-
     public Node3 getMiddle() {
         return middle;
     }
 
-    public void queueMiddle(Node3 middle) {
-        this.middle = middle;
-    }
-
     public Node3 getRight() {
         return right;
-    }
-
-    public void queueRight(Node3 right) {
-        this.right = right;
     }
 }
