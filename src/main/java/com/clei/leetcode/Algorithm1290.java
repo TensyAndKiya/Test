@@ -54,7 +54,7 @@ public class Algorithm1290 {
         PrintUtil.log(getDecimalValue(a));
     }
 
-    public static int getDecimalValue(ListNode head) {
+    private static int getDecimalValue(ListNode head) {
         int sum = 0;
         while (null != head) {
             sum = sum * 2 + head.val;

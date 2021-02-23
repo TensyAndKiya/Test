@@ -30,6 +30,8 @@ import java.util.Map;
  * 来源：力扣（LeetCode）
  * 链接：https://leetcode-cn.com/problems/longest-substring-without-repeating-characters
  * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+ *
+ * @author KIyA
  */
 public class Algorithm0003 {
 
@@ -41,35 +43,36 @@ public class Algorithm0003 {
 
     /**
      * 伸缩滑块 一次循环
+     *
      * @param str
      * @return
      */
     public static int length(String str) {
-        if(null == str || 0 == str.length()){
+        if (null == str || 0 == str.length()) {
             return 0;
         }
 
         int length = str.length();
         int max = 0;
 
-        int a = 0,b;
+        int a = 0, b;
 
-        Map<Character,Integer> map = new HashMap<>();
+        Map<Character, Integer> map = new HashMap<>();
         for (int i = 0; i < length; i++) {
             b = i;
             Character c = str.charAt(i);
 
             // 遇到相同的字符后 左端向右收缩舍弃老字符
             Integer oldIndex = map.get(c);
-            if(null != oldIndex && oldIndex >= a){
+            if (null != oldIndex && oldIndex >= a) {
                 a = oldIndex + 1;
             }
 
-            map.put(c,i);
+            map.put(c, i);
 
             int temp = b - a + 1;
 
-            if(temp > max){
+            if (temp > max) {
                 max = temp;
             }
         }

@@ -44,7 +44,7 @@ public class Algorithm0697 {
         PrintUtil.log(findShortestSubArray(array));
     }
 
-    public static int findShortestSubArray(int[] nums) {
+    private static int findShortestSubArray(int[] nums) {
         int length = nums.length;
         if (length < 2) {
             return length;

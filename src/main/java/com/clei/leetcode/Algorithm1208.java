@@ -47,7 +47,7 @@ public class Algorithm1208 {
         PrintUtil.log(equalSubstring("abcd", "cdef", 1));
     }
 
-    public static int equalSubstring(String s, String t, int maxCost) {
+    private static int equalSubstring(String s, String t, int maxCost) {
         char[] arr1 = s.toCharArray();
         char[] arr2 = t.toCharArray();
         int length1 = s.length();

@@ -43,7 +43,7 @@ public class Algorithm0007 {
         PrintUtil.log(reverse(num));
     }
 
-    public static int reverse(int x) {
+    private static int reverse(int x) {
         int reverseNum = 0;
         while (x != 0) {
             int temp = x % 10;

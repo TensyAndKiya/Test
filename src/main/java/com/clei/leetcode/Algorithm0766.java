@@ -55,7 +55,7 @@ public class Algorithm0766 {
         // {15,0,36,59,71,15,26}
     }
 
-    public static boolean isToeplitzMatrix(int[][] matrix) {
+    private static boolean isToeplitzMatrix(int[][] matrix) {
         int x = matrix.length;
         if (x < 2) {
             return true;

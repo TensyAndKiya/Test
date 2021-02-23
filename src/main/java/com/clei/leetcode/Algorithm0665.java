@@ -35,7 +35,7 @@ public class Algorithm0665 {
         PrintUtil.log(checkPossibility(new int[]{3, 4, 2, 3}));
     }
 
-    public static boolean checkPossibility(int[] nums) {
+    private static boolean checkPossibility(int[] nums) {
         int length = nums.length;
         boolean changed = false;
         for (int i = 1; i < length; i++) {

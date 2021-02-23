@@ -32,7 +32,7 @@ public class Algorithm1052 {
         PrintUtil.log(maxSatisfied(customers, grumpy, x));
     }
 
-    public static int maxSatisfied(int[] customers, int[] grumpy, int X) {
+    private static int maxSatisfied(int[] customers, int[] grumpy, int X) {
         int length = customers.length;
         if (X >= length) {
             int sum = 0;

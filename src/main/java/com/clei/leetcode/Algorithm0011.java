@@ -39,7 +39,7 @@ public class Algorithm0011 {
         PrintUtil.log(maxArea(arr));
     }
 
-    public static int maxArea(int[] height) {
+    private static int maxArea(int[] height) {
         int length = height.length;
         int start = 0;
         int end = length - 1;

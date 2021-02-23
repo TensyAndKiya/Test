@@ -25,6 +25,8 @@ import com.clei.utils.PrintUtil;
  * 来源：力扣（LeetCode）
  * 链接：https://leetcode-cn.com/problems/monotone-increasing-digits
  * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+ *
+ * @author KIyA
  */
 public class Algorithm0738 {
 
@@ -32,7 +34,7 @@ public class Algorithm0738 {
         PrintUtil.log(monotoneIncreasingDigits(332));
     }
 
-    public static int monotoneIncreasingDigits(int N) {
+    private static int monotoneIncreasingDigits(int N) {
         String str = String.valueOf(N);
         int length = str.length();
         StringBuilder sb = new StringBuilder(length);
@@ -57,7 +59,7 @@ public class Algorithm0738 {
         return Integer.parseInt(sb.toString());
     }
 
-    public static void setSb(StringBuilder sb) {
+    private static void setSb(StringBuilder sb) {
         int length = sb.length();
         for (int j = length - 1; j > 0; j--) {
             char c1 = sb.charAt(j);

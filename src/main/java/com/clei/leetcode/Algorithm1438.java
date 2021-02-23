@@ -54,7 +54,7 @@ public class Algorithm1438 {
      * @param limit
      * @return
      */
-    public static int longestSubarray(int[] nums, int limit) {
+    private static int longestSubarray(int[] nums, int limit) {
         LinkedList<Integer> queMax = new LinkedList<>();
         LinkedList<Integer> queMin = new LinkedList<>();
         int n = nums.length;
