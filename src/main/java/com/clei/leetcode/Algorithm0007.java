@@ -35,7 +35,7 @@ import com.clei.utils.PrintUtil;
  *
  * @author KIyA
  */
-public class Algorithm007 {
+public class Algorithm0007 {
 
     public static void main(String[] args) {
         int num = -132;

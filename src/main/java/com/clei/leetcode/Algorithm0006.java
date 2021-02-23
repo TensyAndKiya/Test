@@ -44,7 +44,7 @@ import com.clei.utils.PrintUtil;
  *
  * @author KIyA
  */
-public class Algorithm006 {
+public class Algorithm0006 {
 
     public static void main(String[] args) {
         PrintUtil.log(convert("PAYPALISHIRING", 3));

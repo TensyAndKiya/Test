@@ -36,7 +36,7 @@ import java.util.Set;
  *
  * @author KIyA
  */
-public class Algorithm697 {
+public class Algorithm0697 {
 
     public static void main(String[] args) {
         int[] array = {1, 2, 2, 3, 1, 4, 2};

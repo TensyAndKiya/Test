@@ -94,7 +94,7 @@ import com.clei.utils.PrintUtil;
  *
  * @author KIyA
  */
-public class Algorithm008 {
+public class Algorithm0008 {
 
     public static void main(String[] args) {
         String str = "2147483648";

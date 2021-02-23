@@ -34,7 +34,7 @@ import com.clei.utils.PrintUtil;
  *
  * @author KIyA
  */
-public class Algorithm005 {
+public class Algorithm0005 {
 
     public static void main(String[] args) {
         PrintUtil.log(longestPalindrome("ac"));

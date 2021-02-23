@@ -43,7 +43,7 @@ import com.clei.utils.PrintUtil;
  *
  * @author KIyA
  */
-public class Algorithm766 {
+public class Algorithm0766 {
 
     public static void main(String[] args) {
         // int[][] arr = new int[][]{{1, 2, 3, 4}, {5, 1, 2, 3}, {9, 5, 1, 2}};

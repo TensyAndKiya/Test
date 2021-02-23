@@ -29,7 +29,7 @@ import com.clei.utils.PrintUtil;
  *
  * @author KIyA
  */
-public class Algorithm665 {
+public class Algorithm0665 {
 
     public static void main(String[] args) {
         PrintUtil.log(checkPossibility(new int[]{3, 4, 2, 3}));

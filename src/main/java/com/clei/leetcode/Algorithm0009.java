@@ -39,7 +39,7 @@ import com.clei.utils.PrintUtil;
  *
  * @author KIyA
  */
-public class Algorithm009 {
+public class Algorithm0009 {
 
     public static void main(String[] args) {
         int num = 121;

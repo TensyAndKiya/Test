@@ -28,14 +28,14 @@ import com.clei.utils.PrintUtil;
  * 链接：https://leetcode-cn.com/problems/median-of-two-sorted-arrays
  * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
  */
-public class Algorithm004 {
+public class Algorithm0004 {
 
     public static void main(String[] args) {
 
         int[] arr1 = {};
         int[] arr2 = {};
 
-        double median = getMedian(arr1,arr2);
+        double median = getMedian(arr1, arr2);
 
         PrintUtil.log("中位数: " + median);
 

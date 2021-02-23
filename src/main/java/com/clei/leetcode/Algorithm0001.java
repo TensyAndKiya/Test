@@ -24,17 +24,17 @@ import java.util.Map;
  * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
  * @since 2019-12-28
  */
-public class Algorithm001 {
+public class Algorithm0001 {
 
     public static void main(String[] args) {
-        int[] array = {3,3,3,5};
+        int[] array = {3, 3, 3, 5};
 
-        PrintUtil.println(Arrays.toString(twoSum(array,8)));
+        PrintUtil.println(Arrays.toString(twoSum(array, 8)));
     }
 
 
     public static int[] twoSum(int[] nums, int target) {
-        Map<Integer,Integer> map = new HashMap<>();
+        Map<Integer, Integer> map = new HashMap<>();
 
         for(int i = 0; i < nums.length; i ++){
             int j = nums[i];
