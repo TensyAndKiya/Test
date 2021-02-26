@@ -3,6 +3,7 @@ package com.clei.leetcode;
 import com.clei.utils.PrintUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,13 +32,12 @@ import java.util.List;
 public class Algorithm0015 {
 
     public static void main(String[] args) {
-        int[] arr = {-1, 0, 1, 2, -1, -4};
+        int[] arr = {3, 0, -2, -1, 1, 2};
         List<List<Integer>> result = threeSum(arr);
         for (List<Integer> l : result) {
             PrintUtil.log(l);
         }
     }
-
 
     private static List<List<Integer>> threeSum(int[] nums) {
         int length = nums.length;
@@ -45,7 +45,41 @@ public class Algorithm0015 {
             return new ArrayList<>(0);
         }
         List<List<Integer>> result = new ArrayList<>();
-        // TODO
+        // 排序
+        Arrays.sort(nums);
+        // 循环一
+        for (int i = 0; i < length; i++) {
+            // 第一个数都大于0 无解
+            if (nums[i] > 0) {
+                break;
+            }
+            // 保证与上次不同
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            int target = -nums[i];
+            int k = length - 1;
+            // 循环二
+            for (int j = i + 1; j < length; j++) {
+                if (j > i + 1 && nums[j] == nums[j - 1]) {
+                    continue;
+                }
+                // k值更改 保证j在k左
+                while (j < k && nums[j] + nums[k] > target) {
+                    k--;
+                }
+                if (j == k) {
+                    break;
+                }
+                if (nums[j] + nums[k] == target) {
+                    List<Integer> l = new ArrayList<>(3);
+                    l.add(nums[i]);
+                    l.add(nums[j]);
+                    l.add(nums[k]);
+                    result.add(l);
+                }
+            }
+        }
         return result;
     }
 
