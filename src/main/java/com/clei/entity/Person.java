@@ -5,7 +5,7 @@ package com.clei.entity;
  *
  * @author
  */
-public class Person {
+public class Person implements Comparable<Person> {
 
     private String name;
     private int age;
@@ -48,5 +48,19 @@ public class Person {
                 ", age=" + age +
                 ", sex=" + (sex == 1 ? "男" : "女") +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Person o) {
+        int compare = this.name.compareTo(o.getName());
+        if (0 == compare) {
+            compare = this.sex - o.getSex();
+            if (0 == compare) {
+                return Integer.compare(this.age, o.getAge());
+            }
+        } else {
+            return compare;
+        }
+        return compare;
     }
 }
