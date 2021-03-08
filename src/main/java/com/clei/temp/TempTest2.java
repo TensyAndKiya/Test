@@ -26,6 +26,9 @@ public class TempTest2 {
         list1.retainAll(list2);
         PrintUtil.log(list1);
         //
-        PrintUtil.log(DateUtil.formatMillis(1614064127713L));
+        PrintUtil.log(DateUtil.formatMillis(1615172083862L));
+
+        PrintUtil.log(DateUtil.toEpochSecond("2021-03-05 18:08:08"));
+        PrintUtil.log(DateUtil.toEpochMilli("2021-03-05 18:08:08"));
     }
 }

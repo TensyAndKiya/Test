@@ -227,10 +227,24 @@ public class DateUtil {
         return toEpochMilli(parse(date));
     }
 
+    /**
+     * LocalDateTime -> epochSecond
+     *
+     * @param localDateTime
+     * @return
+     */
     public static long toEpochSecond(LocalDateTime localDateTime) {
-        validateDateTime(localDateTime);
-        return localDateTime.toEpochSecond(ZONE_OFFSET);
-        // return toInstant(localDateTime).getEpochSecond();
+        return toEpochSecond(localDateTime, false);
+    }
+
+    /**
+     * String -> epochSecond
+     *
+     * @param date
+     * @return
+     */
+    public static long toEpochSecond(String date) {
+        return toEpochSecond(parse(date), true);
     }
 
     /**
@@ -350,6 +364,21 @@ public class DateUtil {
         if (null == str || "".equals(str)) {
             throw new IllegalArgumentException("传入字符串为" + (null == str ? "null！" : "空串！"));
         }
+    }
+
+    /**
+     * LocalDateTime -> epochSecond
+     *
+     * @param localDateTime
+     * @param valid         数据是否可信 true是 false否
+     * @return
+     */
+    private static long toEpochSecond(LocalDateTime localDateTime, boolean valid) {
+        if (!valid) {
+            validateDateTime(localDateTime);
+        }
+        return localDateTime.toEpochSecond(ZONE_OFFSET);
+        // return toInstant(localDateTime).getEpochSecond();
     }
 
     /**

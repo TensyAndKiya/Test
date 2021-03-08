@@ -170,16 +170,32 @@ public class PrintUtil {
      * 打印分割线
      */
     public static void separatorLine() {
+        separatorLine(false);
+    }
+
+    /**
+     * 打印分割线
+     *
+     * @param line 是否先换行
+     */
+    public static void separatorLine(boolean line) {
+        if (line) {
+            println();
+        }
         println(SEPARATOR_LINE);
     }
 
     /**
      * 打印分割线 使用指定分隔符
      *
-     * @param separator
+     * @param separator 分隔符
+     * @param line      是否先换行
      */
-    public static void separatorLine(char separator) {
+    public static void separatorLine(char separator, boolean line) {
         StringBuilder sb = new StringBuilder(SEPARATOR_LINE_LENGTH);
+        if (line) {
+            sb.append('\n');
+        }
         for (int i = 0; i < SEPARATOR_LINE_LENGTH; i++) {
             sb.append(separator);
         }
