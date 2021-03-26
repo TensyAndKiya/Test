@@ -16,6 +16,15 @@ import io.netty.handler.codec.string.StringEncoder;
  */
 public class ChatClientInitializer extends ChannelInitializer<SocketChannel> {
 
+    /**
+     * 用户id
+     */
+    private String userId;
+
+    public ChatClientInitializer(String userId) {
+        this.userId = userId;
+    }
+
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
         PrintUtil.log("initChannel");
@@ -23,6 +32,6 @@ public class ChatClientInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast("framer", new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
         pipeline.addLast("decoder", new StringDecoder());
         pipeline.addLast("encoder", new StringEncoder());
-        pipeline.addLast("handler", new ChatClientHandler());
+        pipeline.addLast("handler", new ChatClientHandler(userId));
     }
 }

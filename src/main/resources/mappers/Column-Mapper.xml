@@ -7,6 +7,7 @@
         FROM information_schema.`COLUMNS`
         WHERE TABLE_SCHEMA = #{database}
         AND TABLE_NAME = #{table}
+        ORDER BY ORDINAL_POSITION ASC;
     </select>
 
     <insert id="batchInsertRoadInfo" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="roadId">

@@ -39,7 +39,5 @@ public class PictureComposeTest {
         // 输出
         graphics.dispose();
         ImageIO.write(image, "JPEG", new File("D:\\Work\\KIyA\\temp\\images\\result.jpg"));
-
     }
-
 }

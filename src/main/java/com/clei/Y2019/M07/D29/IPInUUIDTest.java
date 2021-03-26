@@ -1,10 +1,10 @@
 package com.clei.Y2019.M07.D29;
 
 import com.clei.utils.PrintUtil;
+import com.clei.utils.StringUtil;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.UUID;
 
 /**
  * 需求是把服务器的IP放入一个32位的uuid中
@@ -41,7 +41,7 @@ public class IPInUUIDTest {
     }
 
     private static String getIPStr() {
-        String uuid = uuid();
+        String uuid = StringUtil.uuid();
         String result = PREFIX + uuid.substring(0, uuid.length() - PREFIX.length());
         return result;
     }
@@ -57,9 +57,5 @@ public class IPInUUIDTest {
         }
         ip = ip.substring(0, ip.length() - 1);
         return ip;
-    }
-
-    private static String uuid() {
-        return UUID.randomUUID().toString().replaceAll("-", "");
     }
 }

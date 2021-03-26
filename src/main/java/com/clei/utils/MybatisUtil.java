@@ -91,9 +91,9 @@ public class MybatisUtil {
 
         // PrintUtil.printMemoryInfo();
 
-        insertVehicleState(env);
+        // insertVehicleState(env);
 
-        // printResultMapAndColumns(env);
+        printResultMapAndColumns(env);
 
         // ---------------Vehicle End---------------
     }
@@ -1499,8 +1499,7 @@ public class MybatisUtil {
         final String columnName = cn;
         final String columnType = ct;
 
-        list.forEach(e -> {
-
+        for (Map<String, String> e : list) {
             String column = e.get(columnName);
             String type = e.get(columnType);
             resultMap.append("\n");
@@ -1545,8 +1544,7 @@ public class MybatisUtil {
             updateSql.append("=#{");
             updateSql.append(property);
             updateSql.append("},\n");
-
-        });
+        }
         resultMap.append("\n</resultMap>");
         columnSql.deleteCharAt(columnSql.length() - 1);
         columnSql.append("\n</sql>");

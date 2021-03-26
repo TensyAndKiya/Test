@@ -73,7 +73,7 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<String> {
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, String msg) {
         PrintUtil.log("channelRead0");
         Channel client = ctx.channel();
         String socketAddress = client.remoteAddress().toString();
@@ -82,11 +82,13 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<String> {
         msg = msg + '\n';
         // 给所有人发消息
         for (Channel channel : channelGroup) {
-            if (client != channel) {
+            /*if (client != channel) {
                 channel.writeAndFlush("[" + socketAddress + "] " + msg);
             } else {
                 channel.writeAndFlush("[俺] " + msg);
-            }
+            }*/
+            // channel.writeAndFlush(socketAddress + "]|[" + msg);
+            channel.writeAndFlush(msg);
         }
     }
 

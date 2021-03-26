@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.StringJoiner;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**
@@ -241,5 +242,14 @@ public class StringUtil {
         }
         sb.append(suffix);
         return sb.toString();
+    }
+
+    /**
+     * uuid
+     *
+     * @return
+     */
+    public static String uuid() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
     }
 }
