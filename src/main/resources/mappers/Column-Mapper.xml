@@ -2,6 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.clei.utils.other.ColumnDao">
+
+    <resultMap id="BaseArea" type="com.clei.entity.BaseArea">
+        <id property="id" column="id" javaType="java.lang.Long"></id>
+        <result property="areaCode" column="area_code" javaType="java.lang.String"></result>
+        <result property="areaName" column="area_name" javaType="java.lang.String"></result>
+        <result property="parentCode" column="parent_code" javaType="java.lang.String"></result>
+    </resultMap>
+
     <select id="getColumnInfo" resultType="java.util.Map">
         SELECT column_name,column_type
         FROM information_schema.`COLUMNS`
@@ -37,7 +45,8 @@
         </foreach>
     </insert>
 
-    <insert id="batchInsertRoadSectionInfo" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="roadSectionId">
+    <insert id="batchInsertRoadSectionInfo" parameterType="java.util.List" useGeneratedKeys="true"
+            keyProperty="roadSectionId">
         INSERT INTO road_section_info(
         road_id,
         section_name,
@@ -522,5 +531,13 @@
     <delete id="truncateTable" parameterType="java.lang.String">
         TRUNCATE TABLE ${tableName};
     </delete>
+
+    <select id="getAllArea" resultMap="BaseArea">
+        SELECT id,
+            area_name,
+            area_code,
+            parent_code
+        FROM base_area;
+    </select>
 
 </mapper>

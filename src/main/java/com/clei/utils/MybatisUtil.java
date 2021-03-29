@@ -12,6 +12,9 @@ import com.clei.Y2020.M09.D22.SectionInfo;
 import com.clei.Y2020.M09.D22.SectionPoint;
 import com.clei.Y2020.M09.D22.SectionRunState;
 import com.clei.Y2021.M01.D22.Area;
+import com.clei.dto.AreaTreeNode;
+import com.clei.dto.AreaTreeRes;
+import com.clei.entity.BaseArea;
 import com.clei.utils.other.ColumnDao;
 import io.netty.util.CharsetUtil;
 import org.apache.ibatis.io.Resources;
@@ -19,6 +22,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.springframework.beans.BeanUtils;
+import org.springframework.util.CollectionUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,6 +38,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -93,7 +98,9 @@ public class MybatisUtil {
 
         // insertVehicleState(env);
 
-        printResultMapAndColumns(env);
+        // printResultMapAndColumns(env);
+
+        getAreaTree(env);
 
         // ---------------Vehicle End---------------
     }
@@ -1556,6 +1563,65 @@ public class MybatisUtil {
         PrintUtil.log(insertColumnSql.toString());
         PrintUtil.log(insertPropertySql.toString());
         PrintUtil.log(updateSql.toString());
+    }
+
+    /**
+     * 区域树
+     *
+     * @param env
+     * @return
+     */
+    public static AreaTreeRes getAreaTree(String env) throws Exception {
+        SqlSession session = getSession(env);
+        ColumnDao mapper = session.getMapper(ColumnDao.class);
+
+        List<BaseArea> list = mapper.getAllArea();
+        AreaTreeRes res = new AreaTreeRes();
+        // 空集合
+        List<AreaTreeNode> emptyList = Collections.emptyList();
+        if (CollectionUtils.isEmpty(list)) {
+            res.setList(Collections.emptyList());
+            return res;
+        }
+        PrintUtil.log(list.size());
+
+        // 根据父编码分组
+        Map<String, List<BaseArea>> parentCodeMap = list.stream().collect(Collectors.groupingBy(BaseArea::getParentCode));
+        List<BaseArea> provinceList = parentCodeMap.get("0");
+        // 最外层省 一级
+        List<AreaTreeNode> rootList = provinceList.stream().map(c -> {
+            AreaTreeNode node = new AreaTreeNode();
+            node.setKey(c.getAreaCode());
+            node.setValue(c.getAreaName());
+            // 城市 二级
+            List<BaseArea> cityList = parentCodeMap.get(c.getAreaCode());
+            // 第二层 list
+            List<AreaTreeNode> layer2List = cityList.stream().map(cc -> {
+                AreaTreeNode node2 = new AreaTreeNode();
+                node2.setKey(cc.getAreaCode());
+                node2.setValue(cc.getAreaName());
+                // 区域 二级
+                List<BaseArea> areaList = parentCodeMap.get(cc.getAreaCode());
+                // 第三层 list
+                if (!CollectionUtils.isEmpty(areaList)) {
+                    List<AreaTreeNode> layer3List = areaList.stream().map(ccc -> {
+                        AreaTreeNode node3 = new AreaTreeNode();
+                        node3.setKey(ccc.getAreaCode());
+                        node3.setValue(ccc.getAreaName());
+                        node3.setChildren(emptyList);
+                        return node3;
+                    }).collect(Collectors.toList());
+                    node2.setChildren(layer3List);
+                } else {
+                    node2.setChildren(emptyList);
+                }
+                return node2;
+            }).collect(Collectors.toList());
+            node.setChildren(layer2List);
+            return node;
+        }).collect(Collectors.toList());
+        res.setList(rootList);
+        return res;
     }
 
     private static String getProperty(String column) {

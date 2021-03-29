@@ -7,6 +7,7 @@ import com.clei.Y2020.M09.D22.CongestionTop;
 import com.clei.Y2020.M09.D22.DateToDate;
 import com.clei.Y2020.M09.D22.SectionInfo;
 import com.clei.Y2021.M01.D22.Area;
+import com.clei.entity.BaseArea;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -257,4 +258,11 @@ public interface ColumnDao {
      * @param d
      */
     void updateReportForecastData(DateToDate d);
+
+    /**
+     * 获取所有区域数据
+     *
+     * @return
+     */
+    List<BaseArea> getAllArea();
 }
