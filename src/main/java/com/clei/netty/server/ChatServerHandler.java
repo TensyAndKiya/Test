@@ -27,7 +27,7 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<String> {
      * @throws Exception
      */
     @Override
-    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
+    public void handlerAdded(ChannelHandlerContext ctx) {
         PrintUtil.log("handlerAdded");
         Channel client = ctx.channel();
         // 广播给所有channel
@@ -37,7 +37,7 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<String> {
     }
 
     @Override
-    public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+    public void handlerRemoved(ChannelHandlerContext ctx) {
         PrintUtil.log("handlerRemoved");
         Channel client = ctx.channel();
         // 广播给所有channel
@@ -49,7 +49,7 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<String> {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         PrintUtil.log("channelActive");
-        PrintUtil.log("[" + ctx.channel().remoteAddress() + "] 在线");
+        PrintUtil.log("[" + ctx.channel().remoteAddress() + "] 上线");
         super.channelActive(ctx);
     }
 
@@ -99,7 +99,7 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<String> {
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         PrintUtil.log("[" + ctx.channel().remoteAddress() + "] 异常关闭");
         // 遇到异常就关闭连接
         ctx.close();
