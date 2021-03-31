@@ -52,7 +52,7 @@ public class TempTest2 {
         com1 = com1.thenComparing(Obj::getC);
 
         list = list.stream().sorted(com1).collect(Collectors.toList());
-        for (com.clei.temp.TempTest2.Obj obj : list) {
+        for (Obj obj : list) {
             PrintUtil.log(obj.toString());
         }
     }

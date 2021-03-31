@@ -17,6 +17,10 @@ mybatis：
     返回的List<Map>或是Map类型的
     若Map的所有字段值都是NULL，那么这个Map是NULL
 
+    SELECT如若用了resultMap就不用SELECT column AS property这样了，
+    不然字段与类属性对不上，导致所有属性值全为NULL，
+    使用SELECT AS的话直接用resultType就行了
+
 编码：
     任何时候请注意编码
     文件编码字符串编码等。。。windows默认编码。。。linux默认编码。。
@@ -65,7 +69,8 @@ Windows & Linux
     注意好参数的顺序啊大小写啊等等，一般就没问题了
     建行是真的坑坑坑
 
-前端访问后台404
+前后端交互
+    前端访问后台404
     看看后台访问到了没有
     有的话一般是后台异常然后响应中断
     Mybatis那个boundStatement异常竟然被系统自己吃了
@@ -73,6 +78,8 @@ Windows & Linux
     最后debug找到了。。
     改完发现还是404，再看，原来是resultType不对。。
     真滴坑，瓜皮
+
+    后台返回long型数据，在前端，long长度大于17位时会出现精度丢失
 
 Spring Boot
     图标是各种坑，resource目录里放了，static目录里也放了
