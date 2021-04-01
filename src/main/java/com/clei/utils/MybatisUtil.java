@@ -18,6 +18,7 @@ import com.clei.entity.BaseArea;
 import com.clei.utils.other.ColumnDao;
 import io.netty.util.CharsetUtil;
 import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
@@ -1444,10 +1445,26 @@ public class MybatisUtil {
      * @throws IOException
      */
     public static SqlSession getSession(String env) throws IOException {
+        return getSession(env, false, true);
+    }
+
+    /**
+     * 获取sql session
+     *
+     * @param env        环境
+     * @param batch      是否是批处理
+     * @param autoCommit 是否自动提交
+     * @return
+     * @throws IOException
+     */
+    public static SqlSession getSession(String env, boolean batch, boolean autoCommit) throws IOException {
         Reader reader = Resources.getResourceAsReader("mybatisConf/mybatisConf.xml");
         SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(reader, env);
-        // 自动提交 true
-        return sessionFactory.openSession(true);
+        if (batch) {
+            return sessionFactory.openSession(ExecutorType.BATCH, autoCommit);
+        } else {
+            return sessionFactory.openSession(autoCommit);
+        }
     }
 
     /**

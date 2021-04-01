@@ -18,6 +18,12 @@ public class TempTest2 {
 
     public static void main(String[] args) {
 
+        System.out.println((2L << 41) / 1024 / 1024 / 1024 / 1024);
+
+        PrintUtil.log(3 * 0.1 == 0.3);
+
+        System.out.println(0.1 * 3);
+
         PrintUtil.log(Float.valueOf("40.5F"));
         PrintUtil.log(Double.valueOf("40.5D"));
         // PrintUtil.log(Long.valueOf("40.5"));
