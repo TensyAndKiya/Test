@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -17,6 +18,8 @@ import java.util.stream.Collectors;
 public class TempTest2 {
 
     public static void main(String[] args) {
+        // 左闭右开
+        new Random().ints(20, 1, 3).forEach(PrintUtil::log);
 
         System.out.println((2L << 41) / 1024 / 1024 / 1024 / 1024);
 

@@ -1,101 +1,128 @@
 package com.clei.Y2019.M07.D30;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import com.clei.utils.PrintUtil;
+import com.clei.utils.StringUtil;
+import com.clei.utils.ThreadUtil;
+
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 重构下获取token的代码
  * 之前的代码可能有多个用户同时刷新token的可能，这样前面获取的token会失效
  * 开发票就会失败
+ *
+ * @author KIyA
  */
 public class RefreshTokenTest {
-    private ConcurrentHashMap<String,byte[]> lockMap = new ConcurrentHashMap<>(2);
-    private ConcurrentHashMap<String,AccessToken> TokenDB = new ConcurrentHashMap<>(2);
 
-    public static void main(String[] args) throws InterruptedException {
+    private final ConcurrentHashMap<String, AccessToken> TokenDB = new ConcurrentHashMap<>(2);
+    private final static long EXPIRE_LIMIT_MILLI = 5L * 60 * 1000;
+    private final static CopyOnWriteArraySet<String> TOKEN_SET = new CopyOnWriteArraySet<>();
+
+    public static void main(String[] args) throws Exception {
         RefreshTokenTest rtt = new RefreshTokenTest();
         rtt.initDB();
-        Map<String,Object> map = new HashMap<>();
-        map.put("parkId","park");
-        for (int i = 0; i < 100; i++) {
-            rtt.newInvoice(map,"张三");
-            Thread.sleep(4000);
+        String parkId = "park";
+        ThreadPoolExecutor pool = ThreadUtil.pool();
+
+        int times = 1000;
+        CountDownLatch latch = new CountDownLatch(times);
+        for (int i = 0; i < times; i++) {
+            pool.execute(() -> {
+                rtt.newInvoice(parkId, "张三");
+                latch.countDown();
+            });
         }
+
+        latch.await();
+        pool.shutdown();
+        TOKEN_SET.forEach(PrintUtil::log);
     }
 
-    private boolean newInvoice(Map<String,Object> info,String userName){
-        AccessToken token = getToken(info.get("parkId").toString());
-        if(null == token){
+    private boolean newInvoice(String parkId, String userName) {
+        if (StringUtil.isBlank(parkId) || StringUtil.isBlank(userName)) {
             return false;
         }
-        if(null != userName){
-            // TODO
-            return true;
+        AccessToken token = getToken(parkId);
+        if (null == token) {
+            return false;
         }
-        return false;
+
+        // 收集token看看利用率
+        TOKEN_SET.add(token.getToken());
+        // 开票操作
+        return true;
     }
 
-    private AccessToken getToken(String parkId){
+    private AccessToken getToken(String parkId) {
         AccessToken token = selectTokenFromDB(parkId);
+        // 未配置开票相关信息
+        if (null == token) {
+            return null;
+        }
         // 首次获取
-        if(null == token.getToken() || "".equals(token.getToken())){
+        if (StringUtil.isBlank(token.getToken())) {
             return refreshToken(token);
         }
-        // 距离过期时间小于3分钟的话
-        // 测试一下 改成 5秒
-        if(new Date().getTime() - token.getRefreshTime() < 5000){
+        // 距离过期时间小于N毫秒的话
+        if (System.currentTimeMillis() - token.getRefreshTime() > EXPIRE_LIMIT_MILLI) {
+            // 假装token已经过期了
+            token.setToken(null);
             return refreshToken(token);
         }
         return token;
     }
 
     /**
+     * @param token
+     * @return
+     */
+    private AccessToken refreshToken(AccessToken token) {
+        String parkId = token.getParkId();
+        // 只有几百个停车场 intern没风险
+        synchronized (parkId.intern()) {
+            if (StringUtil.isBlank(token.getToken())) {
+                return getTokenFromOther(token);
+            }
+        }
+        return token;
+    }
+
+    private void initDB() {
+        AccessToken token = new AccessToken(1, "park", "aaa", "bb", "cc", 3600, System.currentTimeMillis() - EXPIRE_LIMIT_MILLI - 1);
+        TokenDB.put("park", token);
+    }
+
+    private AccessToken selectTokenFromDB(String parkId) {
+        return TokenDB.get(parkId);
+    }
+
+    /**
+     * 从第三方获取token
      *
      * @param token
      * @return
      */
-    private AccessToken refreshToken(AccessToken token){
-        String parkId = token.getParkId();
-        byte[] lock = lockMap.get(parkId);
-        if(null == lock){
-            lockMap.put(parkId,new byte[0]);
-        }
-        String t = token.getToken();
-        lock = lockMap.get(parkId);
-        if(null != t && !"".equals(t)){
-            synchronized (lock){
-                if(null != t && !"".equals(t)){
-                    return getTokenFromOther(token);
-                }
-            }
-        }
-        return selectTokenFromDB(parkId);
-    }
-
-    private void initDB(){
-        AccessToken token = new AccessToken(1,"park","aaa","bb","cc",3600,new Date().getTime());
-        TokenDB.put("park",token);
-    }
-
-    private AccessToken selectTokenFromDB(String parkId){
-        return TokenDB.get(parkId);
-    }
-
-    // 从第三方获取token
-    private AccessToken getTokenFromOther(AccessToken token){
+    private AccessToken getTokenFromOther(AccessToken token) {
         Random random = new Random();
-        String str = "" + random.nextInt() + random.nextInt() + random.nextInt();
-        str = str.substring(0,3);
-        AccessToken newToken = new AccessToken(token.getId(),token.getParkId(),str,token.getOpenId(),token.getAppSecret(),3600,new Date().getTime());
-        TokenDB.put(newToken.getParkId(),newToken);
-        return newToken;
+        int i = random.ints(1, 100, 1000).toArray()[0];
+        String accessToken = String.valueOf(i);
+
+        token.setRefreshTime(3600);
+        token.setToken(accessToken);
+        token.setRefreshTime(System.currentTimeMillis());
+
+        TokenDB.put(token.getParkId(), token);
+        return token;
     }
 }
 
-class AccessToken{
+class AccessToken {
+
     private Integer id;
     private String parkId;
     private String token;
