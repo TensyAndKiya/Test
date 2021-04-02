@@ -24,7 +24,7 @@ import java.util.Map;
  * 链接：https://leetcode-cn.com/problems/two-sum
  * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
  *
- * @autho KIyA
+ * @author KIyA
  */
 public class Algorithm0001 {
 
@@ -34,23 +34,15 @@ public class Algorithm0001 {
         PrintUtil.println(Arrays.toString(twoSum(array, 8)));
     }
 
-
     public static int[] twoSum(int[] nums, int target) {
-        Map<Integer, Integer> map = new HashMap<>();
-
+        Map<Integer, Integer> map = new HashMap<>(2);
         for (int i = 0; i < nums.length; i++) {
             int j = nums[i];
-
             int diff = target - j;
-
-            if (map.containsKey(diff)) {
-                int index = map.get(diff);
-
-                int[] array = {index, i};
-                return array;
+            Integer another = map.get(diff);
+            if (null != another && i != another) {
+                return new int[]{another, i};
             }
-            // 后 put  是因为 不能重复利用元素
-            // 且 避免了相同数组两两个相同值 的
             if (!map.containsKey(j)) {
                 map.put(j, i);
             }
