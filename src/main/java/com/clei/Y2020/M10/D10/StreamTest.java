@@ -113,10 +113,10 @@ public class StreamTest {
         list.stream().peek(p -> p.setName("草")).forEach(PrintUtil::log);
 
         List<String> ll = Stream.of("one", "two", "three", "four")
-                /*.filter(e -> e.length() > 3)
-                .peek(e -> PrintUtil.println(e))
+                .filter(e -> e.length() > 3)
+                .peek(PrintUtil::println)
                 .map(String::toUpperCase)
-                .peek(e -> PrintUtil.println(e))*/
+                .peek(PrintUtil::println)
                 // 跳过n个元素
                 .skip(1)
                 .collect(Collectors.toList());

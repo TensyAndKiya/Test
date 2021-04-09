@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -219,6 +221,30 @@ public class FileUtil {
             length = file.length();
         }
         return length;
+    }
+
+    /**
+     * 获取网络上文件大小
+     *
+     * @param url
+     * @throws Exception
+     */
+    public static String getHttpFileSize(String url) throws Exception {
+        return getHttpFileSize(url, null);
+    }
+
+    /**
+     * 获取网络上文件大小
+     *
+     * @param url  文件url
+     * @param unit 文件大小单位
+     * @throws Exception
+     */
+    public static String getHttpFileSize(String url, String unit) throws Exception {
+        URL httpUrl = new URL(url);
+        URLConnection connection = httpUrl.openConnection();
+        long size = connection.getContentLengthLong();
+        return getUnitString(size, unit);
     }
 
     /**

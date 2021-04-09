@@ -1,6 +1,7 @@
 package com.clei.temp;
 
 import com.clei.utils.DateUtil;
+import com.clei.utils.FileUtil;
 import com.clei.utils.PrintUtil;
 
 import java.math.BigDecimal;
@@ -17,7 +18,11 @@ import java.util.stream.Collectors;
  */
 public class TempTest2 {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        PrintUtil.log(System.currentTimeMillis());
+
+        PrintUtil.log(FileUtil.getHttpFileSize("https://download.jetbrains.8686c.com/idea/ideaIU-2021.1.exe", "M"));
+
         // 左闭右开
         new Random().ints(20, 1, 3).forEach(PrintUtil::log);
 

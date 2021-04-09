@@ -2,30 +2,40 @@ package com.clei.Y2018.M11.D28;
 
 import com.clei.utils.PrintUtil;
 
-public class DeadLock {
+/**
+ * 死锁测试
+ *
+ * @author KIyA
+ */
+public class DeadLockTest {
+
     public static void main(String[] args) {
-        String s1="老大";
-        String s2="老二";
-        MyThread t1=new MyThread("张三",s1,s2);
-        MyThread1 t2=new MyThread1("李四",s1,s2);
+        String s1 = "老大";
+        String s2 = "老二";
+        MyThread t1 = new MyThread("张三", s1, s2);
+        MyThread1 t2 = new MyThread1("李四", s1, s2);
         t1.start();
         t2.start();
     }
 }
 
-class MyThread extends Thread{
+class MyThread extends Thread {
+
     private String obj1;
     private String obj2;
-    public MyThread(){
+
+    public MyThread() {
         super();
     }
-    public MyThread(String name,String obj1,String obj2){
+
+    public MyThread(String name, String obj1, String obj2) {
         super(name);
         this.obj1 = obj1;
         this.obj2 = obj2;
     }
+
     @Override
-    public void run(){
+    public void run() {
         PrintUtil.log("进程" + this.getName() + "运行中...");
         synchronized (obj1) {
             PrintUtil.log("获得obj1");
@@ -43,19 +53,23 @@ class MyThread extends Thread{
     }
 }
 
-class MyThread1 extends Thread{
+class MyThread1 extends Thread {
+
     private String obj1;
     private String obj2;
-    public MyThread1(){
+
+    public MyThread1() {
         super();
     }
-    public MyThread1(String name,String obj1,String obj2){
+
+    public MyThread1(String name, String obj1, String obj2) {
         super(name);
         this.obj1 = obj1;
         this.obj2 = obj2;
     }
+
     @Override
-    public void run(){
+    public void run() {
         PrintUtil.log("进程" + this.getName() + "运行中...");
         synchronized (obj2) {
             PrintUtil.log("获得obj2");
