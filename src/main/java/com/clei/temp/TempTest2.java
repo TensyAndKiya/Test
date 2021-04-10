@@ -21,7 +21,7 @@ public class TempTest2 {
     public static void main(String[] args) throws Exception {
         PrintUtil.log(System.currentTimeMillis());
 
-        PrintUtil.log(FileUtil.getHttpFileSize("https://download.jetbrains.8686c.com/idea/ideaIU-2021.1.exe", "M"));
+        PrintUtil.log(FileUtil.getHttpFileSize("http://111.111.222.222:8888/asd", "M"));
 
         // 左闭右开
         new Random().ints(20, 1, 3).forEach(PrintUtil::log);

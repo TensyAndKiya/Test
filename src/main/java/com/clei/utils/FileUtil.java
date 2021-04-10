@@ -20,6 +20,11 @@ import java.util.List;
 public class FileUtil {
 
     /**
+     * 连接超时时间
+     */
+    private final static int CONNECTION_TIME_OUT = 3000;
+
+    /**
      * test main
      *
      * @param args
@@ -243,6 +248,8 @@ public class FileUtil {
     public static String getHttpFileSize(String url, String unit) throws Exception {
         URL httpUrl = new URL(url);
         URLConnection connection = httpUrl.openConnection();
+        // 避免长时间等待
+        connection.setConnectTimeout(CONNECTION_TIME_OUT);
         long size = connection.getContentLengthLong();
         return getUnitString(size, unit);
     }
