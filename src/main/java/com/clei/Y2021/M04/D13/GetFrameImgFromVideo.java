@@ -99,9 +99,10 @@ public class GetFrameImgFromVideo {
      */
     private static void grabByTime(FFmpegFrameGrabber grabber, long startMicroSecond, int imgNum) throws Exception {
         long timeLength = grabber.getLengthInTime();
-        long unit = new BigDecimal(ONE_SECOND_MICROSECOND).divide(new BigDecimal(imgNum), 10, RoundingMode.HALF_UP).longValue();
+        int frameNumber = grabber.getLengthInVideoFrames();
+        long unit = new BigDecimal(timeLength).divide(new BigDecimal(frameNumber), 64, RoundingMode.HALF_UP).longValue();
         for (int i = 0; i < imgNum && startMicroSecond < timeLength; i++) {
-            long timestamp = startMicroSecond + (i * unit);
+            long timestamp = startMicroSecond + i * unit;
             grabber.setVideoTimestamp(timestamp);
             // 截图
             grabFrame(grabber, i);
@@ -119,13 +120,14 @@ public class GetFrameImgFromVideo {
     private static void grabByFrame(FFmpegFrameGrabber grabber, long startMicroSecond, int imgNum) throws Exception {
         long timeLength = grabber.getLengthInTime();
         int frameNumber = grabber.getLengthInVideoFrames();
-        BigDecimal ratio = new BigDecimal(startMicroSecond).divide(new BigDecimal(timeLength), 10, RoundingMode.HALF_UP);
+        BigDecimal ratio = new BigDecimal(startMicroSecond).divide(new BigDecimal(timeLength), 64, RoundingMode.HALF_UP);
         int startFrame = new BigDecimal(frameNumber).multiply(ratio).intValue();
-        for (int i = 0; i < imgNum && startFrame <= frameNumber; i++) {
+        int endFrame = startFrame + imgNum;
+        endFrame = Math.min(frameNumber, endFrame);
+        for (int i = startFrame, j = 0; i < endFrame; i++, j++) {
             grabber.setVideoFrameNumber(startFrame);
-            startFrame++;
             // 截图
-            grabFrame(grabber, i);
+            grabFrame(grabber, j);
         }
     }
 
