@@ -44,6 +44,11 @@ public class GetFrameImgFromVideo {
     private final static String IMG_NAME_SUFFIX = "jpg";
 
     /**
+     * BigDecimal保留小数位
+     */
+    private final static int BIG_DECIMAL_SCALE = 128;
+
+    /**
      * 一秒的微秒数
      */
     private final static long ONE_SECOND_MICROSECOND = 1_000_000L;
@@ -100,10 +105,13 @@ public class GetFrameImgFromVideo {
     private static void grabByTime(FFmpegFrameGrabber grabber, long startMicroSecond, int imgNum) throws Exception {
         long timeLength = grabber.getLengthInTime();
         int frameNumber = grabber.getLengthInVideoFrames();
-        long unit = new BigDecimal(timeLength).divide(new BigDecimal(frameNumber), 64, RoundingMode.HALF_UP).longValue();
-        for (int i = 0; i < imgNum && startMicroSecond < timeLength; i++) {
-            long timestamp = startMicroSecond + i * unit;
+        BigDecimal frameLastTime = new BigDecimal(timeLength).divide(new BigDecimal(frameNumber), BIG_DECIMAL_SCALE, RoundingMode.HALF_UP);
+        long timestamp = 0;
+        for (int i = 0; i < imgNum && timestamp < timeLength; i++) {
+            timestamp = startMicroSecond + frameLastTime.multiply(new BigDecimal(i)).longValue();
             grabber.setVideoTimestamp(timestamp);
+            // 设置第一个timestamp之后可以获取到一个对应时刻的frameNumber，之后可以按frameNumber递增截取图片，而不是继续按时间递增
+            // grabber.getFrameNumber()
             // 截图
             grabFrame(grabber, i);
         }
@@ -120,12 +128,11 @@ public class GetFrameImgFromVideo {
     private static void grabByFrame(FFmpegFrameGrabber grabber, long startMicroSecond, int imgNum) throws Exception {
         long timeLength = grabber.getLengthInTime();
         int frameNumber = grabber.getLengthInVideoFrames();
-        BigDecimal ratio = new BigDecimal(startMicroSecond).divide(new BigDecimal(timeLength), 64, RoundingMode.HALF_UP);
-        int startFrame = new BigDecimal(frameNumber).multiply(ratio).intValue();
+        int startFrame = new BigDecimal(frameNumber * startMicroSecond).divide(new BigDecimal(timeLength), BIG_DECIMAL_SCALE, RoundingMode.HALF_UP).intValue();
         int endFrame = startFrame + imgNum;
         endFrame = Math.min(frameNumber, endFrame);
         for (int i = startFrame, j = 0; i < endFrame; i++, j++) {
-            grabber.setVideoFrameNumber(startFrame);
+            grabber.setVideoFrameNumber(i);
             // 截图
             grabFrame(grabber, j);
         }
