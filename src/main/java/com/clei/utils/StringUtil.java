@@ -59,6 +59,16 @@ public class StringUtil {
     }
 
     /**
+     * 是否不是空白字符串
+     *
+     * @param str
+     * @return
+     */
+    public static boolean isNotBlank(String str) {
+        return !isBlank(str);
+    }
+
+    /**
      * 去掉空白
      *
      * @param str
