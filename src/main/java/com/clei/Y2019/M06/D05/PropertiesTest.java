@@ -1,186 +1,203 @@
 package com.clei.Y2019.M06.D05;
 
 import com.clei.utils.PrintUtil;
+import com.clei.utils.StringUtil;
+import com.clei.utils.ThreadUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+/**
+ * 属性文件读取与修改
+ *
+ * @author KIyA
+ */
 public class PropertiesTest {
+
+    /**
+     * 配置文件写锁
+     */
     private final static ReentrantReadWriteLock.WriteLock writeLock = new ReentrantReadWriteLock().writeLock();
-    private final static int DEFAULT_PERCENT = 0;
-    private static String PATH = PropertiesTest.class.getClassLoader().getResource("load.properties").getPath();
-    public static void main(String[] args) {
+
+    /**
+     * 配置文件修改次数
+     */
+    private volatile static int updateTimes = 0;
+
+    /**
+     * 负载文件名
+     */
+    private final static String LOAD_FILE_NAME = "load.properties";
+
+    /**
+     * 限制阀值key
+     */
+    private final static String THRESHOLD_KEY = "limit_threshold";
+
+    /**
+     * 是否开启限制key 1是 其它否
+     */
+    private final static String LIMIT_OPEN_KEY = "limit_open";
+
+    /**
+     * 开启限制时 LIMIT_OPEN_KEY对应的值
+     */
+    private final static String LIMIT_OPEN_VALUE = "1";
+
+    /**
+     * 当开启限制时 不受限制的车场的id
+     * 多个id以英文逗号隔开
+     */
+    private final static String FREE_PARKS_KEY = "free_parks";
+
+    /**
+     * 多个车场的分隔符
+     */
+    private final static String PARKS_SEPARATOR = ",";
+
+    /**
+     * 配置文件路径
+     */
+    private final static String PATH = "D:\\WorkSpace\\KIyA\\Test\\src\\main\\resources" + File.separator + LOAD_FILE_NAME;
+
+    public static void main(String[] args) throws Exception {
         Properties prop = getPropByFile();
-        String parks = prop.getProperty("limit_parks");
-        String[] park = parks.split(",");
-        PrintUtil.log(park.length);
-        for(String s : park){
-            PrintUtil.log(s);
+        if (null == prop) {
+            return;
         }
+        List<String> freeParks = getFreeParks(prop);
+        PrintUtil.log("Free Park 数量： {}", freeParks.size());
+        if (!freeParks.isEmpty()) {
+            freeParks.forEach(PrintUtil::log);
+        }
+        // 尝试修改
+        updateThreshold(prop, 33);
+        // 并发修改
+        ThreadPoolExecutor pool = ThreadUtil.pool();
+        int times = 100;
+        CountDownLatch latch = new CountDownLatch(times);
+        for (int i = 0; i < times; i++) {
+            int threshold = i;
+            pool.execute(() -> {
+                updateThreshold(prop, threshold);
+                latch.countDown();
+            });
+        }
+        latch.await();
+        PrintUtil.log("updateTimes : {}", updateTimes);
     }
 
-    private static Properties getPropByFile(){
-        Properties prop = new Properties();
+    /**
+     * 读取配置文件
+     *
+     * @return
+     */
+    private static Properties getPropByFile() {
         File file = new File(PATH);
-        if(!file.exists()){
+        if (!file.exists()) {
             PrintUtil.log("读取负载配置文件失败，文件不存在！");
             return null;
         }
-        InputStream inputStream = null;
-        try{
-            inputStream = new FileInputStream(file);
-            prop.load(inputStream);
-        }catch (Exception e){
-            PrintUtil.log("加载属性文件出错！");
-            e.printStackTrace();
-        }finally {
-            if(null != inputStream){
-                try{
-                    inputStream.close();
-                }catch(Exception ee){
-                    PrintUtil.log("关闭输入流出错！");
-                    ee.printStackTrace();
-                }
-            }
-        }
-        return prop;
-    }
-
-    private static Set<String> getKeysByProp(Properties prop){
-        Set<String> keys = prop.stringPropertyNames();
-        if(null != keys && keys.size() > 0){
-            return keys;
-        }else{
+        try (InputStream inputStream = new FileInputStream(file)) {
+            Properties properties = new Properties();
+            properties.load(inputStream);
+            return properties;
+        } catch (IOException e) {
+            PrintUtil.log("读取负载配置文件出错", e);
             return null;
         }
     }
 
-    private static int getIntPercent(Properties prop) {
-        String percentStr =  prop.getProperty("percent");
-        //出错则默认0值
-        int percent = DEFAULT_PERCENT;
-        //非null 非空串
-        if(null != percentStr && percentStr.length() > 0){
-            try{
-                percent = Integer.parseInt(percentStr);
-            }catch (Exception e){
-                PrintUtil.log("获取阀值出错！！");
+    /**
+     * 获取不受限制的车场
+     *
+     * @param prop
+     * @return
+     */
+    private static List<String> getFreeParks(Properties prop) {
+        if (null == prop) {
+            prop = getPropByFile();
+            if (null == prop) {
+                return Collections.emptyList();
             }
         }
-        return percent;
-    }
-
-    private static String getPercent(Properties prop) {
-        String percentStr =  prop.getProperty("percent");
-        //非null 非空串
-        if(null != percentStr && percentStr.length() > 0){
-            return percentStr;
+        String parks = prop.getProperty(FREE_PARKS_KEY);
+        if (StringUtil.isNotBlank(parks)) {
+            return new ArrayList<>(Arrays.asList(parks.split(PARKS_SEPARATOR)));
+        } else {
+            return Collections.emptyList();
         }
-        return DEFAULT_PERCENT + "";
     }
 
-    private static Set<String> getParks(Properties prop){
-        Set<String> keys = getKeysByProp(prop);
-        if(null != keys){
-            Set<String> parks = new HashSet<>(keys.size());
-            for(String key : keys){
-                if(key.startsWith("park")){
-                    String parkId = prop.getProperty(key);
-                    //保证id是对的
-                    if(null != parkId && parkId.length() == 32){
-                        parks.add(parkId);
-                    }
-                }
+    /**
+     * 修改限制阀值
+     *
+     * @param prop      属性文件
+     * @param threshold 要设置的阀值
+     * @return
+     */
+    private static void updateThreshold(Properties prop, int threshold) {
+        if (threshold < 0 || threshold > 100) {
+            throw new RuntimeException("参数错误");
+        }
+        if (null == prop) {
+            prop = getPropByFile();
+            if (null == prop) {
+                return;
             }
-            if(parks.size() == 0){
-                return null;
-            }
-            return parks;
         }
-        return null;
-    }
-
-    private static List<String> getParksList(Properties prop){
-        Set<String> parks = getParks(prop);
-        if(null != parks){
-            List<String> parksArray = new ArrayList<>(parks);
-            return parksArray;
+        String newVal = String.valueOf(threshold);
+        String oldVal = prop.getProperty(THRESHOLD_KEY);
+        boolean updateResult = false;
+        if (newVal.equals(oldVal)) {
+            PrintUtil.log("新阀值与旧阀值一致，不必更新");
+            updateResult = true;
+        } else {
+            prop.setProperty(THRESHOLD_KEY, newVal);
+            updateResult = updateProp(prop, null);
         }
-        return null;
+        PrintUtil.log("将负载阀值修改为{}，{}", threshold, updateResult ? "成功" : "失败");
     }
 
-    private static String[] getParksArray(Properties prop){
-        Set<String> parks = getParks(prop);
-        if(null != parks){
-            String[] parksArray = new String[parks.size()];
-            parks.toArray(parksArray);
-            return parksArray;
-        }
-        return null;
-    }
-
-    private static String getVal(Properties prop,String key){
-        return prop.getProperty(key);
-    }
-
-    private static boolean setPercent(String percent){
-        if(null != percent && percent.length() > 0){
-            try {
-                int per = Integer.parseInt(percent);
-                if(per < 0 || per > 100){
-                    return false;
-                }
-                Properties prop = getPropByFile();
-                prop.setProperty("percent",per + "");
-                return updateProp(prop,null);
-            } catch (Exception e){
-                PrintUtil.log("更新属性文件出错！");
-                return false;
-            }
-        }else{
-            return false;
-        }
-    }
-
-    private static boolean updateProp(Properties prop,String comment){
-        if(null == prop){
+    private static boolean updateProp(Properties prop, String comment) {
+        if (null == prop) {
             return false;
         }
         File file = new File(PATH);
-        if(!file.exists()){
+        if (!file.exists()) {
             PrintUtil.log("写入负载配置文件失败，文件不存在！");
             return false;
         }
-        OutputStream outputStream = null;
-        //加锁
+        boolean updateResult = false;
+        int tempUpdateTimes = updateTimes;
+        // 加锁
         writeLock.lock();
-        try{
-            outputStream = new FileOutputStream(file);
-            prop.store(outputStream,comment);
-        }catch (Exception e){
-            PrintUtil.log("加载属性文件出错！");
-            e.printStackTrace();
-            return false;
-        }finally {
-            if(null != outputStream){
-                try{
-                    outputStream.close();
-                }catch(Exception ee){
-                    PrintUtil.log("关闭输出流出错！");
-                    ee.printStackTrace();
-                }
+
+        // 更新操作做一次就行了
+        if (updateTimes == tempUpdateTimes) {
+            try (OutputStream outputStream = new FileOutputStream(file)) {
+                prop.store(outputStream, comment);
+                updateResult = true;
+            } catch (IOException e) {
+                PrintUtil.log("更新配置文件出错", e);
             }
-            writeLock.unlock();
+            // 更新配置文件修改次数
+            updateTimes++;
         }
-        return true;
+
+        writeLock.unlock();
+        return updateResult;
     }
 }
