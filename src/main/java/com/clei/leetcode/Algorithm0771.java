@@ -23,8 +23,6 @@ public class Algorithm0771 {
 
     public static void main(String[] args) {
         PrintUtil.log(numJewelsInStones("aA", "aAAbbbb"));
-
-        PrintUtil.log((int) ('z'));
     }
 
     private static int numJewelsInStones(String jewels, String stones) {
