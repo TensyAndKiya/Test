@@ -1,6 +1,5 @@
 package com.clei.Y2018.M11.D08;
 
-
 import com.clei.utils.PrintUtil;
 
 import java.util.ArrayList;
@@ -8,12 +7,19 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * 小测试
+ * 注意Arrays.asList 和 subList的用法
+ *
+ * @author KIyA
+ */
 public class LittleTest {
-    public static void main(String[] args){
-        Integer[] arr=new Integer[]{9,8,9,7,6,5,7,4,3,2,1};
 
-        List<Integer> list=new ArrayList<>();
-        List<Integer> list2=Arrays.asList(arr);
+    public static void main(String[] args) {
+        Integer[] arr = new Integer[]{9, 8, 9, 7, 6, 5, 7, 4, 3, 2, 1};
+
+        List<Integer> list = new ArrayList<>();
+        List<Integer> list2 = Arrays.asList(arr);
         //  list2.add(3); bug bug
 
         //list.addAll(Arrays.asList(arr));
@@ -39,7 +45,7 @@ public class LittleTest {
                     change = true;
                     int temp = arr[j];
                     arr[j] = arr[j + 1];
-                    arr[j+1]=temp;
+                    arr[j + 1] = temp;
                 }
             }
             if (!change) {

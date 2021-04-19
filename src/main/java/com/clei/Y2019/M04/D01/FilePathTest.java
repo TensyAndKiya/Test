@@ -4,34 +4,43 @@ import com.clei.utils.PrintUtil;
 
 import java.io.File;
 
+/**
+ * 文件目录打印
+ *
+ * @author KIyA
+ */
 public class FilePathTest {
-    public static void main( String[] args ) {
-        String filePath = "/usr/local/tomcat/webapps/photo/park_log";
-        File file = new File(filePath);
-        boolean result = false;
-        if(!file.exists()){
-            result = file.mkdirs();
-        }
-        if(result){
-            printFilePath(file);
-        }
+
+    /**
+     * 目录名
+     */
+    private final static String DIRECTORY = "";
+
+    /**
+     * 对齐字符串
+     */
+    private final static String TAB_STR = "    ";
+
+    public static void main(String[] args) {
+        File file = new File(DIRECTORY);
+        printFilePath(file);
     }
 
-    private static void printFilePath(File file){
+    private static void printFilePath(File file) {
         printFilePath(file, 0);
     }
 
-    private static void printFilePath(File file,int level){
-        StringBuilder tableStr = new StringBuilder();
+    private static void printFilePath(File file, int level) {
+        StringBuilder str = new StringBuilder();
         for (int i = 0; i < level; i++) {
-            tableStr.append('\t');
+            str.append("    ");
         }
-        PrintUtil.log(tableStr + file.getAbsolutePath());
-        if(file.isDirectory()){
+        PrintUtil.log(str + file.getAbsolutePath());
+        if (file.isDirectory()) {
             File[] files = file.listFiles();
-            if(null != files){
-                for(File f : files){
-                    printFilePath(f,level+1);
+            if (null != files) {
+                for (File f : files) {
+                    printFilePath(f, level + 1);
                 }
             }
         }

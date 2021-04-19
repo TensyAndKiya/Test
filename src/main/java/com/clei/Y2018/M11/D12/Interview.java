@@ -2,8 +2,17 @@ package com.clei.Y2018.M11.D12;
 
 import com.clei.utils.PrintUtil;
 
+/**
+ * 面试过程中遇到的部分笔试题
+ * <p>
+ * Integer的常量池
+ * 饿汉式单例
+ *
+ * @author KIyA
+ */
 public class Interview {
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         Integer i1 = 55;
         int i2 = 55;
         Integer i3 = Integer.valueOf(55);
@@ -24,10 +33,14 @@ public class Interview {
     }
 }
 
-class Singleton{
+class Singleton {
+
     private static final Singleton instance = new Singleton();
-    private Singleton(){}
-    public static Singleton getInstance(){
+
+    private Singleton() {
+    }
+
+    public static Singleton getInstance() {
         return instance;
     }
 }

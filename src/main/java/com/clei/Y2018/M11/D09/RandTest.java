@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Random;
 
 /**
+ * 随机数
+ * bound 开区间
+ *
  * @author KIyA
  */
 public class RandTest {
@@ -25,6 +28,7 @@ public class RandTest {
         Map<String, String> temp = new HashMap<>(0);
         //no <>,用的匿名内部类
         Map<String, String> map = new HashMap<String, String>(8) {
+
             private static final long serialVersionUID = -5694805728914070746L;
 
             {

@@ -12,15 +12,26 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
+ * 找到某个类的所有子类
+ *
  * @author KIyA
  */
 public class LearnAboutThrowable {
 
     /**
+     * 要查找的包
+     */
+    private final static String PACKAGE_NAME = "java.lang";
+
+    /**
+     * 要查找的类
+     */
+    private final static String CLASS_NAME = PACKAGE_NAME + ".Throwable";
+
+    /**
      * 查询java.lang包下的某个类以及其下面的子类等。
      */
     public static void main(String[] args) {
-
         String classPath = System.getProperty("java.class.path");
         String[] jarPath = classPath.split(";");
         String rtPath = null;
@@ -36,10 +47,9 @@ public class LearnAboutThrowable {
                 Enumeration<JarEntry> entries = jarFile.entries();
                 while (entries.hasMoreElements()) {
                     String name = entries.nextElement().getName();
-                    if (!name.startsWith("java/lang") || !name.endsWith(".class")) {
-                        continue;
+                    if (name.startsWith(PACKAGE_NAME.replace(".", "/")) && name.endsWith(".class")) {
+                        classFiles.add(name.substring(0, name.lastIndexOf(".class")).replaceAll("/", "."));
                     }
-                    classFiles.add(name.substring(0, name.lastIndexOf(".class")).replaceAll("/", "."));
                 }
                 //
                 Map<String, List<ClassNode>> map = new HashMap<>(classFiles.size());
@@ -47,11 +57,15 @@ public class LearnAboutThrowable {
                     List<ClassNode> list = new ArrayList<>();
                     map.put(name, list);
                 }
-                classFiles.remove("java.lang.Throwable");
+                classFiles.remove(CLASS_NAME);
                 //
-                fillSubClassList("java.lang.Throwable", classFiles, map);
+                fillSubClassList(CLASS_NAME, classFiles, map);
+                // 遍历
+                for (ClassNode classNode : map.get(CLASS_NAME)) {
+                    PrintUtil.log(classNode.getClassName());
+                }
             } catch (Exception e) {
-                e.printStackTrace();
+                PrintUtil.log("查找出错", e);
             }
 
 
@@ -63,16 +77,18 @@ public class LearnAboutThrowable {
     private static boolean isChildClass(String className, String parentClassName) throws ClassNotFoundException {
         Class<?> clazz = Class.forName(className);
         Class<?> parentClass = Class.forName(parentClassName);
-        return clazz.isAssignableFrom(parentClass);
+        // 判断一个类是否是另一个类的子孙类
+        return parentClass.isAssignableFrom(clazz);
     }
 
     private static void fillSubClassList(String className, List<String> classFiles, Map<String, List<ClassNode>> map) throws ClassNotFoundException {
         List<ClassNode> subClassList = map.get(className);
         for (String name : classFiles) {
-            if (isChildClass(name, className)) {
-                PrintUtil.log(className);
-                subClassList.add(new ClassNode(name, map.get(name)));
-                fillSubClassList(name, classFiles, map);
+            if (!name.equals(className)) {
+                if (isChildClass(name, className)) {
+                    subClassList.add(new ClassNode(name, map.get(name)));
+                    fillSubClassList(name, classFiles, map);
+                }
             }
         }
     }
@@ -80,8 +96,8 @@ public class LearnAboutThrowable {
 
 class ClassNode {
 
-    private String className;
-    private List<ClassNode> subClassList;
+    private final String className;
+    private final List<ClassNode> subClassList;
 
     public ClassNode(String className, List<ClassNode> subClassList) {
         this.className = className;

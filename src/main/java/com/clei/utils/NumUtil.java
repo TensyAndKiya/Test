@@ -115,6 +115,26 @@ public class NumUtil {
     }
 
     /**
+     * 判断一个整数是否是质数/素数
+     * 质数只有两个正因数（1和自己）的自然数即为质数
+     * 比1大但不是素数的数称为合数
+     * 1和0既非素数也非合数。
+     *
+     * @param num
+     * @return
+     */
+    public static boolean isPrime(int num) {
+        int k = (int) Math.sqrt(num) + 1;
+        for (int i = 2; i < k; i++) {
+            if (0 == num % i) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
      * 阶乘 n!
      *
      * @param n

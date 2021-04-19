@@ -21,12 +21,8 @@ public class DeadLockTest {
 
 class MyThread extends Thread {
 
-    private String obj1;
-    private String obj2;
-
-    public MyThread() {
-        super();
-    }
+    private final String obj1;
+    private final String obj2;
 
     public MyThread(String name, String obj1, String obj2) {
         super(name);
@@ -43,10 +39,10 @@ class MyThread extends Thread {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                PrintUtil.log("线程执行出错", e);
             }
             synchronized (obj2) {
-                PrintUtil.log("获得obj1");
+                PrintUtil.log("获得obj2");
             }
         }
         PrintUtil.log("进程" + this.getName() + "结束");
@@ -55,12 +51,8 @@ class MyThread extends Thread {
 
 class MyThread1 extends Thread {
 
-    private String obj1;
-    private String obj2;
-
-    public MyThread1() {
-        super();
-    }
+    private final String obj1;
+    private final String obj2;
 
     public MyThread1(String name, String obj1, String obj2) {
         super(name);
@@ -77,10 +69,10 @@ class MyThread1 extends Thread {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                PrintUtil.log("线程执行出错", e);
             }
             synchronized (obj1) {
-                PrintUtil.log("获得obj2");
+                PrintUtil.log("获得obj1");
             }
         }
         PrintUtil.log("进程" + this.getName() + "结束");
