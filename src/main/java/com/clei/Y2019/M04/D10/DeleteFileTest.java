@@ -5,20 +5,23 @@ import com.clei.utils.PrintUtil;
 import java.io.File;
 import java.util.Scanner;
 
-//此包内用于工作项目的测试。
+/**
+ * 文件删除测试
+ *
+ * @author KIyA
+ */
 public class DeleteFileTest {
+
     public static void main(String[] args) {
         deleteTarget();
     }
 
     private static void deleteTarget() {
         PrintUtil.log("输入文件(g || t || d)");
-        Scanner input = new Scanner(System.in,"UTF-8");
+        Scanner input = new Scanner(System.in, "UTF-8");
         char c = input.next().charAt(0);
         String folder = "dev";
         switch (c) {
-            case 'x':
-                return;
             case 'g':
                 folder = "git";
                 break;
@@ -27,6 +30,9 @@ public class DeleteFileTest {
                 break;
             case 'd':
                 break;
+            case 'x':
+            default:
+                return;
         }
         String parentFilePath = "D:\\CLIdeaWorkspace\\" + folder + "\\park";
         File file = new File(parentFilePath);
@@ -37,7 +43,7 @@ public class DeleteFileTest {
                     File[] fs = tempFile.listFiles();
                     if (null != fs) {
                         for (File f : fs) {
-                            if (f.getName().equals("target")) {
+                            if ("target".equals(f.getName())) {
                                 //直接点用f.delete()是不行的。。因为不是空文件件，，所以要递归删除
                                 if (deleteFile(f)) {
                                     PrintUtil.date("删除成功！" + f.getAbsolutePath());
@@ -59,7 +65,7 @@ public class DeleteFileTest {
                     File[] fs = tempFile.listFiles();
                     if (null != fs) {
                         for (File f : fs) {
-                            if (f.getName().equals("target")) {
+                            if ("target".equals(f.getName())) {
                                 clear = false;
                                 PrintUtil.log(f.getAbsolutePath());
                                 break;

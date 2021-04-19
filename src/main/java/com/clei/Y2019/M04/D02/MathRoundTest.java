@@ -5,7 +5,13 @@ import com.clei.utils.PrintUtil;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
+/**
+ * 四舍五入的几种方法
+ *
+ * @author KIyA
+ */
 public class MathRoundTest {
+
     public static void main(String[] args) {
         double d = 123.1455858123D;
         //method 1

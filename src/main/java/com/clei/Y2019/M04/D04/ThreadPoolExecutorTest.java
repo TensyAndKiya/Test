@@ -9,7 +9,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * ThreadPoolExecutor
+ *
+ * @author KIyA
+ */
 public class ThreadPoolExecutorTest {
+
     /**
      * 线程池初始化方法
      * <p>
@@ -22,7 +28,7 @@ public class ThreadPoolExecutorTest {
      * rejectedExecutionHandler 当提交任务数超过maximumPoolSize+workQueue之和时,
      * 任务会交给RejectedExecutionHandler来处理
      */
-    public static void main(String[] args){
+    public static void main(String[] args) {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(
                 4,
                 9,
@@ -46,17 +52,20 @@ public class ThreadPoolExecutorTest {
         }
     }
 
-    private static class CustomThreadFactory implements ThreadFactory{
+    private static class CustomThreadFactory implements ThreadFactory {
+
         private AtomicInteger ai = new AtomicInteger(0);
+
         @Override
         public Thread newThread(Runnable r) {
-            String name = "KIyA_ThreadFactory_Thread_"+ai.addAndGet(1);
+            String name = "KIyA_ThreadFactory_Thread_" + ai.addAndGet(1);
             PrintUtil.log("创建了线程 ： " + name);
             return new Thread(r, name);
         }
     }
 
-    private static class CustomRejectedExecutionHandler implements RejectedExecutionHandler{
+    private static class CustomRejectedExecutionHandler implements RejectedExecutionHandler {
+
         @Override
         public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
             try {

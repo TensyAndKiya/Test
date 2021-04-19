@@ -7,6 +7,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * 停车费计算
+ *
+ * @author KIyA
+ */
 public class CalcPriceTest {
 
     private final static int HOUR_MILLS = 3600000;
@@ -21,30 +26,7 @@ public class CalcPriceTest {
      */
     private final static float PRICE_PER_DAY = 18f;
 
-    public static void main(String[] args) throws Exception {
-        /*Scanner input = new Scanner(System.in, "UTF-8");
-        PrintUtil.log("时间格式 yyyy MM dd HH mm ss");
-        while (true) {
-            PrintUtil.log("请输入开始时间： xxxx xx xx xx xx xx(输入xx结束程序)");
-            String str = input.nextLine();
-            if (null != str && str.equals("xx")) {
-                break;
-            }
-            if (null == str || str.length() == 0) {
-                PrintUtil.log("请输入正确内容：");
-                continue;
-            }
-            LocalDateTime startDate = DateUtil.parse(str);
-            PrintUtil.log("请输入结束时间： xxxx xx xx xx xx xx(输入xx结束程序)");
-            str = input.nextLine();
-            if (str.equals("xx")) {
-                break;
-            }
-            LocalDateTime endDate = DateUtil.parse(str);
-            //输出
-            PrintUtil.log(myCalc(startDate, endDate));
-        }*/
-
+    public static void main(String[] args) {
         LocalDateTime startDate = LocalDateTime.now();
         for (int i = 0; i < 24; i++) {
             LocalDateTime endDate = startDate.plusHours((i + 1) * 2L);
@@ -108,8 +90,7 @@ public class CalcPriceTest {
             price = Math.min(price, PRICE_PER_DAY);
             totalPrice += price;
         }
-        PriceResult priceResult = new PriceResult(startDate, endDate, getDiffHours(startDate, endDate), overNight, totalPrice);
-        return priceResult;
+        return new PriceResult(startDate, endDate, getDiffHours(startDate, endDate), overNight, totalPrice);
     }
 
     /**

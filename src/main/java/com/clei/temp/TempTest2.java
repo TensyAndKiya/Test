@@ -7,7 +7,9 @@ import com.clei.utils.PrintUtil;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -19,6 +21,17 @@ import java.util.stream.Collectors;
 public class TempTest2 {
 
     public static void main(String[] args) throws Exception {
+
+        Map<String, Integer> m = new HashMap<>(16);
+        for (int i = 0; i < 12; i++) {
+            m.merge(String.valueOf(i), 1, (t, u) -> t + u);
+        }
+        m.forEach((k, v) -> PrintUtil.log("K : {}, V : {}", k, v));
+        for (int i = 4; i < 9; i++) {
+            m.merge(String.valueOf(i), 1, (t, u) -> t + u);
+        }
+        m.forEach((k, v) -> PrintUtil.log("K : {}, V : {}", k, v));
+
         Integer aa = 1;
         Integer bb = 2;
         Integer c = 3;
@@ -38,7 +51,6 @@ public class TempTest2 {
         PrintUtil.log(g == (aa + bb));
         // false aa + bb 装箱为 Integer Integer instanceof Long 返回false
         PrintUtil.log(g.equals(aa + bb));
-
 
         PrintUtil.log(System.currentTimeMillis());
 

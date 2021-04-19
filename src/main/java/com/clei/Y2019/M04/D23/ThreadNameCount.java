@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -14,7 +15,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * 获取到一个日志文件里某天的错误排序
@@ -23,13 +23,13 @@ import java.util.Objects;
  */
 public class ThreadNameCount {
 
-    private static String LOG_File = "C:\\Users\\liudg\\Desktop\\logs\\2019-04-23 error\\all_info_0422.log";
+    private final static String LOG_FILE = "C:\\Users\\liudg\\Desktop\\logs\\2019-04-23 error\\all_info_0422.log";
     private final static String ERROR = " ERROR ";
     private final static String DAY = "2019-04-22-";
 
     public static void main(String[] args) throws Exception {
-        File logFile = new File(LOG_File);
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), "UTF-8"));
+        File logFile = new File(LOG_FILE);
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), StandardCharsets.UTF_8));
         Map<String, ThreadDiff> countMap = new HashMap<>();
         String line;
         while ((line = br.readLine()) != null) {
@@ -44,10 +44,10 @@ public class ThreadNameCount {
         PrintUtil.log("筛选完毕");
         List<ThreadDiff> list = new ArrayList<>(countMap.values());
         Collections.sort(list);
-        list.forEach(td -> PrintUtil.log(td));
+        list.forEach(PrintUtil::log);
     }
 
-    private static void createEntity(Map<String, ThreadDiff> map, String threadName, String dateTime) throws Exception {
+    private static void createEntity(Map<String, ThreadDiff> map, String threadName, String dateTime) {
         ThreadDiff td = map.get(threadName);
         LocalDateTime date = DateUtil.parse(dateTime, "yyyy-MM-dd-HH:mm:ss");
         if (null == td) {
@@ -67,9 +67,6 @@ public class ThreadNameCount {
         private LocalDateTime end;
         private long diff;
 
-        public ThreadDiff() {
-        }
-
         public ThreadDiff(String thread, int count, LocalDateTime begin, LocalDateTime end, long diff) {
             this.thread = thread;
             this.count = count;
@@ -81,19 +78,6 @@ public class ThreadNameCount {
         @Override
         public int compareTo(ThreadDiff ec) {
             return Long.compare(ec.getDiff(), diff);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof ThreadDiff)) return false;
-            ThreadDiff that = (ThreadDiff) o;
-            return getDiff() == that.getDiff();
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(getDiff());
         }
 
         @Override

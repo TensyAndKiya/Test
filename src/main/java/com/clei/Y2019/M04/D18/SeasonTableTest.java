@@ -23,30 +23,7 @@ public class SeasonTableTest {
     private static final String INITIAL_DATE = "2016 12 01 00 00 00";
     private static final Random rand = new Random();
 
-    public static void main(String[] args) throws Exception {
-        /*Scanner input = new Scanner(System.in,"UTF-8");
-        PrintUtil.log("时间格式 yyyy MM dd HH mm ss");
-        while(true){
-            PrintUtil.log("请输入开始时间： xxxx xx xx xx xx xx(输入xx结束程序)");
-            String str = input.nextLine();
-            if(str.equals("xx")){
-                break;
-            }
-            if(null == str || str.length() == 0){
-                PrintUtil.log("请输入正确内容：");
-                continue;
-            }
-            Date startDate = SDF.parse(str);
-            PrintUtil.log("请输入结束时间： xxxx xx xx xx xx xx(输入xx结束程序)");
-            str = input.nextLine();
-            if(str.equals("xx")){
-                break;
-            }
-            Date endDate = SDF.parse(str);
-            //输出
-            calcTable(startDate,endDate);
-        }*/
-
+    public static void main(String[] args) {
         LocalDateTime endDate = LocalDateTime.now();
         for (int i = 0; i < 12; i++) {
             LocalDateTime startDate = endDate.minusMonths(i + 1);

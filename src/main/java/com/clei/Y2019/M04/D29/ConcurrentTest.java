@@ -7,11 +7,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-//本来是想用CopyOnArraySet或ConcurrentHashMap来代替HashSet的。。
-//根据下面的测试结果来看。。还是用CopyOnArraySet吧
-//原项目的场景Map并不适用
+/**
+ * 本来是想用CopyOnArraySet或ConcurrentHashMap来代替HashSet的。。
+ * 根据下面的测试结果来看。。还是用CopyOnArraySet吧
+ * 原项目的场景Map并不适用
+ *
+ * @author KIyA
+ */
 public class ConcurrentTest {
+
     private static final int LOOP = 5000000;
+
     public static void main(String[] args) {
         Set<String> set = new HashSet<>();
         Map<String, Object> map = new ConcurrentHashMap<>();
@@ -26,7 +32,7 @@ public class ConcurrentTest {
     }
 
 
-    private static void putInSet(Set<String> set){
+    private static void putInSet(Set<String> set) {
         long begin = System.currentTimeMillis();
         for (int i = 0; i < LOOP; i++) {
             set.add("String " + i);
@@ -35,20 +41,20 @@ public class ConcurrentTest {
         PrintUtil.log("set耗时：" + (end - begin));
     }
 
-    private static void putInMap(Map<String,Object> map){
+    private static void putInMap(Map<String, Object> map) {
         Object obj = new Object();
         long begin = System.currentTimeMillis();
         for (int i = 0; i < LOOP; i++) {
-            map.put("String " + i,obj);
+            map.put("String " + i, obj);
         }
         long end = System.currentTimeMillis();
         PrintUtil.log("map耗时：" + (end - begin));
     }
 
-    private static void traverseSet(Set<String> set){
+    private static void traverseSet(Set<String> set) {
         long begin = System.currentTimeMillis();
-        for(String s: set){
-            if(s.equals("")){
+        for (String s : set) {
+            if (s.equals("")) {
 
             }
         }
@@ -56,10 +62,10 @@ public class ConcurrentTest {
         PrintUtil.log("set耗时：" + (end - begin));
     }
 
-    private static void traverseMap(Map<String,Object> map){
+    private static void traverseMap(Map<String, Object> map) {
         long begin = System.currentTimeMillis();
-        map.forEach((k,v)->{
-            if(k.equals("")){
+        map.forEach((k, v) -> {
+            if (k.equals("")) {
 
             }
         });
@@ -67,7 +73,7 @@ public class ConcurrentTest {
         PrintUtil.log("map耗时：" + (end - begin));
     }
 
-    private static void setRemove(Set<String> set){
+    private static void setRemove(Set<String> set) {
         long begin = System.currentTimeMillis();
         set.remove("String 1");
         set.remove("String 500000");
@@ -76,7 +82,7 @@ public class ConcurrentTest {
         PrintUtil.log("set耗时：" + (end - begin));
     }
 
-    private static void mapRemove(Map<String,Object> map){
+    private static void mapRemove(Map<String, Object> map) {
         long begin = System.currentTimeMillis();
         map.remove("String 1");
         map.remove("String 500000");
@@ -84,5 +90,4 @@ public class ConcurrentTest {
         long end = System.currentTimeMillis();
         PrintUtil.log("map耗时：" + (end - begin));
     }
-
 }
