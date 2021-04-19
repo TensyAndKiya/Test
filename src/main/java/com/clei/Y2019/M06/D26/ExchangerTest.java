@@ -1,16 +1,20 @@
 package com.clei.Y2019.M06.D26;
 
 import java.util.concurrent.Exchanger;
-import static com.clei.utils.PrintUtil.println;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+
+import static com.clei.utils.PrintUtil.println;
 
 /**
  * 并发工具类之Exchanger
  * 例子 儿子放学回家，母亲下班回家
+ *
+ * @author KIyA
  */
 public class ExchangerTest {
-    private static Exchanger<String> exchanger = new Exchanger<>();
+
+    private static final Exchanger<String> EXCHANGER = new Exchanger<>();
     // permits isFair
     // private static Semaphore semaphore = new Semaphore(3,true);
     public static void main(String[] args) {
@@ -30,7 +34,7 @@ public class ExchangerTest {
             println("儿子到家了");
             try {
                 // String message = exchanger.exchange("啊哈！");
-                String message = exchanger.exchange("我要出去玩",2, TimeUnit.SECONDS);
+                String message = EXCHANGER.exchange("我要出去玩", 2, TimeUnit.SECONDS);
                 println(message);
                 println("你打牌我打游戏。。");
             } catch (InterruptedException e) {
@@ -54,7 +58,7 @@ public class ExchangerTest {
             }
             println("母亲到家了");
             try {
-                String message  = exchanger.exchange("老娘出去打牌了",2, TimeUnit.SECONDS);
+                String message = EXCHANGER.exchange("老娘出去打牌了", 2, TimeUnit.SECONDS);
                 println(message);
                 println("玩锤子你玩，滚去做作业！");
             } catch (InterruptedException e) {

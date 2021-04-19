@@ -15,7 +15,7 @@ import java.util.Random;
  *
  * @author KIyA
  */
-public class DesignPattern_Proxy {
+public class DesignPatternProxy {
 
     public static void main(String[] args) {
         new StaticProxy().proxy();
@@ -24,7 +24,9 @@ public class DesignPattern_Proxy {
     }
 }
 
-//静态代理依赖于被代理的类,A修改之后,B可能也要跟着修改。。
+/**
+ * 静态代理依赖于被代理的类,A修改之后,B可能也要跟着修改
+ */
 class StaticProxy {
 
     void proxy() {
@@ -35,7 +37,9 @@ class StaticProxy {
     }
 }
 
-//继承
+/**
+ * 通过继承
+ */
 class CglibDynamicProxy {
 
     void proxy() {
@@ -49,7 +53,9 @@ class CglibDynamicProxy {
     }
 }
 
-//接口
+/**
+ * 通过实现接口
+ */
 class JdkDynamicProxy {
 
     void proxy() {
@@ -74,11 +80,15 @@ class JdkDynamicProxy {
 
 interface Eatable {
 
+    /**
+     * 吃
+     */
     void eat();
 }
 
 class Cat implements Eatable {
 
+    @Override
     public void eat() {
         PrintUtil.log("猫吃老鼠！");
     }
@@ -86,13 +96,14 @@ class Cat implements Eatable {
 
 class CatLogProxy implements Eatable {
 
-    private Eatable e;
+    private final Eatable e;
 
     public CatLogProxy(Eatable e) {
         super();
         this.e = e;
     }
 
+    @Override
     public void eat() {
         PrintUtil.log("Log Start...");
         e.eat();
@@ -107,13 +118,14 @@ class CatLogProxy implements Eatable {
 
 class CatTimeProxy implements Eatable {
 
-    private Eatable e;
+    private final Eatable e;
 
     public CatTimeProxy(Eatable e) {
         super();
         this.e = e;
     }
 
+    @Override
     public void eat() {
         long start = System.currentTimeMillis();
         e.eat();
@@ -124,13 +136,10 @@ class CatTimeProxy implements Eatable {
 
 class LogHandler2 implements MethodInterceptor {
 
-    private Object target;
-
     public Object getInstance(Object target) {
-        this.target = target;
         //创建增强器，用来创建动态代理类
         Enhancer enhancer = new Enhancer();
-        enhancer.setSuperclass(this.target.getClass());
+        enhancer.setSuperclass(target.getClass());
         enhancer.setCallback(this);
         return enhancer.create();
     }
@@ -146,23 +155,43 @@ class LogHandler2 implements MethodInterceptor {
 
 interface UserDao {
 
+    /**
+     * 新增
+     *
+     * @param id
+     * @param name
+     */
     void save(int id, String name);
 
+    /**
+     * 删除
+     *
+     * @param id
+     */
     void delete(int id);
 
+    /**
+     * 更新
+     *
+     * @param id
+     * @param name
+     */
     void update(int id, String name);
 }
 
 class UserDaoMysqlImpl implements UserDao {
 
+    @Override
     public void save(int id, String name) {
         PrintUtil.log("Mysql执行保存！");
     }
 
+    @Override
     public void delete(int id) {
         PrintUtil.log("Mysql执行删除！");
     }
 
+    @Override
     public void update(int id, String name) {
         PrintUtil.log("Mysql执行修改！");
     }
@@ -170,14 +199,17 @@ class UserDaoMysqlImpl implements UserDao {
 
 class UserDaoOracleImpl implements UserDao {
 
+    @Override
     public void save(int id, String name) {
         PrintUtil.log("Oracle执行保存！");
     }
 
+    @Override
     public void delete(int id) {
         PrintUtil.log("Oracle执行删除！");
     }
 
+    @Override
     public void update(int id, String name) {
         PrintUtil.log("Oracle执行修改！");
     }
@@ -185,7 +217,7 @@ class UserDaoOracleImpl implements UserDao {
 
 class ProxyFactory {
 
-    private Object obj;
+    private final Object obj;
 
     public ProxyFactory(Object obj) {
         super();
@@ -193,17 +225,16 @@ class ProxyFactory {
     }
 
     public Object getTransactionProxyInstance() {
-        Object proxy = Proxy.newProxyInstance(obj.getClass().getClassLoader(), obj.getClass().getInterfaces(), (tempProxy, method, args) -> {
+        return Proxy.newProxyInstance(obj.getClass().getClassLoader(), obj.getClass().getInterfaces(), (tempProxy, method, args) -> {
             PrintUtil.log("开启事务！");
             method.invoke(obj, args);
             PrintUtil.log("关闭事务！");
             return tempProxy;
         });
-        return proxy;
     }
 
     public Object getLogProxyInstance() {
-        Object proxy = Proxy.newProxyInstance(obj.getClass().getClassLoader(), obj.getClass().getInterfaces(), (tempProxy, method, args) -> {
+        return Proxy.newProxyInstance(obj.getClass().getClassLoader(), obj.getClass().getInterfaces(), (tempProxy, method, args) -> {
             String methodName = method.getName();
             //只代理save和delete类型的方法
             if (methodName.contains("save") || methodName.contains("delete")) {
@@ -215,7 +246,6 @@ class ProxyFactory {
             }
             return tempProxy;
         });
-        return proxy;
     }
 }
 

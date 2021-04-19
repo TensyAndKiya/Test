@@ -10,10 +10,12 @@ import static com.clei.utils.PrintUtil.println;
 
 /**
  * 并发工具类之CountDownLatch
+ *
+ * @author KIyA
  */
 public class CountDownLatchTest {
 
-    private static CountDownLatch countDownLatch = new CountDownLatch(2);
+    private static final CountDownLatch COUNT_DOWN_LATCH = new CountDownLatch(2);
 
     public static void main(String[] args) {
         ThreadPoolExecutor pool = ThreadUtil.pool();
@@ -25,7 +27,7 @@ public class CountDownLatchTest {
                 // 吃掉异常
             }
             println("吃饭");
-            countDownLatch.countDown();
+            COUNT_DOWN_LATCH.countDown();
         });
 
         pool.execute(() -> {
@@ -35,7 +37,7 @@ public class CountDownLatchTest {
                 // 吃掉异常
             }
             println("学习");
-            countDownLatch.countDown();
+            COUNT_DOWN_LATCH.countDown();
         });
 
         pool.execute(() -> {
@@ -44,7 +46,7 @@ public class CountDownLatchTest {
                 // countDownLatch.await();
                 // 就等一段时间 有返回boolean值的哦。。
                 // 就等2秒钟。。没搞完老子也要睡觉
-                countDownLatch.await(2, TimeUnit.SECONDS);
+                COUNT_DOWN_LATCH.await(2, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
                 // 吃掉异常
                 println("异常！！！");

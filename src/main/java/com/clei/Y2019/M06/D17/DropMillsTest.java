@@ -4,7 +4,13 @@ import com.clei.utils.PrintUtil;
 
 import java.util.Date;
 
+/**
+ * 舍弃毫秒数
+ *
+ * @author KIyA
+ */
 public class DropMillsTest {
+
     public static void main(String[] args) {
         Date date = new Date();
         PrintUtil.log("原来的毫秒数：" + date.getTime());
@@ -12,10 +18,10 @@ public class DropMillsTest {
         PrintUtil.log("现在的毫秒数：" + date.getTime());
     }
 
-    private static void dropMills(final Date date){
+    private static void dropMills(final Date date) {
         long mills = date.getTime();
-        long leftMills = mills%1000;
-        if(leftMills > 0){
+        long leftMills = mills % 1000;
+        if (leftMills > 0) {
             date.setTime(mills - leftMills);
         }
     }

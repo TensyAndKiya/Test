@@ -10,17 +10,20 @@ import static com.clei.utils.PrintUtil.println;
 /**
  * 获得本机的一些信息
  * 获得本地IP地址和主机名
+ *
+ * @author KIyA
  */
-public class InetAddressTest {
+public class SystemPropertyTest {
+
     public static void main(String[] args) throws UnknownHostException {
         InetAddress addr = InetAddress.getLocalHost();
-        println("IP:{}",addr.getHostAddress());
-        println("主机名:{}",addr.getHostName());
-        println("操作系统:{}",System.getProperty("os.name"));
-        println("用户目录:{}",System.getProperty("user.dir"));
-        println("系统位数(CPU架构):{}",System.getProperty("os.arch"));
+        println("IP:{}", addr.getHostAddress());
+        println("主机名:{}", addr.getHostName());
+        println("操作系统:{}", System.getProperty("os.name"));
+        println("用户目录:{}", System.getProperty("user.dir"));
+        println("系统位数(CPU架构):{}", System.getProperty("os.arch"));
         // 若是Sun/Oracle的JDK
-        println("JDK位数:{}",System.getProperty("sun.arch.data.model"));
+        println("JDK位数:{}", System.getProperty("sun.arch.data.model"));
         //
         println("System Properties");
         Properties properties = System.getProperties();

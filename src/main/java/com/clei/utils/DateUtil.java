@@ -18,9 +18,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DateUtil {
 
-    private final static String FORMATTER_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    public final static String FORMATTER_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
-    private final static String FORMATTER_PATTERN_MS = "yyyy-MM-dd HH:mm:ss.SSS";
+    public final static String FORMATTER_PATTERN_MS = "yyyy-MM-dd HH:mm:ss.SSS";
 
     /**
      * 默认parse的日期类型
