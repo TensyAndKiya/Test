@@ -19,6 +19,27 @@ import java.util.stream.Collectors;
 public class TempTest2 {
 
     public static void main(String[] args) throws Exception {
+        Integer aa = 1;
+        Integer bb = 2;
+        Integer c = 3;
+        Integer d = 3;
+        Integer e = 321;
+        Integer f = 321;
+        Long g = 3L;
+        // true
+        PrintUtil.log(c == d);
+        // false
+        PrintUtil.log(e == f);
+        // true aa + bb拆箱为int c也拆箱 比较基础值
+        PrintUtil.log(c == (aa + bb));
+        // true
+        PrintUtil.log(c.equals(aa + bb));
+        // true aa + bb转为 int
+        PrintUtil.log(g == (aa + bb));
+        // false aa + bb 装箱为 Integer Integer instanceof Long 返回false
+        PrintUtil.log(g.equals(aa + bb));
+
+
         PrintUtil.log(System.currentTimeMillis());
 
         PrintUtil.log(FileUtil.getHttpFileSize("http://111.111.222.222:8888/asd", "M"));
@@ -26,11 +47,11 @@ public class TempTest2 {
         // 左闭右开
         new Random().ints(20, 1, 3).forEach(PrintUtil::log);
 
-        System.out.println((2L << 41) / 1024 / 1024 / 1024 / 1024);
+        PrintUtil.log((2L << 41) / 1024 / 1024 / 1024 / 1024);
 
         PrintUtil.log(3 * 0.1 == 0.3);
 
-        System.out.println(0.1 * 3);
+        PrintUtil.log(0.1 * 3);
 
         PrintUtil.log(Float.valueOf("40.5F"));
         PrintUtil.log(Double.valueOf("40.5D"));

@@ -1,96 +1,71 @@
 package com.clei.Y2020.M06.D15;
 
+import com.clei.algorithm.other.FibonacciSequence;
 import com.clei.utils.PrintUtil;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * n个台阶 每次只能走1步或者2步 有多少种方法
+ *
+ * @author KIyA
  */
 public class StepTest {
 
-    private static int num = 0;
+    private static long num = 0;
 
-    private static Map<Integer,Long> map;
+    private final static int STEP = 50;
 
     public static void main(String[] args) {
 
-        int step = 200;
-
-        // 这个太慢了 先注释掉
-        // step(step);
+        long start = System.currentTimeMillis();
+        // 这个太慢了
+        step(STEP);
+        long end = System.currentTimeMillis();
+        PrintUtil.log("方法1耗时： {}ms", end - start);
 
         PrintUtil.log(num);
 
-        Long temp = tempNewStep(step);
+        start = System.currentTimeMillis();
+        long temp = step2(STEP);
+        end = System.currentTimeMillis();
+        PrintUtil.log("方法2耗时： {}ms", end - start);
 
         PrintUtil.log(temp);
-
     }
 
-    public static void step(int lastStep){
-        step(lastStep,1);
-    }
-
-    public static void step(int lastStep, int minus){
-
-        if(0 >= lastStep - minus ){
-            num ++;
-            return;
-        }
-
-        lastStep = lastStep - minus;
-
+    private static void step(int lastStep) {
         step(lastStep, 1);
         step(lastStep, 2);
     }
 
-    /**
-     * 考虑到效率问题 有了newStep2
-     * @param lastStep
-     * @return
-     */
-    public static Long tempNewStep(int lastStep){
-        if(lastStep > 1){
-            map = new HashMap<>(4);
-            return newStep2(lastStep);
+    private static void step(int lastStep, int minus) {
+        lastStep -= minus;
+        if (lastStep > 0) {
+            step(lastStep, 1);
+            step(lastStep, 2);
+        } else if (lastStep == 0) {
+            // 每个选择都能正确走到底才++
+            num++;
         }
-
-        return newStep1(lastStep);
     }
 
     /**
+     * 考虑到效率问题 有了step2
      * 斐波那契数列
-     * @param lastStep
+     *
+     * @param lastStep 剩余台阶数
      * @return
      */
-    public static long newStep1(int lastStep){
-        if(lastStep < 4){
-            return lastStep;
-        }
+    public static long step2(int lastStep) {
 
-        return newStep1(lastStep - 1) + newStep1(lastStep - 2);
-    }
-
-    /**
-     * 斐波那契数列
-     * @param lastStep
-     * @return
-     */
-    public static Long newStep2(int lastStep){
-
-        if(lastStep < 3){
-            return Long.valueOf(lastStep);
-        }
-
-        Integer key1 = 1;
-        Integer key2 = 2;
+        return FibonacciSequence.f(lastStep + 1);
 
         // 全是在一个函数体内操作的，可以不用map
         // 要把f(1)到f(n)存下的话用map
-        map.put(key1,2L);
-        map.put(key2,3L);
+        /*Map<Integer, Long> map = new HashMap<>(4);
+        Integer key1 = 1;
+        Integer key2 = 2;
+        map.put(key1, 2L);
+        map.put(key2, 3L);
 
         for (int i = 3; i < lastStep; i++) {
 
@@ -99,11 +74,10 @@ public class StepTest {
 
             Long l = step1 + step2;
 
-            map.put(key1,step2);
-            map.put(key2,l);
+            map.put(key1, step2);
+            map.put(key2, l);
         }
 
-        return map.get(key2);
+        return map.get(key2);*/
     }
-
 }

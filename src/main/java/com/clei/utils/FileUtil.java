@@ -25,6 +25,11 @@ public class FileUtil {
     private final static int CONNECTION_TIME_OUT = 3000;
 
     /**
+     * 读取超时时间
+     */
+    private final static int READ_TIME_OUT = 3000;
+
+    /**
      * test main
      *
      * @param args
@@ -250,6 +255,7 @@ public class FileUtil {
         URLConnection connection = httpUrl.openConnection();
         // 避免长时间等待
         connection.setConnectTimeout(CONNECTION_TIME_OUT);
+        connection.setReadTimeout(READ_TIME_OUT);
         long size = connection.getContentLengthLong();
         return getUnitString(size, unit);
     }

@@ -126,10 +126,17 @@ public class NumUtil {
         if (n > 12) {
             throw new RuntimeException("int类型会溢出");
         }
-        return n * factorial(n - 1);
+        int result = 1;
+        while (n > 1) {
+            result *= n;
+            n--;
+        }
+        return result;
     }
 
     public static void main(String[] args) {
+        PrintUtil.log(factorial(12));
+
         PrintUtil.log(getPowSum(3, 4));
 
         PrintUtil.log(transRadix("x", 36, 10));
