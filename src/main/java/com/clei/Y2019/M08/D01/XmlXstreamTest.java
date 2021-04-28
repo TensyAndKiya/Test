@@ -21,6 +21,11 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Random;
 
+/**
+ * 上海航信开票测试
+ *
+ * @author KIyA
+ */
 public class XmlXstreamTest {
 
     private final static String AppId = "ZZS_PT_DZFP";

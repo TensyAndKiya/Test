@@ -7,6 +7,8 @@ import java.util.Map;
 
 /**
  * @author KIyA
+ * <p>
+ * 大象发票邮件生成通知
  */
 public class DoPostTest {
 

@@ -8,17 +8,23 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 学习Java8新特性
+ *
+ * @author KIyA
+ */
 public class Java8Test5 {
+
     public static void main(String[] args) {
         List<Person> list = new ArrayList<>();
-        list.add(new Person("张三",18,1));
-        list.add(new Person("李四",19,0));
-        list.add(new Person("李端",22,0));
-        list.add(new Person("王五",20,1));
-        list.add(new Person("赵秦",25,0));
-        list.add(new Person("张泽",21,1));
-        list.add(new Person("王炸",23,1));
-        list.add(new Person("陈某",24,1));
+        list.add(new Person("张三", 18, 1));
+        list.add(new Person("李四", 19, 0));
+        list.add(new Person("李端", 22, 0));
+        list.add(new Person("王五", 20, 1));
+        list.add(new Person("赵秦", 25, 0));
+        list.add(new Person("张泽", 21, 1));
+        list.add(new Person("王炸", 23, 1));
+        list.add(new Person("陈某", 24, 1));
 
         // 找出姓王的
         List<Person> listWang = list.stream().filter(p -> p.getName().startsWith("王")).collect(Collectors.toList());

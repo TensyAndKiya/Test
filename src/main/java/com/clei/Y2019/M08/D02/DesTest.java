@@ -11,7 +11,13 @@ import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+/**
+ * DES加密测试
+ *
+ * @author KIyA
+ */
 public class DesTest {
+
     // vector must be 8 bytes long
     private static String vector = "vectorvc";
     private static String charset = "UTF-8";
@@ -24,6 +30,8 @@ public class DesTest {
         PrintUtil.log(str);
         PrintUtil.log(encrypt3DESECB(str));
         PrintUtil.log(encrypt3DES(str));
+        PrintUtil.log(encryptDESCBC(str));
+        PrintUtil.log(decryptDESCBC(encryptDESCBC(str)));
     }
 
     private static String encryptDESCBC(String str) throws Exception {
@@ -35,7 +43,7 @@ public class DesTest {
         IvParameterSpec iv = new IvParameterSpec(vector.getBytes(charset));
         // 加密
         Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
-        cipher.init(Cipher.ENCRYPT_MODE,secretKey,iv);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, iv);
 
         byte[] bytes = cipher.doFinal(str.getBytes(charset));
         // 用Base64转成字符串
@@ -53,11 +61,11 @@ public class DesTest {
         IvParameterSpec iv = new IvParameterSpec(vector.getBytes(charset));
         // 解密
         Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
-        cipher.init(Cipher.DECRYPT_MODE,secretKey,iv);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey, iv);
 
         byte[] result = cipher.doFinal(bytes);
         // 用Base64转成字符串
-        return new String(result,charset);
+        return new String(result, charset);
     }
 
     // ECB 不需要向量
@@ -69,7 +77,7 @@ public class DesTest {
         SecretKey secretKey = secretKeyFactory.generateSecret(desKeySpec);
         // 加密
         Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");
-        cipher.init(Cipher.ENCRYPT_MODE,secretKey);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 
         byte[] bytes = cipher.doFinal(str.getBytes(charset));
         // 用Base64转成字符串
@@ -85,20 +93,20 @@ public class DesTest {
         SecretKey secretKey = secretKeyFactory.generateSecret(desKeySpec);
         // 解密
         Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");
-        cipher.init(Cipher.DECRYPT_MODE,secretKey);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
 
         byte[] result = cipher.doFinal(bytes);
         // 用Base64转成字符串
-        return new String(result,charset);
+        return new String(result, charset);
     }
 
     public static String encrypt3DES(String str) throws Exception {
         String algorithm = "DESede";
         // key
-        SecretKey secretKey = new SecretKeySpec(key.getBytes(charset),algorithm);
+        SecretKey secretKey = new SecretKeySpec(key.getBytes(charset), algorithm);
         // 加密
         Cipher cipher = Cipher.getInstance(algorithm);
-        cipher.init(Cipher.ENCRYPT_MODE,secretKey);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 
         byte[] bytes = cipher.doFinal(str.getBytes(charset));
         // 用Base64转成字符串
@@ -110,12 +118,12 @@ public class DesTest {
         byte[] bytes = Base64Util.decode(str);
         // key
         String algorithm = "DESede";
-        SecretKey secretKey = new SecretKeySpec(key.getBytes(charset),algorithm);
+        SecretKey secretKey = new SecretKeySpec(key.getBytes(charset), algorithm);
         // 解密
         Cipher cipher = Cipher.getInstance(algorithm);
-        cipher.init(Cipher.DECRYPT_MODE,secretKey);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
 
         byte[] result = cipher.doFinal(bytes);
-        return new String(result,charset);
+        return new String(result, charset);
     }
 }

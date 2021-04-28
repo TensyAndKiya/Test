@@ -9,6 +9,8 @@ import java.net.UnknownHostException;
 /**
  * 需求是把服务器的IP放入一个32位的uuid中
  * 网关返回时根据IP返回给指定服务器
+ *
+ * @author KIyA
  */
 public class IPInUUIDTest {
 

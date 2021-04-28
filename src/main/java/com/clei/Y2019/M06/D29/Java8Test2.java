@@ -6,7 +6,13 @@ import java.util.function.Supplier;
 
 import static com.clei.utils.PrintUtil.println;
 
+/**
+ * 学习Java8新特性
+ *
+ * @author KIyA
+ */
 public class Java8Test2 {
+
     public static void main(String[] args) {
         List<Car> list = new ArrayList<>();
         // 构造器引用 Class::new
@@ -25,6 +31,7 @@ public class Java8Test2 {
 }
 
 class Car {
+
     private String name;
 
     public Car() {

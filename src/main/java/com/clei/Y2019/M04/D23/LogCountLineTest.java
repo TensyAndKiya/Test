@@ -1,6 +1,5 @@
 package com.clei.Y2019.M04.D23;
 
-import com.clei.utils.EncryptUtil;
 import com.clei.utils.PrintUtil;
 
 import java.io.BufferedReader;
@@ -10,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 /**
@@ -35,8 +35,8 @@ public class LogCountLineTest {
         String searchStr = input.nextLine();
         File logFile = new File(LOG_FILE);
         File tempFile = new File(TEMP_FILE);
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), EncryptUtil.UTF8));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tempFile), EncryptUtil.UTF8));
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), StandardCharsets.UTF_8));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tempFile), StandardCharsets.UTF_8));
         String line;
         int count = 0;
         while ((line = br.readLine()) != null) {

@@ -6,8 +6,11 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * CopyOnWriteArraySet竟然可以在遍历的时候删除，厉害了
+ *
+ * @author KIyA
  */
 public class CopyOnWriteArraySetTest {
+
     public static void main(String[] args) {
         CopyOnWriteArraySet<String> set = new CopyOnWriteArraySet<>();
         for (int i = 0; i < 10; i++) {
@@ -15,11 +18,7 @@ public class CopyOnWriteArraySetTest {
         }
 
         for (int i = 0; i < 9; i++) {
-            for(String s : set){
-                if(!s.equals("0")){
-                    set.remove(s);
-                }
-            }
+            set.removeIf(s -> !s.equals("0"));
         }
 
         PrintUtil.log(set);

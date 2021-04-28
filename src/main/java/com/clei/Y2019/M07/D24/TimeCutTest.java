@@ -24,12 +24,12 @@ public class TimeCutTest {
 
     private static LocalDateTime updateEndTime(boolean countStart, int firstSection, int section, LocalDateTime orderStartTime, LocalDateTime orderEndTime) {
         if (section > 0) {
-            final int MINUTE_MILLS = 60 * 1000;
+            final int minuteMills = 60 * 1000;
             long diffMills = ChronoUnit.MILLIS.between(orderStartTime, orderEndTime);
             int sectionMills;
             int firstSectionMills;
-            sectionMills = MINUTE_MILLS * section;
-            firstSectionMills = MINUTE_MILLS * firstSection;
+            sectionMills = minuteMills * section;
+            firstSectionMills = minuteMills * firstSection;
             //看看是不是计算起步价的
             if (countStart) {
                 if (diffMills > firstSectionMills - 1) {

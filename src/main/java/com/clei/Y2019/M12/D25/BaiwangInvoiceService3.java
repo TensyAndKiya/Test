@@ -21,7 +21,9 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * 百旺开票测试2
+ * 百旺开票测试3
+ *
+ * @author KIyA
  */
 public class BaiwangInvoiceService3 {
 

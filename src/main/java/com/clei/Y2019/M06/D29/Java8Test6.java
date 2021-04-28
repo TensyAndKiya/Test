@@ -7,10 +7,13 @@ import java.util.Optional;
 
 /**
  * Optional 常用来封装一些可能为null的对象
+ *
+ * @author KIyA
  */
 public class Java8Test6 {
+
     public static void main(String[] args) {
-        Person person = new Person("阿三",18,1);
+        Person person = new Person("阿三", 18, 1);
 
         // 创建一个空的
         Optional<Person> optional1 = Optional.empty();
@@ -21,10 +24,10 @@ public class Java8Test6 {
         // 创建个String的
         Optional<String> strOptional = optional2.map(Person::getName);
 
-        PrintUtil.println("存在？{}",optional2.isPresent());
+        PrintUtil.println("存在？{}", optional2.isPresent());
 
         // Person p = optional2.get();
-        Person p = optional2.orElse(new Person("阿四",19,0));
-       //  Person p2 = optional2.orElseGet()
+        Person p = optional2.orElse(new Person("阿四", 19, 0));
+        //  Person p2 = optional2.orElseGet()
     }
 }

@@ -1,26 +1,28 @@
 package com.clei.Y2019.M11.D11;
 
+import com.clei.utils.MD5Util;
 import com.clei.utils.PrintUtil;
 
 import java.security.MessageDigest;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class Md5Test {
+
     public static void main(String[] args) {
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime signMark = now.minusHours(12);
-        PrintUtil.log(now.format(df));
-        PrintUtil.log(signMark.format(df));
-        // PrintUtil.log(md5(md5("123456pda")));
+        String str1 = "123456pda";
+        PrintUtil.log(md5(str1));
+        PrintUtil.log(MD5Util.md5(str1));
+        PrintUtil.log(MD5Util.md5(str1, 0));
+        String str2 = "带中文的字符串";
+        PrintUtil.log(md5(str2));
+        PrintUtil.log(MD5Util.md5(str2));
+        PrintUtil.log(MD5Util.md5(str2, 0));
     }
 
 
-    private static String md5(String pwd){
+    private static String md5(String pwd) {
         //用于加密的字符
-        char md5String[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                'A', 'B', 'C', 'D', 'E', 'F' };
+        char[] md5String = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                'A', 'B', 'C', 'D', 'E', 'F'};
         try {
             //使用平台的默认字符集将此 String 编码为 byte序列，并将结果存储到一个新的 byte数组中
             byte[] btInput = pwd.getBytes();
@@ -36,17 +38,18 @@ public class Md5Test {
 
             // 把密文转换成十六进制的字符串形式
             int j = md.length;
-            char str[] = new char[j * 2];
+            char[] arr = new char[j * 2];
             int k = 0;
             for (int i = 0; i < j; i++) {
                 byte byte0 = md[i];
-                str[k++] = md5String[byte0 >>> 4 & 0xf];
-                str[k++] = md5String[byte0 & 0xf];
+                arr[k++] = md5String[byte0 >>> 4 & 0xf];
+                arr[k++] = md5String[byte0 & 0xf];
             }
             //返回经过加密后的字符串
-            return new String(str);
+            return new String(arr);
         } catch (Exception e) {
-            return null;
+            PrintUtil.log("md5 出错", e);
         }
+        return null;
     }
 }

@@ -7,15 +7,18 @@ import com.clei.utils.PrintUtil;
  * 可以滴
  * 顺序呢
  * 从上而下
+ *
+ * @author KIyA
  */
 public class StaticBlockTest {
+
     private static int i = 10;
 
     static {
         i += 5;
     }
 
-    static{
+    static {
         i /= 3;
     }
 

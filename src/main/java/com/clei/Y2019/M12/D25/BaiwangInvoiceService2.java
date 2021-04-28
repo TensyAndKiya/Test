@@ -22,6 +22,8 @@ import java.util.UUID;
 
 /**
  * 百旺开票测试2
+ *
+ * @author KIyA
  */
 public class BaiwangInvoiceService2 {
 

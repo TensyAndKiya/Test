@@ -51,7 +51,7 @@ public class Base64Util {
         byteToFile(bytes, filePath);
     }
 
-    private static void byteToFile(byte[] bytes, String filePath) throws Exception {
+    public static void byteToFile(byte[] bytes, String filePath) throws Exception {
         File file = new File(filePath);
         if (!file.exists()) {
             file.getParentFile().mkdirs();

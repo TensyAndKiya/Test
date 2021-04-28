@@ -6,9 +6,12 @@ import com.clei.utils.PrintUtil;
 import io.jsonwebtoken.Claims;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
+ * JSON WEB TOKEN 测试
+ *
  * @author KIyA
  */
 public class JsonWebTokenTest {
@@ -18,8 +21,9 @@ public class JsonWebTokenTest {
         user.put("username", "zhangsan");
         user.put("password", "hasaki");
         String token = JWTUtil.createToken(user);
-        PrintUtil.log("token : " + token);
+        PrintUtil.log("token : {}", token);
         Claims claims = JWTUtil.parseToken(token);
-        PrintUtil.log(JSONObject.toJSONString(claims.get("obj", Map.class)));
+        PrintUtil.log("claims : {}", JSONObject.toJSONString(claims));
+        PrintUtil.log("obj : {}", JSONObject.toJSONString(claims.get("obj", LinkedHashMap.class)));
     }
 }

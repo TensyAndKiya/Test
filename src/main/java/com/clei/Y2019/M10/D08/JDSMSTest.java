@@ -13,14 +13,20 @@ import com.jdcloud.sdk.service.sms.model.BatchSendResponse;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 京东短信服务
+ *
+ * @author KIyA
+ */
 public class JDSMSTest {
+
     public static void main(String[] args) {
         String accessKeyId = "";
         String secretAccessKey = "";
         List<String> phoneList = Arrays.asList("184XXXXXXXX");
         List<String> params = Arrays.asList("4077");
 
-        CredentialsProvider credentialsProvider = new StaticCredentialsProvider(accessKeyId,secretAccessKey);
+        CredentialsProvider credentialsProvider = new StaticCredentialsProvider(accessKeyId, secretAccessKey);
         HttpRequestConfig requestConfig = new HttpRequestConfig.Builder()
                 .protocol(Protocol.HTTPS).build();
         SmsClient smsClient = SmsClient.builder()
@@ -41,9 +47,9 @@ public class JDSMSTest {
         // 发送
         BatchSendResponse response = smsClient.batchSend(request);
         PrintUtil.log("env : " + JSONObject.toJSONString(smsClient.getEnvironment()));
-        if(null != response){
-            PrintUtil.println("京东云 文本短信 群发 结果 requestId:{},result:{}",response.getRequestId(), JSONObject.toJSONString(response.getResult()));
-        }else {
+        if (null != response) {
+            PrintUtil.println("京东云 文本短信 群发 结果 requestId:{},result:{}", response.getRequestId(), JSONObject.toJSONString(response.getResult()));
+        } else {
             PrintUtil.println("京东云 文本短信 群发 响应为null");
         }
     }

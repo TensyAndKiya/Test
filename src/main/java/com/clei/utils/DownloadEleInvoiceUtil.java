@@ -29,7 +29,7 @@ public class DownloadEleInvoiceUtil {
             String secretKey = "fe5b568cbb2f46d4820dfe1c488ef1b6";
             // 加密key为secretKey前24位
             String desKey = secretKey.substring(0, 24);
-            data = EncryptUtil.decrypt3DES(data, desKey, null);
+            data = EncryptUtil.decrypt3DES(data, desKey);
         }
         return new String(data, "UTF-8");
     }

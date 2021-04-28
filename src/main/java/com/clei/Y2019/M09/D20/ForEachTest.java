@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.function.Consumer;
 
 /**
+ * foreach
+ *
  * @author KIyA
  */
 public class ForEachTest {

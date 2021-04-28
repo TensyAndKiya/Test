@@ -6,8 +6,15 @@ import com.clei.utils.PrintUtil;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
+/**
+ * 京东渠道支付回调
+ *
+ * @author KIyA
+ */
 public class JDPayNotifyTest {
+
     private final static String PAY_NOTIFY_URL = "http://localhost:4018/jdPayResult";
+
     public static void main(String[] args) {
 
         PrintUtil.log(System.currentTimeMillis());

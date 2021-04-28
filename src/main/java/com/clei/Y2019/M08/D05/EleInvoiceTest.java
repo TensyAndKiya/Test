@@ -20,6 +20,11 @@ import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 
+/**
+ * 大象开票测试
+ *
+ * @author KIyA
+ */
 public class EleInvoiceTest {
 
     private final static String API_URL = "http://101.124.15.54:8080/invoice/v1/";
@@ -294,7 +299,7 @@ public class EleInvoiceTest {
             String secretKey = "fe5b568cbb2f46d4820dfe1c488ef1b6";
             // 加密key为secretKey前24位
             String desKey = secretKey.substring(0, 24);
-            data = EncryptUtil.decrypt3DES(data, desKey, null);
+            data = EncryptUtil.decrypt3DES(data, desKey);
         }
         return new String(data, "UTF-8");
     }
