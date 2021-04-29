@@ -4,23 +4,23 @@ import com.clei.utils.PrintUtil;
 
 import java.time.LocalDate;
 
-public class Test {
+/**
+ * 给一个 年月 第几周的第几天
+ * 算出具体日期
+ *
+ * @author KIyA
+ */
+public class YmdTest {
+
     public static void main(String[] args) {
-
-        String s1 = "aa";
-        String s2 = "aa";
-
-        PrintUtil.log("s1 == s2 : " + (s1 == s2));
-
-        Test test = null;
-
+        YmdTest test = null;
         // 这样访问静态方法或变量 竟然不会报NPE哦
         test.test();
 
         ymd();
     }
 
-    public static void test(){
+    public static void test() {
         PrintUtil.log("哈哈哈");
     }
 
@@ -28,7 +28,7 @@ public class Test {
      * 给一个 年月 第几周的第几天
      * 算出具体日期
      */
-    public static void ymd(){
+    public static void ymd() {
 
         int year = 2020;
 
@@ -38,7 +38,7 @@ public class Test {
 
         int dayOfWeek = 2;
 
-        LocalDate date = LocalDate.of(year,month,1);
+        LocalDate date = LocalDate.of(year, month, 1);
 
         LocalDate monthEnd = date.plusMonths(1).minusDays(1);
 
@@ -48,9 +48,9 @@ public class Test {
 
         LocalDate targetDate = date.plusDays(dayDiff);
 
-        if(dayDiff < 0 || targetDate.isAfter(monthEnd)){
+        if (dayDiff < 0 || targetDate.isAfter(monthEnd)) {
             PrintUtil.log(0);
-        }else {
+        } else {
             PrintUtil.log(targetDate);
         }
 

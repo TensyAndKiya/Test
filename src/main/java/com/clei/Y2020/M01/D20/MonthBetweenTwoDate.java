@@ -7,18 +7,21 @@ import java.util.TreeSet;
 
 /**
  * 得到两个月份间的所有月份
+ *
+ * @author KIyA
  */
-public class NothingTest {
+public class MonthBetweenTwoDate {
+
     public static void main(String[] args) {
         int st = 201912;
-        int et = 202001;
+        int et = 202104;
 
         Set<Integer> dateMonth = new TreeSet<>();
         int startYear = st / 100;
         int endYear = et / 100;
         int startMonth = st % 100;
         int endMonth = et % 100;
-        for(int i = startYear, j = startMonth; (i < endYear || (i == endYear && j <= endMonth));){
+        for (int i = startYear, j = startMonth; (i < endYear || (i == endYear && j <= endMonth)); ) {
             dateMonth.add(i * 100 + j);
             j++;
             if(j > 12){

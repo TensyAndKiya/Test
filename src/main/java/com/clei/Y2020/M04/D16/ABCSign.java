@@ -19,6 +19,11 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Enumeration;
 
+/**
+ * 农行签名测试
+ *
+ * @author KIyA
+ */
 public class ABCSign {
 
     public static void main(String[] args) throws Exception {
