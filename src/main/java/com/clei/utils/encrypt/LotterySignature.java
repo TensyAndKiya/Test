@@ -3,22 +3,12 @@ package com.clei.utils.encrypt;
 import com.clei.utils.PrintUtil;
 import org.apache.commons.codec.binary.Base64;
 
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.Signature;
+import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class LotterySignature {
 
@@ -28,6 +18,7 @@ public class LotterySignature {
 
     /**
      * 签名
+     *
      * @param params
      * @param privateKey
      * @return
@@ -41,6 +32,7 @@ public class LotterySignature {
 
     /**
      * 验签
+     *
      * @param params
      * @param publicKey
      * @return
@@ -168,7 +160,7 @@ public class LotterySignature {
 
             return keyPairs;
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            PrintUtil.log("未找到指定算法", e);
         }
         return null;
     }

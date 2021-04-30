@@ -32,7 +32,7 @@ public class SystemUtil {
         Assert.notNull(str);
         String s;
         while (!str.equals(s = INPUT.nextLine())) {
-            PrintUtil.println(s);
+            PrintUtil.log(s);
         }
     }
 }

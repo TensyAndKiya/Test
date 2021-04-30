@@ -110,7 +110,7 @@ class CatLogProxy implements Eatable {
         try {
             Thread.sleep(new Random().nextInt(1000));
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            PrintUtil.log("sleep 出错", e);
         }
         PrintUtil.log("Log End...");
     }

@@ -36,7 +36,7 @@ public class EpochDayTest {
             startDate = startDate.plusDays(1);
         }
 
-        list.forEach(PrintUtil::println);
+        list.forEach(PrintUtil::log);
 
         SystemUtil.pause("");
     }

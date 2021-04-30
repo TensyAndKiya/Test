@@ -2,6 +2,11 @@ package com.clei.Y2020.M07.D02;
 
 import com.clei.utils.PrintUtil;
 
+/**
+ * 判断一个ipv4地址是否正确
+ *
+ * @author KIyA
+ */
 public class IPTest {
     public static void main(String[] args) {
 
@@ -11,29 +16,30 @@ public class IPTest {
 
     /**
      * IP校验 ipv4
+     *
      * @param ip
      */
-    public static boolean validateIP(String ip){
+    public static boolean validateIP(String ip) {
         try {
 
             String[] arr = ip.split("\\.");
 
-            if(4 != arr.length){
+            if (4 != arr.length) {
                 return false;
             }
 
-            for (String s : arr){
+            for (String s : arr) {
                 int i = Integer.parseInt(s);
 
-                if(i < 0 || i > 255){
+                if (i < 0 || i > 255) {
                     return false;
                 }
             }
 
             return true;
 
-        }catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
+            PrintUtil.log("ip验证出错", e);
             return false;
         }
     }

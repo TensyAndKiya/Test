@@ -8,13 +8,7 @@ import org.apache.commons.codec.binary.Hex;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.UnsupportedEncodingException;
-import java.security.KeyStore;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.Signature;
+import java.security.*;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Enumeration;
@@ -61,10 +55,8 @@ public class ABCSign {
             messageDigest = MessageDigest.getInstance("SHA-256");
             messageDigest.update(str.getBytes("UTF-8"));
             encodeStr = byte2Hex(messageDigest.digest());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            PrintUtil.log("信息加密出错", e);
         }
         return encodeStr;
     }
@@ -103,10 +95,8 @@ public class ABCSign {
             messageDigest = MessageDigest.getInstance("SHA-256");
             byte[] hash = messageDigest.digest(str.getBytes("UTF-8"));
             encdeStr = Hex.encodeHexString(hash);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            PrintUtil.log("信息加密出错", e);
         }
         return encdeStr;
     }

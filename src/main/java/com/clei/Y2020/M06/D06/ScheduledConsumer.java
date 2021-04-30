@@ -7,7 +7,7 @@ import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.message.MessageExt;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -52,11 +52,7 @@ public class ScheduledConsumer {
             PrintUtil.println("{} topic : {}", threadId, msg.getTopic());
             PrintUtil.println("{} tag : {}", threadId, msg.getTags());
             PrintUtil.println("{} msgId : {}", threadId, msg.getMsgId());
-            try {
-                PrintUtil.println("{} body : {}", threadId, new String(msg.getBody(),"UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            PrintUtil.println("{} body : {}", threadId, new String(msg.getBody(), StandardCharsets.UTF_8));
         }
     }
 }

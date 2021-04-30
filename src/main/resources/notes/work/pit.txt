@@ -74,7 +74,7 @@ Windows & Linux
     看看后台访问到了没有
     有的话一般是后台异常然后响应中断
     Mybatis那个boundStatement异常竟然被系统自己吃了
-    没有printStackTrace
+    没有打印异常堆栈信息也没有log
     最后debug找到了。。
     改完发现还是404，再看，原来是resultType不对。。
     真滴坑，瓜皮

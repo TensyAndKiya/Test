@@ -53,7 +53,7 @@ import com.clei.utils.PrintUtil;
 public class Algorithm0013 {
 
     public static void main(String[] args) {
-        PrintUtil.println(romanToInt("MCMXCIV"));
+        PrintUtil.log(romanToInt("MCMXCIV"));
         // PrintUtil.println(romanToInt("XII"));
     }
 

@@ -16,9 +16,8 @@ public class StackOverFlowTest {
             callSelf();
         } catch (Throwable t) {
             PrintUtil.log("stack length : {}", stackLength);
-            t.printStackTrace();
+            PrintUtil.log("错误信息", t);
         }
-
     }
 
     /**

@@ -4,12 +4,11 @@ import com.clei.utils.PrintUtil;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
-import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -19,8 +18,11 @@ import java.util.List;
  * @date 2020-06-06
  */
 public class BroadcastConsumer {
-    public static void main(String[] args) throws MQClientException {
+    public static void main(String[] args) throws Exception {
+        consume();
+    }
 
+    private static void consume() throws Exception {
         // 初始化消费者并设置组名
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("ConsumerGroup1");
 
@@ -33,7 +35,7 @@ public class BroadcastConsumer {
         consumer.setNamesrvAddr("127.0.0.1:9876");
 
         // 订阅topic
-        consumer.subscribe("FirstTopic","*");
+        consumer.subscribe("FirstTopic", "*");
 
         // 注册消息处理监听器 MessageListenerConcurrently 多线程处理
         consumer.registerMessageListener((List<MessageExt> messages, ConsumeConcurrentlyContext context) -> {
@@ -47,21 +49,17 @@ public class BroadcastConsumer {
         consumer.start();
     }
 
-    private static void handleMsg(List<MessageExt> messages){
+    private static void handleMsg(List<MessageExt> messages) {
         Thread thread = Thread.currentThread();
         String threadId = thread.getName() + '_' + thread.getId();
 
-        PrintUtil.println("{} 收到新消息 : {}",threadId,messages);
+        PrintUtil.println("{} 收到新消息 : {}", threadId, messages);
 
-        for (MessageExt msg : messages){
+        for (MessageExt msg : messages) {
             PrintUtil.println("{} topic : {}", threadId, msg.getTopic());
             PrintUtil.println("{} tag : {}", threadId, msg.getTags());
             PrintUtil.println("{} msgId : {}", threadId, msg.getMsgId());
-            try {
-                PrintUtil.println("{} body : {}", threadId, new String(msg.getBody(),"UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            PrintUtil.println("{} body : {}", threadId, new String(msg.getBody(), StandardCharsets.UTF_8));
         }
     }
 }

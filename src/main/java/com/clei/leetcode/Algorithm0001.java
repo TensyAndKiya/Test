@@ -31,7 +31,7 @@ public class Algorithm0001 {
     public static void main(String[] args) {
         int[] array = {3, 3, 3, 5};
 
-        PrintUtil.println(Arrays.toString(twoSum(array, 8)));
+        PrintUtil.log(Arrays.toString(twoSum(array, 8)));
     }
 
     public static int[] twoSum(int[] nums, int target) {

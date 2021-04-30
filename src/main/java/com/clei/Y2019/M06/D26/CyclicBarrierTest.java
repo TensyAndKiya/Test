@@ -1,10 +1,9 @@
 package com.clei.Y2019.M06.D26;
 
 import com.clei.utils.DateUtil;
+import com.clei.utils.PrintUtil;
 
 import java.util.concurrent.CyclicBarrier;
-
-import static com.clei.utils.PrintUtil.println;
 
 /**
  * 并发工具类之CyclicBarrier
@@ -17,7 +16,7 @@ public class CyclicBarrierTest {
     //一组一组的拦截
     // private static CyclicBarrier cyclicBarrier = new CyclicBarrier(2);
     // 一组到达后先执行该task
-    private final static CyclicBarrier CYCLIC_BARRIER = new CyclicBarrier(2, () -> println("出发！！！"));
+    private final static CyclicBarrier CYCLIC_BARRIER = new CyclicBarrier(2, () -> PrintUtil.log("出发！！！"));
 
     public static void main(String[] args) {
         for (int i = 'a'; i < 'a' + 6; i++) {
@@ -40,16 +39,16 @@ public class CyclicBarrierTest {
             } catch (Exception e) {
                 // 吃掉异常
             }
-            println(name + "到了" + DateUtil.currentDateTime(true));
+            PrintUtil.log(name + "到了" + DateUtil.currentDateTime(true));
             //到达屏障
             try {
                 CYCLIC_BARRIER.await();
                 // cyclicBarrier.await(2, TimeUnit.SECONDS);
             } catch (Exception e) {
                 // 吃掉异常
-                println(name + "异常");
+                PrintUtil.log(name + "异常");
             }
-            println(name + "出发" + DateUtil.currentDateTime(true));
+            PrintUtil.log(name + "出发" + DateUtil.currentDateTime(true));
         }
     }
 }

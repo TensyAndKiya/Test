@@ -72,7 +72,7 @@ public class PrintUtil {
      * 打印当前日期 + 换行
      */
     public static void dateLine() {
-        println(DateUtil.currentDateTime());
+        log(DateUtil.currentDateTime());
     }
 
     /**
@@ -81,7 +81,7 @@ public class PrintUtil {
      * @param obj
      */
     public static void dateLine(Object obj) {
-        println(DateUtil.currentDateTime() + ' ' + obj);
+        log(DateUtil.currentDateTime() + ' ' + obj);
     }
 
     /**
@@ -182,7 +182,7 @@ public class PrintUtil {
         if (line) {
             println();
         }
-        println(SEPARATOR_LINE);
+        log(SEPARATOR_LINE);
     }
 
     /**
@@ -199,7 +199,7 @@ public class PrintUtil {
         for (int i = 0; i < SEPARATOR_LINE_LENGTH; i++) {
             sb.append(separator);
         }
-        println(sb.toString());
+        log(sb.toString());
     }
 
     /**
@@ -211,16 +211,16 @@ public class PrintUtil {
     private static String getStackTrace(Throwable t) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(LINEFEED + t.toString() + LINEFEED);
+        sb.append(LINEFEED).append(t.toString()).append(LINEFEED);
         for (StackTraceElement s : t.getStackTrace()) {
-            sb.append(TAB + "at " + s.toString() + LINEFEED);
+            sb.append(TAB + "at ").append(s.toString()).append(LINEFEED);
         }
         for (Throwable se : t.getSuppressed()) {
-            sb.append(se.toString() + LINEFEED);
+            sb.append(se.toString()).append(LINEFEED);
         }
         Throwable cause = t.getCause();
         if (null != cause) {
-            sb.append(cause.toString() + LINEFEED);
+            sb.append(cause.toString()).append(LINEFEED);
         }
         return sb.toString();
     }

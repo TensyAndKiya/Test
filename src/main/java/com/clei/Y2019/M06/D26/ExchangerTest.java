@@ -1,10 +1,11 @@
 package com.clei.Y2019.M06.D26;
 
+import com.clei.utils.PrintUtil;
+
 import java.util.concurrent.Exchanger;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import static com.clei.utils.PrintUtil.println;
 
 /**
  * 并发工具类之Exchanger
@@ -15,6 +16,7 @@ import static com.clei.utils.PrintUtil.println;
 public class ExchangerTest {
 
     private static final Exchanger<String> EXCHANGER = new Exchanger<>();
+
     // permits isFair
     // private static Semaphore semaphore = new Semaphore(3,true);
     public static void main(String[] args) {
@@ -22,50 +24,50 @@ public class ExchangerTest {
         new Thread(new MotherGoHome()).start();
     }
 
-    private static class SonGoHome implements Runnable{
+    private static class SonGoHome implements Runnable {
         @Override
         public void run() {
-            println("儿子上完学开始回家");
-            try{
+            PrintUtil.log("儿子上完学开始回家");
+            try {
                 Thread.sleep((long) (Math.random() * 5000));
-            }catch (Exception e){
-                // 吃掉异常
+            } catch (Exception e) {
+                PrintUtil.log("sleep出错", e);
             }
-            println("儿子到家了");
+            PrintUtil.log("儿子到家了");
             try {
                 // String message = exchanger.exchange("啊哈！");
                 String message = EXCHANGER.exchange("我要出去玩", 2, TimeUnit.SECONDS);
-                println(message);
-                println("你打牌我打游戏。。");
+                PrintUtil.log(message);
+                PrintUtil.log("你打牌我打游戏。。");
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                PrintUtil.log("被打断", e);
             } catch (TimeoutException e) {
                 //时间等完了
-                println("老妈再不回来就要饿死了。。啊呜呜呜呜");
+                PrintUtil.log("老妈再不回来就要饿死了。。啊呜呜呜呜", e);
             }
 
         }
     }
 
-    private static class MotherGoHome implements Runnable{
+    private static class MotherGoHome implements Runnable {
         @Override
         public void run() {
-            println("母亲上完班开始回家");
-            try{
+            PrintUtil.log("母亲上完班开始回家");
+            try {
                 Thread.sleep((long) (Math.random() * 5000));
-            }catch (Exception e){
-                // 吃掉异常
+            } catch (Exception e) {
+                PrintUtil.log("sleep出错", e);
             }
-            println("母亲到家了");
+            PrintUtil.log("母亲到家了");
             try {
                 String message = EXCHANGER.exchange("老娘出去打牌了", 2, TimeUnit.SECONDS);
-                println(message);
-                println("玩锤子你玩，滚去做作业！");
+                PrintUtil.log(message);
+                PrintUtil.log("玩锤子你玩，滚去做作业！");
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                PrintUtil.log("被打断", e);
             } catch (TimeoutException e) {
                 //时间等完了
-                println("这小兔崽子还没到家，去找到并打一顿");
+                PrintUtil.log("这小兔崽子还没到家，去找到并打一顿", e);
             }
         }
     }

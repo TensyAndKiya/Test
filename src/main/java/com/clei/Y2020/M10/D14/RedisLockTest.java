@@ -4,11 +4,7 @@ import com.clei.utils.OkHttpUtil;
 import com.clei.utils.PrintUtil;
 import com.clei.utils.StringUtil;
 
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * 疯狂地去访问redis锁接口看看可用性
@@ -34,7 +30,7 @@ public class RedisLockTest {
                     try {
                         e.getQueue().put(r);
                     } catch (InterruptedException interruptedException) {
-                        interruptedException.printStackTrace();
+                        PrintUtil.log("翻入阻塞队列出错", e);
                     }
                 }
         );

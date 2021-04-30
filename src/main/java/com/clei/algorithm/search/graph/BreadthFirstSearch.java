@@ -22,7 +22,7 @@ public class BreadthFirstSearch {
         int[] arr = ArrayUtil.shuffleArray(NumUtil.getPowSum(nodeNum, height), 1, 50, false);
         LinkedList<Integer> queue = Arrays.stream(arr).boxed().collect(Collectors.toCollection(LinkedList::new));
         Node3 tree = Node3.getTree(height, queue, null);
-        PrintUtil.println(tree);
+        PrintUtil.log(tree);
         search(tree);
     }
 

@@ -118,8 +118,8 @@ public class ControllerApiTest {
         Map<String, List<RequestApi>> map = list.stream().collect(Collectors.groupingBy(RequestApi::getJavaClass));
         // 这里是遍历操作，可以有其它的查找操作【比如根据url找到文件和行号什么的】
         map.forEach((k, v) -> {
-            PrintUtil.println(k);
-            v.forEach(r -> PrintUtil.println("\t" + r));
+            PrintUtil.log(k);
+            v.forEach(r -> PrintUtil.log("\t" + r));
         });
     }
 

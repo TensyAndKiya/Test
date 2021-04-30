@@ -14,9 +14,9 @@ public class SelectionSort {
 
     public static void main(String[] args) {
         int[] arr = ArrayUtil.shuffleArray(10, 1, 50, false);
-        PrintUtil.println(Arrays.toString(arr));
+        PrintUtil.log(Arrays.toString(arr));
         sort(arr);
-        PrintUtil.println(Arrays.toString(arr));
+        PrintUtil.log(Arrays.toString(arr));
     }
 
     public static void sort(int[] arr) {

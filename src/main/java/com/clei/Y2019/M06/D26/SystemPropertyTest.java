@@ -1,5 +1,7 @@
 package com.clei.Y2019.M06.D26;
 
+import com.clei.utils.PrintUtil;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Properties;
@@ -25,7 +27,7 @@ public class SystemPropertyTest {
         // 若是Sun/Oracle的JDK
         println("JDK位数:{}", System.getProperty("sun.arch.data.model"));
         //
-        println("System Properties");
+        PrintUtil.log("System Properties");
         Properties properties = System.getProperties();
         Set<String> set = properties.stringPropertyNames();
         for(String key : set){

@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ReplaceThreadSleepTest {
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
 
         // useTimer();
 
@@ -26,7 +26,7 @@ public class ReplaceThreadSleepTest {
 
     /**
      * 使用Timer [ 还是使用ScheduledExecutorService吧 ]
-     *
+     * <p>
      * Timer是内部是单一线程
      * Timer对调度的支持是基于绝对时间,而不是相对时间
      * 如果TimerTask抛出未检查的异常，Timer将会产生无法预料的行为
@@ -41,9 +41,9 @@ public class ReplaceThreadSleepTest {
 
         PrintUtil.log(System.currentTimeMillis() + " - Timer");
 
-        timer.schedule(task1,1000L);
+        timer.schedule(task1, 1000L);
 
-        timer.schedule(task2,2000L);
+        timer.schedule(task2, 2000L);
 
         // 不能立即执行 会抛弃其任务
         // timer.cancel();
@@ -52,7 +52,7 @@ public class ReplaceThreadSleepTest {
     /**
      * 使用ScheduledExecutorService
      */
-    private static void useScheduledExecutorService(){
+    private static void useScheduledExecutorService() {
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
         PrintUtil.log(System.currentTimeMillis() + " - ScheduledExecutorService");
@@ -68,11 +68,11 @@ public class ReplaceThreadSleepTest {
 
 }
 
-class MyTimerTask extends TimerTask{
+class MyTimerTask extends TimerTask {
 
     private Timer timer;
 
-    public MyTimerTask(Timer timer){
+    public MyTimerTask(Timer timer) {
         this.timer = timer;
     }
 
@@ -85,7 +85,7 @@ class MyTimerTask extends TimerTask{
         /*try {
             Thread.sleep(20000L);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            PrintUtil.log("sleep出错", e);
         }*/
 
         // 发生异常会导致整个Timer被取消掉

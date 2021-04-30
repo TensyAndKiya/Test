@@ -50,7 +50,7 @@ public class JDSMSTest {
         if (null != response) {
             PrintUtil.println("京东云 文本短信 群发 结果 requestId:{},result:{}", response.getRequestId(), JSONObject.toJSONString(response.getResult()));
         } else {
-            PrintUtil.println("京东云 文本短信 群发 响应为null");
+            PrintUtil.log("京东云 文本短信 群发 响应为null");
         }
     }
 }

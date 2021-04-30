@@ -29,8 +29,8 @@ public class TempTest {
         json.put("email", "yueyaye@163.com");
         json.put("username", "hasaki");
         json.put("groupCode", "9527");
-        PrintUtil.println(json.toJSONString());
-        PrintUtil.println(URLEncoder.encode(json.toJSONString(), "UTF-8"));
+        PrintUtil.log(json.toJSONString());
+        PrintUtil.log(URLEncoder.encode(json.toJSONString(), "UTF-8"));
 
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime before = now.minusMonths(5);

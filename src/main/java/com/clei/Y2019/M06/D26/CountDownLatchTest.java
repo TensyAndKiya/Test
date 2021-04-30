@@ -1,12 +1,11 @@
 package com.clei.Y2019.M06.D26;
 
+import com.clei.utils.PrintUtil;
 import com.clei.utils.ThreadUtil;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import static com.clei.utils.PrintUtil.println;
 
 /**
  * 并发工具类之CountDownLatch
@@ -26,7 +25,7 @@ public class CountDownLatchTest {
             } catch (Exception e) {
                 // 吃掉异常
             }
-            println("吃饭");
+            PrintUtil.log("吃饭");
             COUNT_DOWN_LATCH.countDown();
         });
 
@@ -36,7 +35,7 @@ public class CountDownLatchTest {
             } catch (Exception e) {
                 // 吃掉异常
             }
-            println("学习");
+            PrintUtil.log("学习");
             COUNT_DOWN_LATCH.countDown();
         });
 
@@ -49,9 +48,9 @@ public class CountDownLatchTest {
                 COUNT_DOWN_LATCH.await(2, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
                 // 吃掉异常
-                println("异常！！！");
+                PrintUtil.log("异常！！！");
             }
-            println("睡觉");
+            PrintUtil.log("睡觉");
         });
 
         pool.shutdown();

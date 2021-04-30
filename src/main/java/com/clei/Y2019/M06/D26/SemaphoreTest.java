@@ -1,10 +1,9 @@
 package com.clei.Y2019.M06.D26;
 
 import com.clei.utils.DateUtil;
+import com.clei.utils.PrintUtil;
 
 import java.util.concurrent.Semaphore;
-
-import static com.clei.utils.PrintUtil.println;
 
 /**
  * 并发工具类之Semaphore
@@ -34,21 +33,21 @@ public class SemaphoreTest {
 
         @Override
         public void run() {
-            println(name + "等待上厕所" + DateUtil.currentDateTime(true));
+            PrintUtil.log(name + "等待上厕所" + DateUtil.currentDateTime(true));
             try {
                 // semaphore.tryAcquire(2, TimeUnit.SECONDS);
                 SEMAPHORE.acquire();
                 // semaphore.acquire(2); 屁股大 占两个位置
-                println(name + "开始上厕所" + DateUtil.currentDateTime(true));
+                PrintUtil.log(name + "开始上厕所" + DateUtil.currentDateTime(true));
                 try {
                     Thread.sleep((long) (Math.random() * 3000));
                 } catch (Exception e) {
                     // 吃掉异常
                 }
-                println(name + "上完了" + DateUtil.currentDateTime(true));
+                PrintUtil.log(name + "上完了" + DateUtil.currentDateTime(true));
                 SEMAPHORE.release();
             } catch (Exception e) {
-                println("异常！！！");
+                PrintUtil.log("异常！！！");
             }
         }
     }

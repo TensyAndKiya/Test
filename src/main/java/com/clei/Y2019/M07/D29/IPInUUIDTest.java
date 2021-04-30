@@ -21,13 +21,12 @@ public class IPInUUIDTest {
         try {
             IP = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
-            e.printStackTrace();
-            PrintUtil.println("error");
+            PrintUtil.log("获取本机ip地址出错", e);
             IP = "127.0.0.1";
         }
-        String arr[] = IP.split("[.]");
-        for (int i = 0; i < arr.length; i++) {
-            String str = arr[i];
+        String[] arr = IP.split("[.]");
+        for (String s : arr) {
+            String str = s;
             str = Integer.toHexString(Integer.parseInt(str));
             str = str.length() < 2 ? "G" + str : str;
             PREFIX += str;
@@ -44,8 +43,7 @@ public class IPInUUIDTest {
 
     private static String getIPStr() {
         String uuid = StringUtil.uuid();
-        String result = PREFIX + uuid.substring(0, uuid.length() - PREFIX.length());
-        return result;
+        return PREFIX + uuid.substring(0, uuid.length() - PREFIX.length());
     }
 
     private static String getIP(String IPStr) {

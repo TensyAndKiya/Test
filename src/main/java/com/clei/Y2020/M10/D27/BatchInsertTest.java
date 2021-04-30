@@ -74,6 +74,6 @@ public class BatchInsertTest {
         sb.delete(sb.length() - 2, sb.length());
         sb.append(';');
 
-        PrintUtil.println(sb.toString());
+        PrintUtil.log(sb.toString());
     }
 }

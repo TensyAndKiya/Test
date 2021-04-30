@@ -2,11 +2,7 @@ package com.clei.Y2019.M04.D04;
 
 import com.clei.utils.PrintUtil;
 
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -45,7 +41,7 @@ public class ThreadPoolExecutorTest {
                 try {
                     Thread.sleep(150);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    PrintUtil.log("sleep出错", e);
                 }
                 PrintUtil.log(Thread.currentThread().getName() + "执行完毕。。。");
             });

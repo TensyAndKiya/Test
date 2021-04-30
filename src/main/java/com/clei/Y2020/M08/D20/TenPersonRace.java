@@ -40,7 +40,7 @@ public class TenPersonRace {
                     list.add(new Score(name, result));
 
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    PrintUtil.log("错误信息", e);
                 } finally {
                     latch2.countDown();
                 }
@@ -59,11 +59,11 @@ public class TenPersonRace {
 
         // 全部
         PrintUtil.log("全部");
-        sList.forEach(PrintUtil::println);
+        sList.forEach(PrintUtil::log);
 
         // 前三名
         PrintUtil.log("前三");
-        sList.stream().limit(3).forEach(PrintUtil::println);
+        sList.stream().limit(3).forEach(PrintUtil::log);
 
         // 平均成绩
         PrintUtil.log("平均成绩");

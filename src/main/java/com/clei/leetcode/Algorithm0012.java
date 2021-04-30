@@ -54,7 +54,7 @@ public class Algorithm0012 {
     private static String[] symbols = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
 
     public static void main(String[] args) {
-        PrintUtil.println(intToRoman(1994));
+        PrintUtil.log(intToRoman(1994));
     }
 
     private static String intToRoman(int num) {

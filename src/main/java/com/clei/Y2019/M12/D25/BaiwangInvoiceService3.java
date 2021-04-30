@@ -1,11 +1,7 @@
 package com.clei.Y2019.M12.D25;
 
 import com.alibaba.fastjson.JSONObject;
-import com.clei.utils.Base64Util;
-import com.clei.utils.DateUtil;
-import com.clei.utils.EncryptUtil;
-import com.clei.utils.PrintUtil;
-import com.clei.utils.RequestUtils;
+import com.clei.utils.*;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -14,11 +10,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 百旺开票测试3
@@ -288,10 +280,9 @@ public class BaiwangInvoiceService3 {
             SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
             Cipher cipher = Cipher.getInstance("AES");
             cipher.init(1, key);
-            byte[] result = cipher.doFinal(content);
-            return result;
-        } catch (Exception var6) {
-            var6.printStackTrace();
+            return cipher.doFinal(content);
+        } catch (Exception e) {
+            PrintUtil.log("信息加密出错", e);
             return null;
         }
     }

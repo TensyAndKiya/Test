@@ -40,7 +40,7 @@ public class Java8Test1 {
         println("a - b : {}", operation(a, b, subtract));
         println("a * b : {}", operation(a, b, multiply));
 
-        Consumer<String> consumer = PrintUtil::println;
+        Consumer<String> consumer = PrintUtil::log;
         consumer.accept("这个东西也算个lambda吗？");
     }
 

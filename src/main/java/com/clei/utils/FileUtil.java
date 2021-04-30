@@ -124,7 +124,7 @@ public class FileUtil {
         String str;
         while (null != (str = br.readLine())) {
             if (str.contains(content)) {
-                PrintUtil.println(file.getAbsoluteFile());
+                PrintUtil.log(file.getAbsoluteFile());
                 break;
             }
         }

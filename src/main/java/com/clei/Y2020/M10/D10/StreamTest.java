@@ -3,11 +3,7 @@ package com.clei.Y2020.M10.D10;
 import com.clei.entity.Person;
 import com.clei.utils.PrintUtil;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -114,15 +110,15 @@ public class StreamTest {
 
         List<String> ll = Stream.of("one", "two", "three", "four")
                 .filter(e -> e.length() > 3)
-                .peek(PrintUtil::println)
+                .peek(PrintUtil::log)
                 .map(String::toUpperCase)
-                .peek(PrintUtil::println)
+                .peek(PrintUtil::log)
                 // 跳过n个元素
                 .skip(1)
                 .collect(Collectors.toList());
 
         PrintUtil.log();
-        ll.forEach(PrintUtil::println);
+        ll.forEach(PrintUtil::log);
     }
 
     public static boolean trueMethod(int i) {

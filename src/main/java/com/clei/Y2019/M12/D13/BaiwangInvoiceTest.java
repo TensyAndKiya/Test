@@ -64,7 +64,7 @@ public class BaiwangInvoiceTest {
         Object accessToken = tokenRequestMap.get("access_token");
         //如果距离过期时间小于5分钟 则刷新ACCESSTOKEN
         if (null == accessToken || "".equals(accessToken)) {
-            PrintUtil.println("初始化token");
+            PrintUtil.log("初始化token");
             refreshAccessToken();
             return;
         }
@@ -72,7 +72,7 @@ public class BaiwangInvoiceTest {
         Integer expireTime = (Integer) tokenRequestMap.get("expire_time");
         long timeDiff = System.currentTimeMillis() - refreshDate.getTime();
         if (expireTime * 1000 - timeDiff < 300000) {
-            PrintUtil.println("快要过期 刷新token");
+            PrintUtil.log("快要过期 刷新token");
             refreshAccessToken();
         }
     }
@@ -81,7 +81,7 @@ public class BaiwangInvoiceTest {
 
         getAccessToken();
 
-        PrintUtil.println("tokenMap : " + tokenRequestMap);
+        PrintUtil.log("tokenMap : " + tokenRequestMap);
 
         //开票人传空则从token记录获取，且长度限制为8
         if (null == userName || "".equals(userName)) {
@@ -162,22 +162,22 @@ public class BaiwangInvoiceTest {
         params.put("serviceKey", "ebi_InvoiceHandle_newBlueInvoice");//service method
         params.put("data", dataParams);//数据
 
-        PrintUtil.println("开始开发票 params: " + params);
+        PrintUtil.log("开始开发票 params: " + params);
         String response = OkHttpUtil.doPostJson(API_BUSS_URL, params.toJSONString());
-        PrintUtil.println("开具蓝字发票 response:" + response);
+        PrintUtil.log("开具蓝字发票 response:" + response);
 
         if (StringUtil.isNotEmpty(response)) {
             JSONObject map = JSONObject.parseObject(response);
             String result = map.get("result").toString();
             if ("SUCCESS".equals(result)) {
-                PrintUtil.println("开具蓝字发票成功");
+                PrintUtil.log("开具蓝字发票成功");
 
                 onlineDeliver(tokenMap, orderNo, email);
 
                 return true;
             }
         }
-        PrintUtil.println("开具蓝字发票失败");
+        PrintUtil.log("开具蓝字发票失败");
         return false;
     }
 
@@ -195,17 +195,17 @@ public class BaiwangInvoiceTest {
 
         String response = OkHttpUtil.doPostJson(API_BUSS_URL, params.toJSONString());
 
-        PrintUtil.println("在线交付:" + response);
+        PrintUtil.log("在线交付:" + response);
 
         if (StringUtil.isNotEmpty(response)) {
             JSONObject map = JSONObject.parseObject(response);
             String result = map.getString("result");
             if ("SUCCESS".equals(result)) {
-                PrintUtil.println("在线交付成功");
+                PrintUtil.log("在线交付成功");
                 return true;
             }
         }
-        PrintUtil.println("在线交付失败");
+        PrintUtil.log("在线交付失败");
         return false;
     }
 
@@ -221,15 +221,15 @@ public class BaiwangInvoiceTest {
             params.put("app_secret", tokenRequestMap.get("app_secret").toString());
 
             String response = OkHttpUtil.doPostJson(API_TOKEN_URL, params.toString());
-            PrintUtil.println("刷新AccessToken response:" + response);
+            PrintUtil.log("刷新AccessToken response:" + response);
 
             JSONObject map = JSONObject.parseObject(response);
             String result = map.get("result").toString();
 
             if ("SUCCESS".equals(result)) {
-                PrintUtil.println("刷新发票AccessToken成功");
+                PrintUtil.log("刷新发票AccessToken成功");
                 JSONObject newTokenMap = JSONObject.parseObject(map.getString("rows"));
-                PrintUtil.println("tokenMap : " + newTokenMap);
+                PrintUtil.log("tokenMap : " + newTokenMap);
                 //refresh
                 String accessToken = newTokenMap.get("access_token").toString();
 
@@ -240,7 +240,7 @@ public class BaiwangInvoiceTest {
                 // 成功刷新token才保存
                 tokenRequestMap.put(openId, curTime);
             } else {
-                PrintUtil.println("刷新发票AccessToken失败: " + map);
+                PrintUtil.log("刷新发票AccessToken失败: " + map);
             }
         }
     }

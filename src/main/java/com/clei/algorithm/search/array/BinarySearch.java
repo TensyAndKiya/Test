@@ -17,10 +17,10 @@ public class BinarySearch {
     public static void main(String[] args) {
         int[] arr = ArrayUtil.shuffleArray(10, 1, 50, false);
         QuickSort.sort(arr);
-        PrintUtil.println(Arrays.toString(arr));
+        PrintUtil.log(Arrays.toString(arr));
         int num = arr[new Random().nextInt(arr.length)];
-        PrintUtil.println(num);
-        PrintUtil.println(search(arr, num));
+        PrintUtil.log(num);
+        PrintUtil.log(search(arr, num));
     }
 
     public static int search(int[] arr, int num) {

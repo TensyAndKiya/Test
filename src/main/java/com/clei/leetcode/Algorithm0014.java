@@ -26,7 +26,7 @@ public class Algorithm0014 {
 
     public static void main(String[] args) {
         String[] arr = {"flower", "flower"};
-        PrintUtil.println(longestCommonPrefix(arr));
+        PrintUtil.log(longestCommonPrefix(arr));
     }
 
     private static String longestCommonPrefix(String[] strs) {

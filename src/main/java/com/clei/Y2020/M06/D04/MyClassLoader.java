@@ -1,5 +1,6 @@
 package com.clei.Y2020.M06.D04;
 
+import com.clei.utils.PrintUtil;
 import com.clei.utils.StringUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -50,8 +51,7 @@ public class MyClassLoader extends ClassLoader {
             return defineClass(name, data, 0, data.length);
 
         } catch (Exception e) {
-
-            e.printStackTrace();
+            PrintUtil.log("文件读取出错", e);
             return super.findClass(name);
         }
     }

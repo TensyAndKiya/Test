@@ -1,5 +1,7 @@
 package com.clei.Y2019.M06.D29;
 
+import com.clei.utils.PrintUtil;
+
 import static com.clei.utils.PrintUtil.println;
 
 /**
@@ -13,10 +15,10 @@ import static com.clei.utils.PrintUtil.println;
 public class AssertClass {
 
     public static void main(String[] args) {
-        println("获取一个随机数");
+        PrintUtil.log("获取一个随机数");
         double i = Math.random() * 100;
         println("随机数为：{}", i);
         assert i > 64 : "竟然不大于32，爆炸！" + i;
-        println("成功！");
+        PrintUtil.log("成功！");
     }
 }

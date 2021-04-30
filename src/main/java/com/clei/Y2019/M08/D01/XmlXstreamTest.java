@@ -8,11 +8,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import okhttp3.*;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -70,7 +66,7 @@ public class XmlXstreamTest {
                     PrintUtil.log("really really result : " + content);
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    PrintUtil.log("发票信息处理出错", e);
                 }
             }).start();
         } else {

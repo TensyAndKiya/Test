@@ -2,19 +2,8 @@ package com.clei.Y2021.M01.D18;
 
 import com.clei.utils.PrintUtil;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -109,7 +98,7 @@ public class JarTest {
         BufferedReader br = new BufferedReader(isr);
         String line;
         while (null != (line = br.readLine())) {
-            PrintUtil.println(line);
+            PrintUtil.log(line);
         }
         is.close();
     }

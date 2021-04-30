@@ -18,22 +18,22 @@ public class ErrorLogTest {
             PrintUtil.println("message : {}", e.getMessage());
             PrintUtil.println("toString : {}", e.toString());
 
-            e.printStackTrace();
+            PrintUtil.log("错误信息", e);
 
-            PrintUtil.println("custom begin.");
-            PrintUtil.println(e.toString());
+            PrintUtil.log("custom begin.");
+            PrintUtil.log(e.toString());
             for (StackTraceElement s : e.getStackTrace()) {
-                PrintUtil.println("\t at " + s.toString());
+                PrintUtil.log("\t at " + s.toString());
             }
             for (Throwable se : e.getSuppressed()) {
-                PrintUtil.println(se.toString());
+                PrintUtil.log(se.toString());
             }
             if (null != e.getCause()) {
-                PrintUtil.println(e.getCause().toString());
+                PrintUtil.log(e.getCause().toString());
             }
-            PrintUtil.println("custom begin.");
+            PrintUtil.log("custom begin.");
 
-            PrintUtil.println("log");
+            PrintUtil.log("log");
             PrintUtil.log("竟然有错误 ：{}", "卧槽", e);
 
         }

@@ -7,7 +7,7 @@ import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.message.MessageExt;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -68,11 +68,7 @@ public class Consumer {
             PrintUtil.log("{} topic : {}", threadId, msg.getTopic());
             PrintUtil.log("{} tag : {}", threadId, msg.getTags());
             PrintUtil.log("{} msgId : {}", threadId, msg.getMsgId());
-            try {
-                PrintUtil.log("{} body : {}", threadId, new String(msg.getBody(), "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            PrintUtil.log("{} body : {}", threadId, new String(msg.getBody(), StandardCharsets.UTF_8));
         }
 
         PrintUtil.log("收到消息数量 : {}", MESSAGE_COUNT.addAndGet(1));
