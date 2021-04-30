@@ -19,7 +19,7 @@ import java.util.zip.ZipOutputStream;
  */
 public class ZipTest {
 
-    private final static String CHARSET_UTF8 = "UTF-8";
+    private final static String CHARSET_UTF8 = StandardCharsets.UTF_8.name();
 
     public static void main(String[] args) throws Exception {
         String str = "我是你滴大爷爷呀！";

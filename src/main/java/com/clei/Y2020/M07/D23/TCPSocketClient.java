@@ -6,6 +6,7 @@ import com.clei.utils.SystemUtil;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @backStory 好久没写socket程序了，试一哈
@@ -20,7 +21,7 @@ public class TCPSocketClient {
         // 写入
         OutputStream os = socket.getOutputStream();
 
-        os.write("十步杀一人".getBytes("UTF-8"));
+        os.write("十步杀一人".getBytes(StandardCharsets.UTF_8));
 
         // 读取
         byte[] buffer = new byte[1024];
@@ -31,13 +32,13 @@ public class TCPSocketClient {
 
         PrintUtil.log(length);
 
-        String content = new String(buffer, 0, length, "UTF-8");
+        String content = new String(buffer, 0, length, StandardCharsets.UTF_8);
 
         PrintUtil.log(content);
 
         // 再写入
         os = socket.getOutputStream();
-        os.write("千里不留行".getBytes("UTF-8"));
+        os.write("千里不留行".getBytes(StandardCharsets.UTF_8));
 
         // 暂停
         SystemUtil.pause();
@@ -47,7 +48,5 @@ public class TCPSocketClient {
         os.close();
 
         socket.close();
-
     }
-
 }

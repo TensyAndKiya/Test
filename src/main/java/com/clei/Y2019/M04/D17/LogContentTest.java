@@ -2,13 +2,8 @@ package com.clei.Y2019.M04.D17;
 
 import com.clei.utils.PrintUtil;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 /**
@@ -29,13 +24,13 @@ public class LogContentTest {
     private final static String KEYWORD = "successPaid";
 
     public static void main(String[] args) throws Exception {
-        Scanner input = new Scanner(System.in, "UTF-8");
+        Scanner input = new Scanner(System.in, StandardCharsets.UTF_8.name());
         PrintUtil.log("请输入匹配字符串：");
         //String outputFileName = input.next();
         String searchStr = input.next();
         File logFile = new File(LOG_DIRECTORY + File.separator + "all_error_0422.log");
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), "UTF-8"));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(LOG_DIRECTORY + File.separator + "temp.log"), "UTF-8"));
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), StandardCharsets.UTF_8));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(LOG_DIRECTORY + File.separator + "temp.log"), StandardCharsets.UTF_8));
         boolean successPaid = false;
         String line;
         String preLine = "";

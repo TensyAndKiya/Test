@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 
@@ -44,9 +45,9 @@ public class RequestUtils {
             SSLSocketFactory ssf = getSSLContext().getSocketFactory();
             conn.setSSLSocketFactory(ssf);
             wr = conn.getOutputStream();
-            wr.write(content.getBytes("utf-8"));
+            wr.write(content.getBytes(StandardCharsets.UTF_8));
             wr.flush();
-            resultData = IOUtils.toString(conn.getInputStream(), "utf-8");
+            resultData = IOUtils.toString(conn.getInputStream(), StandardCharsets.UTF_8.name());
         } catch (MalformedURLException e) {
             PrintUtil.log("http请求失败！请求地址不正确！请求地址：" + address, e);
         } catch (IOException e) {

@@ -15,6 +15,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 /**
@@ -37,7 +38,7 @@ public class XmlXstreamTest {
     private final static String url = "http://fw1test.shdzfp.com:9000/sajt-shdzfp-sl-http/SvrServlet";
     private final static String companyName = "上海爱信诺航天信息有限公司90";
     private final static float SL = 0.13f;
-    private final static String charset = "UTF-8";
+    private final static String UTF_8 = StandardCharsets.UTF_8.name();
 
     public static void main(String[] args) throws Exception {
 
@@ -48,7 +49,7 @@ public class XmlXstreamTest {
         String code = getElementContent(invoiceResult, "returnCode");
         String message = getElementContent(invoiceResult, "returnMessage");
         if (null != message && !"".equals(message)) {
-            message = new String(Base64Util.decode(message), charset);
+            message = new String(Base64Util.decode(message), UTF_8);
         }
         if (code.equals("0000")) {
             PrintUtil.log("开具发票成功,message: " + message);
@@ -109,7 +110,7 @@ public class XmlXstreamTest {
 
     private static String outerXML(String interfaceCode, String content) {
         // 通用外层报文
-        XStream stream = new XStream(new DomDriver("UTF-8", new XmlFriendlyNameCoder("-_", "_")));
+        XStream stream = new XStream(new DomDriver(UTF_8, new XmlFriendlyNameCoder("-_", "_")));
         // 处理注解
         stream.processAnnotations(Interface.class);
         stream.processAnnotations(GlobalInfo.class);
@@ -124,7 +125,7 @@ public class XmlXstreamTest {
 
     private static String invoiceXML(String fpqqlsh, String orderId) {
         // 开具发票报文
-        XStream stream = new XStream(new DomDriver("UTF-8", new XmlFriendlyNameCoder("-_", "_")));
+        XStream stream = new XStream(new DomDriver(UTF_8, new XmlFriendlyNameCoder("-_", "_")));
         // 处理注解
         stream.processAnnotations(CreateInvoiceRequest.class);
         stream.processAnnotations(InvoiceHeader.class);
@@ -142,7 +143,7 @@ public class XmlXstreamTest {
 
     private static String downloadInvoiceXML(String fpqqlsh, String orderId) {
         // 下载发票报文
-        XStream stream = new XStream(new DomDriver("UTF-8", new XmlFriendlyNameCoder("-_", "_")));
+        XStream stream = new XStream(new DomDriver(UTF_8, new XmlFriendlyNameCoder("-_", "_")));
         // 处理注解
         stream.processAnnotations(DownloadInvoiceRequest.class);
         // 填充数据
@@ -284,24 +285,24 @@ public class XmlXstreamTest {
     private static byte[] encrypt3DES(String str) throws Exception {
         String algorithm = "DESede";
         // key
-        SecretKey secretKey = new SecretKeySpec(DESKey.getBytes(charset), algorithm);
+        SecretKey secretKey = new SecretKeySpec(DESKey.getBytes(UTF_8), algorithm);
         // 加密
         Cipher cipher = Cipher.getInstance(algorithm);
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 
-        return cipher.doFinal(str.getBytes(charset));
+        return cipher.doFinal(str.getBytes(UTF_8));
     }
 
     private static String decrypt3DES(byte[] bytes) throws Exception {
         // key
         String algorithm = "DESede";
-        SecretKey secretKey = new SecretKeySpec(DESKey.getBytes(charset), algorithm);
+        SecretKey secretKey = new SecretKeySpec(DESKey.getBytes(UTF_8), algorithm);
         // 解密
         Cipher cipher = Cipher.getInstance(algorithm);
         cipher.init(Cipher.DECRYPT_MODE, secretKey);
 
         byte[] result = cipher.doFinal(bytes);
-        return new String(result, charset);
+        return new String(result, UTF_8);
     }
 }
 

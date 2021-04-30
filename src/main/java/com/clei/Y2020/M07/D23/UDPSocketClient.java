@@ -5,6 +5,7 @@ import com.clei.utils.PrintUtil;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
 
 public class UDPSocketClient {
 
@@ -17,14 +18,14 @@ public class UDPSocketClient {
         int port = 8001;
 
         // 发送
-        byte[] content = "天地有正气".getBytes("UTF-8");
+        byte[] content = "天地有正气".getBytes(StandardCharsets.UTF_8);
 
         DatagramPacket packet = new DatagramPacket(content,content.length,address,port);
 
         socket.send(packet);
 
         // 再发送
-        content = "杂然赋流形".getBytes("UTF-8");
+        content = "杂然赋流形".getBytes(StandardCharsets.UTF_8);
 
         packet = new DatagramPacket(content,content.length,address,port);
 
@@ -39,7 +40,7 @@ public class UDPSocketClient {
 
         byte[] data = receivePacket.getData();
 
-        String response = new String(data,"UTF-8");
+        String response = new String(data, StandardCharsets.UTF_8);
 
         PrintUtil.log(response);
 

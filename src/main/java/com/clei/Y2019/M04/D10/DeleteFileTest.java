@@ -3,6 +3,7 @@ package com.clei.Y2019.M04.D10;
 import com.clei.utils.PrintUtil;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 /**
@@ -18,7 +19,7 @@ public class DeleteFileTest {
 
     private static void deleteTarget() {
         PrintUtil.log("输入文件(g || t || d)");
-        Scanner input = new Scanner(System.in, "UTF-8");
+        Scanner input = new Scanner(System.in, StandardCharsets.UTF_8.name());
         char c = input.next().charAt(0);
         String folder = "dev";
         switch (c) {

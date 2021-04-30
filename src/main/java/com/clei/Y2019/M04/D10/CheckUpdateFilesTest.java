@@ -2,6 +2,7 @@ package com.clei.Y2019.M04.D10;
 
 import com.clei.utils.PrintUtil;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Scanner;
 public class CheckUpdateFilesTest {
 
     public static void main(String[] args) {
-        Scanner input = new Scanner(System.in, "UTF-8");
+        Scanner input = new Scanner(System.in, StandardCharsets.UTF_8.name());
         StringBuilder sb = new StringBuilder("");
         String str = input.nextLine();
         while (!str.contains("no changes added to commit")) {

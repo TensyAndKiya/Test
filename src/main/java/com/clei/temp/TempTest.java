@@ -7,6 +7,7 @@ import com.clei.utils.PrintUtil;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class TempTest {
         json.put("username", "hasaki");
         json.put("groupCode", "9527");
         PrintUtil.log(json.toJSONString());
-        PrintUtil.log(URLEncoder.encode(json.toJSONString(), "UTF-8"));
+        PrintUtil.log(URLEncoder.encode(json.toJSONString(), StandardCharsets.UTF_8.name()));
 
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime before = now.minusMonths(5);

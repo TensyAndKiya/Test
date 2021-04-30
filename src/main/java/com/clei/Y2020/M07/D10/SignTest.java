@@ -4,6 +4,7 @@ import com.clei.utils.EncryptUtil;
 import com.clei.utils.MD5Util;
 import com.clei.utils.PrintUtil;
 
+import java.nio.charset.StandardCharsets;
 import java.util.TreeMap;
 
 public class SignTest {
@@ -59,7 +60,8 @@ public class SignTest {
         PrintUtil.log(signStr);
 
         PrintUtil.log(EncryptUtil.md5(signStr));
-        PrintUtil.log(EncryptUtil.md5(signStr, "UTF8", false));
-        PrintUtil.log(EncryptUtil.md5(signStr, "UTF-8", true));
+        String charset = StandardCharsets.UTF_8.name();
+        PrintUtil.log(EncryptUtil.md5(signStr, charset, false));
+        PrintUtil.log(EncryptUtil.md5(signStr, charset, true));
     }
 }

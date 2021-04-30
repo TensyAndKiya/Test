@@ -8,6 +8,7 @@ import org.apache.commons.codec.binary.Hex;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -53,7 +54,7 @@ public class ABCSign {
         String encodeStr = "";
         try {
             messageDigest = MessageDigest.getInstance("SHA-256");
-            messageDigest.update(str.getBytes("UTF-8"));
+            messageDigest.update(str.getBytes(StandardCharsets.UTF_8));
             encodeStr = byte2Hex(messageDigest.digest());
         } catch (Exception e) {
             PrintUtil.log("信息加密出错", e);
@@ -93,7 +94,7 @@ public class ABCSign {
         String encdeStr = "";
         try {
             messageDigest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = messageDigest.digest(str.getBytes("UTF-8"));
+            byte[] hash = messageDigest.digest(str.getBytes(StandardCharsets.UTF_8));
             encdeStr = Hex.encodeHexString(hash);
         } catch (Exception e) {
             PrintUtil.log("信息加密出错", e);

@@ -2,6 +2,7 @@ package com.clei.utils;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
@@ -31,7 +32,7 @@ public class DownloadEleInvoiceUtil {
             String desKey = secretKey.substring(0, 24);
             data = EncryptUtil.decrypt3DES(data, desKey);
         }
-        return new String(data, "UTF-8");
+        return new String(data, StandardCharsets.UTF_8);
     }
 }
 

@@ -9,7 +9,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 
 /**
@@ -75,7 +75,7 @@ public class ServerSocket {
             read = clientChannel.read(buffer);
         }
         // 响应消息
-        ByteBuffer writeBuffer = ByteBuffer.wrap("hasaki\n".getBytes(Charset.forName("UTF-8")));
+        ByteBuffer writeBuffer = ByteBuffer.wrap("hasaki\n".getBytes(StandardCharsets.UTF_8));
         clientChannel.write(writeBuffer);
 
         if (-1 == read) {

@@ -12,6 +12,8 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -22,6 +24,8 @@ import java.util.*;
  * @author KIyA
  */
 public class BaiwangInvoiceService2 {
+
+    private final static Charset CHARSET = StandardCharsets.UTF_8;
 
     public static void main(String[] args) throws Exception {
 
@@ -59,13 +63,13 @@ public class BaiwangInvoiceService2 {
 
         PrintUtil.log("content : " + contentStr);
 
-        contentStr = Base64Util.encode(contentStr.getBytes("UTF-8")).replaceAll("\r", "").replaceAll("\n", "");
+        contentStr = Base64Util.encode(contentStr.getBytes(CHARSET)).replaceAll("\r", "").replaceAll("\n", "");
 
         PrintUtil.log("contentStr : " + contentStr);
 
-        String contentMD5 = MD5(contentStr.getBytes("UTF-8"));
+        String contentMD5 = MD5(contentStr.getBytes(CHARSET));
 
-        byte[] encryptBytes = encrypt(contentMD5.getBytes("UTF-8"), aesKey);
+        byte[] encryptBytes = encrypt(contentMD5.getBytes(CHARSET), aesKey);
 
         String encryptStr = Base64Util.encode(encryptBytes).replaceAll("\r", "").replaceAll("\n", "");
 
@@ -117,7 +121,7 @@ public class BaiwangInvoiceService2 {
         data.put("dataDescription", dataDescription);
         dataDescription.put("zipCode", "0");
 
-        data.put("content", Base64Util.encode(content.getBytes("UTF-8")).replaceAll("\r", "").replaceAll("\n", ""));
+        data.put("content", Base64Util.encode(content.getBytes(StandardCharsets.UTF_8)).replaceAll("\r", "").replaceAll("\n", ""));
         data.put("contentKey", contentKey);
 
         interfaceInfo.put("globalInfo", global);

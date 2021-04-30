@@ -4,6 +4,7 @@ import com.clei.utils.PrintUtil;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.nio.charset.StandardCharsets;
 
 public class UDPSocketServer {
 
@@ -24,12 +25,12 @@ public class UDPSocketServer {
 
             byte[] data = packet.getData();
 
-            String content = new String(data,"UTF-8");
+            String content = new String(data, StandardCharsets.UTF_8);
 
             PrintUtil.log(content);
 
             // 响应
-            byte[] response = "何不语".getBytes("UTF-8");
+            byte[] response = "何不语".getBytes(StandardCharsets.UTF_8);
 
             PrintUtil.log("address : " + packet.getAddress() + " port : " + packet.getPort());
 

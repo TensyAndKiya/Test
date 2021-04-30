@@ -1,20 +1,14 @@
 package com.clei.utils;
 
 import com.alibaba.fastjson.JSONObject;
-import okhttp3.FormBody;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
+import okhttp3.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -24,6 +18,8 @@ import java.util.Map;
  * @author KIyA
  */
 public class OkHttpUtil {
+
+    private final static String CHARSET = StandardCharsets.UTF_8.name();
 
     /**
      * post json
@@ -138,7 +134,7 @@ public class OkHttpUtil {
         StringBuilder sb = new StringBuilder(url);
         sb.append('?');
         sb.append(field);
-        sb.append(URLEncoder.encode(String.valueOf(value), "UTF-8"));
+        sb.append(URLEncoder.encode(String.valueOf(value), CHARSET));
         return sb.toString();
     }
 
@@ -157,7 +153,7 @@ public class OkHttpUtil {
             Map.Entry<String, Object> next = iterator.next();
             sb.append(next.getKey());
             sb.append('=');
-            sb.append(URLEncoder.encode(String.valueOf(next.getValue()), "UTF-8"));
+            sb.append(URLEncoder.encode(String.valueOf(next.getValue()), CHARSET));
             sb.append('&');
         }
         // 最后一个字符处理

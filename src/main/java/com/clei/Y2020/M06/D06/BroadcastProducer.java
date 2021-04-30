@@ -7,13 +7,13 @@ import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
 
 /**
+ * 广播
+ *
  * @author KIyA
  * @date 2020-04-08
- *
- * 广播
  */
 public class BroadcastProducer {
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         // 初始化一个producer group
         DefaultMQProducer producer = new DefaultMQProducer("ProducerGroup1");
 
@@ -25,7 +25,7 @@ public class BroadcastProducer {
 
         for (int i = 0; i < 100; i++) {
             // 创建消息
-            Message msg = new Message("FirstTopic","FirstTag","FirstKey",
+            Message msg = new Message("FirstTopic", "FirstTag", "FirstKey",
                     ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET));
 
             // 发送

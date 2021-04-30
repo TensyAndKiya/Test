@@ -18,10 +18,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class AsyncProducer {
     public static void main(String[] args) throws Exception {
-        start();
+        send();
     }
 
-    private static void start() throws Exception {
+    private static void send() throws Exception {
         // 初始化一个producer group
         DefaultMQProducer producer = new DefaultMQProducer("ProducerGroup1");
 

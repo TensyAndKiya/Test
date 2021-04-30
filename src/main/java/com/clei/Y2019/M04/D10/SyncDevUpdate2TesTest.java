@@ -5,6 +5,7 @@ import com.clei.utils.PrintUtil;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -25,7 +26,7 @@ public class SyncDevUpdate2TesTest {
     public static void main(String[] args) {
         PrintUtil.log("Sync A to B");
         PrintUtil.log("输入A B");
-        Scanner input = new Scanner(System.in, "UTF-8");
+        Scanner input = new Scanner(System.in, StandardCharsets.UTF_8.name());
         String from = input.next();
         String to = input.next();
         String fromPath = "D:\\CLIdeaWorkspace\\" + from + "\\park\\";

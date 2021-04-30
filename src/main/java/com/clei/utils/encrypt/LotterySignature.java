@@ -3,6 +3,7 @@ package com.clei.utils.encrypt;
 import com.clei.utils.PrintUtil;
 import org.apache.commons.codec.binary.Base64;
 
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -14,7 +15,7 @@ public class LotterySignature {
 
     public static final String SIGN_TYPE_RSA = "RSA";
     public static final String SIGN_SHA256RSA_ALGORITHMS = "SHA256WithRSA";
-    public static final String DEFAULT_CHARSET = "utf-8";
+    public static final String DEFAULT_CHARSET = StandardCharsets.UTF_8.name();
 
     /**
      * 签名

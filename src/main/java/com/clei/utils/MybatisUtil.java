@@ -3,14 +3,7 @@ package com.clei.utils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.clei.Y2020.M09.D17.RoadObject;
-import com.clei.Y2020.M09.D22.Checkpoint;
-import com.clei.Y2020.M09.D22.CongestionForcast;
-import com.clei.Y2020.M09.D22.CongestionHourForcat;
-import com.clei.Y2020.M09.D22.CongestionTop;
-import com.clei.Y2020.M09.D22.DateToDate;
-import com.clei.Y2020.M09.D22.SectionInfo;
-import com.clei.Y2020.M09.D22.SectionPoint;
-import com.clei.Y2020.M09.D22.SectionRunState;
+import com.clei.Y2020.M09.D22.*;
 import com.clei.Y2021.M01.D22.Area;
 import com.clei.dto.AreaTreeNode;
 import com.clei.dto.AreaTreeRes;
@@ -25,12 +18,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
@@ -38,16 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -476,7 +455,7 @@ public class MybatisUtil {
         String filePath = "D:\\Download\\DingDing\\咔咔咔咔咔咔卡口.csv";
         File file = new File(filePath);
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
         String str;
         while (null != (str = br.readLine())) {
 
@@ -1060,7 +1039,7 @@ public class MybatisUtil {
 
         List<Map<String, String>> list = new ArrayList<>();
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "UTF-8"));
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8));
         String str;
 
         Map<String, String> uuidMap = new HashMap<>();

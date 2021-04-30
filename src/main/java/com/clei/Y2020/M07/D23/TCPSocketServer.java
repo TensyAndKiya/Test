@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @backStory 好久没写socket程序了，试一哈
@@ -48,12 +49,12 @@ public class TCPSocketServer {
                     break;
                 }
 
-                String content = new String(buffer,0,length,"UTF-8");
+                String content = new String(buffer, 0, length, StandardCharsets.UTF_8);
 
                 PrintUtil.log(content);
 
                 // 写入
-                os.write("侠客行".getBytes("UTF-8"));
+                os.write("侠客行".getBytes(StandardCharsets.UTF_8));
 
                 if("结束".equals(content)){
 

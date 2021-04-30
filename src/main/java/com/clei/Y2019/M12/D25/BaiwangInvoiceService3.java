@@ -8,6 +8,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -51,9 +52,9 @@ public class BaiwangInvoiceService3 {
 
         PrintUtil.log("content " + content);
 
-        String contentMD5 = MD5(content.getBytes("UTF-8"));
+        String contentMD5 = MD5(content.getBytes(StandardCharsets.UTF_8));
 
-        byte[] encryptBytes = encrypt(contentMD5.getBytes("UTF-8"), aesKey);
+        byte[] encryptBytes = encrypt(contentMD5.getBytes(StandardCharsets.UTF_8), aesKey);
 
         String encryptStr = Base64Util.encode(encryptBytes).replaceAll("\r", "").replaceAll("\n", "");
 
@@ -83,7 +84,7 @@ public class BaiwangInvoiceService3 {
         PrintUtil.log("content : " + returnContent);
         byte[] base64 = Base64Util.decode(returnContent);
 
-        PrintUtil.log(new String(base64, "utf-8"));
+        PrintUtil.log(new String(base64, StandardCharsets.UTF_8));
 
         PrintUtil.log("length1 : " + base64.length);
         byte[] aesBytes = EncryptUtil.decryptAES(base64, aesKey);
@@ -242,7 +243,7 @@ public class BaiwangInvoiceService3 {
 
         PrintUtil.log("content " + content.toString());
 
-        String str = Base64Util.encode(content.toString().getBytes("UTF-8"))
+        String str = Base64Util.encode(content.toString().getBytes(StandardCharsets.UTF_8))
                 .replaceAll("\r", "").replaceAll("\n", "");
 
         return str;

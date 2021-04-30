@@ -15,6 +15,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
@@ -32,7 +33,7 @@ public class EleInvoiceTest {
     private final static String INTERFACE_GENERATE_INVOICE = "generateInvoice";
     private final static String INTERFACE_PUSH_INVOICE = "pushInvoice";
     private final static String POST = "POST";
-    private final static String CHARSET_UTF8 = "UTF-8";
+    private final static String CHARSET_UTF8 = StandardCharsets.UTF_8.name();
     private final static String ALGORITHM_SIGN = "HmacSHA1";
     private final static String DES_KEY = "12345678";
     private final static float SL = 0.09f;
@@ -301,7 +302,7 @@ public class EleInvoiceTest {
             String desKey = secretKey.substring(0, 24);
             data = EncryptUtil.decrypt3DES(data, desKey);
         }
-        return new String(data, "UTF-8");
+        return new String(data, StandardCharsets.UTF_8);
     }
 
 }
