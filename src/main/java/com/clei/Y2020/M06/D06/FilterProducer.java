@@ -9,11 +9,15 @@ import org.apache.rocketmq.remoting.common.RemotingHelper;
 /**
  * @author KIyA
  * @date 2020-04-08
- *
+ * <p>
  * 添加用户自定义属性 用于过滤
  */
 public class FilterProducer {
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
+        send();
+    }
+
+    private static void send() throws Exception {
         // 初始化一个producer group
         DefaultMQProducer producer = new DefaultMQProducer("ProducerGroup1");
 
@@ -40,6 +44,5 @@ public class FilterProducer {
 
         // 关闭
         producer.shutdown();
-
     }
 }

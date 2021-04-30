@@ -4,7 +4,6 @@ import com.clei.utils.PrintUtil;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
-import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.message.MessageExt;
 
 import java.nio.charset.StandardCharsets;
@@ -21,10 +20,11 @@ public class Consumer {
 
     private final static AtomicInteger MESSAGE_COUNT = new AtomicInteger(0);
 
-    public static void main(String[] args) throws MQClientException {
+    public static void main(String[] args) throws Exception {
+        consume();
+    }
 
-        PrintUtil.log(System.currentTimeMillis());
-
+    private static void consume() throws Exception {
         // 初始化消费者并设置组名
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("ConsumerGroup1");
 
@@ -51,6 +51,8 @@ public class Consumer {
 
             handleMsg(messages);
 
+            PrintUtil.log("收到消息数量 : {}", MESSAGE_COUNT.addAndGet(1));
+
             return ConsumeOrderlyStatus.SUCCESS;
         });
 
@@ -58,19 +60,19 @@ public class Consumer {
         consumer.start();
     }
 
-    private static void handleMsg(List<MessageExt> messages) {
+    public static void handleMsg(List<MessageExt> messages) {
         Thread thread = Thread.currentThread();
         String threadId = thread.getName() + '_' + thread.getId();
 
         PrintUtil.log("{} 收到新消息 : {}", threadId, messages);
 
         for (MessageExt msg : messages) {
+
+            PrintUtil.log("{} after : {}ms", threadId, System.currentTimeMillis() - msg.getStoreTimestamp());
             PrintUtil.log("{} topic : {}", threadId, msg.getTopic());
             PrintUtil.log("{} tag : {}", threadId, msg.getTags());
             PrintUtil.log("{} msgId : {}", threadId, msg.getMsgId());
             PrintUtil.log("{} body : {}", threadId, new String(msg.getBody(), StandardCharsets.UTF_8));
         }
-
-        PrintUtil.log("收到消息数量 : {}", MESSAGE_COUNT.addAndGet(1));
     }
 }

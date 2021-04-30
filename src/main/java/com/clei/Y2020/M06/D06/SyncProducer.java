@@ -11,11 +11,15 @@ import org.apache.rocketmq.remoting.common.RemotingHelper;
 /**
  * @author KIyA
  * @date 2020-04-08
- *
+ * <p>
  * 可靠同步发送 运用在比较重要一点消息传递/通知等业务
  */
 public class SyncProducer {
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
+        send();
+    }
+
+    private static void send() throws Exception {
         // 初始化一个producer group
         DefaultMQProducer producer = new DefaultMQProducer("ProducerGroup1");
 
@@ -35,13 +39,12 @@ public class SyncProducer {
             // 发送
             // SendResult result = producer.send(msg);
             // 指定消息存储在哪个队列中
-            SendResult result = producer.send(msg,selector,Integer.valueOf(1));
+            SendResult result = producer.send(msg, selector, 1);
 
             PrintUtil.log(i + " 发送结果：" + result);
         }
 
         // 关闭
         producer.shutdown();
-
     }
 }

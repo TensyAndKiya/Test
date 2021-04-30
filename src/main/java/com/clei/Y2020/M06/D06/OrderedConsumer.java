@@ -1,15 +1,12 @@
 package com.clei.Y2020.M06.D06;
 
-import com.clei.utils.PrintUtil;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
-import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -23,8 +20,11 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class OrderedConsumer {
 
-    public static void main(String[] args) throws MQClientException {
+    public static void main(String[] args) throws Exception {
+        consume();
+    }
 
+    private static void consume() throws Exception {
         // 初始化消费者并设置组名
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("ConsumerGroup1");
 
@@ -42,11 +42,11 @@ public class OrderedConsumer {
             AtomicLong consumTimes = new AtomicLong(0);
 
             @Override
-            public ConsumeOrderlyStatus consumeMessage(List<MessageExt> list, ConsumeOrderlyContext context) {
+            public ConsumeOrderlyStatus consumeMessage(List<MessageExt> messages, ConsumeOrderlyContext context) {
 
                 context.setAutoCommit(false);
 
-                handleMsg(list);
+                Consumer.handleMsg(messages);
 
                 this.consumTimes.incrementAndGet();
 
@@ -70,19 +70,5 @@ public class OrderedConsumer {
 
         // 启动
         consumer.start();
-    }
-
-    private static void handleMsg(List<MessageExt> messages) {
-        Thread thread = Thread.currentThread();
-        String threadId = thread.getName() + '_' + thread.getId();
-
-        PrintUtil.println("{} 收到新消息 : {}", threadId, messages);
-
-        for (MessageExt msg : messages) {
-            PrintUtil.println("{} topic : {}", threadId, msg.getTopic());
-            PrintUtil.println("{} tag : {}", threadId, msg.getTags());
-            PrintUtil.println("{} msgId : {}", threadId, msg.getMsgId());
-            PrintUtil.println("{} body : {}", threadId, new String(msg.getBody(), StandardCharsets.UTF_8));
-        }
     }
 }

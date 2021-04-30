@@ -27,6 +27,10 @@ import org.apache.rocketmq.remoting.common.RemotingHelper;
 public class ScheduledProducer {
 
     public static void main(String[] args) throws Exception {
+        send();
+    }
+
+    private static void send() throws Exception {
         // 初始化一个producer group
         DefaultMQProducer producer = new DefaultMQProducer("ProducerGroup1");
 
@@ -52,6 +56,5 @@ public class ScheduledProducer {
 
         // 关闭
         producer.shutdown();
-
     }
 }

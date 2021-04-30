@@ -18,20 +18,20 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class TransactionListenerImpl implements TransactionListener {
 
-    private AtomicInteger transactionIndex = new AtomicInteger(0);
+    private final AtomicInteger atomicInteger = new AtomicInteger(0);
 
-    private ConcurrentHashMap<String,Integer> localTrans = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Integer> localTrans = new ConcurrentHashMap<>();
 
     @Override
     public LocalTransactionState executeLocalTransaction(Message message, Object o) {
 
         PrintUtil.log(DateUtil.currentDateTime() + " message : " + message + " obj : " + o);
 
-        Integer value = transactionIndex.getAndIncrement();
+        int value = atomicInteger.getAndIncrement();
 
         int status = value % 3;
 
-        localTrans.put(message.getTransactionId(),status);
+        localTrans.put(message.getTransactionId(), status);
 
         return LocalTransactionState.UNKNOW;
     }
@@ -43,15 +43,14 @@ public class TransactionListenerImpl implements TransactionListener {
 
         Integer status = localTrans.get(messageExt.getTransactionId());
 
-        if(null != status){
+        if (null != status) {
 
-            switch (status){
+            switch (status) {
                 case 0:
                     return LocalTransactionState.UNKNOW;
-                case 1:
-                    return LocalTransactionState.COMMIT_MESSAGE;
                 case 2:
                     return LocalTransactionState.ROLLBACK_MESSAGE;
+                case 1:
                 default:
                     return LocalTransactionState.COMMIT_MESSAGE;
             }

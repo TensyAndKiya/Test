@@ -20,6 +20,10 @@ import org.apache.rocketmq.remoting.common.RemotingHelper;
  */
 public class OneWayProducer {
     public static void main(String[] args) throws Exception {
+        send();
+    }
+
+    private static void send() throws Exception {
         // 初始化一个producer group
         DefaultMQProducer producer = new DefaultMQProducer("ProducerGroup1");
 
@@ -39,7 +43,7 @@ public class OneWayProducer {
             // 发送
             // SendResult result = producer.send(msg);
             // 指定消息存储在哪个队列中
-            producer.sendOneway(msg, selector, Integer.valueOf(1));
+            producer.sendOneway(msg, selector, 1);
         }
 
         // 等待发送完成
@@ -47,6 +51,5 @@ public class OneWayProducer {
 
         // 关闭
         producer.shutdown();
-
     }
 }

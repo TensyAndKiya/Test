@@ -5,22 +5,23 @@ import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.client.producer.TransactionMQProducer;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author KIyA
  * @date 2020-06-09
- *
+ * <p>
  * 事务消息发送
  */
 public class TransactionProducer {
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
+        send();
+    }
+
+    private static void send() throws Exception {
         // 初始化一个producer group
         TransactionMQProducer producer = new TransactionMQProducer("TransactionProducerGroup1");
 
@@ -31,13 +32,11 @@ public class TransactionProducer {
         ExecutorService executorService = new ThreadPoolExecutor(2, 5, 100, TimeUnit.SECONDS,
                 new ArrayBlockingQueue<>(200),
                 new ThreadFactory() {
-                    private AtomicInteger threadNum = new AtomicInteger(0);
+                    private final AtomicInteger threadNum = new AtomicInteger(0);
 
                     @Override
-                    public Thread newThread(Runnable r) {
-                        Thread thread = new Thread(r);
-                        thread.setName("transaction-msg-check-" + threadNum.getAndIncrement());
-                        return thread;
+                    public Thread newThread(@NotNull Runnable r) {
+                        return new Thread(r, "transaction-msg-check-" + threadNum.getAndIncrement());
                     }
                 });
 
@@ -49,13 +48,13 @@ public class TransactionProducer {
 
         for (int i = 0; i < 10; i++) {
             // 创建消息
-            Message msg = new Message("FirstTopic","FirstTag",
+            Message msg = new Message("FirstTopic", "FirstTag",
                     ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET));
 
             // 发送
             // SendResult result = producer.send(msg);
             // 指定消息存储在哪个队列中
-            SendResult result = producer.sendMessageInTransaction(msg,Integer.valueOf(i));
+            SendResult result = producer.sendMessageInTransaction(msg, i);
 
             PrintUtil.log(i + " 发送结果：" + result);
         }
@@ -64,6 +63,5 @@ public class TransactionProducer {
 
         // 关闭
         producer.shutdown();
-
     }
 }

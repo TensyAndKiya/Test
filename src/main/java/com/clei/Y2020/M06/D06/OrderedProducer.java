@@ -10,11 +10,15 @@ import org.apache.rocketmq.remoting.common.RemotingHelper;
 /**
  * @author KIyA
  * @date 2020-04-08
- *
+ * <p>
  * 有序发送
  */
 public class OrderedProducer {
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
+        send();
+    }
+
+    private static void send() throws Exception {
         // 初始化一个producer group
         DefaultMQProducer producer = new DefaultMQProducer("ProducerGroup1");
 
@@ -24,7 +28,7 @@ public class OrderedProducer {
         // 启动
         producer.start();
 
-        String[] tags = {"tagA","tagB","tagC","tagD","tagE"};
+        String[] tags = {"tagA", "tagB", "tagC", "tagD", "tagE"};
 
         MessageQueueSelector selector = (messageQueues, msg, obj) -> {
             Integer id = (Integer) obj;
@@ -37,18 +41,17 @@ public class OrderedProducer {
             int orderId = i % 10;
 
             // 创建消息
-            Message msg = new Message("FirstTopic",tags[i % tags.length], "KEY_" + i,
+            Message msg = new Message("FirstTopic", tags[i % tags.length], "KEY_" + i,
                     ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET));
 
             // 发送
             // 指定消息存储在哪个队列中
-            SendResult result = producer.send(msg,selector,orderId);
+            SendResult result = producer.send(msg, selector, orderId);
 
             PrintUtil.log(i + " 发送结果：" + result);
         }
 
         // 关闭
         producer.shutdown();
-
     }
 }
