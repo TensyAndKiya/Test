@@ -5,8 +5,10 @@ import org.openjdk.jol.info.ClassLayout;
 
 /**
  * 对象占多少空间
+ *
+ * @author KIyA
  */
-public class Test {
+public class ObjectSpaceSizeTest {
 
     public static void main(String[] args) {
 
@@ -15,7 +17,7 @@ public class Test {
         PrintUtil.log(ClassLayout.parseClass(Temp.class).toPrintable());
         PrintUtil.log(ClassLayout.parseClass(Temp2.class).toPrintable());
 
-        PrintUtil.log(ClassLayout.parseInstance(new Long(1234)).toPrintable());
+        PrintUtil.log(ClassLayout.parseInstance(1234L).toPrintable());
         PrintUtil.log(ClassLayout.parseInstance(Boolean.FALSE).toPrintable());
         PrintUtil.log(ClassLayout.parseInstance(new Temp()).toPrintable());
         PrintUtil.log(ClassLayout.parseInstance(new Temp2()).toPrintable());
@@ -24,10 +26,10 @@ public class Test {
 
 class Temp {
 
-    private Long l = Long.valueOf(1);
+    private Long l = 1L;
 }
 
 class Temp2 {
 
-    private Temp temp = new Temp();
+    private final Temp temp = new Temp();
 }

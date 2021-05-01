@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ReplaceThreadSleepTest {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         // useTimer();
 
@@ -53,19 +53,17 @@ public class ReplaceThreadSleepTest {
      * 使用ScheduledExecutorService
      */
     private static void useScheduledExecutorService() {
-        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        // ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(4);
 
-        PrintUtil.log(System.currentTimeMillis() + " - ScheduledExecutorService");
+        PrintUtil.log("{} - ScheduledExecutorService", System.currentTimeMillis());
 
-        executor.schedule(() -> {
-            PrintUtil.log(System.currentTimeMillis() + " - ScheduledExecutorService Hello World!");
-        }, 8000L, TimeUnit.MILLISECONDS);
+        executor.schedule(() -> PrintUtil.log("{} - ScheduledExecutorService Hello World!", System.currentTimeMillis()),
+                8000L, TimeUnit.MILLISECONDS);
 
         // 关闭
         executor.shutdown();
-
     }
-
 }
 
 class MyTimerTask extends TimerTask {

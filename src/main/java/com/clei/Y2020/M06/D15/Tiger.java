@@ -2,6 +2,8 @@ package com.clei.Y2020.M06.D15;
 
 /**
  * Tiger bean
+ *
+ * @author KIyA
  */
 public class Tiger {
 

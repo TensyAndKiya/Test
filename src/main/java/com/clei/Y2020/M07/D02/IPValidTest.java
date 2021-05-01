@@ -7,11 +7,10 @@ import com.clei.utils.PrintUtil;
  *
  * @author KIyA
  */
-public class IPTest {
+public class IPValidTest {
     public static void main(String[] args) {
 
         PrintUtil.log(validateIP("255.255.255.256"));
-
     }
 
     /**
@@ -39,7 +38,7 @@ public class IPTest {
             return true;
 
         } catch (Exception e) {
-            PrintUtil.log("ip验证出错", e);
+            PrintUtil.log("校验IP信息出错", e);
             return false;
         }
     }

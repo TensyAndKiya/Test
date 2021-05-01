@@ -5,6 +5,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * spring 配置文件加载
+ *
+ * @author KIyA
  */
 public class SpringTest {
     public static void main(String[] args) {

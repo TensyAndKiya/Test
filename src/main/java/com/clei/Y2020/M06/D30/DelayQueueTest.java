@@ -8,6 +8,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * DelayQueue 学习一波
+ *
+ * @author KIyA
  */
 public class DelayQueueTest {
 
@@ -21,6 +23,7 @@ public class DelayQueueTest {
 
         QueryResult q3 = new QueryResult(curMillis + 9000);
 
+        PrintUtil.log(curMillis);
         PrintUtil.log(q1.getStopMillis());
         PrintUtil.log(q2.getStopMillis());
         PrintUtil.log(q3.getStopMillis());
@@ -44,7 +47,7 @@ public class DelayQueueTest {
 
 class QueryResult implements Delayed{
 
-    private long stopMillis;
+    private final long stopMillis;
 
     public QueryResult(long stopMillis){
         this.stopMillis = stopMillis;
