@@ -37,7 +37,7 @@ public class CyclicBarrierTest {
             try {
                 Thread.sleep((long) (Math.random() * 3000));
             } catch (Exception e) {
-                // 吃掉异常
+                PrintUtil.log("sleep出错", e);
             }
             PrintUtil.log(name + "到了" + DateUtil.currentDateTime(true));
             //到达屏障
@@ -45,8 +45,7 @@ public class CyclicBarrierTest {
                 CYCLIC_BARRIER.await();
                 // cyclicBarrier.await(2, TimeUnit.SECONDS);
             } catch (Exception e) {
-                // 吃掉异常
-                PrintUtil.log(name + "异常");
+                PrintUtil.log(name + "异常", e);
             }
             PrintUtil.log(name + "出发" + DateUtil.currentDateTime(true));
         }

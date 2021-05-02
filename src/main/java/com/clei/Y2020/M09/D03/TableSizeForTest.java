@@ -19,7 +19,7 @@ public class TableSizeForTest {
 
         PrintUtil.log(Math.pow(2, 14 - 14));
         PrintUtil.log(Math.pow(2, 14 - 19));
-        PrintUtil.log(Math.pow(2, 14 - 14));
+        PrintUtil.log(Math.pow(2, 14 - 18));
         PrintUtil.log(Math.pow(2, 14 - 17));
         PrintUtil.log(Math.pow(2, 14 - 16));
         PrintUtil.log(Math.pow(2, 14 - 15));
@@ -27,7 +27,7 @@ public class TableSizeForTest {
 
         int capacity = 7;
 
-        PrintUtil.log(tableSizeFor(7));
+        PrintUtil.log(tableSizeFor(capacity));
     }
 
     /**
@@ -49,7 +49,4 @@ public class TableSizeForTest {
         PrintUtil.log(n);
         return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
     }
-
-
-
 }

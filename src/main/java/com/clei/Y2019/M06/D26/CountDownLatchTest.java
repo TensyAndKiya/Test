@@ -23,7 +23,7 @@ public class CountDownLatchTest {
             try {
                 Thread.sleep(2500);
             } catch (Exception e) {
-                // 吃掉异常
+                PrintUtil.log("sleep出错", e);
             }
             PrintUtil.log("吃饭");
             COUNT_DOWN_LATCH.countDown();
@@ -33,7 +33,7 @@ public class CountDownLatchTest {
             try {
                 Thread.sleep(500);
             } catch (Exception e) {
-                // 吃掉异常
+                PrintUtil.log("sleep出错", e);
             }
             PrintUtil.log("学习");
             COUNT_DOWN_LATCH.countDown();
@@ -47,8 +47,7 @@ public class CountDownLatchTest {
                 // 就等2秒钟。。没搞完老子也要睡觉
                 COUNT_DOWN_LATCH.await(2, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
-                // 吃掉异常
-                PrintUtil.log("异常！！！");
+                PrintUtil.log("异常！！！", e);
             }
             PrintUtil.log("睡觉");
         });

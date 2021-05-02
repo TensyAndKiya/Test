@@ -12,7 +12,6 @@ public class IntSecond2StrTest {
     public static void main(String[] args) {
 
         PrintUtil.log(convertSecond2Str((24 + 23) * 3600 + 59 * 60 + 59));
-
     }
 
     /**

@@ -69,7 +69,6 @@ public class TenPersonRace {
         PrintUtil.log("平均成绩");
         double avg = sList.stream().mapToInt(Score::getScore).average().orElse(0D);
         PrintUtil.log(avg);
-
     }
 
     static class Score {

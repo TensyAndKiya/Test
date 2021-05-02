@@ -2,12 +2,10 @@ package com.clei.utils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.clei.Y2020.M09.D17.RoadObject;
-import com.clei.Y2020.M09.D22.*;
 import com.clei.Y2021.M01.D22.Area;
 import com.clei.dto.AreaTreeNode;
 import com.clei.dto.AreaTreeRes;
-import com.clei.entity.BaseArea;
+import com.clei.entity.*;
 import com.clei.utils.other.ColumnDao;
 import io.netty.util.CharsetUtil;
 import org.apache.ibatis.io.Resources;
@@ -140,7 +138,7 @@ public class MybatisUtil {
 
             // 道路类型
             String type = array[2];
-            Integer roadType = 1;
+            int roadType = 1;
 
             char c = roadName.charAt(0);
             if (c == 'G' || c == 'g' || c == 'S' || c == 's') {

@@ -1,4 +1,4 @@
-package com.clei.Y2020.M09.D22;
+package com.clei.entity;
 
 import java.math.BigDecimal;
 

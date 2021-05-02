@@ -3,12 +3,7 @@ package com.clei.utils;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.StringJoiner;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -214,13 +209,13 @@ public class StringUtil {
      * @param suffix     后缀
      * @return
      */
-    public static String join(Collection<String> list, String emptyValue, String delimiter, String prefix, String suffix) {
+    public static <T> String join(Collection<T> list, String emptyValue, String delimiter, String prefix, String suffix) {
         if (CollectionUtils.isEmpty(list)) {
             return emptyValue;
         }
         StringJoiner joiner = new StringJoiner(delimiter, prefix, suffix);
-        for (String s : list) {
-            joiner.add(s);
+        for (T t : list) {
+            joiner.add(t.toString());
         }
         return joiner.toString();
     }
@@ -236,14 +231,43 @@ public class StringUtil {
      * @param suffix     后缀
      * @return
      */
-    public static String strJoin(Collection<String> list, String emptyValue, String delimiter, String prefix, String suffix) {
+    public static <T> String strJoin(Collection<T> list, String emptyValue, String delimiter, String prefix, String suffix) {
         if (CollectionUtils.isEmpty(list)) {
             return emptyValue;
         }
         StringBuilder sb = new StringBuilder();
         sb.append(prefix);
-        for (String s : list) {
-            sb.append(s);
+        for (T t : list) {
+            sb.append(t.toString());
+            sb.append(delimiter);
+        }
+        if (isNotEmpty(delimiter)) {
+            int length = sb.length();
+            sb.delete(length - delimiter.length(), length);
+        }
+        sb.append(suffix);
+        return sb.toString();
+    }
+
+    /**
+     * 字符串拼接
+     * 自己通过StringBuilder实现
+     *
+     * @param arr        泛型对象集合
+     * @param emptyValue 字符串集合为空时返回的值
+     * @param delimiter  分隔符
+     * @param prefix     前缀
+     * @param suffix     后缀
+     * @return
+     */
+    public static <T> String strJoin(T[] arr, String emptyValue, String delimiter, String prefix, String suffix) {
+        if (ArrayUtil.isEmpty(arr)) {
+            return emptyValue;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(prefix);
+        for (T t : arr) {
+            sb.append(t.toString());
             sb.append(delimiter);
         }
         if (isNotEmpty(delimiter)) {

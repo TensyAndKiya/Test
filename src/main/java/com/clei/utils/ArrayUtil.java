@@ -1,11 +1,6 @@
 package com.clei.utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 数组相关工具类
@@ -31,6 +26,17 @@ public class ArrayUtil {
         PrintUtil.log("shuffle result : " + Arrays.toString(randomArray));
 
         PrintUtil.log("size : " + randomArray.length);
+    }
+
+    /**
+     * 判断数组是否为空数组
+     *
+     * @param arr
+     * @param <T>
+     * @return
+     */
+    public static <T> boolean isEmpty(T[] arr) {
+        return null == arr || 0 == arr.length;
     }
 
     // 从 0 到 n 里 选 num 个

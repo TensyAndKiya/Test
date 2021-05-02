@@ -7,7 +7,7 @@ import java.io.File;
 
 /**
  * @author KIyA
- * @backStory 下载了26集鬼灭之刃
+ * 下载了26集鬼灭之刃
  * 其文件名的鬼灭竟然是以GM代替的
  * 我要改过来
  */
@@ -32,10 +32,7 @@ public class UpdateFileNameTest {
                 f.renameTo(newFile);
 
                 PrintUtil.println("newName : {}",newName);
-
             }
-
         });
-
     }
 }

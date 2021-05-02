@@ -43,7 +43,5 @@ public class UDPSocketClient {
         String response = new String(data, StandardCharsets.UTF_8);
 
         PrintUtil.log(response);
-
     }
-
 }

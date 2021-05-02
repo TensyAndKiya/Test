@@ -12,13 +12,13 @@ public class UDPSocketServer {
 
         DatagramSocket serverSocket = new DatagramSocket(8001);
 
-        while (true){
+        while (true) {
 
             PrintUtil.log("begin");
 
             byte[] buffer = new byte[1024];
 
-            DatagramPacket packet = new DatagramPacket(buffer,buffer.length);
+            DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 
             // 接受
             serverSocket.receive(packet);
@@ -32,14 +32,11 @@ public class UDPSocketServer {
             // 响应
             byte[] response = "何不语".getBytes(StandardCharsets.UTF_8);
 
-            PrintUtil.log("address : " + packet.getAddress() + " port : " + packet.getPort());
+            PrintUtil.log("address : {} port : {}", packet.getAddress(), packet.getPort());
 
-            DatagramPacket packetToClient = new DatagramPacket(response,response.length,packet.getAddress(),packet.getPort());
+            DatagramPacket packetToClient = new DatagramPacket(response, response.length, packet.getAddress(), packet.getPort());
 
             serverSocket.send(packetToClient);
-
         }
-
     }
-
 }

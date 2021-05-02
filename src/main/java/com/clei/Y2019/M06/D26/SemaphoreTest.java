@@ -42,12 +42,12 @@ public class SemaphoreTest {
                 try {
                     Thread.sleep((long) (Math.random() * 3000));
                 } catch (Exception e) {
-                    // 吃掉异常
+                    PrintUtil.log("sleep出错", e);
                 }
                 PrintUtil.log(name + "上完了" + DateUtil.currentDateTime(true));
                 SEMAPHORE.release();
             } catch (Exception e) {
-                PrintUtil.log("异常！！！");
+                PrintUtil.log("信号量使用出错", e);
             }
         }
     }

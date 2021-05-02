@@ -18,7 +18,7 @@ import java.math.RoundingMode;
  * 从视频中截取图片
  *
  * @author KIyA
- * @backStory 手动暂停播放视频到指定位置来截图太麻烦了
+ * 手动暂停播放视频到指定位置来截图太麻烦了
  * @date 2021-04-13
  */
 public class GetFrameImgFromVideo {

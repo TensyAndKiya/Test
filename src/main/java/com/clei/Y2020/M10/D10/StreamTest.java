@@ -130,6 +130,4 @@ public class StreamTest {
         PrintUtil.log("" + i + false);
         return false;
     }
-
-
 }

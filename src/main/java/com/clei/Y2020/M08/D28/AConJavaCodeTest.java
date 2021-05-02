@@ -5,24 +5,21 @@ import com.clei.utils.PrintUtil;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.Optional;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 /**
+ * 看见一段处理并发问题的代码，总感觉有点问题，测试一下
+ * 添加车辆
+ *
  * @author KIyA
- * @backStory 看见一段处理并发问题的代码，总感觉有点问题，测试一下
  */
 public class AConJavaCodeTest {
 
     public static void main(String[] args) throws InterruptedException {
 
-        operation(1);
-
+        operation(0);
     }
 
     /**
@@ -37,35 +34,31 @@ public class AConJavaCodeTest {
         int tasks = 1000;
 
         // park数量
-        int parks = 100;
+        int parks = 100000;
 
         ThreadPoolExecutor executor = new ThreadPoolExecutor(
                 8,
                 17,
                 1,
                 TimeUnit.MINUTES,
-                new LinkedBlockingQueue<Runnable>(tasks)
+                new LinkedBlockingQueue<>(tasks)
         );
 
         // 操作
-        AddVehicleOperation operation = null;
+        AddVehicleOperation operation;
 
         // 数据结构
-        final ConcurrentHashMap<Long,List<VehicleInfo>> map = new ConcurrentHashMap<>(10);
+        final ConcurrentHashMap<Long, List<VehicleInfo>> map = new ConcurrentHashMap<>(10);
 
         // 原操作
-        if(0 == type){
+        if (0 == type) {
 
-            operation = (a,b,c,d) -> {
-                originalAddVehicle(a,b,c,d);
-            };
+            operation = AConJavaCodeTest::originalAddVehicle;
 
-        }else {
+        } else {
             // 我的操作
 
-            operation = (a,b,c,d) -> {
-                myAddVehicle(a,b,c,d);
-            };
+            operation = AConJavaCodeTest::myAddVehicle;
 
         }
 
@@ -86,7 +79,7 @@ public class AConJavaCodeTest {
 
                     byte b = 0;
 
-                    op.operate(map,parkId,"black",b);
+                    op.operate(map, parkId, "black", b);
 
                 }
 
@@ -104,26 +97,27 @@ public class AConJavaCodeTest {
         int size = 0;
 
 
-        Iterator<Map.Entry<Long,List<VehicleInfo>>> it = map.entrySet().iterator();
-        while (it.hasNext()){
-            Map.Entry<Long,List<VehicleInfo>> entry = it.next();
+        Iterator<Map.Entry<Long, List<VehicleInfo>>> it = map.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<Long, List<VehicleInfo>> entry = it.next();
             size += entry.getValue().size();
         }
 
         PrintUtil.log("size : " + size);
 
-        PrintUtil.println("操作：{} 耗时：{}ms",type,end - start);
+        PrintUtil.println("操作：{} 耗时：{}ms", type, end - start);
 
     }
 
     /**
      * 原添加方法
+     *
      * @param vehicleMap
      * @param parkId
      * @param vehicleNo
      * @param vehicleColor
      */
-    private static synchronized void originalAddVehicle(ConcurrentHashMap<Long,List<VehicleInfo>> vehicleMap,long parkId, String vehicleNo, byte vehicleColor) {
+    private static synchronized void originalAddVehicle(ConcurrentHashMap<Long, List<VehicleInfo>> vehicleMap, long parkId, String vehicleNo, byte vehicleColor) {
         List<VehicleInfo> vehicleInfoList = vehicleMap.get(parkId);
         if (vehicleInfoList == null) {
             vehicleInfoList = new CopyOnWriteArrayList<>();
@@ -147,36 +141,38 @@ public class AConJavaCodeTest {
 
     /**
      * 我的添加方法
+     *
      * @param vehicleMap
      * @param parkId
      * @param vehicleNo
      * @param vehicleColor
      */
-    private static synchronized void myAddVehicle(Map<Long, List<VehicleInfo>> vehicleMap,long parkId, String vehicleNo, byte vehicleColor) {
+    private static synchronized void myAddVehicle(Map<Long, List<VehicleInfo>> vehicleMap, long parkId, String vehicleNo, byte vehicleColor) {
         List<VehicleInfo> vehicleInfoList = vehicleMap.get(parkId);
         if (vehicleInfoList == null) {
 
             // synchronized (String.valueOf(parkId).intern()) parkId太多不同值会导致常量池堆积大量数据
-            synchronized(AConJavaCodeTest.class){
+            Long lock = getCache(parkId);
+            synchronized (lock) {
 
                 vehicleInfoList = vehicleMap.get(parkId);
 
-                if(vehicleInfoList == null){
+                if (vehicleInfoList == null) {
 
                     vehicleInfoList = new CopyOnWriteArrayList<>();
 
-                    vehicleMap.put(parkId,vehicleInfoList);
+                    vehicleMap.put(parkId, vehicleInfoList);
 
                 }
 
             }
 
-        } else if (vehicleInfoList.size() > 0) {
-            List<VehicleInfo> existList = vehicleInfoList.stream()
-                    .filter(v -> v.getVehicleNo().equals(vehicleNo)
-                            && v.getVehicleColor() == vehicleColor)
-                    .collect(Collectors.toCollection(CopyOnWriteArrayList::new));
-            if (existList != null && existList.size() > 0) {
+        }
+        if (vehicleInfoList.size() > 0) {
+            Optional<VehicleInfo> existVehicle = vehicleInfoList.stream()
+                    .filter(v -> v.getVehicleNo().equals(vehicleNo) && v.getVehicleColor() == vehicleColor)
+                    .findFirst();
+            if (existVehicle.isPresent()) {
                 return;
             }
         }
@@ -186,6 +182,19 @@ public class AConJavaCodeTest {
         vehicleInfo.setVehicleNo(vehicleNo);
         vehicleInfo.setAcquiredBaseInfo(false);
         vehicleInfoList.add(vehicleInfo);
+    }
+
+    /**
+     * 获取缓存池里的Long对象
+     *
+     * @param l
+     * @return
+     */
+    private static Long getCache(long l) {
+        // 使得 -127 <= l <= 127
+        l = l % 128;
+        // 通过自动装箱获取到缓冲池里的对象
+        return l;
     }
 
 
@@ -234,8 +243,8 @@ public class AConJavaCodeTest {
     /**
      * 添加车辆操作
      */
-    interface AddVehicleOperation{
-        void operate(ConcurrentHashMap<Long, List<VehicleInfo>> vehicleMap,long parkId, String vehicleNo, byte vehicleColor);
+    interface AddVehicleOperation {
+        void operate(ConcurrentHashMap<Long, List<VehicleInfo>> vehicleMap, long parkId, String vehicleNo, byte vehicleColor);
     }
 
 }

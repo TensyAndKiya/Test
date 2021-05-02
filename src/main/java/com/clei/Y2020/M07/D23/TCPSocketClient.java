@@ -9,14 +9,15 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @backStory 好久没写socket程序了，试一哈
+ * 好久没写socket程序了，试一哈
+ *
  * @author KIyA
  */
 public class TCPSocketClient {
 
     public static void main(String[] args) throws Exception {
 
-        Socket socket = new Socket("127.0.0.1", 8888);
+        Socket socket = new Socket("127.0.0.1", 8001);
 
         // 写入
         OutputStream os = socket.getOutputStream();

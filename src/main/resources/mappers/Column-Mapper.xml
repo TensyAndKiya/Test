@@ -416,7 +416,7 @@
         )
     </update>
 
-    <update id="updateReportForecastData" parameterType="com.clei.Y2020.M09.D22.DateToDate">
+    <update id="updateReportForecastData" parameterType="com.clei.entity.DateToDate">
         UPDATE road_report_hour_congestion_forcast
         SET date = #{target}
         WHERE date = #{source};
@@ -453,7 +453,7 @@
         <foreach collection="list" item="item" open="(" close=")" separator=",">#{item.uuid}</foreach>
     </select>
 
-    <select id="getSectionInfo" resultType="com.clei.Y2020.M09.D22.SectionInfo">
+    <select id="getSectionInfo" resultType="com.clei.entity.SectionInfo">
         SELECT rsi.id AS roadSectionId,
         section_name AS roadSectionName,
         rsi.uuid,
@@ -475,7 +475,7 @@
         AND (LENGTH(r1.start_location) > 1 AND LENGTH(r1.end_location) > 1)
     </select>
 
-    <select id="getCongestionTopList" resultType="com.clei.Y2020.M09.D22.CongestionTop">
+    <select id="getCongestionTopList" resultType="com.clei.entity.CongestionTop">
         SELECT ri.id AS roadId,
         ri.name AS roadName,
         rsi.id AS roadSectionId,

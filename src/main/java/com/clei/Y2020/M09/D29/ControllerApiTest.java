@@ -29,8 +29,7 @@ public class ControllerApiTest {
     /**
      * 一个请求接口必有的注解
      */
-    private final static String[] REQUEST_API_ARR = {"@RequestMapping", "@GetMapping", "@PostMapping", "@PutMapping", "DeleteMapping"};
-
+    private final static String[] REQUEST_API_ARR = {"@RequestMapping", "@GetMapping", "@PostMapping", "@PutMapping", "@DeleteMapping"};
 
     public static void main(String[] args) throws Exception {
 
@@ -102,7 +101,6 @@ public class ControllerApiTest {
                                 requestApi.setJavaClass(className);
                                 requestApi.setLineNumber(lineNumber + 1);
                                 list.add(requestApi);
-
                             }
                         }
                     }

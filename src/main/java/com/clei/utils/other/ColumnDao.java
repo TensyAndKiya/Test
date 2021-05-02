@@ -1,13 +1,7 @@
 package com.clei.utils.other;
 
-import com.clei.Y2020.M09.D17.RoadObject;
-import com.clei.Y2020.M09.D22.Checkpoint;
-import com.clei.Y2020.M09.D22.CongestionHourForcat;
-import com.clei.Y2020.M09.D22.CongestionTop;
-import com.clei.Y2020.M09.D22.DateToDate;
-import com.clei.Y2020.M09.D22.SectionInfo;
 import com.clei.Y2021.M01.D22.Area;
-import com.clei.entity.BaseArea;
+import com.clei.entity.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
