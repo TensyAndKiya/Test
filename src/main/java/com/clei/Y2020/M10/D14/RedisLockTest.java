@@ -4,7 +4,11 @@ import com.clei.utils.OkHttpUtil;
 import com.clei.utils.PrintUtil;
 import com.clei.utils.StringUtil;
 
-import java.util.concurrent.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 疯狂地去访问redis锁接口看看可用性
@@ -30,28 +34,31 @@ public class RedisLockTest {
                     try {
                         e.getQueue().put(r);
                     } catch (InterruptedException interruptedException) {
-                        PrintUtil.log("翻入阻塞队列出错", e);
+                        PrintUtil.log("将任务放入阻塞队列出错", e);
                     }
                 }
         );
 
-        CopyOnWriteArrayList<Integer> list = new CopyOnWriteArrayList<>();
-
         long begin = System.currentTimeMillis();
         CountDownLatch latch = new CountDownLatch(times);
+
+        AtomicInteger failInt = new AtomicInteger(0);
+        AtomicInteger processingInt = new AtomicInteger(0);
+        AtomicInteger successInt = new AtomicInteger(0);
+        AtomicInteger errorInt = new AtomicInteger(0);
+
         while (times > 0) {
             executor.submit(() -> {
                 String result = OkHttpUtil.doGet(url);
-
                 // 0处理失败 1处理中 2处理成功 3处理出错
                 if (StringUtil.isEmpty(result)) {
-                    list.add(0);
-                } else if (result.equals("处理中...")) {
-                    list.add(1);
-                } else if (result.equals("处理成功...")) {
-                    list.add(2);
-                } else if (result.equals("处理出错...")) {
-                    list.add(3);
+                    failInt.incrementAndGet();
+                } else if ("处理中...".equals(result)) {
+                    processingInt.incrementAndGet();
+                } else if ("处理成功...".equals(result)) {
+                    successInt.incrementAndGet();
+                } else if ("处理出错...".equals(result)) {
+                    errorInt.incrementAndGet();
                 }
                 // 一个任务执行完毕
                 latch.countDown();
@@ -65,31 +72,10 @@ public class RedisLockTest {
         executor.shutdown();
         long end = System.currentTimeMillis();
 
-        int a = 0, b = 0, c = 0, d = 0;
-        for (Integer i : list) {
-            switch (i) {
-                case 0:
-                    a++;
-                    break;
-                case 1:
-                    b++;
-                    break;
-                case 2:
-                    c++;
-                    break;
-                case 3:
-                    d++;
-                    break;
-                default:
-                    PrintUtil.log("未知结果类型");
-            }
-        }
-
         PrintUtil.println("耗时 ： {}ms", end - begin);
-        PrintUtil.log("处理成功... {}", c);
-        PrintUtil.log("处理中... {}", b);
-        PrintUtil.log("处理失败... {}", a);
-        PrintUtil.log("处理出错... {}", d);
+        PrintUtil.log("处理成功... {}", successInt.get());
+        PrintUtil.log("处理中... {}", processingInt.get());
+        PrintUtil.log("处理失败... {}", failInt.get());
+        PrintUtil.log("处理出错... {}", errorInt.get());
     }
-
 }

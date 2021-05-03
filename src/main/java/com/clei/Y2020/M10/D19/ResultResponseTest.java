@@ -41,7 +41,7 @@ public class ResultResponseTest {
      * @return
      */
     public static <T> Response<T> convert(Result<T> result) {
-        return new Response<T>(result.isSuccess(), result.getMessage(), result.getCode(), result.getData());
+        return new Response<>(result.isSuccess(), result.getMessage(), result.getCode(), result.getData());
     }
 
     /**
@@ -52,7 +52,7 @@ public class ResultResponseTest {
      * @return
      */
     public static <T> Result<T> convert(Response<T> response) {
-        return new Result<T>(response.isSuccess(), response.getMsg(), response.getCode(), response.getResult());
+        return new Result<>(response.isSuccess(), response.getMsg(), response.getCode(), response.getResult());
     }
 
     static class Result<T> {

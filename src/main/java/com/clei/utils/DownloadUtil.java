@@ -65,5 +65,4 @@ public class DownloadUtil {
         readChannel.close();
         writeChannel.close();
     }
-
 }

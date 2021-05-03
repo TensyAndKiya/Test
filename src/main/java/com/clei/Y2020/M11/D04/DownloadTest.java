@@ -14,5 +14,4 @@ public class DownloadTest {
         String toFile = "D:\\Temp\\xxx.jpg";
         DownloadUtil.downloadToLocal(fileUrl, toFile);
     }
-
 }

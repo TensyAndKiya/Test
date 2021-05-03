@@ -2,7 +2,6 @@ package com.clei.Y2020.M10.D27;
 
 import com.clei.utils.DateUtil;
 import com.clei.utils.PrintUtil;
-import com.clei.utils.SystemUtil;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -37,8 +36,5 @@ public class EpochDayTest {
         }
 
         list.forEach(PrintUtil::log);
-
-        SystemUtil.pause("");
     }
-
 }
