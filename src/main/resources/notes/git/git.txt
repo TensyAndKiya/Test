@@ -57,6 +57,7 @@ git tag -d V1.0.0  删除本地标签
 git push origin --delete V1.0.0  删除远程仓库标签
 git tag  展示所有tag
 git show V1.0.0  展示对应tag的详细信息
+git checkout V1.0.0 切到某个tag对应的代码
 
 # 拉取远程分支到本地
 先 git fetch origin 拉下最新的信息

@@ -13,10 +13,18 @@ public class NumberTest {
 
     public static void main(String[] args) {
 
+        PrintUtil.log(~1);
+        PrintUtil.log(true ^ false);
+        PrintUtil.log(true & false);
+        PrintUtil.log(true | false);
+
         PrintUtil.log(16 >>> 2);
         PrintUtil.log(16 >> 2);
 
-        PrintUtil.log(Integer.toBinaryString(-1));
+        PrintUtil.log(-3 >> 1);
+        PrintUtil.log(-3 / 2);
+        PrintUtil.log(1 >> 2);
+        PrintUtil.log(1 / 4);
 
         // >>> 是左边补0
         PrintUtil.log(Integer.toBinaryString(-16));

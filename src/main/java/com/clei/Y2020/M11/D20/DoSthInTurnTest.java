@@ -27,22 +27,26 @@ public class DoSthInTurnTest {
         Thread[] arr = new Thread[threadNum];
         for (int i = 0; i < threadNum; i++) {
             int index = i;
-            String str = "" + (char) ('A' + i);
-            Thread t = new Thread(() -> print(str, loopTimes, index, arr));
+            Thread t = new Thread(() -> print(loopTimes, index, arr));
             arr[i] = t;
             t.start();
         }
+        // 第一个开工
         LockSupport.unpark(arr[0]);
     }
 
-    private static void print(String str, int loopTimes, int index, Thread[] arr) {
+    private static void print(int loopTimes, int index, Thread[] arr) {
+        char c = (char) ('A' + index);
         index++;
         if (index == arr.length) {
             index = 0;
         }
         for (int i = 0; i < loopTimes; i++) {
+            // 先等着
             LockSupport.park();
-            PrintUtil.log(str);
+            // 要做的事
+            PrintUtil.log(c);
+            // 让下一个开工
             LockSupport.unpark(arr[index]);
         }
     }
