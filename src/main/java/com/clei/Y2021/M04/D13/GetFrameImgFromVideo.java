@@ -60,13 +60,13 @@ public class GetFrameImgFromVideo {
     /**
      * 提取第startSecond秒开始的imgNum帧图片
      *
-     * @param startSecond 开始秒数
+     * @param startSecond 开始秒数 从1开始
      * @param imgNum      要截取的图片数
      * @param grabMethod  截取方法 1按时间 2按帧数
      * @throws Exception 各种异常
      */
     private static void getImg(int startSecond, int imgNum, int grabMethod) throws Exception {
-        if (startSecond < 0 || imgNum < 1) {
+        if (startSecond < 1 || imgNum < 1) {
             throw new RuntimeException("参数错误");
         }
         // 开始

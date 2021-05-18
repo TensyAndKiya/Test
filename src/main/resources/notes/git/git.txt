@@ -49,6 +49,9 @@ git push origin master --force
 # 推送并设置上游
 git push --set-upstream origin chester
 
+# 设置当前分支的上游分支
+git branch --set-upstream-to=origin/chester
+
 # 打标签了
 git tag -a V1.0.0 -m "第一个标签"  这个是给当前的commit打标签
 git tag -a V1.0.1 439d104 -m "之前忘记打标签了。现在补上"  指定commit打标签

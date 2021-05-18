@@ -19,7 +19,6 @@ public class FiveQuestionTest {
         //PrintUtil.log(q3());
         q4();
         q5();
-        q6();
     }
 
     //false
@@ -65,8 +64,9 @@ public class FiveQuestionTest {
     //并发锁问题
     private static void q5() {
         final Lock lock = new ReentrantLock();
+        boolean lockSuccess = lock.tryLock();
         try {
-            if (lock.tryLock()) {
+            if (lockSuccess) {
                 //需要加锁的代码
             }
         } catch (Exception e) {
@@ -74,50 +74,5 @@ public class FiveQuestionTest {
         } finally {
             lock.unlock();
         }
-    }
-
-    //触类旁通
-    //证明switch对于String 用到了hashCode
-    private static void q6() {
-        String param1 = "param";
-        String param2 = "PARAM";
-        PrintUtil.log(param1.hashCode());
-        PrintUtil.log(param2.hashCode());
-        PrintUtil.log(strSwitch1(param1));
-        PrintUtil.log(strSwitch1(param2));
-        PrintUtil.log(strSwitch2(param1));
-        PrintUtil.log(strSwitch2(param2));
-    }
-
-    private static String strSwitch1(String param) {
-        String result = null;
-        if (null != param) {
-            switch (param) {
-                case "param":
-                    result = "lowerCase";
-                    break;
-                case "PARAM":
-                    result = "upperCase";
-                    break;
-                default:
-            }
-        }
-        return result;
-    }
-
-    private static String strSwitch2(String param) {
-        String result = null;
-        if (null != param) {
-            switch (param) {
-                case "PARAM":
-                    result = "upperCase";
-                    break;
-                case "param":
-                    result = "lowerCase";
-                    break;
-                default:
-            }
-        }
-        return result;
     }
 }

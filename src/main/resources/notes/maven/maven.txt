@@ -12,6 +12,10 @@ maven要使用已经打好的jar包，又没有源码用来install的话，可�
 # 使用命令将jar包install到本地仓库 再通过常规方式引入
 mvn install:install-file -Dfile=D:\CLIdeaWorkspace\Test\target\CleiUtils-1.0.0.jar -DgroupId=com.clei -DartifactId=CleiUtils -Dversion=1.0.0 -Dpackaging=jar
 
+使用命令将jar包deploy到私服
+mvn deploy:deploy-file -Dfile=D:\WorkSpace\KIyA\uploadJar001\target\uploadJar001-1.0-SNAPSHOT.jar -DgroupId=com.clei -DartifactId=uploadJar001 -Dversion=1.0-SNAPSHOT -Dpackaging=jar -Durl=http://test.hikcreate.com/repository/maven-snapshots -DrepositoryId=nexus
+mvn deploy:deploy-file -Dfile=D:\WorkSpace\KIyA\uploadJar001\target\uploadJar001-1.0-SNAPSHOT.jar -DgroupId=com.clei -DartifactId=uploadJar001 -Dversion=1.0-SNAPSHOT -Dpackaging=jar -Durl=http://username:password@test.hikcreate.com/repository/maven-snapshots
+
 打jar包时候把引入的jar包一起打到jar包里的方法
 <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

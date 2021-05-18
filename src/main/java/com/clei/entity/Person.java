@@ -3,7 +3,7 @@ package com.clei.entity;
 /**
  * 常用到的一些简单类 人
  *
- * @author
+ * @author KIyA
  */
 public class Person implements Comparable<Person> {
 
@@ -58,8 +58,6 @@ public class Person implements Comparable<Person> {
             if (0 == compare) {
                 return Integer.compare(this.age, o.getAge());
             }
-        } else {
-            return compare;
         }
         return compare;
     }

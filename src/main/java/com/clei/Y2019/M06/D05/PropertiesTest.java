@@ -182,7 +182,8 @@ public class PropertiesTest {
         }
         boolean updateResult = false;
         int tempUpdateTimes = updateTimes;
-        // 加锁
+        // 加锁 放到try外面避免加锁失败后执行unlock报错
+        // 放到try外面能保证执行lock后面的语句时已经加锁成功了
         writeLock.lock();
 
         // 更新操作做一次就行了
@@ -190,14 +191,14 @@ public class PropertiesTest {
             try (OutputStream outputStream = new FileOutputStream(file)) {
                 prop.store(outputStream, comment);
                 updateResult = true;
+                // 更新配置文件修改次数
+                updateTimes++;
             } catch (IOException e) {
                 PrintUtil.log("更新配置文件出错", e);
+            } finally {
+                writeLock.unlock();
             }
-            // 更新配置文件修改次数
-            updateTimes++;
         }
-
-        writeLock.unlock();
         return updateResult;
     }
 }
