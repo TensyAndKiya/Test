@@ -1,5 +1,6 @@
-package com.clei.netty.client;
+package com.clei.netty.chat.client;
 
+import com.clei.consts.NettyConstants;
 import com.clei.utils.PrintUtil;
 import com.clei.utils.StringUtil;
 import io.netty.bootstrap.Bootstrap;
@@ -18,9 +19,7 @@ import java.io.InputStreamReader;
  */
 public class ChatClient {
 
-    public final static String SEPARATOR = "]|[";
-
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         PrintUtil.log("Chat Client 启动");
         // 启动
         EventLoopGroup bossGroup = new NioEventLoopGroup();
@@ -31,11 +30,11 @@ public class ChatClient {
                     .channel(NioSocketChannel.class)
                     .handler(new ChatClientInitializer(userId));
             // 连接
-            Channel channel = bootstrap.connect("127.0.0.1", 8888).sync().channel();
+            Channel channel = bootstrap.connect("127.0.0.1", NettyConstants.SERVER_PORT).sync().channel();
             // 输入并发送
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
             while (true) {
-                channel.writeAndFlush(userId + SEPARATOR + in.readLine() + "\n");
+                channel.writeAndFlush(userId + NettyConstants.STR_SEPARATOR + in.readLine() + "\n");
             }
         } catch (Exception e) {
             PrintUtil.log(e);

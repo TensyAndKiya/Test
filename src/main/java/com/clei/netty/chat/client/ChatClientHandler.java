@@ -1,5 +1,6 @@
-package com.clei.netty.client;
+package com.clei.netty.chat.client;
 
+import com.clei.consts.NettyConstants;
 import com.clei.utils.PrintUtil;
 import com.clei.utils.StringUtil;
 import io.netty.channel.ChannelHandlerContext;
@@ -26,7 +27,7 @@ public class ChatClientHandler extends SimpleChannelInboundHandler<String> {
         // PrintUtil.log("channelRead0");
         // 输出消息
         if (!StringUtil.isBlank(msg)) {
-            String separator = ChatClient.SEPARATOR;
+            String separator = NettyConstants.STR_SEPARATOR;
             int index = msg.indexOf(separator);
             if (index > 0) {
                 // 暂时只用了userId，以后可以考虑加上登录验证获取用户名等信息
@@ -40,5 +41,12 @@ public class ChatClientHandler extends SimpleChannelInboundHandler<String> {
                 PrintUtil.log(msg);
             }
         }
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        PrintUtil.log("[{}]异常关闭", ctx.channel().remoteAddress(), cause);
+        // 遇到异常就关闭连接
+        ctx.close();
     }
 }

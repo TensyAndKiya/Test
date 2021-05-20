@@ -1,4 +1,4 @@
-package com.clei.netty.client;
+package com.clei.netty.chat.client;
 
 import com.clei.utils.PrintUtil;
 import io.netty.channel.ChannelInitializer;
@@ -26,7 +26,7 @@ public class ChatClientInitializer extends ChannelInitializer<SocketChannel> {
     }
 
     @Override
-    protected void initChannel(SocketChannel ch) throws Exception {
+    protected void initChannel(SocketChannel ch) {
         PrintUtil.log("initChannel");
         ChannelPipeline pipeline = ch.pipeline();
         pipeline.addLast("framer", new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));

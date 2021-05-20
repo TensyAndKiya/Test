@@ -1,4 +1,4 @@
-package com.clei.netty.server;
+package com.clei.netty.chat.server;
 
 import com.clei.utils.PrintUtil;
 import io.netty.channel.Channel;
@@ -100,7 +100,7 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<String> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        PrintUtil.log("[" + ctx.channel().remoteAddress() + "] 异常关闭");
+        PrintUtil.log("[{}]异常关闭", ctx.channel().remoteAddress(), cause);
         // 遇到异常就关闭连接
         ctx.close();
     }

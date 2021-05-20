@@ -1,4 +1,4 @@
-package com.clei.netty.server;
+package com.clei.netty.chat.server;
 
 import com.clei.utils.PrintUtil;
 import io.netty.channel.ChannelInitializer;
@@ -17,7 +17,7 @@ import io.netty.handler.codec.string.StringEncoder;
 public class ChatServerInitializer extends ChannelInitializer<SocketChannel> {
 
     @Override
-    protected void initChannel(SocketChannel ch) throws Exception {
+    protected void initChannel(SocketChannel ch) {
         PrintUtil.log("initChannel");
         ChannelPipeline pipeline = ch.pipeline();
         // 换行分隔
