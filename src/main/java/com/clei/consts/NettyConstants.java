@@ -21,4 +21,9 @@ public interface NettyConstants {
      * websocket server uri
      */
     String WS_URI = "/ws";
+
+    /**
+     * websocket 绑定用户关系记号
+     */
+    String BIND_USER = "bindUser->";
 }

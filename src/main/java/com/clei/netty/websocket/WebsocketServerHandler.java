@@ -1,6 +1,8 @@
 package com.clei.netty.websocket;
 
+import com.clei.consts.NettyConstants;
 import com.clei.utils.PrintUtil;
+import com.clei.utils.StringUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -56,14 +58,32 @@ public class WebsocketServerHandler extends SimpleChannelInboundHandler<TextWebS
         PrintUtil.log("channelInactive");
         PrintUtil.log("[" + ctx.channel().remoteAddress() + "] 掉线");
         super.channelInactive(ctx);
+
+        // 清理用户信息
+        SessionManager.clear(ctx);
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame frame) {
         PrintUtil.log("channelRead0");
+
         Channel client = ctx.channel();
-        String socketAddress = client.remoteAddress().toString();
         String msg = frame.text();
+
+        // 绑定用户关联关系
+        int bindIndex = msg.indexOf(NettyConstants.BIND_USER);
+        if (-1 != bindIndex) {
+            SessionManager.bindUser(ctx, msg, bindIndex);
+            return;
+        }
+
+        // 检查访问权限
+        String userName = SessionManager.checkAuth(ctx);
+        if (StringUtil.isBlank(userName)) {
+            return;
+        }
+
+        String socketAddress = client.remoteAddress().toString();
         PrintUtil.log("[{}] - msg - [{}]", socketAddress, msg);
         // 给所有人发消息
         for (Channel channel : channelGroup) {
@@ -73,7 +93,7 @@ public class WebsocketServerHandler extends SimpleChannelInboundHandler<TextWebS
                 channel.writeAndFlush("[俺] " + msg);
             }*/
             // channel.writeAndFlush(socketAddress + "]|[" + msg);
-            channel.writeAndFlush(new TextWebSocketFrame(msg));
+            channel.writeAndFlush(new TextWebSocketFrame("[" + userName + "]" + msg));
         }
     }
 
@@ -89,4 +109,6 @@ public class WebsocketServerHandler extends SimpleChannelInboundHandler<TextWebS
         // 遇到异常就关闭连接
         ctx.close();
     }
+
+
 }

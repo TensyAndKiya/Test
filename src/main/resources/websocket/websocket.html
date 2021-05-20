@@ -13,16 +13,25 @@
     if (window.WebSocket) {
         socket = new WebSocket("ws://localhost:8888/ws");
         socket.onmessage = function (event) {
-            var ta = document.getElementById('responseText');
-            ta.value = ta.value + '\n' + event.data
+            var msg = event.data;
+            if ("bindUser->success" === msg) {
+                var ta = document.getElementById('responseText');
+                ta.value = "连接开启!";
+            } else {
+                var ta = document.getElementById('responseText');
+                ta.value = ta.value + '\n' + msg
+            }
         };
         socket.onopen = function (event) {
-            var ta = document.getElementById('responseText');
-            ta.value = "连接开启!";
+            var userId = location.hash.substr(1);
+            if (userId.length > 0) {
+                // 用户登录
+                socket.send("bindUser->" + userId);
+            }
         };
         socket.onclose = function (event) {
             var ta = document.getElementById('responseText');
-            ta.value = ta.value + "连接被关闭";
+            ta.value = ta.value + "\n连接被关闭";
         };
     } else {
         alert("你的浏览器不支持 WebSocket！");
