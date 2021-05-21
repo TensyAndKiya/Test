@@ -84,7 +84,7 @@ public class WebsocketServerHandler extends SimpleChannelInboundHandler<TextWebS
         }
 
         String socketAddress = client.remoteAddress().toString();
-        PrintUtil.log("[{}] - msg - [{}]", socketAddress, msg);
+        PrintUtil.log("[{}] - [{}] - msg - [{}]", socketAddress, userName, msg);
         // 给所有人发消息
         for (Channel channel : channelGroup) {
             /*if (client != channel) {
