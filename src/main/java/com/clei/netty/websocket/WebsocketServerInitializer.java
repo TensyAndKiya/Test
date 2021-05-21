@@ -7,6 +7,9 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
+import io.netty.handler.ipfilter.IpFilterRuleType;
+import io.netty.handler.ipfilter.IpSubnetFilterRule;
+import io.netty.handler.ipfilter.RuleBasedIpFilter;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
 /**
@@ -20,6 +23,12 @@ public class WebsocketServerInitializer extends ChannelInitializer<SocketChannel
     protected void initChannel(SocketChannel ch) {
         PrintUtil.log("initChannel");
         ChannelPipeline pipeline = ch.pipeline();
+
+        // IP限制
+        IpSubnetFilterRule accept = new IpSubnetFilterRule("128.0.0.1", 24, IpFilterRuleType.ACCEPT);
+        IpSubnetFilterRule reject = new IpSubnetFilterRule("127.0.0.1", 32, IpFilterRuleType.REJECT);
+        pipeline.addLast(new RuleBasedIpFilter(accept, reject));
+
         pipeline.addLast(new HttpServerCodec());
         pipeline.addLast(new HttpObjectAggregator(64 * 1024));
         pipeline.addLast(new ChunkedWriteHandler());

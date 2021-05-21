@@ -5,6 +5,7 @@ import com.clei.utils.PrintUtil;
 import com.clei.utils.StringUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.group.ChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 import java.util.HashMap;
@@ -72,8 +73,15 @@ public class SessionManager {
 
         CHANNEL_USER.put(hashCode, userId);
         USER_CHANNEL.put(userId, client);
+
+        ChannelGroup channelGroup = WebsocketServerHandler.channelGroup;
+        // 广播给所有channel
+        channelGroup.writeAndFlush(new TextWebSocketFrame("[系统]用户[" + ACCOUNTS.get(userId) + "]上线"));
+        // 添加到组内
+        channelGroup.add(client);
+
         client.writeAndFlush(new TextWebSocketFrame(NettyConstants.BIND_USER + "success"));
-        PrintUtil.log("用户登录成功 userId : {}", userId);
+        PrintUtil.log("用户登录成功 userId : {}，userName : {}", userId, ACCOUNTS.get(userId));
     }
 
 
@@ -107,6 +115,9 @@ public class SessionManager {
         String userId = CHANNEL_USER.remove(hashCode);
         if (StringUtil.isNotBlank(userId)) {
             USER_CHANNEL.remove(userId);
+            ChannelGroup channelGroup = WebsocketServerHandler.channelGroup;
+            // 广播给所有channel
+            channelGroup.writeAndFlush(new TextWebSocketFrame("[系统]用户[" + ACCOUNTS.get(userId) + "]下线"));
             PrintUtil.log("清理用户信息完毕 userId : {}", userId);
         }
     }

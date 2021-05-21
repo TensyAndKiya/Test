@@ -29,34 +29,22 @@ public class WebsocketServerHandler extends SimpleChannelInboundHandler<TextWebS
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) {
         PrintUtil.log("handlerAdded");
-        Channel client = ctx.channel();
-        // 广播给所有channel
-        channelGroup.writeAndFlush("[SERVER] - " + client.remoteAddress() + " 加入\n");
-        // 添加到组内
-        channelGroup.add(client);
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) {
         PrintUtil.log("handlerRemoved");
-        Channel client = ctx.channel();
-        // 广播给所有channel
-        channelGroup.writeAndFlush("[SERVER] - " + client.remoteAddress() + " 离开\n");
-        // 关闭的channel会自动从channelGroup remove
-        // 无需调用channelGroup.remove(client)
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         PrintUtil.log("channelActive");
-        PrintUtil.log("[" + ctx.channel().remoteAddress() + "] 上线");
         super.channelActive(ctx);
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         PrintUtil.log("channelInactive");
-        PrintUtil.log("[" + ctx.channel().remoteAddress() + "] 掉线");
         super.channelInactive(ctx);
 
         // 清理用户信息
