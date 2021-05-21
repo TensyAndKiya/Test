@@ -1,8 +1,0 @@
-# 查询
-/index/type/_search
-# 查询记录数
-/index/type/_count
-# 查看mapping
-/index/type/_mapping
-# 删除索引
-DELETE index
