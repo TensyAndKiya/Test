@@ -71,9 +71,12 @@ CREATE
     TRIGGER `trigger_dog_after_insert` BEFORE INSERT ON `dog` 
     FOR EACH ROW BEGIN
     
-    declare age int;
-    set age = month(sysdate()) - month(new.birthday);
-    set new.age = abs(age);
+    DECLARE age INT;
+    SET age = MONTH(SYSDATE()) - MONTH(new.birthday);
+    IF(age < 0) THEN
+    signal SQLSTATE '45000' SET message_text = '年龄不能为负数';
+    END IF;	
+    SET new.age = ABS(age);
 
     END;
 $$
