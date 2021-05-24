@@ -204,7 +204,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.clei.Y2019.M08.D10.CarEnterReqTest</mainClass>
+                            <mainClass>com.clei.leetcode.Algorithm0001</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

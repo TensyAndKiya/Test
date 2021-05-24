@@ -41,3 +41,6 @@ mvn deploy:deploy-file -Dfile=D:\WorkSpace\KIyA\uploadJar001\target\uploadJar001
                     </execution>
                 </executions>
             </plugin>
+
+# 查看jar包的打包时间
+将jar包解压后查看pom.properties文件，里面有打包时间
