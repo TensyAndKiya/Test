@@ -8,6 +8,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQuery;
 import java.util.Date;
@@ -253,7 +254,7 @@ public class DateUtil {
      * @param localDateTime
      * @return
      */
-    public static Date localDateTimeToDate(LocalDateTime localDateTime) {
+    public static Date toDate(LocalDateTime localDateTime) {
         return Date.from(localDateTime.toInstant(ZONE_OFFSET));
     }
 
@@ -263,7 +264,7 @@ public class DateUtil {
      * @param date
      * @return
      */
-    public static LocalDateTime DateToLocalDateTime(Date date) {
+    public static LocalDateTime toLocalDateTime(Date date) {
         return LocalDateTime.ofInstant(date.toInstant(), ZONE_OFFSET);
     }
 
@@ -275,7 +276,7 @@ public class DateUtil {
      * @return
      */
     public static String getDuration(LocalDateTime start, LocalDateTime end) {
-        return getDuration(toEpochMilli(start), toEpochMilli(end));
+        return getDuration(ChronoUnit.MILLIS.between(start, end));
     }
 
     /**
@@ -297,33 +298,7 @@ public class DateUtil {
      * @return
      */
     public static String getDuration(long start, long end) {
-        long diff = end - start;
-        if (0 > diff) {
-            throw new RuntimeException("时间错误！");
-        }
-        // 否则至少一分钟
-        if (MINUTE_MILLIS > diff) {
-            return "1分";
-        }
-        StringBuilder sb = new StringBuilder();
-        long dayDiff = diff / DAY_MILLIS;
-        if (0 < dayDiff) {
-            sb.append(dayDiff);
-            sb.append("天");
-        }
-        diff = diff % DAY_MILLIS;
-        long hourDiff = diff / HOUR_MILLIS;
-        if (0 < hourDiff) {
-            sb.append(hourDiff);
-            sb.append("小时");
-        }
-        diff = diff % HOUR_MILLIS;
-        long minuteDiff = diff / MINUTE_MILLIS;
-        if (0 < minuteDiff) {
-            sb.append(minuteDiff);
-            sb.append("分");
-        }
-        return sb.toString();
+        return getDuration(end - start);
     }
 
     /**
@@ -336,6 +311,41 @@ public class DateUtil {
     public static boolean isSameDay(TemporalAccessor temporal1, TemporalAccessor temporal2) {
         return temporal1.get(ChronoField.YEAR) == temporal2.get(ChronoField.YEAR)
                 && temporal1.get(ChronoField.DAY_OF_YEAR) == temporal2.get(ChronoField.DAY_OF_YEAR);
+    }
+
+    /**
+     * 毫秒数转时间长度 3天2小时1分这样子
+     *
+     * @param millis 毫秒数
+     * @return
+     */
+    private static String getDuration(long millis) {
+        if (0 > millis) {
+            throw new RuntimeException("时间错误！");
+        }
+        // 否则至少一分钟
+        if (MINUTE_MILLIS > millis) {
+            return "1分";
+        }
+        StringBuilder sb = new StringBuilder();
+        long dayDiff = millis / DAY_MILLIS;
+        if (0 < dayDiff) {
+            sb.append(dayDiff);
+            sb.append("天");
+        }
+        millis = millis % DAY_MILLIS;
+        long hourDiff = millis / HOUR_MILLIS;
+        if (0 < hourDiff) {
+            sb.append(hourDiff);
+            sb.append("小时");
+        }
+        millis = millis % HOUR_MILLIS;
+        long minuteDiff = millis / MINUTE_MILLIS;
+        if (0 < minuteDiff) {
+            sb.append(minuteDiff);
+            sb.append("分");
+        }
+        return sb.toString();
     }
 
     private static String format(TemporalAccessor temporal, DateTimeFormatter dateTimeFormatter) {

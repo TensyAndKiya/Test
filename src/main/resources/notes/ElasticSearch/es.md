@@ -106,3 +106,11 @@ POST /_aliases
   ]
 }
 ```
+# 根据条件删除数据
+```
+POST index/type/_delete_by_query
+{
+    "query": {
+    }
+}
+```

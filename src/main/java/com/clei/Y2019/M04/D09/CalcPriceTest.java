@@ -128,7 +128,13 @@ public class CalcPriceTest {
      * @return
      */
     private static int getDiffHours(LocalDateTime startDate, LocalDateTime endDate) {
-        return (int) (Math.ceil((ChronoUnit.MILLIS.between(startDate, endDate) - 0.0) / HOUR_MILLS));
+        long millis = ChronoUnit.MILLIS.between(startDate, endDate);
+        long hours = millis / HOUR_MILLS;
+        long remainder = millis % HOUR_MILLS;
+        if (remainder > 0) {
+            hours++;
+        }
+        return (int) hours;
     }
 }
 
