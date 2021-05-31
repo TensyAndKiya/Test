@@ -20,3 +20,9 @@ jstack 线程堆栈分析
 2. 使用top -Hp <pid> 查看相关的线程情况(这样方便找出占用cpu和memory的线程)
 3. 使用jstack -l <pid> >> fileName.log （>>是追加内容，不会覆盖之前的）
 4. 看文件分析
+
+jstat 查看正在运行的程序的gc信息
+
+jstat -gcutil pid interval
+例 jstat -gcutil 12345 1000
+每隔1秒打印一次pid为12345的程序的gc信息

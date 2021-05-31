@@ -1,4 +1,0 @@
-注入maven的properties
-@aa.bb@
-例
-spring.profiles.active=@profiles.active@
