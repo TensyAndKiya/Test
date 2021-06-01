@@ -69,5 +69,27 @@ auth liuli
 查看集群信息
 cluster info
 cluster nodes
+cluster slots
+```
+
+# 集群扩容
+```
+新增两个配置文件并启动
+添加主节点到集群 第一个ip:port是要添加到集群的节点，第二个ip:port是当前集群的任意节点
+./src/redis-cli --cluster add-node 192.168.137.2:7007 192.168.137.2:7007 -a liuli
+给新添加的节点分配哈希槽 选择分配的数量，接收节点，哈希槽来源
+./src/redis-cli --cluster reshard  192.168.137.2:7007 -a liuli
+# 添加从节点到集群 并指定主节点的节点id 第一个ip:port是要添加到集群的节点，第二个ip:port是当前集群的任意节点
+./src/redis-cli --cluster add-node --cluster-slave --cluster-master-id db10a9d5c1662d9e3cee21c5776f2e9709f76619 192.168.137.2:7008 192.168.137.2:7001
+```
+
+# 集群缩容
+```
+先删除从节点 ip:port是当前集群的任意节点 后面是要删除的节点id
+src/redis-cli --cluster del-node 192.168.137.2:7001 e996b5222eca3bf9dbaec3eaec38fb44761e3a2c -a liuli
+删除主节点之前要将主节点的哈希槽分出去 选择的时候指定source为要删除的节点id
+src/redis-cli --cluster reshard  192.168.137.2:7001 -a liuli
+删除主节点
+src/redis-cli --cluster del-node 192.168.137.2:7001 524d6232f8c62d41eaa9f79d5c33c40284d60b6b -a liuli
 ```
 
