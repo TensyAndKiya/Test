@@ -6,7 +6,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -126,7 +131,7 @@ public class AConJavaCodeTest {
                     .filter(v -> v.getVehicleNo().equals(vehicleNo)
                             && v.getVehicleColor() == vehicleColor)
                     .collect(Collectors.toCollection(CopyOnWriteArrayList::new));
-            if (existList != null && existList.size() > 0) {
+            if (existList.size() > 0) {
                 return;
             }
         }
