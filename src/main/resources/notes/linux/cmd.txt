@@ -25,6 +25,12 @@ tail -f all_info.log -n 100
 当前行下方打开一行 o 小呕
 当前行上方打开一行 O 大呕
 撤销 u
+将每一行的from改成to : %s/from/to/g
+将当前行的from改成to : s/from/to/g
+展示行号 :set nu 或 :set number
+取消展示行号 :set nonu 或 :set nonumber
+取消高亮 :nohl 或 :nohlsearch
+搜索字符串 /keyword 按回车 再按n/N切换下一个或上一个匹配项
 
 # grep技巧(Globally search given Regular Expression and Print)
 #统计test.log里文本1234出现行数
