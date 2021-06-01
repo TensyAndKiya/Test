@@ -85,15 +85,86 @@ spop types n
 # set 随机返回n个元素，去掉n表示随机返回1个
 srandmember types n
 
-# zset 往set添加元素
-zadd names 100 asan
-# zset 查看元素 和 lrange一样的操作
-zrange names 0 -1
+# zset 往key中添加名为member，分数为score的单个或多个元素
+zadd key [NX|XX] [CH] [INCR] score member [score member ...]
+# zset 查看key中member的分数
+zscore key member
+# zset 查看key中从start到stop的元素，左闭右闭区间，start和stop是按分数升序排的序号索引，从0开始，到stop为-1时表示全部
+zrange key start stop [WITHSCORES]
+# zset 查看key中从start到stop的元素，左闭右闭区间，start和stop是按分数降序排的序号索引，从0开始，到stop为-1时表示全部
+zrevrange key start stop [WITHSCORES]
+# zset 查看key中分值在min到max之间的元素，左闭右闭区间，返回升序
+zrangebyscore key min max [WITHSCORES]
+# zset 查看key中分值在max到min之间的元素，左闭右闭区间，返回降序
+zrevrangebyscore key max min [WITHSCORES]
+# zset 查看key中member字典序在min到max之间的元素，返回升序【分值rank】，(表示开区间，[表示闭区间，使用-或+替代min和max，表示最小值和最大值
+zrangebylex key min max [LIMIT offset count]
+例：zrangebylex names3 (AAA [Z
+例：zrangebylex names3 - +
+# zset 查看key中字典序在max到min之间的元素，返回降序【分值rank】
+zrevrangebylex key max min
+# zset 查看集合元素数量
+zcard key
+# zset 将key中对应的member元素的分值增加incrment
+zincrby key increment member
+# zset 统计key中分值在min到max之间的元素个数，左闭右闭区间
+zcount key min max
+# zset 统计key中字典序在min到max之间的元素个数
+zlexcount key min max
+# zset 查看key中member的排名，升序，从0开始
+zrank key member
+# zset 查看key中member的排名，降序，从0开始,rev应该是reverse的意思
+zrevrank key member
+# zset 删除key中对应的member元素
+zrem key member
+# zset 删除key中从start到stop的元素，左闭右闭区间，start和stop是按分数降序排的序号索引，从0开始，到stop为-1时表示全部
+zremrangebyrank key start stop
+# zset 删除key中分值在min到max之间的元素，左闭右闭区间
+zremrangebyscore key start stop
+# zset 删除key中字典序min到max之间的元素
+zremrangebylex key min max
+# 将多个集合key1...keyn中的交集，numkeys个元素放入destination，其中的元素的分值为在各个原集中的和，numkeys必须为交集元素的个数，不然报错
+zinterstore destination numkeys key [key ...] [WEIGHTS weight] [AGGREGATE SUM|MIN|MAX]
+# 将多个集合key1...keyn中的并集，放入destination，其中的元素的分值为在各个原集中的和，numkeys必须为交集元素的个数，不然报错
+ZUNIONSTORE destination numkeys key [key ...] [WEIGHTS weight] [AGGREGATE SUM|MIN|MAX]
+# 删除并返回key中最多count个分数最高的member，返回降序
+zpopmax key [count]
+# 删除并返回key中最多count个分数最低的member，返回升序
+zpopmin key [count]
+# zpopmax的阻塞版，允许指定多个key，timeout为客户端被阻塞的最大秒数，0为永久阻塞，只有key中没有member的时候才会阻塞哦
+bzpopmax key [key ...] timeout
+# zpopmin的阻塞版，允许指定多个key，timeout为客户端被阻塞的最大秒数，0为永久阻塞，只有key中没有member的时候才会阻塞哦
+bzpopmin key [key ...] timeout
 
-# hash 往hash添加元素 或者修改
-hset users aa 11
-# hash 往hash添加多个元素
-hmset users aa 11 bb 22 cc 33
+# hash 往key中添加或修改单个或多个field，hmset被视为已弃用，建议用hset
+hset key field value [field value ...]
+hmset key field value [field value ...]
+# hash 查看key中某个field的值
+hget key field
+# hash 查看key中单个或多个field的值
+hmget key field [field ...]
+# hash 查看key中所有field的值
+hgetall key
+# hash 删除key中一个活多个field
+hdel key field [field ...]
+# hash 查看key中是否存在某个field
+hexists key field
+# hash 将key中field的数值增加increment，若不是整型数值类型会报错，或新增field并设置值为increment
+hincrby key field increment
+# hash 将key中field的数值增加increment，若不能解析为浮点数值类型会报错，或新增field并设置值为increment
+hincrbyfloat key field increment
+# hash 查看key中所有field
+hkeys key
+# hash 查看key中field个数
+hlen key
+# hash key中不存在指定field时新增，存在则不执行操作
+hsetnx key field value
+# hash 查看key中field对应的value字符串的长度
+hstrlen key field
+# hash 查看key中所有value
+hvals key
+
+
 # hash 查看元素
 hget users aa
 # hash 查看所有元素
@@ -102,3 +173,18 @@ hgetall users
 hincrby users aa 100
 # hash 删除某key
 hdel users aa
+
+# geo 实现
+通过zset实现
+# geo 添加单个或多个位置
+geoadd key longitude latitude member [longitude latitude member ...]
+# geo 查看单个或多个未知经纬度
+geopos key member [member ...]
+# geo 查看两个位置的距离
+geodist key member1 member2 [m|km|ft|mi]
+# geo 查看单个或多个未知的geohash表示
+geohash key member [member ...]
+# geo 以给定的经纬度为中心，返回目标集合中与其距离不超过给定最大距离的所有位置
+georadius key longitude latitude radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count] [ASC|DESC] [STORE key] [STOREDIST key]
+# geo 以给定的位置为中心，返回目标集合中与其距离不超过给定最大距离的所有位置
+georadiusbymember key member radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count] [ASC|DESC] [STORE key] [STOREDIST key]
