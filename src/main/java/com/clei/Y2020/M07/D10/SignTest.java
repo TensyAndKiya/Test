@@ -20,9 +20,9 @@ public class SignTest {
 
         String md51 = EncryptUtil.md5(str);
 
-        String md52 = MD5Util.md5(str);
+        String md52 = MD5Util.md55(str);
 
-        String md53 = MD5Util.md5(str, 0);
+        String md53 = MD5Util.md5(str);
 
         PrintUtil.log(md51);
 

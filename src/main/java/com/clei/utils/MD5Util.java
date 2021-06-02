@@ -1,5 +1,9 @@
 package com.clei.utils;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -13,12 +17,12 @@ public class MD5Util {
 
     /**
      * 这个方法
-     * str包含了ASCII之外的字符会有问题，如中文字符
+     * str包含了ASCII之外的字符会跟其它方法生成的不一样，如中文字符
      *
      * @param str 数据
      * @return 摘要
      */
-    public static String md5(String str) {
+    public static String md55(String str) {
         MessageDigest md5;
         try {
             md5 = MessageDigest.getInstance("MD5");
@@ -45,21 +49,59 @@ public class MD5Util {
 
 
     /**
-     * 计算消息摘要。
+     * 计算md5
      *
-     * @param offset 数据偏移地址。
-     * @return 摘要结果。(16字节)
+     * @param str 要计算的字符串
+     * @return md5值
      */
-    public static String md5(String str, int offset) {
+    public static String md5(String str) {
         try {
             MessageDigest md5 = MessageDigest.getInstance("MD5");
             byte[] b = str.getBytes(StandardCharsets.UTF_8);
-            md5.update(b, offset, b.length);
+            md5.update(b);
             return byteArrayToHexString(md5.digest());
         } catch (NoSuchAlgorithmException e) {
             PrintUtil.log("md5 出错", e);
+            return null;
         }
-        return null;
+    }
+
+    /**
+     * 计算md5
+     *
+     * @param inputStream 数据流
+     * @return md5值
+     */
+    public static String md5(InputStream inputStream) {
+        byte[] buffer = new byte[1024];
+        int length;
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            while (-1 != (length = inputStream.read(buffer))) {
+                md5.update(buffer, 0, length);
+            }
+            return byteArrayToHexString(md5.digest());
+        } catch (Exception e) {
+            PrintUtil.log("md5 出错", e);
+            return null;
+        }
+    }
+
+    /**
+     * 计算md5
+     *
+     * @param file 文件
+     * @return md5值
+     */
+    public static String md5(File file) {
+        String str = null;
+        try (FileInputStream fis = new FileInputStream(file);
+             BufferedInputStream bis = new BufferedInputStream(fis)) {
+            str = md5(bis);
+        } catch (Exception e) {
+            PrintUtil.log("md5 出错", e);
+        }
+        return str;
     }
 
     /**
