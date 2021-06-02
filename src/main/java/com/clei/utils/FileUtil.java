@@ -1,8 +1,11 @@
 package com.clei.utils;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -304,6 +307,117 @@ public class FileUtil {
     }
 
     /**
+     * 将大文件切割成多个指定大小的小文件
+     *
+     * @param sourceFilePath 源文件路径
+     * @param outputPath     输出文件夹路径
+     * @param outputFileName 输出文件名
+     * @param limitSize      输出文件最大值限制 单位M
+     * @throws Exception
+     */
+    public static void cut(String sourceFilePath, String outputPath, String outputFileName, int limitSize) throws Exception {
+        // 1M 对应limitSize的单位
+        int bufferSize = 1024 * 1024;
+        byte[] buffer = new byte[bufferSize];
+        File inputFile = new File(sourceFilePath);
+
+        // 创建输出目录
+        File outputDirectoryFile = new File(outputPath);
+        outputDirectoryFile.mkdirs();
+
+        long fileSize = inputFile.length();
+        // 输出文件数量
+        long fileCount = fileSize / bufferSize / limitSize;
+        if (fileSize % (bufferSize * limitSize) > 0) {
+            fileCount++;
+        }
+
+        // 输出文件的名称的最大长度
+        int outputFileNameLength = (outputFileName + fileCount).length();
+
+        // 切割
+        try (FileInputStream fis = new FileInputStream(inputFile);
+             BufferedInputStream bis = new BufferedInputStream(fis)) {
+
+            int fileIndex = 0;
+            // 输出文件
+            String tempOutputFileName = StringUtil.complete(fileIndex + outputFileName, '0', outputFileNameLength);
+            File outputFile = new File(outputPath + File.separator + tempOutputFileName);
+            FileOutputStream fos = new FileOutputStream(outputFile);
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+
+            int readTimes = 0;
+            int length;
+            while (-1 != (length = bis.read(buffer))) {
+                readTimes++;
+
+                if (readTimes == limitSize) {
+                    readTimes = 1;
+                    fileIndex++;
+
+                    bos.flush();
+                    bos.close();
+                    fos.close();
+
+                    outputFile = new File(outputPath + File.separator + outputFileName + fileIndex);
+                    fos = new FileOutputStream(outputFile);
+                    bos = new BufferedOutputStream(fos);
+                }
+
+                bos.write(buffer, 0, length);
+            }
+
+            bos.flush();
+            bos.close();
+            fos.close();
+        }
+    }
+
+    /**
+     * 将由大文件切割而成的多个的小文件
+     * 合并成大文件
+     *
+     * @throws Exception
+     */
+    public static void merge(String sourceFilePath, String outputFilePath) throws Exception {
+        File outputFile = new File(outputFilePath);
+        // 创建输出目录
+        outputFile.getParentFile().mkdirs();
+        FileOutputStream fos = new FileOutputStream(outputFile);
+        BufferedOutputStream bos = new BufferedOutputStream(fos);
+
+        // 1M
+        int bufferSize = 1024 * 1024;
+        byte[] buffer = new byte[bufferSize];
+        File inputFile = new File(sourceFilePath);
+        File[] files = inputFile.listFiles();
+        // 合并
+        for (File file : files) {
+            try (FileInputStream fis = new FileInputStream(file);
+                 BufferedInputStream bis = new BufferedInputStream(fis)) {
+
+                int length;
+                while (-1 != (length = bis.read(buffer))) {
+                    bos.write(buffer, 0, length);
+
+                }
+            }
+        }
+        bos.flush();
+        bos.close();
+        fos.close();
+    }
+
+    /**
+     * Consumer<File>
+     * 对文件的操作
+     */
+    public interface Operation {
+
+        void operate(File file) throws Exception;
+    }
+
+    /**
      * 将source文件/文件夹移动路径为path的文件
      *
      * @param source
@@ -360,15 +474,6 @@ public class FileUtil {
         // 保留两位小数
         BigDecimal result = new BigDecimal(length).divide(new BigDecimal(divisor), 2, RoundingMode.HALF_UP);
         return result + unit;
-    }
-
-    /**
-     * Consumer<File>
-     * 对文件的操作
-     */
-    public interface Operation {
-
-        void operate(File file) throws Exception;
     }
 
     /**

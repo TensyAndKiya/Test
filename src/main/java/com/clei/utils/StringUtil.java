@@ -3,7 +3,12 @@ package com.clei.utils;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.StringJoiner;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**
@@ -285,5 +290,32 @@ public class StringUtil {
      */
     public static String uuid() {
         return UUID.randomUUID().toString().replaceAll("-", "");
+    }
+
+    /**
+     * 返回一个由str结束
+     * 使用字符补全到长度为length的字符串
+     *
+     * @param str    源字符串
+     * @param c      补全用的字符
+     * @param length 期望的字符串长度
+     * @return
+     */
+    public static String complete(String str, char c, int length) {
+        if (null == str) {
+            str = "null";
+        }
+        int l = str.length();
+        if (l >= length) {
+            return str;
+        }
+        int diff = length - l;
+
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < diff; i++) {
+            sb.append(c);
+        }
+        sb.append(str);
+        return sb.toString();
     }
 }
