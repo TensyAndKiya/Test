@@ -35,5 +35,9 @@ public class FileChecksumTest {
         PrintUtil.log(JDK_8U291_WIN64_MD5.equals(MD5Util.md5(file)));
         FileInputStream fis = new FileInputStream(file);
         PrintUtil.log(JDK_8U291_WIN64_MD5.equals(MD5Util.md5(fis)));
+
+        PrintUtil.log(JDK_8U291_WIN64_SHA256.equals(MD5Util.sha256(file)));
+        fis = new FileInputStream(file);
+        PrintUtil.log(JDK_8U291_WIN64_SHA256.equals(MD5Util.sha256(fis)));
     }
 }

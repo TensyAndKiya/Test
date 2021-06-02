@@ -9,7 +9,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.security.MessageDigest;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -150,75 +149,6 @@ public class EncryptUtil {
         baos.flush();
         baos.close();
         return data;
-    }
-
-    /**
-     * md5
-     *
-     * @param str
-     * @return
-     * @throws Exception
-     */
-    public static String md5(String str) throws Exception {
-        return md5(str, null, false);
-    }
-
-    /**
-     * md5
-     *
-     * @param str         源字符串
-     * @param charset     编码
-     * @param isUpperCase 返回字符串字母是否大写
-     * @throws Exception
-     */
-    public static String md5(String str, String charset, boolean isUpperCase) throws Exception {
-
-        MessageDigest md = MessageDigest.getInstance("MD5");
-
-        // 指定编码
-        if (StringUtil.isBlank(charset)) {
-            md.update(str.getBytes());
-        } else {
-            md.update(str.getBytes(charset));
-        }
-
-        byte[] arr = md.digest();
-
-        return byteArrToHexString(arr, isUpperCase);
-    }
-
-    /**
-     * sha1
-     *
-     * @param str 源字符串
-     * @throws Exception
-     */
-    public static String sha1(String str) throws Exception {
-        return sha1(str, null, false);
-    }
-
-    /**
-     * sha1
-     *
-     * @param str         源字符串
-     * @param charset     编码
-     * @param isUpperCase 返回字符串字母是否大写
-     * @throws Exception
-     */
-    public static String sha1(String str, String charset, boolean isUpperCase) throws Exception {
-        // SHA SHA1 SHA-1是一样的
-        MessageDigest md = MessageDigest.getInstance("SHA");
-
-        byte[] arr;
-
-        // 指定编码
-        if (StringUtil.isBlank(charset)) {
-            arr = md.digest(str.getBytes());
-        } else {
-            arr = md.digest(str.getBytes(charset));
-        }
-
-        return byteArrToHexString(arr, isUpperCase);
     }
 
     /**

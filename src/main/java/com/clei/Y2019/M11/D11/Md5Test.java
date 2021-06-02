@@ -1,6 +1,5 @@
 package com.clei.Y2019.M11.D11;
 
-import com.clei.utils.EncryptUtil;
 import com.clei.utils.MD5Util;
 import com.clei.utils.PrintUtil;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -14,20 +13,18 @@ import java.security.MessageDigest;
  */
 public class Md5Test {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         String str1 = "123456pda";
         PrintUtil.log(md5(str1));
         PrintUtil.log(DigestUtils.md5Hex(str1));
         PrintUtil.log(MD5Util.md55(str1));
         PrintUtil.log(MD5Util.md5(str1));
-        PrintUtil.log(EncryptUtil.md5(str1));
 
         String str2 = "带中文的字符串";
         PrintUtil.log(md5(str2));
         PrintUtil.log(DigestUtils.md5Hex(str2));
         PrintUtil.log(MD5Util.md55(str2));
         PrintUtil.log(MD5Util.md5(str2));
-        PrintUtil.log(EncryptUtil.md5(str2));
     }
 
 

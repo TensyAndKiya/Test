@@ -1,10 +1,8 @@
 package com.clei.Y2020.M07.D10;
 
-import com.clei.utils.EncryptUtil;
 import com.clei.utils.MD5Util;
 import com.clei.utils.PrintUtil;
 
-import java.nio.charset.StandardCharsets;
 import java.util.TreeMap;
 
 /**
@@ -18,19 +16,13 @@ public class SignTest {
 
         String str = "中文";
 
-        String md51 = EncryptUtil.md5(str);
+        String md51 = MD5Util.md55(str);
 
-        String md52 = MD5Util.md55(str);
-
-        String md53 = MD5Util.md5(str);
+        String md52 = MD5Util.md5(str);
 
         PrintUtil.log(md51);
 
         PrintUtil.log(md52);
-
-        PrintUtil.log(md53);
-
-        PrintUtil.log(EncryptUtil.sha1(md51));
 
         TreeMap<String, Object> param = new TreeMap<>();
         // 接口名
@@ -64,9 +56,6 @@ public class SignTest {
 
         PrintUtil.log(signStr);
 
-        PrintUtil.log(EncryptUtil.md5(signStr));
-        String charset = StandardCharsets.UTF_8.name();
-        PrintUtil.log(EncryptUtil.md5(signStr, charset, false));
-        PrintUtil.log(EncryptUtil.md5(signStr, charset, true));
+        PrintUtil.log(MD5Util.md5(signStr));
     }
 }
