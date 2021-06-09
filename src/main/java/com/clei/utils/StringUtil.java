@@ -302,6 +302,20 @@ public class StringUtil {
      * @return
      */
     public static String complete(String str, char c, int length) {
+        return complete(str, c, length, true);
+    }
+
+    /**
+     * 返回一个由str结束
+     * 使用字符补全到长度为length的字符串
+     *
+     * @param str    源字符串
+     * @param c      补全用的字符
+     * @param length 期望的字符串长度
+     * @param before 填充字符放的位置 true前 false 后
+     * @return
+     */
+    public static String complete(String str, char c, int length, boolean before) {
         if (null == str) {
             str = "null";
         }
@@ -312,10 +326,15 @@ public class StringUtil {
         int diff = length - l;
 
         StringBuilder sb = new StringBuilder(length);
+        if (!before) {
+            sb.append(str);
+        }
         for (int i = 0; i < diff; i++) {
             sb.append(c);
         }
-        sb.append(str);
+        if (before) {
+            sb.append(str);
+        }
         return sb.toString();
     }
 }
