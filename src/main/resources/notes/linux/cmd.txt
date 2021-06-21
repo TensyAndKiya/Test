@@ -1,5 +1,14 @@
 # 查看linux机器是64还是32位的
 getconf LONG_BIT
+
+# 查看centos版本
+cat /etc/redhat-release
+# 查看系统内核版本
+uname -a
+
+# 查看命令手册
+man cmd
+
 # 复制文件或文件夹到某个位置
 cp hasaki.txt /a/b/c/ 文件
 cp -r hasaki /a/b/c/ 文件夹

@@ -24,18 +24,17 @@ public class TxtFormatTest {
     /**
      * 读取文件绝对路径
      */
-    private final static String INPUT_DIRECTORY = "D:\\Download\\DingDing\\详细设计文档\\es";
+    private final static String INPUT_DIRECTORY = "D:\\Download\\DingDing\\详细设计文档\\mysql";
 
     /**
      * 读取文件绝对路径
      */
-    private final static String OUTPUT_DIRECTORY = "D:\\Download\\DingDing\\详细设计文档\\es\\temp";
+    private final static String OUTPUT_DIRECTORY = INPUT_DIRECTORY + File.separator + "temp";
 
     /**
      * 表列数
      */
     private final static int COLUMNS = 4;
-
 
     /**
      * 将source样子的文本转为target样子的
@@ -111,7 +110,8 @@ public class TxtFormatTest {
                         // 最后一行没必要做补齐
                         if (i < COLUMNS - 1) {
                             // 默认补齐4个空格的长度
-                            s = StringUtil.complete(s, ' ', columnMaxLengthArr[i] + 4 - strLength(s) + s.length(), false);
+                            int lengthDiff = columnMaxLengthArr[i] - strLength(s) + 4;
+                            s = StringUtil.complete(s, ' ', s.length() + lengthDiff, false);
                         }
                         bw.write(s);
                     }

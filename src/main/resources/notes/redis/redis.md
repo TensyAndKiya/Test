@@ -1,3 +1,5 @@
+# Redis
+Remote Dictionary Service
 # 安装
 ```
 下载redis-5.0.5.tar.gz
@@ -93,3 +95,65 @@ src/redis-cli --cluster reshard  192.168.137.2:7001 -a liuli
 src/redis-cli --cluster del-node 192.168.137.2:7001 524d6232f8c62d41eaa9f79d5c33c40284d60b6b -a liuli
 ```
 
+# redis集群启动脚本
+```
+#!/bin/bash
+
+redis_path="/usr/dev/redis-6.0.10/"
+redis_server="${redis_path}src/redis-server"
+redis_conf="${redis_path}conf/3m-3s/700"
+
+echo 'start'
+
+for((i=1;i<7;i++))
+do $redis_server "${redis_conf}${i}.conf"
+done
+
+echo 'end'
+```
+
+# 数据淘汰策略
+## 当实际内存超出maxmemory时候用到淘汰策略
+## 淘汰策略配置使用配置文件里的maxmemory-policy项
+| 策略 | 描述 |
+| --- | --- |
+| noeviction | Don't evict anything, just return an error on write operations. DEFAULT |
+| volatile-lru | Evict using approximated LRU, only keys with an expire set. |
+| allkeys-lru | Evict any key using approximated LRU. |
+| volatile-lfu | Evict using approximated LFU, only keys with an expire set. |
+| allkeys-lfu | Evict any key using approximated LFU. |
+| volatile-random | Remove a random key having an expire set. |
+| allkeys-random | Remove a random key, any key. |
+| volatile-ttl | Remove the key with the nearest expire time (minor TTL) |
+
+# Redis内部数据结构
+## RedisObject
+```cpp
+struct RedisObject{
+    // 类型 4bits
+    int4 type;
+    // 存储格式 4bits
+    int4 encoding;
+    // lru信息 24bits
+    int24 lru;
+    // 引用计数 32bits
+    int32 refcount;
+    // 对象内容指针 64位系统 64bits 32位系统 32bits
+    void *ptr;
+}
+```
+## string SDS Simple Dynamic String
+```cpp
+// 为什么使用T不直接用int呢
+// 因为字符串比较短时，可以用byte或short来表示，节约空间
+struct SDS<T>{
+    // 数组容量
+    T capacity;
+    // 数组长度
+    T len;
+    // 特殊标识位
+    byte flags;
+    // 数组内容
+    byte[] content;
+}
+```
