@@ -148,12 +148,199 @@ struct RedisObject{
 // 因为字符串比较短时，可以用byte或short来表示，节约空间
 struct SDS<T>{
     // 数组容量
-    T capacity;
+    T alloc;
     // 数组长度
     T len;
-    // 特殊标识位
-    byte flags;
+    // 特殊标识位 低3位表示header类型
+    unsigned char flags;
     // 数组内容
-    byte[] content;
+    char buf[];
 }
 ```
+## RedisDb
+```cpp
+struct RedisDb{
+    // all keys key -> value
+    dict *dict;
+    // all expired keys key -> long(timestamp)
+    dict *expires;
+    ...
+}
+```
+## zset
+```cpp
+struct zset{
+    // all values value -> score
+    dict *dict;
+    // 跳表
+    zskiplist *zsl;
+}
+```
+## dict
+```cpp
+struct dict{
+    // hashtable 通常只有一个hashtable有值，但是扩容时使用渐进式搬迁，有两个hashtable，依次是旧的和新的
+    dicht ht[2];
+    ...
+}
+```
+## dictEntry
+```cpp
+struct dictEntry{
+    void *key;
+    void *val;
+    dictEntry *next;
+}
+```
+## dictht 类似JAVA HashMap 数组+链表
+```cpp
+struct dictht{
+    // 二维
+    dictEntry **table;
+    // 一维数组长度
+    long size;
+    // hashtable中元素个数
+    long used;
+    ...
+}
+```
+## ziplist redis未定义 仅描述所用
+```cpp
+struct ziplist<T>{
+    // 整个压缩列表占用字节数
+    int32 zlbytes;
+    // 最后一个元素距离列表起始位置的偏移量 用于快速定位最后一个元素，然后倒序遍历
+    int32 zltail_offset;
+    // 元素个数
+    int16 zllength
+    //  元素内容列表
+    T[] entries;
+    // 压缩列表的结束 值恒为0XFF
+    int8 zlend;
+}
+```
+## ziplist entry redis未定义 仅描述所用
+```cpp
+struct entry{
+    // 前一个entry的字节长度
+    int<var> prevlen
+    // 元素类型编码
+    int<var> encoding;
+    // 元素内容
+    optional byte[] content;
+}
+```
+## intset set容纳的元素都是整数且元素个数较小时用到intset
+```cpp
+struct intset<T>{
+    // 元素类型编码 决定整数位宽是16 32 还是64位
+    int32 encoding;
+    // 元素个数
+    int32 length;
+    // 元素内容
+    int<T> countents[];
+}
+```
+## ziplist_compressed
+```cpp
+struct ziplist_compressed{
+    int32 size;
+    byte[] compressed_data;
+}
+```
+## quicklistNode
+```cpp
+struct ziplist_compressed{
+    quicklistNode *prev;
+    quicklistNode *next;
+    // 指向压缩列表
+    ziplist *zl;
+    // 压缩列表的字节数
+    int32 size;
+    // 压缩列表的元素个数
+    int16 count;
+    // 编码格式 原生字节数组还是LZF压缩存储 RAW==1 LZF==2
+    int2 encoding;
+    ...
+}
+```
+## quicklist
+```cpp
+struct ziplist_compressed{
+    quicklistNode *head;
+    quicklistNode *tail;
+    // 元素总数
+    long count;
+    // quicklistNode个数
+    long len;
+    // list两端不压缩的节点个数，0表示不开启压缩，1表示首尾节点都不压缩，2表示首两个和尾两个节点不压缩...
+    int compress;
+}
+```
+## zskiplistNode
+```cpp
+struct zskiplistNode {
+    // 节点value
+    sds ele;
+    // 分数
+    double score;
+    // 回溯指针
+    zskiplistNode *backward;
+    // 多层连接指针
+    struct zskiplistLevel {
+        // 前向指针
+        struct zskiplistNode *forward;
+        // 到下一节点的跨度 可以计算rank
+        unsigned long span;
+    } level[];
+}
+```
+## zskiplist
+```cpp
+struct zskiplist {
+    // 跳表头指针 尾指针
+    zskiplistNode *header, *tail;
+    // 跳表长度
+    long length;
+    // 当前最高层
+    int level;
+}
+```
+## listpack 紧凑列表
+```cpp
+struct listpack<T>{
+    // 整个列表占用字节数
+    int32 total_bytes;
+    // 元素个数
+    int16 size
+    // 元素内容列表
+    T[] entries;
+    // 列表的结束 同ziplist一样 值恒为0XFF
+    int8 end;
+}
+```
+## lpentry
+```cpp
+struct lpentry{
+    // 元素类型编码
+    int<var> encoding;
+    // 元素内容
+    optional byte[] content;
+    // 当前元素长度
+    int<var> length;
+}
+```
+## string存储格式
+| 存储格式 | 说明 |
+| --- | --- |
+| embstr | RedisObject和SDS连续存在一起，使用malloc方法一次分配。长度超过44时使用raw。因为字符串的buf都是以\0结尾占用一个字节，RedisObject占16个字节，SDS除开buf最少占3个字节，还剩下44字节 |
+| raw | RedisObject和SDS分开存，使用两次malloc |
+
+# string SDS扩容
+长度小于1M之前，加倍扩容，超过1M之后，每次扩容只多分配1M
+# hashdt扩容
+元素个数等于数组长度时，开始扩容，数组长度变为原数组的两倍，但若是redis正在bgsave，为了减少内存页的过多分离
+不扩容，但若是元素个数达到了数组长度的5倍，强制扩容
+# hashdt缩容
+元素个数低于数组长度的10%
+
