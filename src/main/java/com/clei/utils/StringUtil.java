@@ -3,9 +3,7 @@ package com.clei.utils;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Random;
 import java.util.StringJoiner;
 import java.util.UUID;
@@ -180,12 +178,6 @@ public class StringUtil {
         return Pattern.matches(pattern, str);
     }
 
-    public static String[] arrayRemoveDuplicate() {
-        String[] array = new String[0];
-        array = new HashSet<>(Arrays.asList(array)).toArray(array);
-        return array;
-    }
-
     /**
      * 反转字符串
      *
@@ -336,5 +328,22 @@ public class StringUtil {
             sb.append(str);
         }
         return sb.toString();
+    }
+
+    /**
+     * 去掉字符串尾部的0
+     *
+     * @param areaCode
+     * @return
+     */
+    private static String trimTailZeros(String areaCode) {
+        int end = areaCode.length();
+        while ('0' == areaCode.charAt(end - 1)) {
+            end--;
+            if (0 == end) {
+                break;
+            }
+        }
+        return areaCode.substring(0, end);
     }
 }

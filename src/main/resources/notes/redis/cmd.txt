@@ -15,6 +15,28 @@ dbsize
 # 查看key类型
 type key
 
+# 删除一个或多个key
+DEL key [key ...]
+# 判断一个或多个key是否存在
+EXISTS key [key ...]
+
+# 设置key n秒后过期
+expire key n
+# 查看key还有多久过期，返回正整数秒数，返回-1表示永不过期，返回-2表示没这个key
+ttl key
+# 设置key在指定的unit timestamp之后过期
+expireat key 1293840000
+
+# 设置key n毫秒后过期
+pexpire key n
+# 查看key还有多久过期，返回正整数毫秒数，返回-1表示永不过期，返回-2表示没这个key
+pttl key
+# 设置key在指定的unit timestamp之后过期
+pexpireat key 1293840000
+
+# 将有有效期的key设置为永不过期，对原本永不过期的无用
+persist aa
+
 # 查看key的redis数据结构
 object encoding key
 
@@ -41,24 +63,24 @@ set key value [EX seconds | PX milliseconds] [NX|XX]
 set aa bb
 # 查看值
 get aa
-# 删除键值
-del aa bb
-# 判断键是否存在
-exists aa
+# 字符串长度
+STRLEN key
+# 字符串value追加
+APPEND key value
+# 字符串截取 闭区间
+GETRANGE key start end
+# 字符串修改，设置offset位置及之后的数据为value
+SETRANGE key offset value
 # 让一个整数自增1，key不存在的话，设置该key值为1(原子操作)
 incr aa
 # 让一个整数加上n，key不存在的话，设置该key值为n(原子操作)
 incrby aa n
 # decr，decrby与incr，incrby相反的效果
-# 设置key n秒后过期
-expire aa n
-# 查看key还有多久过期，返回正整数表名还有n秒，返回-1表示永不过期，返回-2表示没这个key
-# 当对一个有有效期的key用set重新赋值后，其变成永不过期
-ttl aa
+# 让一个float加上increment，key不存在的话，设置该key值为increment
+INCRBYFLOAT key increment
 # string 设置键值 并 设置n秒后过期
 set aa bb ex n
-# 将有有效期的key设置为永不过期，对原本永不过期的无用
-persist aa
+
 # list 往list尾添加元素，key不存在则创建，返回list长度
 rpush names aa
 # list 往list头添加元素，key不存在则创建，返回list长度
@@ -70,12 +92,22 @@ lpush names 1 2 3
 # list 查看list长度
 llen names
 # list 查看list元素
+# 查看指定位置的元素
+LINDEX key index
 # list 查看从0开始到第n个元素
 lrange names 0 n
 # list 查看从0开始的全部元素
 lrange names 0 -1
 # list 查看从0开始到倒数第二个元素
 lrange names 0 -2
+# 在pivot前面或后面插入元素
+LINSERT key BEFORE|AFTER pivot element
+# 修改index位置的值
+LSET key index element
+# 移除值为element的count个元素，count大于0表示从头开始，小于0表示从尾开始，等于0表示全部
+LREM key count element
+# 移除start到stop之外的元素
+LTRIM key start stop
 # list 移除list头一个元素并返回
 lpop names
 # list 移除list尾第一个元素并返回
@@ -88,20 +120,26 @@ brpop key timeout
 sadd types aa
 # set 往set添加多个元素
 sadd types bb cc dd
+# 查看集合元素个数
+SCARD key
 # set 移除元素 返回0表示没这个，1表示移除成功
 srem types aa
 # set 查看所有元素
 smembers types
 # set 查看元素是否存在 0 没有 1 有
 sismerber types aa
-# set 合并两个set的值并返回set
-sunion types class
 # set 移除并返回一个元素
 spop types
 # set 移除并返回n个元素
 spop types n
 # set 随机返回n个元素，去掉n表示随机返回1个
 srandmember types n
+# set 交集
+SINTER key [key ...]
+# set 并集
+SUNION key [key ...]
+# set 差集
+SDIFF key [key ...]
 
 # zset 往key中添加名为member，分数为score的单个或多个元素
 zadd key [NX|XX] [CH] [INCR] score member [score member ...]
@@ -181,8 +219,6 @@ hsetnx key field value
 hstrlen key field
 # hash 查看key中所有value
 hvals key
-
-
 # hash 查看元素
 hget users aa
 # hash 查看所有元素

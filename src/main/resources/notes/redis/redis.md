@@ -335,6 +335,7 @@ struct lpentry{
 | --- | --- |
 | embstr | RedisObject和SDS连续存在一起，使用malloc方法一次分配。长度超过44时使用raw。因为字符串的buf都是以\0结尾占用一个字节，RedisObject占16个字节，SDS除开buf最少占3个字节，还剩下44字节 |
 | raw | RedisObject和SDS分开存，使用两次malloc |
+| int | 64位有符号整数，这种编码方式是为了节省空间 |
 
 # string SDS扩容
 长度小于1M之前，加倍扩容，超过1M之后，每次扩容只多分配1M
