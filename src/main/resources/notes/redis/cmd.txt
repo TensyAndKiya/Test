@@ -24,18 +24,21 @@ EXISTS key [key ...]
 expire key n
 # 查看key还有多久过期，返回正整数秒数，返回-1表示永不过期，返回-2表示没这个key
 ttl key
-# 设置key在指定的unit timestamp之后过期
-expireat key 1293840000
+# 设置key在指定的timestamp之后过期
+expireat key 1293840000123
 
 # 设置key n毫秒后过期
 pexpire key n
-# 查看key还有多久过期，返回正整数毫秒数，返回-1表示永不过期，返回-2表示没这个key
+# 查看key还有多久过期，返回正整数秒数，返回-1表示永不过期，返回-2表示没这个key
 pttl key
-# 设置key在指定的unit timestamp之后过期
+# 设置key在指定的unix timestamp之后过期
 pexpireat key 1293840000
 
 # 将有有效期的key设置为永不过期，对原本永不过期的无用
 persist aa
+
+# 查看key的信息
+debug object key
 
 # 查看key的redis数据结构
 object encoding key
@@ -140,6 +143,12 @@ SINTER key [key ...]
 SUNION key [key ...]
 # set 差集
 SDIFF key [key ...]
+# set 存储交集到destination
+SINTERSTORE destination key [key ...]
+# set 存储并集到destination
+SUNIONSTORE destination key [key ...]
+# set 存储差集到destination
+SDIFFSTORE destination key [key ...]
 
 # zset 往key中添加名为member，分数为score的单个或多个元素
 zadd key [NX|XX] [CH] [INCR] score member [score member ...]

@@ -371,8 +371,8 @@ public class DateUtil {
     }
 
     private static void validateStr(String str) {
-        if (null == str || "".equals(str)) {
-            throw new IllegalArgumentException("传入字符串为" + (null == str ? "null！" : "空串！"));
+        if (StringUtil.isBlank(str)) {
+            throw new IllegalArgumentException("传入字符串为空");
         }
     }
 

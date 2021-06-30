@@ -38,9 +38,6 @@ public class Algorithm0046 {
 
     public static void main(String[] args) {
         int[] nums = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        /*PrintUtil.log(permute1(nums));
-        PrintUtil.log(permute2(nums));*/
-        System.out.println(getResultLength(nums.length));
         long start = System.currentTimeMillis();
         permute1(nums);
         long end = System.currentTimeMillis();
@@ -49,7 +46,6 @@ public class Algorithm0046 {
         permute2(nums);
         end = System.currentTimeMillis();
         PrintUtil.log(" {} ms ", end - start);
-
     }
 
     /**
