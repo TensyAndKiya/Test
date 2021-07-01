@@ -29,17 +29,17 @@ public class PropertiesTest {
     /**
      * 配置文件写锁
      */
-    private final static ReentrantReadWriteLock.WriteLock writeLock = new ReentrantReadWriteLock().writeLock();
+    private final static ReentrantReadWriteLock.WriteLock WRITE_LOCK = new ReentrantReadWriteLock().writeLock();
 
     /**
      * 配置文件修改次数
      */
-    private volatile static int updateTimes = 0;
+    private static int updateTimes = 0;
 
     /**
      * 负载文件名
      */
-    private final static String LOAD_FILE_NAME = "load.properties";
+    private final static String LOAD_FILE_NAME = "/other/load.properties";
 
     /**
      * 限制阀值key
@@ -70,7 +70,7 @@ public class PropertiesTest {
     /**
      * 配置文件路径
      */
-    private final static String PATH = "D:\\WorkSpace\\KIyA\\Test\\src\\main\\resources" + File.separator + LOAD_FILE_NAME;
+    private final static String PATH = PropertiesTest.class.getResource(LOAD_FILE_NAME).getPath();
 
     public static void main(String[] args) throws Exception {
         Properties prop = getPropByFile();
@@ -96,6 +96,7 @@ public class PropertiesTest {
             });
         }
         latch.await();
+        pool.shutdown();
         PrintUtil.log("updateTimes : {}", updateTimes);
     }
 
@@ -160,7 +161,7 @@ public class PropertiesTest {
         }
         String newVal = String.valueOf(threshold);
         String oldVal = prop.getProperty(THRESHOLD_KEY);
-        boolean updateResult = false;
+        boolean updateResult;
         if (newVal.equals(oldVal)) {
             PrintUtil.log("新阀值与旧阀值一致，不必更新");
             updateResult = true;
@@ -181,23 +182,18 @@ public class PropertiesTest {
             return false;
         }
         boolean updateResult = false;
-        int tempUpdateTimes = updateTimes;
         // 加锁 放到try外面避免加锁失败后执行unlock报错
         // 放到try外面能保证执行lock后面的语句时已经加锁成功了
-        writeLock.lock();
-
-        // 更新操作做一次就行了
-        if (updateTimes == tempUpdateTimes) {
-            try (OutputStream outputStream = new FileOutputStream(file)) {
-                prop.store(outputStream, comment);
-                updateResult = true;
-                // 更新配置文件修改次数
-                updateTimes++;
-            } catch (IOException e) {
-                PrintUtil.log("更新配置文件出错", e);
-            } finally {
-                writeLock.unlock();
-            }
+        WRITE_LOCK.lock();
+        try (OutputStream outputStream = new FileOutputStream(file)) {
+            prop.store(outputStream, comment);
+            updateResult = true;
+            // 更新配置文件修改次数
+            updateTimes++;
+        } catch (IOException e) {
+            PrintUtil.log("更新配置文件出错", e);
+        } finally {
+            WRITE_LOCK.unlock();
         }
         return updateResult;
     }

@@ -118,10 +118,10 @@ class MailSender {
         textPart.setContent("中国，我爱你，不用千言和万语<br/> <img src='cid:linkinpark.jpg' />", "text/html;charset=UTF-8");
         //图片数据
         MimeBodyPart imagePart = new MimeBodyPart();
-        DataHandler dh = new DataHandler(new FileDataSource(JavaMailTest.class.getResource("/linkinpark.jpg").getPath()));
+        DataHandler dh = new DataHandler(new FileDataSource(JavaMailTest.class.getResource("/images/linkinpark.jpg").getPath()));
         imagePart.setDataHandler(dh);
         //这里的contendID要与上面text里的cid对应哦
-        imagePart.setContentID("linkinpark.jpg");
+        imagePart.setContentID("images/linkinpark.jpg");
         //描述数据关系
         MimeMultipart mm = new MimeMultipart();
         mm.addBodyPart(textPart);
@@ -142,9 +142,9 @@ class MailSender {
         textPart.setContent("中国，我爱你，不用千言和万语", "text/html;charset=UTF-8");
         //附件数据
         MimeBodyPart attachPart = new MimeBodyPart();
-        DataHandler dh = new DataHandler(new FileDataSource(JavaMailTest.class.getResource("/linkinpark.jpg").getPath()));
+        DataHandler dh = new DataHandler(new FileDataSource(JavaMailTest.class.getResource("/images/linkinpark.jpg").getPath()));
         attachPart.setDataHandler(dh);
-        attachPart.setContentID("linkinpark.jpg");
+        attachPart.setContentID("images/linkinpark.jpg");
         //描述数据关系
         MimeMultipart mm = new MimeMultipart();
         mm.addBodyPart(textPart);
@@ -165,12 +165,12 @@ class MailSender {
         textPart.setContent("中国，我爱你，不用千言和万语<br/> <img src='cid:linkinpark.jpg' />", "text/html;charset=UTF-8");
         //图片数据
         MimeBodyPart imagePart = new MimeBodyPart();
-        DataHandler dh = new DataHandler(new FileDataSource(JavaMailTest.class.getResource("/linkinpark.jpg").getPath()));
+        DataHandler dh = new DataHandler(new FileDataSource(JavaMailTest.class.getResource("/images/linkinpark.jpg").getPath()));
         imagePart.setDataHandler(dh);
-        imagePart.setContentID("linkinpark.jpg");
+        imagePart.setContentID("images/linkinpark.jpg");
         //附件数据
         MimeBodyPart attachPart = new MimeBodyPart();
-        DataHandler dh2 = new DataHandler(new FileDataSource(JavaMailTest.class.getResource("/BreakingTheHabit.txt").getPath()));
+        DataHandler dh2 = new DataHandler(new FileDataSource(JavaMailTest.class.getResource("/other/BreakingTheHabit.txt").getPath()));
         attachPart.setDataHandler(dh2);
         attachPart.setFileName(dh2.getName());
         //描述正文和图片数据关系

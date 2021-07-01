@@ -6,6 +6,9 @@ cat /etc/redhat-release
 # 查看系统内核版本
 uname -a
 
+# centos8修改主机名
+hostnamectl set-hostname KIyA
+
 # 查看命令手册
 man cmd
 
