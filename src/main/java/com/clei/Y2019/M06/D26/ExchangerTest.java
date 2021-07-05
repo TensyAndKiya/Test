@@ -1,8 +1,10 @@
 package com.clei.Y2019.M06.D26;
 
 import com.clei.utils.PrintUtil;
+import com.clei.utils.ThreadUtil;
 
 import java.util.concurrent.Exchanger;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -17,11 +19,11 @@ public class ExchangerTest {
 
     private static final Exchanger<String> EXCHANGER = new Exchanger<>();
 
-    // permits isFair
-    // private static Semaphore semaphore = new Semaphore(3,true);
     public static void main(String[] args) {
-        new Thread(new SonGoHome()).start();
-        new Thread(new MotherGoHome()).start();
+        ThreadPoolExecutor pool = ThreadUtil.pool();
+        pool.execute(new SonGoHome());
+        pool.execute(new MotherGoHome());
+        pool.shutdown();
     }
 
     private static class SonGoHome implements Runnable {
@@ -42,7 +44,7 @@ public class ExchangerTest {
             } catch (InterruptedException e) {
                 PrintUtil.log("被打断", e);
             } catch (TimeoutException e) {
-                //时间等完了
+                // 时间等完了
                 PrintUtil.log("老妈再不回来就要饿死了。。啊呜呜呜呜", e);
             }
 
@@ -66,7 +68,7 @@ public class ExchangerTest {
             } catch (InterruptedException e) {
                 PrintUtil.log("被打断", e);
             } catch (TimeoutException e) {
-                //时间等完了
+                // 时间等完了
                 PrintUtil.log("这小兔崽子还没到家，去找到并打一顿", e);
             }
         }

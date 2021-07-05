@@ -83,3 +83,62 @@ $$
 
 DELIMITER ;
 ```
+
+# 创建partition并使用sql删除
+```
+CREATE TABLE `p` (
+  `id` INT NOT NULL,
+  `p_name` VARCHAR(16) DEFAULT NULL,
+  `create_date` DATETIME DEFAULT NULL
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+
+PARTITION BY RANGE(TO_DAYS(create_date))
+(
+PARTITION p1 VALUES LESS THAN (TO_DAYS('2021-04-01 00:00:00')),
+PARTITION p2 VALUES LESS THAN (TO_DAYS('2021-07-01 00:00:00')),
+PARTITION p3 VALUES LESS THAN (TO_DAYS('2021-10-01 00:00:00')),
+PARTITION p4 VALUES LESS THAN (TO_DAYS('2022-01-01 00:00:00'))
+);
+
+DELIMITER $$
+USE `test`$$
+DROP PROCEDURE IF EXISTS `PROC_DROP_OLD_PARTITIONS`$$
+# 以下用到了 cursor while statement partition等知识点
+CREATE DEFINER=`kiya`@`%` PROCEDURE `PROC_DROP_OLD_PARTITIONS`(in limit_time datetime)
+BEGIN
+	declare pName varchar(16);
+	declare done int default 0;
+	declare cs cursor for SELECT partition_name FROM `information_schema`.`PARTITIONS` WHERE table_name = 'p' AND create_time < limit_time and partition_name != 'p4';
+	
+	# 游标执行完后设置done为1
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done=1; 
+	
+	open cs ;
+	
+	while_label: begin
+	while done != 1 do
+	
+        # 有多个字段的话，个数与类型要一致
+		fetch cs into pName;
+		
+        # 避免游标最后多执行一次
+		if done = 1 then 
+		leave while_label;
+		end if;
+		
+		set @exeSql = concat('ALTER TABLE p DROP PARTITION ',pName);
+		prepare stmt from @exeSql;
+		# 记录下拼接的sql
+		INSERT INTO dog(id,NAME) VALUES(NULL,@exeSql);
+		execute stmt;
+		deallocate prepare stmt;
+	
+	end while;
+	end while_label;
+	
+	close cs ;
+
+	END$$
+
+DELIMITER ;
+```
