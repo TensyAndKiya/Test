@@ -8,25 +8,25 @@ package com.clei.utils;
  */
 public class NumUtil {
 
-    private final static char[] lCaseArr;
+    private final static char[] LOWER_CASE_ARR;
 
-    private final static char[] uCaseArr;
+    private final static char[] UPPER_CASE_ARR;
 
     // 初始化
     static {
-        lCaseArr = new char[36];
-        uCaseArr = new char[36];
+        LOWER_CASE_ARR = new char[36];
+        UPPER_CASE_ARR = new char[36];
 
         // 10个数字字符
         for (int i = 0; i < 10; i++) {
-            lCaseArr[i] = (char) ('0' + i);
-            uCaseArr[i] = (char) ('0' + i);
+            LOWER_CASE_ARR[i] = (char) ('0' + i);
+            UPPER_CASE_ARR[i] = (char) ('0' + i);
         }
 
         // 26个字母字符 分大小写
         for (int i = 0; i < 26; i++) {
-            lCaseArr[i + 10] = (char) ('a' + i);
-            uCaseArr[i + 10] = (char) ('A' + i);
+            LOWER_CASE_ARR[i + 10] = (char) ('a' + i);
+            UPPER_CASE_ARR[i + 10] = (char) ('A' + i);
         }
     }
 
@@ -61,13 +61,19 @@ public class NumUtil {
      * @return
      */
     public static String toBinaryString(int i) {
-        StringBuilder sb = new StringBuilder(Integer.toBinaryString(i));
+        int length = 32;
+        String str = Integer.toBinaryString(i);
         // 前面补0
-        int diff = 32 - sb.length();
-        for (int j = 0; j < diff; j++) {
-            sb.insert(0, '0');
+        int diff = length - str.length();
+        if (diff > 0) {
+            StringBuilder sb = new StringBuilder(length);
+            sb.append(str);
+            for (int j = 0; j < diff; j++) {
+                sb.insert(0, '0');
+            }
+            return sb.toString();
         }
-        return sb.toString();
+        return str;
     }
 
     /**
@@ -124,6 +130,9 @@ public class NumUtil {
      * @return
      */
     public static boolean isPrime(int num) {
+        if (num < 2) {
+            throw new RuntimeException("参数错误");
+        }
         int k = (int) Math.sqrt(num) + 1;
         for (int i = 2; i < k; i++) {
             if (0 == num % i) {

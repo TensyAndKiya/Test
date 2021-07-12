@@ -126,30 +126,67 @@ echo 'end'
 | allkeys-random | Remove a random key, any key. |
 | volatile-ttl | Remove the key with the nearest expire time (minor TTL) |
 
-# Redis内部数据结构
+# Redis内部数据结构 代码来自redis-6.0.10的源码
 ## RedisObject
-```cpp
-struct RedisObject{
+```c
+type
+#define OBJ_STRING 0    /* String object. */
+#define OBJ_LIST 1      /* List object. */
+#define OBJ_SET 2       /* Set object. */
+#define OBJ_ZSET 3      /* Sorted set object. */
+#define OBJ_HASH 4      /* Hash object. */
+
+encoding
+#define OBJ_ENCODING_RAW 0     /* Raw representation */
+#define OBJ_ENCODING_INT 1     /* Encoded as integer */
+#define OBJ_ENCODING_HT 2      /* Encoded as hash table */
+#define OBJ_ENCODING_ZIPMAP 3  /* Encoded as zipmap */
+#define OBJ_ENCODING_LINKEDLIST 4 /* No longer used: old list encoding. */
+#define OBJ_ENCODING_ZIPLIST 5 /* Encoded as ziplist */
+#define OBJ_ENCODING_INTSET 6  /* Encoded as intset */
+#define OBJ_ENCODING_SKIPLIST 7  /* Encoded as skiplist */
+#define OBJ_ENCODING_EMBSTR 8  /* Embedded sds string encoding */
+#define OBJ_ENCODING_QUICKLIST 9 /* Encoded as linked list of ziplists */
+#define OBJ_ENCODING_STREAM 10 /* Encoded as a radix tree of listpacks */
+
+typedef struct redisObject{
     // 类型 4bits
-    int4 type;
+    unsigned type:4;
     // 存储格式 4bits
-    int4 encoding;
+    unsigned encoding:4;
     // lru信息 24bits
-    int24 lru;
+    unsigned lru:LRU_BITS;
     // 引用计数 32bits
-    int32 refcount;
+    int refcount;
     // 对象内容指针 64位系统 64bits 32位系统 32bits
     void *ptr;
-}
+} robj;
 ```
+## RedisDb
+```c
+typedef struct redisDb {
+    // all keys key -> value
+    dict *dict;                 /* The keyspace for this DB */
+    // all expired keys key -> long(timestamp)
+    dict *expires;              /* Timeout of keys with a timeout set */
+    dict *blocking_keys;        /* Keys with clients waiting for data (BLPOP)*/
+    dict *ready_keys;           /* Blocked keys that received a PUSH */
+    dict *watched_keys;         /* WATCHED keys for MULTI/EXEC CAS */
+    int id;                     /* Database ID */
+    long long avg_ttl;          /* Average TTL, just for stats */
+    unsigned long expires_cursor; /* Cursor of the active expire cycle. */
+    list *defrag_later;         /* List of key names to attempt to defrag one by one, gradually. */
+} redisDb;
+```
+
 ## string SDS Simple Dynamic String
-```cpp
+```c
 // 为什么使用T不直接用int呢
 // 因为字符串比较短时，可以用byte或short来表示，节约空间
-struct SDS<T>{
+struct sdshdr<T>{
     // 数组容量
     T alloc;
-    // 数组长度
+    // 字符串长度
     T len;
     // 特殊标识位 低3位表示header类型
     unsigned char flags;
@@ -157,100 +194,172 @@ struct SDS<T>{
     char buf[];
 }
 ```
-## RedisDb
-```cpp
-struct RedisDb{
-    // all keys key -> value
-    dict *dict;
-    // all expired keys key -> long(timestamp)
-    dict *expires;
-    ...
-}
+## list
+```c
+typedef struct listNode {
+    // 前置节点
+    struct listNode *prev;
+    // 后置节点
+    struct listNode *next;
+    // 节点值
+    void *value;
+} listNode;
+
+typedef struct listIter {
+    listNode *next;
+    int direction;
+} listIter;
+
+typedef struct list {
+    // 头节点
+    listNode *head;
+    // 尾节点
+    listNode *tail;
+    // 节点值复制函数
+    void *(*dup)(void *ptr);
+    // 节点值释放函数
+    void (*free)(void *ptr);
+    // 节点值对比函数
+    int (*match)(void *ptr, void *key);
+    // 节点数
+    unsigned long len;
+} list;
 ```
-## zset
-```cpp
-struct zset{
+## hash dict
+```c
+typedef struct dict {
+    // 类型特定函数
+    dictType *type;
+    // 私有数据 保存了需要传给那些类型特定函数的可选参数
+    void *privdata;
+    // 哈希表 通常只有一个hashtable有值，使用ht[0]，但是扩容时使用渐进式搬迁，有两个hashtable，依次是旧的和新的
+    dictht ht[2];
+    // rehash索引 当rehash不在进行时 值为-1
+    long rehashidx; /* rehashing not in progress if rehashidx == -1 */
+    unsigned long iterators; /* number of iterators currently running */
+} dict;
+
+// dictht 类似JAVA HashMap 数组+链表
+typedef struct dictht {
+    // 哈希表数组
+    dictEntry **table;
+    // 哈希表大小
+    unsigned long size;
+    // 哈希表大小掩码，用于计算索引值，总是等于size - 1
+    unsigned long sizemask;
+    // 哈希表节点数
+    unsigned long used;
+} dictht;
+
+// 哈希表节点
+typedef struct dictEntry {
+    // 键
+    void *key;
+    // 值
+    union {
+        void *val;
+        uint64_t u64;
+        int64_t s64;
+        double d;
+    } v;
+    // 下个哈希表节点 形成链表
+    struct dictEntry *next;
+} dictEntry;
+
+// 类型特定函数
+typedef struct dictType {
+    // 计算哈希值
+    uint64_t (*hashFunction)(const void *key);
+    // 复制键
+    void *(*keyDup)(void *privdata, const void *key);
+    // 复制值
+    void *(*valDup)(void *privdata, const void *obj);
+    // 对比键
+    int (*keyCompare)(void *privdata, const void *key1, const void *key2);
+    // 销毁键
+    void (*keyDestructor)(void *privdata, void *key);
+    // 销毁值
+    void (*valDestructor)(void *privdata, void *obj);
+} dictType;
+```
+
+## zset 
+```c
+typedef struct zset {
     // all values value -> score
     dict *dict;
     // 跳表
     zskiplist *zsl;
-}
+} zset;
+
+typedef struct zskiplistNode {
+    // 元素值
+    sds ele;
+    // 分值
+    double score;
+    // 后退指针
+    struct zskiplistNode *backward;
+    // 层
+    struct zskiplistLevel {
+        // 前进指针
+        struct zskiplistNode *forward;
+        // 跨度 用来计算rank
+        unsigned long span;
+    } level[];
+} zskiplistNode;
+
+typedef struct zskiplist {
+    // 表头节点和表尾节点
+    struct zskiplistNode *header, *tail;
+    // 节点数量
+    unsigned long length;
+    // 表中层数最大的节点的层数
+    int level;
+} zskiplist;
 ```
-## dict
-```cpp
-struct dict{
-    // hashtable 通常只有一个hashtable有值，但是扩容时使用渐进式搬迁，有两个hashtable，依次是旧的和新的
-    dicht ht[2];
-    ...
-}
-```
-## dictEntry
-```cpp
-struct dictEntry{
-    void *key;
-    void *val;
-    dictEntry *next;
-}
-```
-## dictht 类似JAVA HashMap 数组+链表
-```cpp
-struct dictht{
-    // 二维
-    dictEntry **table;
-    // 一维数组长度
-    long size;
-    // hashtable中元素个数
-    long used;
-    ...
-}
-```
-## ziplist redis未定义 仅描述所用
-```cpp
-struct ziplist<T>{
-    // 整个压缩列表占用字节数
-    int32 zlbytes;
-    // 最后一个元素距离列表起始位置的偏移量 用于快速定位最后一个元素，然后倒序遍历
-    int32 zltail_offset;
+
+## intset set容纳的元素都是整数且元素个数较少时用到
+```c
+typedef struct intset {
+    // 类型编码 决定整数位宽是16/32/64位
+    uint32_t encoding;
     // 元素个数
-    int16 zllength
+    uint32_t length;
+    // 保存元素的数组
+    int8_t contents[];
+} intset;
+
+## ziplist ziplist entry redis未定义 仅描述所用
+```c
+// ziplist <zlbytes> <zltail> <zllen> <entry> <entry> ... <entry> <zlend>
+// 例子： [0f 00 00 00] [0c 00 00 00] [02 00] [00 f3] [02 f6] [ff]
+// entry <prevlen> <encoding> <entry-data>
+typedef struct ziplist<T>{
+    // 整个压缩列表占用字节数
+    uint32_t zlbytes;
+    // 最后一个元素距离列表起始位置的字节数偏移量 用于快速定位最后一个元素，然后倒序遍历
+    uint32_t zltail;
+    // 元素个数
+    uint16_t zllen
     //  元素内容列表
-    T[] entries;
+    T[] entry;
     // 压缩列表的结束 值恒为0XFF
-    int8 zlend;
+    uint8_t zlend;
 }
-```
-## ziplist entry redis未定义 仅描述所用
-```cpp
-struct entry{
-    // 前一个entry的字节长度
-    int<var> prevlen
+
+typedef struct entry{
+    // 前一个entry的字节长度 1字节或5字节(0xFE + 4字节)
+    uint<var> prevlen
     // 元素类型编码
     int<var> encoding;
     // 元素内容
     optional byte[] content;
 }
 ```
-## intset set容纳的元素都是整数且元素个数较小时用到intset
-```cpp
-struct intset<T>{
-    // 元素类型编码 决定整数位宽是16 32 还是64位
-    int32 encoding;
-    // 元素个数
-    int32 length;
-    // 元素内容
-    int<T> countents[];
-}
-```
-## ziplist_compressed
-```cpp
-struct ziplist_compressed{
-    int32 size;
-    byte[] compressed_data;
-}
-```
+
 ## quicklistNode
-```cpp
-struct ziplist_compressed{
+```c
+struct quicklistNode{
     quicklistNode *prev;
     quicklistNode *next;
     // 指向压缩列表
@@ -265,8 +374,8 @@ struct ziplist_compressed{
 }
 ```
 ## quicklist
-```cpp
-struct ziplist_compressed{
+```c
+struct quicklist{
     quicklistNode *head;
     quicklistNode *tail;
     // 元素总数
@@ -277,37 +386,9 @@ struct ziplist_compressed{
     int compress;
 }
 ```
-## zskiplistNode
-```cpp
-struct zskiplistNode {
-    // 节点value
-    sds ele;
-    // 分数
-    double score;
-    // 回溯指针
-    zskiplistNode *backward;
-    // 多层连接指针
-    struct zskiplistLevel {
-        // 前向指针
-        struct zskiplistNode *forward;
-        // 到下一节点的跨度 可以计算rank
-        unsigned long span;
-    } level[];
-}
-```
-## zskiplist
-```cpp
-struct zskiplist {
-    // 跳表头指针 尾指针
-    zskiplistNode *header, *tail;
-    // 跳表长度
-    long length;
-    // 当前最高层
-    int level;
-}
-```
+
 ## listpack 紧凑列表
-```cpp
+```
 struct listpack<T>{
     // 整个列表占用字节数
     int32 total_bytes;
@@ -320,7 +401,7 @@ struct listpack<T>{
 }
 ```
 ## lpentry
-```cpp
+```c
 struct lpentry{
     // 元素类型编码
     int<var> encoding;
@@ -331,16 +412,21 @@ struct lpentry{
 }
 ```
 ## string存储格式
-| 存储格式 | 说明 |
-| --- | --- |
-| embstr | RedisObject和SDS连续存在一起，使用malloc方法一次分配。长度超过44时使用raw。因为字符串的buf都是以\0结尾占用一个字节，RedisObject占16个字节，SDS除开buf最少占3个字节，还剩下44字节 |
-| raw | RedisObject和SDS分开存，使用两次malloc |
-| int | 64位有符号整数，这种编码方式是为了节省空间 |
+| 存储格式 | 使用到的数据类型 | 说明 |
+| --- | --- | --- |
+| embstr | string | RedisObject和SDS连续存在一起，使用malloc方法一次分配。长度超过44时使用raw。因为字符串的buf都是以\0结尾占用一个字节，RedisObject占16个字节，SDS除开buf最少占3个字节，还剩下44字节 |
+| raw | string | RedisObject和SDS分开存，使用两次malloc |
+| int | string | 64位有符号整数，这种编码方式是为了节省空间 |
+| quicklist | list |  |
+| ziplist | hash,zset |  |
+| intset | set |  |
+| hashtable | hash,set |  |
+| skiplist | zset |  |
 
 # string SDS扩容
 长度小于1M之前，加倍扩容，超过1M之后，每次扩容只多分配1M
 # hashdt扩容
-元素个数等于数组长度时，开始扩容，数组长度变为原数组的两倍，但若是redis正在bgsave，为了减少内存页的过多分离
+元素个数等于数组长度时，开始扩容，数组长度变为原数组的两倍，但若是redis正在执行bgsave或bgrewriteaof，为了减少内存页的过多分离
 不扩容，但若是元素个数达到了数组长度的5倍，强制扩容
 # hashdt缩容
 元素个数低于数组长度的10%
