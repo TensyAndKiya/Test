@@ -8,16 +8,18 @@ package com.clei.utils;
 public class BitUtil {
 
     /**
-     * 设置某位为1的操作数数组
-     * 通过使用位运算OR
+     * 只有一位为1的数组
+     * 可以用于设置某位为1，通过使用位运算OR
+     * 也可以用于判断某位是1或0，通过使用位运算AND
      */
-    private static final byte[] OPERAND_OR_ARR = new byte[]{-128, 64, 32, 16, 8, 4, 2, 1};
+    private static final byte[] SINGLE_BIT_ONE_ARR = new byte[]{-128, 64, 32, 16, 8, 4, 2, 1};
 
     /**
-     * 设置某位为0的操作数数组
-     * 通过使用位运算AND
+     * 只有一位为0的数组
+     * 可以用于设置某位为0，通过使用位运算AND
+     * 也可以用于判断某位是1或0，通过使用位运算OR
      */
-    private static final byte[] OPERAND_AND_ARR = new byte[]{127, -65, -33, -17, -9, -5, -3, -2};
+    private static final byte[] SINGLE_BIT_ZERO_ARR = new byte[]{127, -65, -33, -17, -9, -5, -3, -2};
 
     public static void main(String[] args) {
         byte b = 0;
@@ -33,6 +35,22 @@ public class BitUtil {
 
         PrintUtil.log(b);
         PrintUtil.log(Integer.toBinaryString(b & 0XFF));
+
+        for (int i = 0; i < 8; i++) {
+            PrintUtil.print(getBit(b, i));
+        }
+    }
+
+    /**
+     * 取得b的第i位的值
+     *
+     * @param b 源数据
+     * @param i bit位置 0到7
+     * @return 0或1
+     */
+    public static int getBit(byte b, int i) {
+        return 0 == (b & SINGLE_BIT_ONE_ARR[i]) ? 0 : 1;
+        // return -1 == (b | SINGLE_BIT_ZERO_ARR[i]) ? 1 : 0;
     }
 
     /**
@@ -55,7 +73,7 @@ public class BitUtil {
      * @return
      */
     public static byte set1(byte b, int i) {
-        return (byte) (b | OPERAND_OR_ARR[i]);
+        return (byte) (b | SINGLE_BIT_ONE_ARR[i]);
     }
 
     /**
@@ -66,6 +84,6 @@ public class BitUtil {
      * @return
      */
     public static byte set0(byte b, int i) {
-        return (byte) (b & OPERAND_AND_ARR[i]);
+        return (byte) (b & SINGLE_BIT_ZERO_ARR[i]);
     }
 }
