@@ -1,6 +1,6 @@
-package com.clei.datastructure.algorithm;
+package com.clei.algorithm.other;
 
-import com.clei.datastructure.dt.TreeNode;
+import com.clei.datastructure.TreeNode;
 import com.clei.utils.PrintUtil;
 
 import java.util.LinkedList;
@@ -11,7 +11,7 @@ import java.util.Queue;
  *
  * @author KIyA
  */
-public class Traversal {
+public class BinaryTreeTraversal {
 
     public static void main(String[] args) {
         TreeNode<Integer> tree4 = new TreeNode<>(4);

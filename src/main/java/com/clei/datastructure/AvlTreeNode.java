@@ -1,4 +1,4 @@
-package com.clei.datastructure.dt;
+package com.clei.datastructure;
 
 /**
  * 二叉树节点高度

@@ -1,4 +1,4 @@
-package com.clei.datastructure.dt;
+package com.clei.datastructure;
 
 /**
  * AVL 平衡二叉查找树
