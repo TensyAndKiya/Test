@@ -53,8 +53,6 @@ public class MergeSort {
             temp[k++] = arr[p2++];
         }
 
-        for (int i = start; i < end + 1; i++) {
-            arr[i] = temp[i - start];
-        }
+        System.arraycopy(temp, 0, arr, start, end - start + 1);
     }
 }

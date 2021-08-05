@@ -96,3 +96,6 @@ Maven插件
     进到那个parent pom一看，spring-boot-maven-plugin插件配置的属性<configuration>里还有个属性<skip>true</skip>，俺服了
     这个代码要这样搞，没办法，只能在该项目插件配置里也加个<skip>false</skip>，mvn clean package -> java -jar XXX.jar Success!
     唉，搞了小半天，俺记住你了
+
+JAVA
+    今天才知道char占两个字节，以前一直以为是一个字节
