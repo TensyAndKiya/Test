@@ -15,7 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <spring.version>5.2.7.RELEASE</spring.version>
+        <spring.version>5.2.22.RELEASE</spring.version>
         <netty.version>4.1.58.Final</netty.version>
         <jol.version>0.14</jol.version>
         <rocketmq.version>4.7.0</rocketmq.version>
